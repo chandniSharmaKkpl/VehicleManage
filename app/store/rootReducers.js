@@ -6,6 +6,7 @@ const navReducer = createNavigationReducer(AppNavigator);
 
 const appReducer = combineReducers({
   nav: navReducer,
+  auth: authReducer,
 });
 
 export default appReducer;
