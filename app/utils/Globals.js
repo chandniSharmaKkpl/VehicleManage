@@ -12,6 +12,12 @@ export const appName = 'Roadie';
 export const isInternetConnected = true;
 export let isTablat = iPad.indexOf("iPad") != -1 || DeviceInfo.isTablet();
 
+// ADD theme modes
+export const THEME_MODE = {
+  DARK: "dark",
+  LIGHT: "light"
+}
+
 // Check the return custom condition
 export function renderIf(condition, component) {
   if (condition) {

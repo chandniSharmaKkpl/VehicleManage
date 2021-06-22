@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "374701197391",
+    "project_id": "roadie-4f4f5",
+    "storage_bucket": "roadie-4f4f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374701197391:android:ceb01e01a08420199b423a",
+        "android_client_info": {
+          "package_name": "com.roadie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374701197391-1cbq0a80k79s3gue9chl8lo2ll4pj3s0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbeBmiDPz6dXYUDRJPrwKlzzOAsVMzWic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374701197391-1cbq0a80k79s3gue9chl8lo2ll4pj3s0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

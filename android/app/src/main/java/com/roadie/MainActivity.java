@@ -1,8 +1,20 @@
 package com.roadie;
 
 import com.facebook.react.ReactActivity;
-
+import android.content.Intent; 
+import android.content.res.Configuration;
 public class MainActivity extends ReactActivity {
+
+  /**
+   * Returns the new configuration It's used fpr dark mode and light mode
+   */
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    Intent intent = new Intent("onConfigurationChanged");
+    intent.putExtra("newConfig", newConfig);
+    sendBroadcast(intent);
+  }
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
