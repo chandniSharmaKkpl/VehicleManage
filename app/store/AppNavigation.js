@@ -12,13 +12,16 @@ class AppNavigation extends Component {
     this.exitCount = 0;
   }
   componentDidMount() {
+    // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
   }
 
   componentWillUnmount() {
+    // manage hardware backpress button in android
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
   }
 
+  // setTimeOut while app will close
   setTimeoutForExitApp = () => {
     this.exitCount += +1;
     setTimeout(() => {
@@ -26,6 +29,7 @@ class AppNavigation extends Component {
     }, 2500);
   };
 
+  // after 2 time press on hardware back app will close
   exitApp = () => {
     this.setTimeoutForExitApp();
     if (this.exitCount >= 2) {
@@ -39,6 +43,7 @@ class AppNavigation extends Component {
     return true;
   };
 
+  // manage hardware backpress button in android 
   onBackPress = () => {
     const { nav, dispatch } = this.props;
     console.warn("i am in nav 0-Dispatch", nav, dispatch);
@@ -49,6 +54,7 @@ class AppNavigation extends Component {
     dispatch(NavigationActions.back());
     return true;
   };
+
   render() {
     const { nav, dispatch, isLoading, loaderMessage } = this.props;
 

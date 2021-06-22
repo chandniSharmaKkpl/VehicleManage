@@ -1,10 +1,12 @@
 import * as actionTypes from "./ActionType";
+import { lightTheme, darkTheme } from '../../../assets/Theme'
 
 const initialState = {
   isLoading: false,
   isLoggedIn: false,
   loaderMessage: "Loading...",
   isInternetConnection: false,
+  theme: { ...lightTheme }
 };
 
 const authReducer = (state = initialState, action) => {
@@ -90,6 +92,18 @@ const authReducer = (state = initialState, action) => {
         isLoggedIn: false,
         loaderMessage: "",
       };
+
+      case actionTypes.SWITCH_THEME:
+          return {
+            ...state,
+            home: {
+              ...state,
+              isLoading: false,
+              theme: {...action.payload.baseTheme} ,
+              loaderMessage: 'Loading...',
+            }
+          };
+
     default:
       return state;
   }
