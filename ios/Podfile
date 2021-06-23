@@ -13,6 +13,8 @@ target 'Roadie' do
   )
 
 
+  pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
+
   target 'RoadieTests' do
     inherit! :complete
     # Pods for testing
