@@ -6,10 +6,11 @@ import AppNavigator from "./store/AppNavigation";
 import FlashMessage from "react-native-flash-message";
 import NetInfo from "@react-native-community/netinfo";
 import * as globals from "./utils/Globals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class App extends Component {
   async componentDidMount() {
-    console.disableYellowBox = true;
+    LogBox.ignoreLogs(['Warning: ...']);
     console.log("getColorScheme :->", Appearance.getColorScheme());
     this.setDefaultSettings();   // manage Dark & lite theme
     LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
