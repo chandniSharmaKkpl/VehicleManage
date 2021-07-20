@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,StatusBar
 } from 'react-native';
+import FontFamily from "../../assets/styles/FontFamily";
 
 import {
   GoogleSignin,
@@ -111,6 +112,9 @@ export class LoginScreen extends Component {
           <Text style={styles.titleText}>
             Example of Google Sign In in React Native
           </Text>
+          <Text >
+            Example of Google Sign In in React Native
+          </Text>
           <View style={styles.container}>
             {userInfo !== null ? (
               <>
@@ -160,6 +164,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     padding: 20,
+    fontFamily:FontFamily.RalewayThinItalic
   },
   imageStyle: {
     width: 200,

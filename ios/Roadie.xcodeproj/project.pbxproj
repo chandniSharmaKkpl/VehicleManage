@@ -15,6 +15,7 @@
 		41EB97FA59C39A08A7DC68FD /* libPods-Roadie-RoadieTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DDF705B829A419DEE15C476 /* libPods-Roadie-RoadieTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		CF7A412326A54D820052D9D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CF7A412226A54D820052D9D9 /* GoogleService-Info.plist */; };
+		CF7CE4E126A6CEE60020FB90 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = CF7CE4E026A6CEE60020FB90 /* fonts */; };
 		CFEFFF142682EFD100A5B395 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CFEFFF132682EFD100A5B395 /* libswiftWebKit.tbd */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		9DDF705B829A419DEE15C476 /* libPods-Roadie-RoadieTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Roadie-RoadieTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0A318A84767760DA2CE86A5 /* Pods-Roadie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roadie.release.xcconfig"; path = "Target Support Files/Pods-Roadie/Pods-Roadie.release.xcconfig"; sourceTree = "<group>"; };
 		CF7A412226A54D820052D9D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Roadie/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CF7CE4E026A6CEE60020FB90 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		CFDEE700268204AF00ED0B9D /* Roadie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Roadie.entitlements; path = Roadie/Roadie.entitlements; sourceTree = "<group>"; };
 		CFEFFF132682EFD100A5B395 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
 		E96B42A4865914CF80ADE794 /* Pods-Roadie-RoadieTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roadie-RoadieTests.release.xcconfig"; path = "Target Support Files/Pods-Roadie-RoadieTests/Pods-Roadie-RoadieTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CF7CE4E026A6CEE60020FB90 /* fonts */,
 				13B07FAE1A68108700A75B9A /* Roadie */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RoadieTests */,
@@ -254,6 +257,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				CF7A412326A54D820052D9D9 /* GoogleService-Info.plist in Resources */,
+				CF7CE4E126A6CEE60020FB90 /* fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
