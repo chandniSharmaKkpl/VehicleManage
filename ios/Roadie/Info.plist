@@ -43,6 +43,32 @@
 			<string>com.googleusercontent.apps.374701197391-9nk7besa55sffmjtb31fqbqomjcv3qa6</string>
 		</dict>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>fonts/Raleway-Black.ttf</string>
+		<string>fonts/Raleway-BlackItalic.ttf</string>
+		<string>fonts/Raleway-Bold.ttf</string>
+		<string>fonts/Raleway-BoldItalic.ttf</string>
+
+		<string>fonts/Raleway-ExtraBold.ttf</string>
+		<string>fonts/Raleway-ExtraBoldItalic.ttf</string>
+		<string>fonts/Raleway-ExtraLight.ttf</string>
+		<string>fonts/Raleway-ExtraLightItalic.ttf</string>
+
+		<string>fonts/Raleway-Italic.ttf</string>
+		<string>fonts/Raleway-Light.ttf</string>
+		<string>fonts/Raleway-LightItalic.ttf</string>
+		<string>fonts/Raleway-Medium.ttf</string>
+
+		<string>fonts/Raleway-Regular.ttf</string>
+		<string>fonts/Raleway-MediumItalic.ttf</string>
+		<string>fonts/Raleway-SemiBold.ttf</string>
+		<string>fonts/Raleway-SemiBoldItalic.ttf</string>
+
+		<string>fonts/Raleway-Thin.ttf</string>
+		<string>fonts/Raleway-ThinItalic.ttf</string>
+		
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
