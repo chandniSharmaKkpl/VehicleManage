@@ -1,15 +1,20 @@
 import { createAppContainer, withNavigation } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import RegisterScreen from '..//modules/authentication/RegisterScreen'
+import RegisterScreen from '..//modules/authentication/RegisterScreen';
+import LoginScreen from '..//modules/authentication/LoginScreen'
+
 const AppNavigator = createStackNavigator(
   {
     
     Register: {
       screen: RegisterScreen,
     },
+    Login: {
+      screen: LoginScreen,
+    },
   },
   {
-    initialRouteName: "Register",
+    initialRouteName: "Login",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,
