@@ -87,18 +87,64 @@ export const ComponentStyle = StyleSheet.create({
   //Custom Component name "BigIconButton" Finished....
 
   /// primaryBtnonlyContainer style Starting....
-  primaryBtnonlyContainer:{
+  primaryBtnonlyContainer: {
     height: 55,
     backgroundColor: Colors.primary,
     borderRadius: 10,
     justifyContent: "center",
   },
-  primaryBtnonlyText:{
+  primaryBtnonlyText: {
     fontFamily: FontFamily.RalewaySemiBold,
     fontSize: globals.font_16,
     color: Colors.white,
     textAlign: "center",
     justifyContent: "center",
-  }
+  },
   //primaryBtnonlyContainer style Finished....
+
+  // Login Input style started
+  inputText: {
+    height: 55,
+    marginHorizontal: 20,
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_14,
+    borderBottomWidth: 0.8,
+    borderBottomColor: Colors.border_color,
+    color: Colors.black,
+  },
+  errorText: {
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: RFPercentage(1.5),
+    color: Colors.black,
+    padding: 5,
+  },
+  passwordInputText: {
+    height: 55,
+    marginTop: 10,
+    borderBottomWidth: 0.8,
+    borderBottomColor: Colors.border_color,
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_14,
+    flex: 1,
+    color: Colors.black,
+  },
+  eyeContainer: {
+    borderBottomWidth: 0.8,
+    borderBottomColor: Colors.border_color,
+    marginTop: 10,
+    height: 55,
+    justifyContent: "center",
+  },
+  errorText: {
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: RFPercentage(1.5),
+    color: Colors.red,
+    padding: 5,
+  },
+  passwordInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 10,
+    marginHorizontal: 20,
+  },
 });

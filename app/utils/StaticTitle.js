@@ -7,8 +7,12 @@ const StaticTitle = {
     or:'or',
     newApp:'New to this app?',
     signup:'Sign Up',
+    signin:'Sign In',
+    forgotPassword:'Forgot my password?',
+    enterPassword:'Enter Password',
+    enterUsaerName:'Enter Email Address',
+    backTo:'Back to',
 
-  
   };
   export { StaticTitle };
   
