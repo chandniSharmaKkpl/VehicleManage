@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Final Roadie Logo_Black.png",
+      "filename" : "Splash Screen.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Final Roadie Logo_Black@2x.png",
+      "filename" : "Splash Screen@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Final Roadie Logo_Black@3x.png",
+      "filename" : "Splash Screen@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
