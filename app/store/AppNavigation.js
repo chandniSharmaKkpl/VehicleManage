@@ -13,6 +13,7 @@ import Loader from "../components/Loader";
 import { AppWithNavigationState } from "./index";
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
+import SplashScreen from "react-native-splash-screen";
 
 let STATUS_BAR_HEIGHT =
   Platform.OS === "ios"
@@ -25,6 +26,12 @@ class AppNavigation extends Component {
     this.exitCount = 0;
   }
   componentDidMount() {
+    // hide SplashScreen
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 5000);
+
+
     // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     Platform.OS == "android"
@@ -62,7 +69,6 @@ class AppNavigation extends Component {
   // manage hardware backpress button in android
   onBackPress = () => {
     const { nav, dispatch } = this.props;
-    console.warn("i am in nav 0-Dispatch", nav, dispatch);
     if (nav.index === 0) {
       console.warn("i amin 0 index");
       this.exitApp();
