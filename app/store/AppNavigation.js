@@ -1,10 +1,23 @@
 import React, { Component } from "react";
-import { BackHandler, ToastAndroid, View } from "react-native";
+import {
+  BackHandler,
+  ToastAndroid,
+  View,
+  Platform,
+  StatusBar,
+} from "react-native";
 import { NavigationActions } from "react-navigation";
 import NavigationService from "../utils/NavigationService";
 import { connect } from "react-redux";
 import Loader from "../components/Loader";
 import { AppWithNavigationState } from "./index";
+import * as globals from "../utils/Globals";
+import Colors from "../assets/Colors";
+
+let STATUS_BAR_HEIGHT =
+  Platform.OS === "ios"
+    ? globals.deviceHeight * 0.055
+    : globals.deviceHeight * 0.01;
 
 class AppNavigation extends Component {
   constructor(props) {
@@ -14,6 +27,9 @@ class AppNavigation extends Component {
   componentDidMount() {
     // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+    Platform.OS == "android"
+      ? StatusBar.setBackgroundColor(Colors.primary, true)
+      : null; // add android statusbar color
   }
 
   componentWillUnmount() {
@@ -43,7 +59,7 @@ class AppNavigation extends Component {
     return true;
   };
 
-  // manage hardware backpress button in android 
+  // manage hardware backpress button in android
   onBackPress = () => {
     const { nav, dispatch } = this.props;
     console.warn("i am in nav 0-Dispatch", nav, dispatch);
@@ -61,6 +77,15 @@ class AppNavigation extends Component {
     return (
       <View style={{ flex: 1 }}>
         {isLoading && <Loader isOverlay={true} loaderMessage={loaderMessage} />}
+        {/* <View
+          style={{
+            width: "100%",
+            height: STATUS_BAR_HEIGHT,
+            backgroundColor: Colors.primary,
+          }}
+        >
+          <StatusBar barStyle="light-content" backgroundColor="##FFBE0B" />
+        </View> */}
         <AppWithNavigationState
           state={nav}
           dispatch={dispatch}
