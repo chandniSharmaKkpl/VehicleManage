@@ -14,7 +14,7 @@ target 'Roadie' do
   pod 'GoogleSignIn', '~> 5.0.2'
 
   pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
-
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   target 'RoadieTests' do
     inherit! :complete
     # Pods for testing

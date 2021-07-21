@@ -24,10 +24,12 @@ class GoogleLogin extends Component {
   }
 
   async componentDidMount() {
-    this.configureGoogleSignIn();
-    await this.getCurrentUser();
+    this.configureGoogleSignIn(); // configure Google SignIn
+    await this.getCurrentUser();   // check Current user 
   }
 
+
+  // check Current user  Silently
   async getCurrentUser() {
     try {
       const userInfo = await GoogleSignin.signInSilently();
@@ -43,6 +45,7 @@ class GoogleLogin extends Component {
     }
   }
 
+  // configure Google SignIn with client id
   configureGoogleSignIn() {
     GoogleSignin.configure({
       webClientId: WEB_CLIENT_ID,
@@ -52,6 +55,8 @@ class GoogleLogin extends Component {
     });
   }
 
+
+  // signout fb account from application 
   _signOut = async () => {
     try {
       await GoogleSignin.revokeAccess();

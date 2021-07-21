@@ -6,12 +6,15 @@ const Colors = {
   black: "#000000",
   silver: "#C0C0C0",
   white: "#FFFFFF",
+  red: "#FF0000",
   success: "#00C851",
   danger: "#FF4444",
   blackTransparent: "#00000080",
   transparent: "#00000000",
   lite_background:'#FFFEF9',
-  google_background:'#4285F4'
+  google_background:'#4285F4',
+  border_color:'#00000026',
+  lite_black:'#080909',
 };
 
 export default Colors;

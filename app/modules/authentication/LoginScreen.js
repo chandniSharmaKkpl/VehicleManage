@@ -7,6 +7,7 @@ import { StaticTitle } from "../../utils/StaticTitle";
 import PrimaryButton from "../../components/PrimaryButton";
 import FBLogin from "../../components/FBLogin";
 import GoogleLogin from "../../components/GoogleLogin";
+import NavigationService from "../../utils/NavigationService";
 
 const logo_img = require("../../assets/images/roadie_logo.png");
 const car_img = require("../../assets/images/car_bg.png");
@@ -18,12 +19,20 @@ export class LoginScreen extends Component {
     this.state = {};
   }
 
+  // Login with Email navigate to sign in screen
+  performLoginwithEmail = () => {
+    NavigationService.navigate("SignIn");
+  };
+
+  // sign up(New Register) navigate to sign up screen
+  gotoSignUpscreen = () => {
+    NavigationService.navigate("SignUp");
+  };
+
   render() {
-    const { isLoading, loaderMessage } = this.props;
-    const { userInfo } = this.state;
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View style={AuthStyle.logincontainer}>
           <View style={AuthStyle.imglogoContainer}>
             <Image source={logo_img} style={AuthStyle.imglogo} />
           </View>
@@ -45,14 +54,14 @@ export class LoginScreen extends Component {
               <View style={AuthStyle.lineContainer}></View>
             </View>
             <PrimaryButton
-              buttonStyle={{ backgroundColor: Colors.primary }}
               btnName={StaticTitle.loginwithEmail}
+              onPress={() => this.performLoginwithEmail()}
             />
           </View>
 
           <View style={AuthStyle.bottomContainer}>
             <Text style={AuthStyle.smallNewAppText}>{StaticTitle.newApp}</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.gotoSignUpscreen()}>
               <Text style={AuthStyle.smallSignupText}>
                 {StaticTitle.signup}
               </Text>
