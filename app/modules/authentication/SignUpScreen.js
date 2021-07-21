@@ -12,9 +12,9 @@ import {
 } from 'react-native-fbsdk-next';
 import { connect } from "react-redux";
 
-const TAG = 'RegisterScreen ::=';
+const TAG = 'SignUpScreen ::=';
 
-export class RegisterScreen extends Component {
+export class SignUpScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -192,4 +192,4 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
