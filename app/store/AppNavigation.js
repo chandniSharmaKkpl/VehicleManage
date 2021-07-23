@@ -34,9 +34,9 @@ class AppNavigation extends Component {
 
     // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    Platform.OS == "android"
-      ? StatusBar.setBackgroundColor(Colors.primary, true)
-      : null; // add android statusbar color
+    // Platform.OS == "android"
+    //   ? StatusBar.setBackgroundColor(Colors.primary, true)
+    //   : null; // add android statusbar color
   }
 
   componentWillUnmount() {

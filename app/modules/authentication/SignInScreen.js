@@ -9,7 +9,6 @@ import {
   Keyboard,
   Platform,
   TouchableWithoutFeedback,
-  StatusBar,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";

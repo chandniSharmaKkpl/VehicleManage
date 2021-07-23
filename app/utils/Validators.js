@@ -48,6 +48,4 @@ export const isValidPhoneNumber = (phoneNumber) => {
   }
 };
 
-export const getAge = (value) => {
-  const dob = Math.floor((new Date() - new Date(value).getTime()) / 3.15576e+10)
-};
+

@@ -116,6 +116,7 @@ export const AuthStyle = StyleSheet.create({
     fontSize: globals.font_12,
     color: Colors.primary,
     textAlign: "center",
+    
   },
 
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
@@ -175,6 +176,9 @@ export const AuthStyle = StyleSheet.create({
 
   //////// SignUp screen
   termAndConditionView:{
-    alignItems: "center", marginTop: -1.8, marginLeft:2
+    // alignItems: "center", 
+    // alignSelf:'center',
+    // marginTop: 3.8, 
+    marginLeft:2
   }
 });
