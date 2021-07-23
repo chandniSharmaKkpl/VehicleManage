@@ -44,6 +44,7 @@ const Input = ({
         keyboardType={keyboardType}
         maxLength={maxLength}
         autoCapitalize={autoCapitalize}
+        underlineColorAndroid="transparent"
       />
       {renderIf(
         isValidationShow,

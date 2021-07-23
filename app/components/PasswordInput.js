@@ -45,6 +45,7 @@ const PasswordInput = ({
           onChangeText={onChangeText}
           keyboardType={keyboardType}
           placeholderStyle={placeholderStyle}
+          underlineColorAndroid='transparent'
           {...props}
         />
         <TouchableWithoutFeedback onPress={onPasswordShow}>
@@ -58,7 +59,8 @@ const PasswordInput = ({
               <Icon
                 name={isVisible ? "eye-slash" : "eye"}
                 size={18}
-                color={Colors.border_color}
+                style={{opacity:0.50}}
+                color={Colors.lite_black}
               />
             </View>
           </View>
