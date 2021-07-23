@@ -9,8 +9,14 @@ const Messages = {
   passwordValid: "Password must contain letters and numbers",
   matchPassword: "Password does not match",
   nameFail:'Name must be 2-26 characters, cannot contain spaces or symbols.',
+  userNameFail:'Username must be 3-26 characters',
+  enterUsername:'Please enter user name',
   emailFail:'Invalid email',
   dobFail:'User must be 13 years or older',
-  enterDob:'Please choose date'
+  enterDob:'Please choose date',
+  cityFail:"Please restrict location to 3-40 characters",
+  modalFail:'Please restrict Make and model to 3-40 characters',
+  colorFail:'Please restrict Make and model to 3-20 characters'
+
 };
 export { Messages };

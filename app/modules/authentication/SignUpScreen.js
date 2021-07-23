@@ -100,9 +100,10 @@ export class SignUpScreen extends Component {
 
   // Check all validation in this function, if all values validate after the call Register API
   gotoSignup = () => {
-    if (!this.checkValidation()) {
-      return;
-    }
+    // if (!this.checkValidation()) {
+    //   return;
+    // }
+    NavigationService.navigate("CreateProfile");
   };
 
   // start of validation
@@ -280,7 +281,7 @@ export class SignUpScreen extends Component {
                   keyboardShouldPersistTaps="never"
                   style={{ marginTop: globals.deviceHeight * 0.015 }}
                 >
-                  <View style={{ elevation: 2 }}>
+                  <View>
                     <View
                       style={[AuthStyle.titleviewStyle, { marginBottom: 10 }]}
                     >
