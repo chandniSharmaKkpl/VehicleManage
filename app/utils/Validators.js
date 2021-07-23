@@ -3,13 +3,29 @@ export const isEmpty = (value) => {
 };
 
 export const isEmail = (value) => {
-  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const emailRegex =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return emailRegex.test(value.trim());
 };
 
 export const isPassword = (value) => {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
   return passwordRegex.test(value);
+};
+
+export const isPasswordLength = (value) => {
+  if (value.length >= 8) {
+    return true;
+  }
+  return false;
+};
+
+export const isName = (value) => {
+  if (value.length >= 2) {
+    return true;
+  }
+  return false;
 };
 
 export const isValidComparedPassword = (password, confirmPassword) => {
@@ -30,4 +46,8 @@ export const isValidPhoneNumber = (phoneNumber) => {
   } else {
     return true;
   }
+};
+
+export const getAge = (value) => {
+  const dob = Math.floor((new Date() - new Date(value).getTime()) / 3.15576e+10)
 };

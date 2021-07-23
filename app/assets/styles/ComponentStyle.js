@@ -109,14 +109,16 @@ export const ComponentStyle = StyleSheet.create({
     fontFamily: FontFamily.RalewaRegular,
     fontSize: globals.font_14,
     borderBottomWidth: 0.8,
+    marginTop: 20,
     borderBottomColor: Colors.border_color,
     color: Colors.black,
   },
   errorText: {
     fontFamily: FontFamily.RalewaRegular,
     fontSize: RFPercentage(1.5),
-    color: Colors.black,
+    color: Colors.red,
     padding: 5,
+    marginHorizontal: 15,
   },
   passwordInputText: {
     height: 55,
@@ -135,16 +137,12 @@ export const ComponentStyle = StyleSheet.create({
     height: 55,
     justifyContent: "center",
   },
-  errorText: {
-    fontFamily: FontFamily.RalewaRegular,
-    fontSize: RFPercentage(1.5),
-    color: Colors.red,
-    padding: 5,
-  },
+ 
   passwordInputContainer: {
     flexDirection: "row",
     alignItems: "center",
     paddingTop: 10,
     marginHorizontal: 20,
   },
+  calendar_Image: { width: 20, height: 20, tintColor: Colors.primary },
 });

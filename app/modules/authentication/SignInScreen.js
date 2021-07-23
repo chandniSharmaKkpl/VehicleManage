@@ -9,6 +9,7 @@ import {
   Keyboard,
   Platform,
   TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -17,6 +18,8 @@ import { PasswordInput, Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
+import { isEmpty, isEmail } from "../../utils/Validators";
+import { Messages } from "../../utils/Messages";
 
 const logo_img = require("../../assets/images/roadie_logo.png");
 const car_img = require("../../assets/images/car_bg.png");
@@ -56,6 +59,41 @@ export class SignInScreen extends Component {
       isShowPassword: !this.state.isShowPassword,
     });
   }
+
+   // start of validation
+  checkValidation = () => {
+   const { txtEmail, txtPassword } = this.state;
+   if (isEmpty(txtEmail)) {
+     this.setState({
+       isEmailError: true,
+       emailValidMsg: Messages.email,
+     });
+     return false;
+   }
+   if (!isEmail(txtEmail)) {
+     this.setState({
+       isEmailError: true,
+       emailValidMsg: Messages.emailValid,
+     });
+     return false;
+   }
+   if (isEmpty(txtPassword)) {
+     this.setState({
+       isPasswordError: true,
+       passwdValidMsg: Messages.password,
+     });
+     return false;
+   }
+
+    return true;
+  }
+
+  // Check all validation in this function if all values validate after the call Login API
+  gotoSignin = () => {
+    if (!this.checkValidation()) {
+      return
+    }
+  };
 
   render() {
     return (
@@ -147,7 +185,10 @@ export class SignInScreen extends Component {
                     </View>
 
                     <View style={AuthStyle.signinbtnView}>
-                      <PrimaryButton btnName={StaticTitle.signin} />
+                      <PrimaryButton
+                        btnName={StaticTitle.signin}
+                        onPress={() => this.gotoSignin()}
+                      />
                     </View>
                     <View style={AuthStyle.bottomsignin}>
                       <Text style={AuthStyle.smallNewAppText}>

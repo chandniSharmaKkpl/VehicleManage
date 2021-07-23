@@ -171,4 +171,10 @@ export const AuthStyle = StyleSheet.create({
     paddingVertical: "5%",
     marginHorizontal: 20,
   },
+
+
+  //////// SignUp screen
+  termAndConditionView:{
+    alignItems: "center", marginTop: -1.8, marginLeft:2
+  }
 });

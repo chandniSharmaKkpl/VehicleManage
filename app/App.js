@@ -12,12 +12,9 @@ export class App extends Component {
   async componentDidMount() {
     
     LogBox.ignoreLogs(["Warning: ..."]);
-    console.log("getColorScheme :->", Appearance.getColorScheme());
     this.setDefaultSettings(); // manage Dark & lite theme
     LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
-    Platform.OS == "android"
-      ? StatusBar.setBackgroundColor("white", true)
-      : null; // add statusbar color
+   
     // check IsInternet-Connection available or not at the time of page load / first render
     NetInfo.addEventListener((state) => {
       console.log("Is connected?", state.isConnected);
