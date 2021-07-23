@@ -21,8 +21,17 @@ export const isPasswordLength = (value) => {
   return false;
 };
 
+// min 2 char
 export const isName = (value) => {
   if (value.length >= 2) {
+    return true;
+  }
+  return false;
+};
+
+// min 3 char
+export const isText = (value) => {
+  if (value.length >= 3) {
     return true;
   }
   return false;

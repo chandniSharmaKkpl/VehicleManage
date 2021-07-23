@@ -122,7 +122,7 @@ export class SignInScreen extends Component {
                   keyboardShouldPersistTaps="never"
                   style={{ marginTop: globals.deviceHeight * 0.015 }}
                 >
-                  <View style={{ elevation: 2 }}>
+                  <View>
                     <View style={AuthStyle.titleviewStyle}>
                       <Text
                         style={[AuthStyle.titleText, { textAlign: "left" }]}

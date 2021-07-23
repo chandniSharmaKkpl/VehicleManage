@@ -19,7 +19,14 @@ const StaticTitle = {
     termAndConditionText:'By clicking Sign Up, you agree to our,',
     termAndCondition:'Terms and conditions',
     termAndConditionLast:'a confirmation email will be sent to the above email to activate your account.',
-    alreadyHaveAccount:'Already have an account?'
+    alreadyHaveAccount:'Already have an account?',
+    continue:'Continue',
+    createProfile:'Create Profile',
+    enterUserName:'Enter Username',
+    enterCity:'Enter City or Suburb',
+    makeModal:'Make and Model of Car',
+    enterColor:'Enter Color of Car',
+    addDescription:'Add a Description'
   };
   export { StaticTitle };
   

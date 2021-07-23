@@ -21,6 +21,8 @@ const Input = ({
   autoCapitalize,
   inputStyle,
   returnKeyType,
+  multiline,
+  numberOfLines,
   ...props
 }) => {
   return (
@@ -45,6 +47,8 @@ const Input = ({
         maxLength={maxLength}
         autoCapitalize={autoCapitalize}
         underlineColorAndroid="transparent"
+        multiline={multiline}
+        numberOfLines={numberOfLines}
       />
       {renderIf(
         isValidationShow,
