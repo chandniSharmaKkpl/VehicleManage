@@ -11,5 +11,6 @@ const Messages = {
   nameFail:'Name must be 2-26 characters, cannot contain spaces or symbols.',
   emailFail:'Invalid email',
   dobFail:'User must be 13 years or older',
+  enterDob:'Please choose date'
 };
 export { Messages };

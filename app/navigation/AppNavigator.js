@@ -3,6 +3,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import SignUpScreen from '..//modules/authentication/SignUpScreen';
 import SignInScreen from '..//modules/authentication/SignInScreen';
 import LoginScreen from '..//modules/authentication/LoginScreen';
+import CreateProfile from '..//modules/authentication/CreateProfile';
 
 const AppNavigator = createStackNavigator(
   {
@@ -16,6 +17,9 @@ const AppNavigator = createStackNavigator(
     Login: {
       screen: LoginScreen,
     },
+    CreateProfile:{
+      screen:CreateProfile
+    }
   },
   {
     initialRouteName: "Login",

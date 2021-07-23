@@ -29,8 +29,10 @@ import {
   isValidComparedPassword,
   isName,
   isPasswordLength,
-  getAge
+  getAge,
 } from "../../utils/Validators";
+import moment from "moment";
+import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
 const logo_img = require("../../assets/images/roadie_logo.png");
 const car_img = require("../../assets/images/car_bg.png");
@@ -51,6 +53,7 @@ export class SignUpScreen extends Component {
 
       isShowPassword: true,
       isShowConfirmPassword: true,
+      isDatePickerVisible: false,
 
       isEmailError: false,
       isFirstNameError: false,
@@ -208,11 +211,45 @@ export class SignUpScreen extends Component {
       });
       return false;
     }
-    // if(getAge(txtDob)){
-
-    // }
+    if (isEmpty(txtDob)) {
+      this.setState({
+        isDobError: true,
+        dobValidMsg: Messages.enterDob,
+      });
+      return false;
+    }
+    if (!isEmpty(txtDob)) {
+      let replaceDate = txtDob.replace("-", "");
+      let age = moment().diff(moment(replaceDate, "DDMMYYYY"), "years");
+      if (age < 13) {
+        this.setState({
+          isDobError: true,
+          dobValidMsg: Messages.dobFail,
+        });
+      }
+      return false;
+    }
 
     return true;
+  };
+
+  // show Date Picker
+  showDatePicker = () => {
+    this.setState({ isDatePickerVisible: true });
+  };
+
+  // hide Date Picker
+  hideDatePicker = () => {
+    this.setState({ isDatePickerVisible: false });
+  };
+
+  // set Date choose from, picker
+  handleConfirm = (date) => {
+    this.setState({
+      isDatePickerVisible: false,
+      txtDob: moment(date).format("DD-MM-YYYY"),
+      isDobError: false,
+    });
   };
 
   render() {
@@ -348,7 +385,7 @@ export class SignUpScreen extends Component {
                       validateMesssage={this.state.passwdValidMsg}
                       onPasswordShow={() => this.showPassword()}
                       isVisible={this.state.isShowPassword}
-                      returnKeyType="done"
+                      returnKeyType="next"
                       onChangeText={(text) =>
                         this.setState({
                           txtPassword: text,
@@ -374,7 +411,7 @@ export class SignUpScreen extends Component {
                       validateMesssage={this.state.confirmPasswordValidMsg}
                       onPasswordShow={() => this.showConfirmPassword()}
                       isVisible={this.state.isShowConfirmPassword}
-                      returnKeyType="done"
+                      returnKeyType="next"
                       onChangeText={(text) =>
                         this.setState({
                           txtConfirmPassword: text,
@@ -383,6 +420,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <InputWithIcon
+                      onPressIcon={() => this.showDatePicker()}
                       value={this.state.txtDob}
                       placeholderText={StaticTitle.enterDOB}
                       onSubmitEditing={Keyboard.dismiss}
@@ -405,9 +443,23 @@ export class SignUpScreen extends Component {
                         })
                       }
                     />
+                    <DateTimePickerModal
+                      isVisible={this.state.isDatePickerVisible}
+                      mode={"date"}
+                      date={
+                        this.state.txtDob != ""
+                          ? moment(this.state.txtDob, "DD-MM-YYYY").toDate()
+                          : new Date()
+                      }
+                      onConfirm={this.handleConfirm}
+                      onCancel={this.hideDatePicker}
+                      maximumDate={new Date()}
+                    />
 
                     <View style={AuthStyle.signinbtnView}>
-                      <Text numberOfLines={1} style={AuthStyle.smallNewAppText}>
+                      <Text
+                        style={[AuthStyle.smallNewAppText, { marginBottom: 2 }]}
+                      >
                         {StaticTitle.termAndConditionText}
                         <TouchableOpacity
                           style={AuthStyle.termAndConditionView}
