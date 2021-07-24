@@ -28,7 +28,9 @@ const StaticTitle = {
     enterColor:'Enter Color of Car',
     addDescription:'Add a Description',
     forgotPassword:'Forgot Password',
-
+    resetpassword:'Reset Password',
+    confirmationCode:'Enter Confirmation Code',
+    enternewpassword:'Enter New Password'
   };
   export { StaticTitle };
   

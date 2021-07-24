@@ -5,6 +5,7 @@ const Messages = {
   name: "Please enter your name",
   password: "Please enter your password",
   confirmPassword: "Please enter your confirm password",
+  newPassword:'Please enter your new password',
   passwordValidLength:"Password must be 8 characters",
   passwordValid: "Password must contain letters and numbers",
   matchPassword: "Password does not match",

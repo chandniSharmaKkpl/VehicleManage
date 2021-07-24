@@ -5,6 +5,7 @@ import SignInScreen from '..//modules/authentication/SignInScreen';
 import LoginScreen from '..//modules/authentication/LoginScreen';
 import CreateProfile from '..//modules/authentication/CreateProfile';
 import ForgotPasswordScreen from '..//modules/authentication/ForgotPasswordScreen';
+import ResetPasswordScreen from '..//modules/authentication/ResetPasswordScreen';
 
 const AppNavigator = createStackNavigator(
   {
@@ -23,6 +24,9 @@ const AppNavigator = createStackNavigator(
     },
     ForgotPassword:{
       screen:ForgotPasswordScreen
+    },
+    ResetPassword:{
+      screen:ResetPasswordScreen
     }
   },
   {
