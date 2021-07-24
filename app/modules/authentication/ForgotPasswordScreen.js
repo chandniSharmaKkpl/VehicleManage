@@ -40,9 +40,10 @@ export class ForgotPasswordScreen extends Component {
 
   // Check all validation in this function if all values validate after the call forgotpassword API
   PerformForgotPassAPI = () => {
-    if (!this.checkValidation()) {
-      return;
-    }
+    // if (!this.checkValidation()) {
+    //   return;
+    // }
+    NavigationService.navigate("ResetPassword");
   };
 
   // start of validation

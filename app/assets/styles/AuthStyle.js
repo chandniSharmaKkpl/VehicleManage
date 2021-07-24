@@ -143,7 +143,7 @@ export const AuthStyle = StyleSheet.create({
   titleviewStyle: {
     marginTop: 28,
     marginHorizontal: 20,
-    marginBottom: 20,
+    // marginBottom: 20,
     height: globals.deviceHeight * 0.06,
   },
   forgotPasswordContainer: {
