@@ -157,6 +157,7 @@ export class CreateProfile extends Component {
                       placeholderText={StaticTitle.enterUserName}
                       onSubmitEditing={() => this.focusNextTextField("txtCity")}
                       blurOnSubmit={false}
+                      autoFocus={true}
                       returnKeyType="next"
                       autoCapitalize={"none"}
                       maxLength={26}
@@ -256,7 +257,7 @@ export class CreateProfile extends Component {
                     <Input
                       value={this.state.txtDescription}
                       placeholderText={StaticTitle.addDescription}
-                      onSubmitEditing={() => Keyboard.dismiss}
+                      onSubmitEditing={Keyboard.dismiss}
                       forwardRef={(ref) => {
                         (this.input.txtDescription = ref),
                           this.input.txtDescription &&

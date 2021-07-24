@@ -122,10 +122,11 @@ export const AuthStyle = StyleSheet.create({
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
   bottomCurve: {
     flex: 1,
+    flexGrow: 1,
     height: 100,
     marginTop: globals.deviceHeight * 0.1,
     borderColor: Colors.border_color,
-    borderWidth: 0.3,
+    borderWidth: 0.1,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     backgroundColor: Colors.white,
@@ -139,6 +140,7 @@ export const AuthStyle = StyleSheet.create({
     shadowOpacity: 0.58,
     shadowRadius: 16,
     elevation: 24,
+    zIndex: 0
   },
   titleviewStyle: {
     marginTop: 28,

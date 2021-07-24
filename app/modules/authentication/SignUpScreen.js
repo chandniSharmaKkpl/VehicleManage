@@ -300,6 +300,7 @@ export class SignUpScreen extends Component {
                       }
                       blurOnSubmit={false}
                       returnKeyType="next"
+                      autoFocus={true}
                       autoCapitalize={"none"}
                       maxLength={26}
                       minLength={2}

@@ -109,9 +109,10 @@ export class ForgotPasswordScreen extends Component {
                     <Input
                       value={this.state.txtEmail}
                       placeholderText={StaticTitle.enterUsaerName}
-                      onSubmitEditing={() => Keyboard.dismiss}
+                      onSubmitEditing={Keyboard.dismiss}
                       blurOnSubmit={false}
                       returnKeyType="done"
+                      autoFocus={true}
                       autoCapitalize={"none"}
                       keyboardType={"email-address"}
                       isValidationShow={this.state.isEmailError}
