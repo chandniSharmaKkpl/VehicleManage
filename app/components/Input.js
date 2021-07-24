@@ -23,6 +23,7 @@ const Input = ({
   returnKeyType,
   multiline,
   numberOfLines,
+  autoFocus,
   ...props
 }) => {
   return (
@@ -48,6 +49,7 @@ const Input = ({
         autoCapitalize={autoCapitalize}
         underlineColorAndroid="transparent"
         multiline={multiline}
+        autoFocus={autoFocus}
         numberOfLines={numberOfLines}
       />
       {renderIf(

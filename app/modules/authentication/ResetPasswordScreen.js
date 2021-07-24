@@ -160,6 +160,7 @@ export class ResetPasswordScreen extends Component {
                       returnKeyType="next"
                       autoCapitalize={"none"}
                       maxLength={26}
+                      autoFocus={true}
                       minLength={2}
                       isValidationShow={this.state.isConfirmCodeError}
                       validateMesssage={this.state.ConfirmCodeValidMsg}
@@ -181,7 +182,7 @@ export class ResetPasswordScreen extends Component {
                               style: { fontFamily: "Raleway-Regular" },
                             });
                       }}
-                      onSubmitEditing={() => Keyboard.dismiss}
+                      onSubmitEditing={Keyboard.dismiss}
                       isValidationShow={this.state.isConfirmPasswordError}
                       isPasswordError={this.state.isConfirmPasswordError}
                       secureTextEntry={this.state.isShowConfirmPassword}

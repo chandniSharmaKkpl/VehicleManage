@@ -145,6 +145,7 @@ export class SignInScreen extends Component {
                       blurOnSubmit={false}
                       returnKeyType="next"
                       autoCapitalize={"none"}
+                      autoFocus={true}
                       keyboardType={"email-address"}
                       isValidationShow={this.state.isEmailError}
                       validateMesssage={this.state.emailValidMsg}

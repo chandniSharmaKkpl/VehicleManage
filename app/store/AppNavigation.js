@@ -5,6 +5,7 @@ import {
   View,
   Platform,
   StatusBar,
+  Text
 } from "react-native";
 import { NavigationActions } from "react-navigation";
 import NavigationService from "../utils/NavigationService";
@@ -23,8 +24,13 @@ let STATUS_BAR_HEIGHT =
 class AppNavigation extends Component {
   constructor(props) {
     super(props);
+    if (Text.defaultProps == null) Text.defaultProps = {};
+    Text.defaultProps.allowFontScaling = false; //<--------Set allowFontScaling false for Screen
     this.exitCount = 0;
   }
+
+  
+
   componentDidMount() {
     // hide SplashScreen
     setTimeout(() => {
