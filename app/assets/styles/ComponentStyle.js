@@ -144,5 +144,22 @@ export const ComponentStyle = StyleSheet.create({
     paddingTop: 10,
     marginHorizontal: 20,
   },
-  calendar_Image: { width: 20, height: 20, tintColor: Colors.primary },
+  tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
+
+
+  //// Custom Header style
+  headerContainer: {
+    backgroundColor: Colors.primary,
+    justifyContent: "center",
+  },
+  headerContain: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: 10,
+  },
+  titleText: {
+    fontSize: RFPercentage(2.5),
+    fontFamily: FontFamily.RalewayBold,
+    color: Colors.white,
+  },
 });

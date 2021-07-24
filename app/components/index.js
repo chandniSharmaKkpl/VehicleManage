@@ -4,6 +4,8 @@ import PrimaryButton from "../components/PrimaryButton";
 import Input from "../components/Input";
 import InputWithIcon from "../components/InputWithIcon";
 import PasswordInput from "../components/PasswordInput";
+import Header from "../components/Header";
+
 export {
   PrimaryButtonwithIcon,
   BigIconButton,
@@ -11,4 +13,5 @@ export {
   Input,
   InputWithIcon,
   PasswordInput,
+  Header
 };

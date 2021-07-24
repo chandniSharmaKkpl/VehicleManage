@@ -30,7 +30,13 @@ const StaticTitle = {
     forgotPassword:'Forgot Password',
     resetpassword:'Reset Password',
     confirmationCode:'Enter Confirmation Code',
-    enternewpassword:'Enter New Password'
+    enternewpassword:'Enter New Password',
+    addRegistrationDetail:'Add registration details',
+    linkyouraccount:'Link with your social media accounts',
+    rego:'REGO',
+    sa:'SA',
+    linkwithinsta:'Link with Instagram',
+    enterSnapName:'Enter Sanpchat Username'
   };
   export { StaticTitle };
   

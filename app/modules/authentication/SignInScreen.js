@@ -19,9 +19,7 @@ import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
-
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
+import { IMAGE } from "../../assets/Images";
 
 const TAG = "SignInScreen ::=";
 
@@ -56,7 +54,6 @@ export class SignInScreen extends Component {
   gotoForgotPasswordscreen = () => {
     NavigationService.navigate("ForgotPassword");
   };
-  
 
   // This function show/hide the password
   showPassword() {
@@ -65,38 +62,38 @@ export class SignInScreen extends Component {
     });
   }
 
-   // start of validation
+  // start of validation
   checkValidation = () => {
-   const { txtEmail, txtPassword } = this.state;
-   if (isEmpty(txtEmail)) {
-     this.setState({
-       isEmailError: true,
-       emailValidMsg: Messages.email,
-     });
-     return false;
-   }
-   if (!isEmail(txtEmail)) {
-     this.setState({
-       isEmailError: true,
-       emailValidMsg: Messages.emailValid,
-     });
-     return false;
-   }
-   if (isEmpty(txtPassword)) {
-     this.setState({
-       isPasswordError: true,
-       passwdValidMsg: Messages.password,
-     });
-     return false;
-   }
+    const { txtEmail, txtPassword } = this.state;
+    if (isEmpty(txtEmail)) {
+      this.setState({
+        isEmailError: true,
+        emailValidMsg: Messages.email,
+      });
+      return false;
+    }
+    if (!isEmail(txtEmail)) {
+      this.setState({
+        isEmailError: true,
+        emailValidMsg: Messages.emailValid,
+      });
+      return false;
+    }
+    if (isEmpty(txtPassword)) {
+      this.setState({
+        isPasswordError: true,
+        passwdValidMsg: Messages.password,
+      });
+      return false;
+    }
 
     return true;
-  }
+  };
 
   // Check all validation in this function if all values validate after the call Login API
   gotoSignin = () => {
     if (!this.checkValidation()) {
-      return
+      return;
     }
   };
 
@@ -110,11 +107,11 @@ export class SignInScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={logo_img} style={AuthStyle.imglogo} />
+                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={car_img} style={AuthStyle.imgcar} />
+                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
@@ -183,7 +180,9 @@ export class SignInScreen extends Component {
                       }
                     />
                     <View style={[AuthStyle.forgotPasswordContainer]}>
-                      <TouchableOpacity onPress={()=>this.gotoForgotPasswordscreen()}>
+                      <TouchableOpacity
+                        onPress={() => this.gotoForgotPasswordscreen()}
+                      >
                         <Text style={[AuthStyle.resetText]}>
                           {StaticTitle.forgotPasswordSignin}
                         </Text>

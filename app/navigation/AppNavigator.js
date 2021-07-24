@@ -6,6 +6,7 @@ import LoginScreen from '..//modules/authentication/LoginScreen';
 import CreateProfile from '..//modules/authentication/CreateProfile';
 import ForgotPasswordScreen from '..//modules/authentication/ForgotPasswordScreen';
 import ResetPasswordScreen from '..//modules/authentication/ResetPasswordScreen';
+import CreateSocialMediaProfile from '..//modules/authentication/CreateSocialMediaProfile';
 
 const AppNavigator = createStackNavigator(
   {
@@ -27,10 +28,13 @@ const AppNavigator = createStackNavigator(
     },
     ResetPassword:{
       screen:ResetPasswordScreen
+    },
+    CreateSocialMediaProfile:{
+      screen:CreateSocialMediaProfile
     }
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "CreateSocialMediaProfile",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,

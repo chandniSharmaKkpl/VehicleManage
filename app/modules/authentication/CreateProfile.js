@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   KeyboardAvoidingView,
-  TouchableOpacity,
   ScrollView,
   Keyboard,
   Platform,
@@ -14,21 +13,16 @@ import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
 import {
-  PasswordInput,
   Input,
   PrimaryButton,
-  InputWithIcon,
 } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
-import moment from "moment";
-import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
+import { IMAGE } from "../../assets/Images";
 
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
+
 const TAG = "CreateProfile ::=";
 
 export class CreateProfile extends Component {
@@ -64,9 +58,11 @@ export class CreateProfile extends Component {
 
   // create a new profile after check validation's
   createProfile = () => {
-    if (!this.checkValidation()) {
-      return;
-    }
+    // if (!this.checkValidation()) {
+    //   return;
+    // }
+    NavigationService.navigate("CreateSocialMediaProfile");
+    
   };
 
   // start of validation
@@ -123,11 +119,11 @@ export class CreateProfile extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={logo_img} style={AuthStyle.imglogo} />
+                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={car_img} style={AuthStyle.imgcar} />
+                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}

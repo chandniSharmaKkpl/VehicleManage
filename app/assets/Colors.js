@@ -15,6 +15,7 @@ const Colors = {
   google_background:'#4285F4',
   border_color:'#00000026',
   lite_black:'#080909',
+  snapChat:'#F7F400'
 };
 
 export default Colors;
