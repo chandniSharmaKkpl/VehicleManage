@@ -3,6 +3,7 @@ import Colors from "../Colors";
 import { RFPercentage } from "../../utils/ResponsiveFont";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
+import { color } from "react-native-reanimated";
 
 export const AuthStyle = StyleSheet.create({
   /// Common STyle of auth screen's
@@ -60,10 +61,6 @@ export const AuthStyle = StyleSheet.create({
 
   /// Login views
 
-  loginContainer: {
-    flex: 1,
-  },
-
   // lineView
   lineViewContainer: {
     flexDirection: "row",
@@ -116,7 +113,6 @@ export const AuthStyle = StyleSheet.create({
     fontSize: globals.font_12,
     color: Colors.primary,
     textAlign: "center",
-    
   },
 
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
@@ -140,7 +136,7 @@ export const AuthStyle = StyleSheet.create({
     shadowOpacity: 0.58,
     shadowRadius: 16,
     elevation: 24,
-    zIndex: 0
+    zIndex: 0,
   },
   titleviewStyle: {
     marginTop: 28,
@@ -175,12 +171,95 @@ export const AuthStyle = StyleSheet.create({
     marginHorizontal: 20,
   },
 
-
   //////// SignUp screen
-  termAndConditionView:{
-    alignItems: "center", 
-    alignSelf:'center',
-    marginTop: -3.5, 
-    marginLeft:2
+  termAndConditionView: {
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: -3.5,
+    marginLeft: 2,
+  },
+
+  // create Social profile
+  login_safeAreaStyle: {
+    flex: 1,
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  imageview: {
+    marginVertical: globals.deviceHeight * 0.03,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  beforeimgView: {
+    height: globals.deviceWidth * 0.3,
+    width: globals.deviceWidth * 0.3,
+    borderColor: Colors.primary,
+    borderRadius: (globals.deviceWidth * 0.3) / 2,
+    borderWidth: 0.7,
+  },
+  imageStyle: {
+    height: globals.deviceWidth * 0.3,
+    width: globals.deviceWidth * 0.3,
+    borderWidth: 0.7,
+    borderColor: Colors.primary,
+    borderRadius: (globals.deviceWidth * 0.3) / 2,
+  },
+  settingOpacityContainer: {
+    height: globals.deviceWidth * 0.085,
+    width: globals.deviceWidth * 0.085,
+    borderRadius: (globals.deviceWidth * 0.085) / 2,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    // position: 'absolute',
+    alignSelf: "center",
+    bottom: 0,
+    marginTop: -globals.deviceHeight * 0.04,
+    marginLeft: globals.deviceHeight * 0.1,
+  },
+  settingIconStyle: {
+    alignSelf: "center",
+    resizeMode: "contain",
+    width: globals.deviceWidth * 0.04,
+    height: globals.deviceHeight * 0.06,
+  },
+
+  //////// Social Profile style
+  smallTitle: {
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_14,
+    color: Colors.black,
+    textAlign: "center",
+    justifyContent: "center",
+  },
+  RectangleShapeView: {
+    width: 70 * 2,
+    height: 50,
+    backgroundColor: Colors.white,
+    borderColor: Colors.black,
+    borderWidth: 2,
+    borderRadius:8,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  regoText:{
+    fontFamily: FontFamily.RalewayBold,
+    fontSize: globals.font_20,
+    color: Colors.black,
+    textAlign: "center",
+    justifyContent: "center",
+    fontWeight:'bold'
+  },
+  saText:{
+    fontFamily: FontFamily.RalewayBold,
+    fontSize: globals.font_8,
+    color: Colors.black,
+    textAlign: "center",
+    fontWeight:'bold'
+  },
+  SnapText:{
+    color:Colors.black,
+    fontFamily:FontFamily.RalewaRegular
   }
 });

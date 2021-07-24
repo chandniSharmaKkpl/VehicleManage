@@ -20,7 +20,6 @@ import {
   InputWithIcon,
 } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
 import {
   isEmpty,
@@ -29,15 +28,13 @@ import {
   isValidComparedPassword,
   isName,
   isPasswordLength,
-  checkfirstWhiteSpace,
-  allSpecialCharacter,
   onlycharandnum,
 } from "../../utils/Validators";
 import moment from "moment";
 import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
+import { IMAGE } from "../../assets/Images";
+
 
 const TAG = "SignUpScreen ::=";
 
@@ -102,10 +99,10 @@ export class SignUpScreen extends Component {
 
   // Check all validation in this function, if all values validate after the call Register API
   gotoSignup = () => {
-    if (!this.checkValidation()) {
-      return;
-    }
-    // NavigationService.navigate("CreateProfile");
+    // if (!this.checkValidation()) {
+    //   return;
+    // }
+    NavigationService.navigate("CreateProfile");
   };
 
   // start of validation
@@ -282,11 +279,11 @@ export class SignUpScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={logo_img} style={AuthStyle.imglogo} />
+                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={car_img} style={AuthStyle.imgcar} />
+                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
