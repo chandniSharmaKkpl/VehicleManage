@@ -52,6 +52,12 @@ export class SignInScreen extends Component {
     NavigationService.navigate("Login");
   };
 
+  // user forgot their password then go to ForgotPassword screen
+  gotoForgotPasswordscreen = () => {
+    NavigationService.navigate("ForgotPassword");
+  };
+  
+
   // This function show/hide the password
   showPassword() {
     this.setState({
@@ -176,9 +182,9 @@ export class SignInScreen extends Component {
                       }
                     />
                     <View style={[AuthStyle.forgotPasswordContainer]}>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={()=>this.gotoForgotPasswordscreen()}>
                         <Text style={[AuthStyle.resetText]}>
-                          {StaticTitle.forgotPassword}
+                          {StaticTitle.forgotPasswordSignin}
                         </Text>
                       </TouchableOpacity>
                     </View>
