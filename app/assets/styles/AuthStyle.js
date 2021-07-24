@@ -178,9 +178,9 @@ export const AuthStyle = StyleSheet.create({
 
   //////// SignUp screen
   termAndConditionView:{
-    // alignItems: "center", 
-    // alignSelf:'center',
-    // marginTop: 3.8, 
+    alignItems: "center", 
+    alignSelf:'center',
+    marginTop: -3.5, 
     marginLeft:2
   }
 });

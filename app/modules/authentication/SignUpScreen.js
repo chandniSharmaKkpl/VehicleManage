@@ -29,7 +29,9 @@ import {
   isValidComparedPassword,
   isName,
   isPasswordLength,
-  getAge,
+  checkfirstWhiteSpace,
+  allSpecialCharacter,
+  onlycharandnum,
 } from "../../utils/Validators";
 import moment from "moment";
 import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
@@ -100,10 +102,10 @@ export class SignUpScreen extends Component {
 
   // Check all validation in this function, if all values validate after the call Register API
   gotoSignup = () => {
-    // if (!this.checkValidation()) {
-    //   return;
-    // }
-    NavigationService.navigate("CreateProfile");
+    if (!this.checkValidation()) {
+      return;
+    }
+    // NavigationService.navigate("CreateProfile");
   };
 
   // start of validation
@@ -130,6 +132,15 @@ export class SignUpScreen extends Component {
       });
       return false;
     }
+
+    if (!onlycharandnum(txtFirstName)) {
+      this.setState({
+        isFirstNameError: true,
+        firstNameValidMsg: Messages.nameFail,
+      });
+      return false;
+    }
+
     if (isEmpty(txtLastName)) {
       this.setState({
         isLastNameError: true,
@@ -138,6 +149,14 @@ export class SignUpScreen extends Component {
       return false;
     }
     if (!isName(txtLastName)) {
+      this.setState({
+        isLastNameError: true,
+        lastNameValidMsg: Messages.nameFail,
+      });
+      return false;
+    }
+
+    if (!onlycharandnum(txtLastName)) {
       this.setState({
         isLastNameError: true,
         lastNameValidMsg: Messages.nameFail,

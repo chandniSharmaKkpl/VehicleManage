@@ -57,4 +57,30 @@ export const isValidPhoneNumber = (phoneNumber) => {
   }
 };
 
+export const checkfirstWhiteSpace = (char) => {
+  let regex = /^[^\s]+(\s+[^\s]+)*$ /;
+  var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+  if (!regex.test(char) || !format.test(char)) {
+    // Alert.alert(globals.appName, message)
+    return true;
+  }
+  return false;
+};
 
+/**
+ * Regular Expression Method for TextInput allSpecialCharacter
+ */
+export const allSpecialCharacter = (txtInput) => {
+  const regex = /[`~,.<>;':"\/\[\]\|{}()=_+-]/;
+
+  if (!regex.test(txtInput)) {
+    return true;
+  }
+  // Alert.alert(globals.appName, emptyMessage);
+  return false;
+};
+
+export const onlycharandnum = (value) => {
+  let regex = /^[^!-\\/:-@\\[-`{-~]+$/;
+  return regex.test(value);
+};
