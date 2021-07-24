@@ -8,7 +8,7 @@ const StaticTitle = {
     newApp:'New to this app?',
     signup:'Sign Up',
     signin:'Sign In',
-    forgotPassword:'Forgot my password?',
+    forgotPasswordSignin:'Forgot my password?',
     enterPassword:'Enter Password',
     enterUsaerName:'Enter Email Address',
     backTo:'Back to',
@@ -26,7 +26,9 @@ const StaticTitle = {
     enterCity:'Enter City or Suburb',
     makeModal:'Make and Model of Car',
     enterColor:'Enter Color of Car',
-    addDescription:'Add a Description'
+    addDescription:'Add a Description',
+    forgotPassword:'Forgot Password',
+
   };
   export { StaticTitle };
   
