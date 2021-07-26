@@ -155,7 +155,7 @@ export const AuthStyle = StyleSheet.create({
     fontFamily: FontFamily.RalewaRegular,
     fontSize: RFPercentage(1.5),
     alignSelf: "flex-end",
-    color: Colors.lite_black,
+    color: Colors.placeholderColor,
   },
   bottomsignin: {
     marginHorizontal: 20,
@@ -182,7 +182,7 @@ export const AuthStyle = StyleSheet.create({
   // create Social profile
   login_safeAreaStyle: {
     flex: 1,
-    marginBottom: 20,
+    marginBottom: 20, 
     marginTop: 10,
   },
   imageview: {
@@ -219,9 +219,9 @@ export const AuthStyle = StyleSheet.create({
   },
   settingIconStyle: {
     alignSelf: "center",
-    resizeMode: "contain",
+    
     width: globals.deviceWidth * 0.04,
-    height: globals.deviceHeight * 0.06,
+    height: globals.deviceHeight * 0.04,
   },
 
   //////// Social Profile style
@@ -238,28 +238,31 @@ export const AuthStyle = StyleSheet.create({
     backgroundColor: Colors.white,
     borderColor: Colors.black,
     borderWidth: 2,
-    borderRadius:8,
+    borderRadius: 8,
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
   },
-  regoText:{
+  regoText: {
     fontFamily: FontFamily.RalewayBold,
-    fontSize: globals.font_20,
+    fontSize: globals.font_26,
     color: Colors.black,
     textAlign: "center",
     justifyContent: "center",
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
-  saText:{
+  saText: {
     fontFamily: FontFamily.RalewayBold,
     fontSize: globals.font_8,
     color: Colors.black,
     textAlign: "center",
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
-  SnapText:{
-    color:Colors.black,
-    fontFamily:FontFamily.RalewaRegular
-  }
+  SnapText: {
+    color: Colors.black,
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_15,
+    textAlign: "center",
+    justifyContent: "center",
+  },
 });

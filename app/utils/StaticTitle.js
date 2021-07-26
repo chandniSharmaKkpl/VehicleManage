@@ -36,7 +36,11 @@ const StaticTitle = {
     rego:'REGO',
     sa:'SA',
     linkwithinsta:'Link with Instagram',
-    enterSnapName:'Enter Sanpchat Username'
+    enterSnapName:'Enter Sanpchat Username',
+    captureimgfromCamera:'Capture Image from Camera',
+    uploadfromgallery:'Upload Image from Gallery',
+    filetoupload:'Choose File To Upload',
+    
   };
   export { StaticTitle };
   

@@ -9,7 +9,6 @@ import GoogleLogin from "../../components/GoogleLogin";
 import NavigationService from "../../utils/NavigationService";
 import { IMAGE } from "../../assets/Images";
 
-
 const TAG = "LoginScreen ::=";
 
 export class LoginScreen extends Component {
@@ -52,10 +51,12 @@ export class LoginScreen extends Component {
               <Text style={AuthStyle.smallText}>{StaticTitle.or}</Text>
               <View style={AuthStyle.lineContainer}></View>
             </View>
-            <PrimaryButton
-              btnName={StaticTitle.loginwithEmail}
-              onPress={() => this.performLoginwithEmail()}
-            />
+            <View style={[AuthStyle.signinbtnView, { paddingVertical: 0 }]}>
+              <PrimaryButton
+                btnName={StaticTitle.loginwithEmail}
+                onPress={() => this.performLoginwithEmail()}
+              />
+            </View>
           </View>
 
           <View style={AuthStyle.bottomContainer}>
