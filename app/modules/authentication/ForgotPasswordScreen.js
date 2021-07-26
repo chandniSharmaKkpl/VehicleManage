@@ -84,7 +84,7 @@ export class ForgotPasswordScreen extends Component {
                 behavior={Platform.OS === "ios" ? "padding" : null}
                 style={[
                   AuthStyle.bottomCurve,
-                  { marginTop: globals.deviceHeight * 0.25 },
+                  // { marginTop: globals.deviceHeight * 0.25 },
                 ]}
               >
                 <ScrollView

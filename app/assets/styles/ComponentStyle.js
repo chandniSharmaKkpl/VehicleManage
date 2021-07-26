@@ -75,17 +75,21 @@ export const ComponentStyle = StyleSheet.create({
 
   //Custom Component name "BigIconButton" Starting....
   bigIconBtnContainer: {
-    flexDirection: "column",
-    alignItems: "center",
+    height: 55,
     backgroundColor: Colors.primary,
-    padding: "5%",
     borderRadius: 10,
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom:20
   },
   bigIconLabel: {
-    fontFamily: FontFamily.RalewayBold,
-    fontSize: RFPercentage(1.3),
-    color: Colors.black,
-    paddingTop: 10,
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_15,
+    color: Colors.white,
+    textAlign: "left",
+    justifyContent: "center",
+    width:globals.deviceWidth * 0.7
   },
   //Custom Component name "BigIconButton" Finished....
 
@@ -98,7 +102,7 @@ export const ComponentStyle = StyleSheet.create({
   },
   primaryBtnonlyText: {
     fontFamily: FontFamily.RalewaySemiBold,
-    fontSize: globals.font_16,
+    fontSize: globals.font_18,
     color: Colors.white,
     textAlign: "center",
     justifyContent: "center",
@@ -193,12 +197,11 @@ export const ComponentStyle = StyleSheet.create({
   },
   choosefilestyle: {
     fontSize: globals.font_16,
-    fontFamily: FontFamily.RalewayBold,
+    fontFamily: FontFamily.RalewaySemiBold,
     color: Colors.primary,
     paddingTop: 18,
     paddingBottom: 18,
     textAlign: "center",
-    fontWeight: "bold" 
   },
   lineStyle: {
     height: globals.deviceHeight * 0.002,
@@ -218,10 +221,10 @@ export const ComponentStyle = StyleSheet.create({
     fontWeight: "400",
     paddingTop: 18,
     paddingBottom: 18,
-    paddingHorizontal:globals.deviceWidth * 0.03,
+    paddingHorizontal: globals.deviceWidth * 0.03,
   },
   lineStyle1: {
-    height: 1,
+    height: (Platform.OS == 'ios') ?  0.1 : 0.5,
     width: "100%",
     backgroundColor: Colors.black,
     opacity: 0.4,

@@ -9,6 +9,7 @@ const IMAGE = {
   facebook_img:require("../assets/images/facebook.png"),
   upload_img:require("../assets/images/upload.png"),
   camera_img:require("../assets/images/camera.png"),
+  upload_doc_img:require("../assets/images/upload_doc.png"),
 };
 
 export { IMAGE };

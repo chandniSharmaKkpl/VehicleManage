@@ -5,7 +5,7 @@ import {
   View,
   Platform,
   StatusBar,
-  Text
+  Text,
 } from "react-native";
 import { NavigationActions } from "react-navigation";
 import NavigationService from "../utils/NavigationService";
@@ -29,20 +29,17 @@ class AppNavigation extends Component {
     this.exitCount = 0;
   }
 
-  
-
   componentDidMount() {
     // hide SplashScreen
     setTimeout(() => {
       SplashScreen.hide();
     }, 5000);
 
-
     // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    // Platform.OS == "android"
-    //   ? StatusBar.setBackgroundColor(Colors.primary, true)
-    //   : null; // add android statusbar color
+    Platform.OS == "android"
+      ? StatusBar.setBackgroundColor(Colors.primary, true)
+      : null; // add android statusbar color
   }
 
   componentWillUnmount() {
@@ -89,15 +86,15 @@ class AppNavigation extends Component {
     return (
       <View style={{ flex: 1 }}>
         {isLoading && <Loader isOverlay={true} loaderMessage={loaderMessage} />}
-        {/* <View
+        <View
           style={{
             width: "100%",
             height: STATUS_BAR_HEIGHT,
             backgroundColor: Colors.primary,
           }}
         >
-          <StatusBar barStyle="light-content" backgroundColor="##FFBE0B" />
-        </View> */}
+          <StatusBar barStyle="light-content" backgroundColor="#FFBE0B" />
+        </View>
         <AppWithNavigationState
           state={nav}
           dispatch={dispatch}

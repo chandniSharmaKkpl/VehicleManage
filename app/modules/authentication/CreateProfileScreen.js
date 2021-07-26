@@ -23,9 +23,9 @@ import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 
 
-const TAG = "CreateProfile ::=";
+const TAG = "CreateProfileScreen ::=";
 
-export class CreateProfile extends Component {
+export class CreateProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -300,5 +300,5 @@ export class CreateProfile extends Component {
 
 // const mapDispatchToProps = (dispatch) => ({});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CreateProfile);
-export default CreateProfile;
+// export default connect(mapStateToProps, mapDispatchToProps)(CreateProfileScreen);
+export default CreateProfileScreen;
