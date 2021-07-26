@@ -19,11 +19,11 @@ const MediaModel = ({
   ...props
 }) => (
   <ReactModal
-    animationType="slideOutDown"
-    transparent={false}
+    animationType="slide"
+    transparent={true}
     isVisible={modalVisible}
     onBackdropPress={onBackdropPress}
-    backdropColor={"rgb(57,58,58)"}
+    backdropColor={"rgba(58, 58, 58, 0.8)"}
     backdropOpacity={1}
   >
     <TouchableWithoutFeedback onPress={onPress}>

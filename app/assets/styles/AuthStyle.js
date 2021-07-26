@@ -27,7 +27,7 @@ export const AuthStyle = StyleSheet.create({
     marginTop:
       Platform.OS == "ios"
         ? globals.deviceHeight * 0.07
-        : globals.deviceHeight * 0.02,
+        : globals.deviceHeight * 0.05,
   },
   imglogo: {
     width: globals.deviceHeight * 0.25,
@@ -118,8 +118,9 @@ export const AuthStyle = StyleSheet.create({
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
   bottomCurve: {
     flex: 1,
-    flexGrow: 1,
-    height: 100,
+    // flexGrow: 1,
+    // height: 100,
+    width: '100%',
     marginTop: globals.deviceHeight * 0.1,
     borderColor: Colors.border_color,
     borderWidth: 0.1,
@@ -137,12 +138,14 @@ export const AuthStyle = StyleSheet.create({
     shadowRadius: 16,
     elevation: 24,
     zIndex: 0,
+    // position: 'absolute', //Here is the trick
+    bottom: 0, //Here is the trick
   },
   titleviewStyle: {
     marginTop: 28,
     marginHorizontal: 20,
-    // marginBottom: 20,
-    height: globals.deviceHeight * 0.06,
+    marginBottom: 10,
+    // height: globals.deviceHeight * 0.06,
   },
   forgotPasswordContainer: {
     padding: 10,
@@ -182,7 +185,7 @@ export const AuthStyle = StyleSheet.create({
   // create Social profile
   login_safeAreaStyle: {
     flex: 1,
-    marginBottom: 20, 
+    marginBottom: 20,
     marginTop: 10,
   },
   imageview: {
@@ -219,7 +222,7 @@ export const AuthStyle = StyleSheet.create({
   },
   settingIconStyle: {
     alignSelf: "center",
-    
+
     width: globals.deviceWidth * 0.04,
     height: globals.deviceHeight * 0.04,
   },
@@ -265,4 +268,26 @@ export const AuthStyle = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
   },
+
+  //// registration screen style
+  registrationStyle: {
+    fontFamily: FontFamily.RalewaRegular,
+    textAlign: "left",
+    color: Colors.black,
+    fontSize: globals.font_20,
+    justifyContent: "center",
+  },
+  registerContent: {
+    marginHorizontal: 20,
+  },
+  registrationContentTextStyle:{
+    fontFamily: FontFamily.RalewaRegular,
+    color: Colors.black,
+    fontSize: globals.font_12,
+    justifyContent: "center",
+  },
+  registernumView:{
+    marginTop:10,
+    marginBottom:20
+  }
 });

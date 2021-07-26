@@ -64,7 +64,7 @@ const PrimaryTextinputwithIcon = ({
           autoCapitalize={autoCapitalize}
           underlineColorAndroid="transparent"
           multiline={multiline}
-          autoFocus={autoFocus}
+          autoFocus={false}
           numberOfLines={numberOfLines}
         />
       </View>
