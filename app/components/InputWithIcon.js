@@ -50,7 +50,7 @@ const InputWithIcon = ({
             },
           ]}
           placeholder={placeholderText}
-          placeholderTextColor={Colors.lite_black}
+          placeholderTextColor={Colors.placeholderColor}
           blurOnSubmit={blurOnSubmit}
           onChangeText={onChangeText}
           keyboardType={keyboardType}

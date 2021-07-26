@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { View } from "react-native";
 import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
-const facebook_img = require("../assets/images/facebook.png");
+import { IMAGE } from "../assets/Images";
+
 import { StaticTitle } from "../utils/StaticTitle";
 import {
   LoginManager,
@@ -120,11 +122,13 @@ class FBLogin extends Component {
 
   render() {
     return (
-      <PrimaryButtonwithIcon
-        iconName={facebook_img}
-        btnName={StaticTitle.loginwithFB}
-        onPress={() => this.performFBLogin()}
-      />
+      <View style={{ marginHorizontal: 10 }}>
+        <PrimaryButtonwithIcon
+          iconName={IMAGE.facebook_img}
+          btnName={StaticTitle.loginwithFB}
+          onPress={() => this.performFBLogin()}
+        />
+      </View>
     );
   }
 }

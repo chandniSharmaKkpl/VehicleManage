@@ -5,6 +5,9 @@ import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
 
 export const ComponentStyle = StyleSheet.create({
+  onlyFlex: {
+    flex: 1,
+  },
   //Custom Component name "Loader" Starting....
   centerIndicator: {
     position: "absolute",
@@ -137,7 +140,7 @@ export const ComponentStyle = StyleSheet.create({
     height: 55,
     justifyContent: "center",
   },
- 
+
   passwordInputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -145,7 +148,6 @@ export const ComponentStyle = StyleSheet.create({
     marginHorizontal: 20,
   },
   tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
-
 
   //// Custom Header style
   headerContainer: {
@@ -161,5 +163,72 @@ export const ComponentStyle = StyleSheet.create({
     fontSize: RFPercentage(2.5),
     fontFamily: FontFamily.RalewayBold,
     color: Colors.white,
+  },
+
+  /////// Social media textinput for snapchat
+
+  snap_inputText: {
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_14,
+    width: globals.deviceWidth * 0.65,
+    color: Colors.black,
+  },
+
+  /// react-native modal
+
+  modelContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    width: "100%",
+  },
+  modelView: {
+    backgroundColor: Colors.white,
+    width: "100%",
+    borderRadius: 10,
+  },
+
+  titleviewstyle: {
+    marginVertical: globals.deviceHeight * 0.01,
+  },
+  choosefilestyle: {
+    fontSize: globals.font_16,
+    fontFamily: FontFamily.RalewayBold,
+    color: Colors.primary,
+    paddingTop: 18,
+    paddingBottom: 18,
+    textAlign: "center",
+    fontWeight: "bold" 
+  },
+  lineStyle: {
+    height: globals.deviceHeight * 0.002,
+    width: "100%",
+    backgroundColor: Colors.primary,
+    opacity: 0.6,
+  },
+  viewPopupStyle: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginStart: 22,
+  },
+  textStylePopup: {
+    color: Colors.black,
+    fontSize: 16,
+    fontFamily: FontFamily.RalewaRegular,
+    fontWeight: "400",
+    paddingTop: 18,
+    paddingBottom: 18,
+    paddingHorizontal:globals.deviceWidth * 0.03,
+  },
+  lineStyle1: {
+    height: 1,
+    width: "100%",
+    backgroundColor: Colors.black,
+    opacity: 0.4,
+  },
+  imagePopupStyle: {
+    height: globals.deviceWidth * 0.05,
+    width: globals.deviceWidth * 0.05,
+    resizeMode: "contain",
   },
 });

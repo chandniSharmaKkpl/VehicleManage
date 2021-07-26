@@ -5,6 +5,8 @@ import Input from "../components/Input";
 import InputWithIcon from "../components/InputWithIcon";
 import PasswordInput from "../components/PasswordInput";
 import Header from "../components/Header";
+import PrimaryTextinputwithIcon from '../components/PrimaryTextinputwithIcon';
+import MediaModel from '../components/MediaModel';
 
 export {
   PrimaryButtonwithIcon,
@@ -13,5 +15,7 @@ export {
   Input,
   InputWithIcon,
   PasswordInput,
-  Header
+  Header,
+  PrimaryTextinputwithIcon,
+  MediaModel
 };
