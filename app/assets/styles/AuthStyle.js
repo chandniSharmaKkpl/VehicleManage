@@ -98,7 +98,7 @@ export const AuthStyle = StyleSheet.create({
     flex: 0.1,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: globals.deviceHeight * 0.03,
+    marginTop: globals.deviceHeight * 0.06,
     flexDirection: "row",
   },
   smallNewAppText: {
