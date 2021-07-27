@@ -7,7 +7,7 @@ const ButtonwithRightIcon = ({ title, onPress, iconName,bigcontainerstyle, ...pr
   return (
     <TouchableOpacity onPress={onPress} {...props}>
       <View style={[ComponentStyle.bigIconBtnContainer, bigcontainerstyle]}>
-        <Text numberOfLines={3} style={[ComponentStyle.bigIconLabel]}>{title}</Text>
+        <Text numberOfLines={2} style={[ComponentStyle.bigIconLabel]}>{title}</Text>
         <FastImage
           style={{
             width: 18,

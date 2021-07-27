@@ -89,7 +89,8 @@ export const ComponentStyle = StyleSheet.create({
     color: Colors.white,
     textAlign: "left",
     justifyContent: "center",
-    width:globals.deviceWidth * 0.7
+    width:globals.deviceWidth * 0.7,
+    paddingVertical:2
   },
   //Custom Component name "BigIconButton" Finished....
 

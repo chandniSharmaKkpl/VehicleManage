@@ -125,7 +125,7 @@ export class ResetPasswordScreen extends Component {
                 behavior={Platform.OS === "ios" ? "padding" : null}
                 style={[
                   AuthStyle.bottomCurve,
-                  { marginTop: globals.deviceHeight * 0.2 },
+                  { marginTop: globals.deviceHeight * 0.1 },
                 ]}
               >
                 <ScrollView
