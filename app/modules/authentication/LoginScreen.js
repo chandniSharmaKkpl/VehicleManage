@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StatusBar,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { connect } from "react-redux";
 import { StaticTitle } from "../../utils/StaticTitle";
@@ -32,6 +39,11 @@ export class LoginScreen extends Component {
     return (
       <>
         <View style={AuthStyle.onlyFlex}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <View style={AuthStyle.imglogoContainer}>
             <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
           </View>
@@ -43,11 +55,17 @@ export class LoginScreen extends Component {
           <View style={AuthStyle.titleContainer}>
             <Text style={AuthStyle.titleText}>{StaticTitle.login}</Text>
           </View>
-          <ScrollView  ref={(node) => (this.scroll = node)}
+          <ScrollView
+            ref={(node) => (this.scroll = node)}
             automaticallyAdjustContentInsets={true}
             enableOnAndroid={true}
             showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="never" style={[AuthStyle.onlyFlex, {marginBottom:globals.deviceHeight * 0.06}]}>
+            keyboardShouldPersistTaps="never"
+            style={[
+              AuthStyle.onlyFlex,
+              { marginBottom: globals.deviceHeight * 0.02 },
+            ]}
+          >
             <View style={AuthStyle.onlyFlex}>
               <FBLogin />
               <GoogleLogin />

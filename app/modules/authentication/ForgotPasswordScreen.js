@@ -84,7 +84,7 @@ export class ForgotPasswordScreen extends Component {
                 behavior={Platform.OS === "ios" ? "padding" : null}
                 style={[
                   AuthStyle.bottomCurve,
-                  // { marginTop: globals.deviceHeight * 0.25 },
+                  { marginTop: globals.deviceHeight * 0.25 },
                 ]}
               >
                 <ScrollView
@@ -93,7 +93,11 @@ export class ForgotPasswordScreen extends Component {
                   enableOnAndroid={true}
                   showsVerticalScrollIndicator={false}
                   keyboardShouldPersistTaps="never"
-                  style={{ marginTop: globals.deviceHeight * 0.015 }}
+                  style={{
+                    flex: 1,
+                    marginTop: globals.deviceHeight * 0.015,
+                    marginBottom: globals.deviceHeight * 0.02,
+                  }}
                 >
                   <View>
                     <View style={AuthStyle.titleviewStyle}>
@@ -128,7 +132,7 @@ export class ForgotPasswordScreen extends Component {
                         onPress={() => this.PerformForgotPassAPI()}
                       />
                     </View>
-                    <View style={AuthStyle.bottomsignin}>
+                    <View style={[AuthStyle.bottomsignin]}>
                       <Text style={AuthStyle.smallNewAppText}>
                         {StaticTitle.backTo}
                       </Text>

@@ -9,6 +9,7 @@ import {
   Keyboard,
   Platform,
   TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -29,12 +30,12 @@ import {
   isName,
   isPasswordLength,
   onlycharandnum,
+  
 } from "../../utils/Validators";
 import moment from "moment";
 import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
-
 
 const TAG = "SignUpScreen ::=";
 
@@ -273,6 +274,11 @@ export class SignUpScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
@@ -475,9 +481,7 @@ export class SignUpScreen extends Component {
                     />
 
                     <View style={AuthStyle.signinbtnView}>
-                      <Text
-                        style={[AuthStyle.smallNewAppText, { marginBottom: 2 }]}
-                      >
+                      <Text style={[AuthStyle.smallNewAppText, {}]}>
                         {StaticTitle.termAndConditionText}
                         <TouchableOpacity
                           style={AuthStyle.termAndConditionView}

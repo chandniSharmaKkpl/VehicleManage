@@ -8,6 +8,7 @@ import {
   ScrollView,
   Keyboard,
   Platform,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
@@ -103,6 +104,11 @@ export class ResetPasswordScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}

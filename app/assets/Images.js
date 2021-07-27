@@ -10,6 +10,7 @@ const IMAGE = {
   upload_img:require("../assets/images/upload.png"),
   camera_img:require("../assets/images/camera.png"),
   upload_doc_img:require("../assets/images/upload_doc.png"),
+  primaryBackground:require("../assets/images/background.png"),
 };
 
 export { IMAGE };

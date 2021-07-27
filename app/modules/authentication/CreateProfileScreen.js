@@ -7,21 +7,18 @@ import {
   ScrollView,
   Keyboard,
   Platform,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import {
-  Input,
-  PrimaryButton,
-} from "../../components";
+import { Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
-
 
 const TAG = "CreateProfileScreen ::=";
 
@@ -62,7 +59,6 @@ export class CreateProfileScreen extends Component {
     //   return;
     // }
     NavigationService.navigate("CreateSocialMediaProfile");
-    
   };
 
   // start of validation
@@ -113,6 +109,11 @@ export class CreateProfileScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}

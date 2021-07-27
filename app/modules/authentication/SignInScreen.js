@@ -8,6 +8,7 @@ import {
   ScrollView,
   Keyboard,
   Platform,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
@@ -15,7 +16,6 @@ import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
 import { PasswordInput, Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
@@ -101,6 +101,11 @@ export class SignInScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
