@@ -46,7 +46,9 @@ const StaticTitle = {
     attachPaper:'Attach Registration Paper',
     attachPhoto:'Attach Vehicle Photo',
     saveDetails:'Save Details',
-    attchDoc:'Attach Document/Photo'
+    attchDoc:'Attach Document/Photo',
+    linkfb:'Link with Facebook',
+    linkinsta:'Link with Instagram'
   };
   export { StaticTitle };
   

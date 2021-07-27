@@ -139,8 +139,8 @@ export const AuthStyle = StyleSheet.create({
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
   bottomCurve: {
     flex: 1,
-    flexGrow: 1,
-    // height: 100,
+    // flexGrow: 1,
+    height: 100,
     width: "100%",
     marginTop: globals.deviceHeight * 0.1,
     borderColor: Colors.border_color,

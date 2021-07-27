@@ -20,6 +20,8 @@ import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationEvents } from "react-navigation";
 
 const TAG = "SignInScreen ::=";
 
@@ -38,7 +40,25 @@ export class SignInScreen extends Component {
     };
     this.input = {};
   }
-  componentDidMount() {}
+
+  
+  componentDidMount = async () => {
+    const fb_email = await AsyncStorage.getItem("FB_USEREMAIL");
+    console.log(TAG, "fb_email--", fb_email);
+  };
+
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
+      txtEmail: "",
+      txtPassword: "",
+      isShowPassword: true,
+      isEmailError: false,
+      isPasswordError: false,
+      emailValidMsg: "",
+      passwdValidMsg: "",
+    });
+  };
 
   // Focus on next input
   focusNextTextField = (ref) => {
@@ -95,13 +115,17 @@ export class SignInScreen extends Component {
     if (!this.checkValidation()) {
       return;
     }
+    NavigationService.navigate("CreateProfile");
   };
 
   render() {
     return (
       <>
         <View style={AuthStyle.container}>
-        <StatusBar
+          <NavigationEvents
+            onWillBlur={() => this.clearStates()}
+          />
+          <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
             translucent={true}

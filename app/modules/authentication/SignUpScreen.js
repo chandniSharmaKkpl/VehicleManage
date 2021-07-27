@@ -22,6 +22,8 @@ import {
 } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
+import { NavigationEvents } from "react-navigation";
+
 import {
   isEmpty,
   isEmail,
@@ -74,6 +76,38 @@ export class SignUpScreen extends Component {
 
   componentDidMount() {}
 
+  
+
+  // clear States before leave this screen
+  clearStates =()=>{
+    this.setState({
+      txtEmail: "",
+      txtFirstName: "",
+      txtLastName: "",
+      txtPassword: "",
+      txtConfirmPassword: "",
+      txtDob: "",
+
+      isShowPassword: true,
+      isShowConfirmPassword: true,
+      isDatePickerVisible: false,
+
+      isEmailError: false,
+      isFirstNameError: false,
+      isLastNameError: false,
+      isPasswordError: false,
+      isConfirmPasswordError: false,
+      isDobError: false,
+
+      emailValidMsg: "",
+      firstNameValidMsg: "",
+      lastNameValidMsg: "",
+      passwdValidMsg: "",
+      confirmPasswordValidMsg: "",
+      dobValidMsg: "",
+    })
+  }
+
   // Focus on next input
   focusNextTextField = (ref) => {
     this.input[ref].focus();
@@ -99,10 +133,10 @@ export class SignUpScreen extends Component {
   }
 
   // Check all validation in this function, if all values validate after the call Register API
-  gotoSignup = () => {
-    // if (!this.checkValidation()) {
-    //   return;
-    // }
+  gotoSignup = async () => {
+    if (!this.checkValidation()) {
+      return;
+    }
     NavigationService.navigate("CreateProfile");
   };
 
@@ -244,8 +278,11 @@ export class SignUpScreen extends Component {
           isDobError: true,
           dobValidMsg: Messages.dobFail,
         });
+        return false;
+      }else{
+        return true;
       }
-      return false;
+      
     }
 
     return true;
@@ -274,6 +311,9 @@ export class SignUpScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <NavigationEvents
+            onWillBlur={() => this.clearStates()}
+          />
         <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"

@@ -18,7 +18,9 @@ const Colors = {
   snapChat:'#F7F400',
   placeholderColor:'rgb(136,137,137)',
   pink:'#DB3773',
-  blue:'#3B5998'
+  blue:'#3B5998',
+ 
+  
 };
 
 export default Colors;

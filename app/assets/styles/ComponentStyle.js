@@ -108,6 +108,13 @@ export const ComponentStyle = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
   },
+  PrimaryTextinputiconstyle:{
+    width: 25,
+    height: 25,
+    marginLeft: 20,
+    marginRight: 24,
+    marginVertical: 10,
+  },
   //primaryBtnonlyContainer style Finished....
 
   // Login Input style started

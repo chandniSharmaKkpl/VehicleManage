@@ -37,7 +37,7 @@ const PrimaryTextinputwithIcon = ({
     <TouchableOpacity {...props} onPress={onPress}>
       <View style={[ComponentStyle.primaryBtnContainer, buttonStyle]}>
         <FastImage
-          style={[ComponentStyle.iconstyle, iconStyle]}
+          style={[ComponentStyle.PrimaryTextinputiconstyle, iconStyle]}
           source={iconName}
           resizeMode={FastImage.resizeMode.contain}
         />

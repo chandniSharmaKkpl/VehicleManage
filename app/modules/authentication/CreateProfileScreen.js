@@ -19,6 +19,7 @@ import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
+import { NavigationEvents } from "react-navigation";
 
 const TAG = "CreateProfileScreen ::=";
 
@@ -53,11 +54,34 @@ export class CreateProfileScreen extends Component {
     this.input[ref].focus();
   };
 
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
+      txtUserName: "",
+      txtCity: "",
+      txtModalofCar: "",
+      txtColorofCar: "",
+      txtDescription: "",
+
+      isUserNameError: false,
+      isCityError: false,
+      isModalofCarError: false,
+      isColorofCarError: false,
+      isDescriptionError: false,
+
+      userNameValidMsg: "",
+      cityValidMsg: "",
+      modalofCarValidMsg: "",
+      colorofCarValidMsg: "",
+      descriptionValidMsg: "",
+    });
+  };
+
   // create a new profile after check validation's
   createProfile = () => {
-    // if (!this.checkValidation()) {
-    //   return;
-    // }
+    if (!this.checkValidation()) {
+      return;
+    }
     NavigationService.navigate("CreateSocialMediaProfile");
   };
 
@@ -109,7 +133,8 @@ export class CreateProfileScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
-        <StatusBar
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
             translucent={true}

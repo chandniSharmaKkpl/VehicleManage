@@ -16,6 +16,7 @@ import GoogleLogin from "../../components/GoogleLogin";
 import NavigationService from "../../utils/NavigationService";
 import { IMAGE } from "../../assets/Images";
 import * as globals from "../../utils/Globals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "LoginScreen ::=";
 
@@ -24,6 +25,8 @@ export class LoginScreen extends Component {
     super(props);
     this.state = {};
   }
+
+  
 
   // Login with Email navigate to sign in screen
   performLoginwithEmail = () => {
