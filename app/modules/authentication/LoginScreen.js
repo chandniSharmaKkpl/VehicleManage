@@ -63,7 +63,7 @@ export class LoginScreen extends Component {
             keyboardShouldPersistTaps="never"
             style={[
               AuthStyle.onlyFlex,
-              { marginBottom: globals.deviceHeight * 0.02 },
+              { marginBottom: globals.deviceHeight * 0.04, paddingBottom:globals.deviceHeight * 0.02 },
             ]}
           >
             <View style={AuthStyle.onlyFlex}>

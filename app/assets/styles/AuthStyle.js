@@ -6,7 +6,6 @@ import * as globals from "../../utils/Globals";
 import { color } from "react-native-reanimated";
 
 export const AuthStyle = StyleSheet.create({
-
   primaryBG: {
     height: "100%",
     width: "100%",
@@ -17,7 +16,7 @@ export const AuthStyle = StyleSheet.create({
     // backgroundColor: Colors.blackTransparent,
     flex: 1,
   },
-  spalshContainer:{
+  spalshContainer: {
     // justifyContent: "center",
     alignSelf: "center",
     flex: 1,
@@ -42,13 +41,13 @@ export const AuthStyle = StyleSheet.create({
     padding: 10,
   },
   imglogoContainer: {
-    flex: 0.1,
+    // flex: 0.1,
+    height: 50,
+   
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
-    marginTop:
-      
-        globals.deviceHeight * 0.09,
+    marginTop: globals.deviceHeight * 0.07,
   },
   imglogo: {
     width: globals.deviceHeight * 0.25,
@@ -56,7 +55,8 @@ export const AuthStyle = StyleSheet.create({
     resizeMode: "contain",
   },
   imgcarContainer: {
-    flex: 0.2,
+    // flex: 0.2,
+    height: 100,
     alignItems: "center",
     justifyContent: "center",
     marginTop: globals.deviceHeight * 0.09,
@@ -92,7 +92,7 @@ export const AuthStyle = StyleSheet.create({
     marginBottom: globals.deviceHeight * 0.04,
   },
   lineContainer: {
-    height:Platform.OS =='ios' ? 0.7 : 0.9,
+    height: Platform.OS == "ios" ? 0.7 : 0.9,
     width: globals.deviceWidth * 0.4,
     backgroundColor: Colors.black,
   },
@@ -119,7 +119,7 @@ export const AuthStyle = StyleSheet.create({
     flex: 0.1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: globals.deviceHeight * 0.1,
+    marginTop: globals.deviceHeight * 0.07,
     flexDirection: "row",
   },
   smallNewAppText: {
@@ -131,7 +131,7 @@ export const AuthStyle = StyleSheet.create({
   },
   smallSignupText: {
     fontFamily: FontFamily.RalewaySemiBold,
-    fontSize: globals.font_12,
+    fontSize: globals.font_11,
     color: Colors.primary,
     textAlign: "center",
   },
@@ -141,7 +141,7 @@ export const AuthStyle = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     // height: 100,
-    width: '100%',
+    width: "100%",
     marginTop: globals.deviceHeight * 0.1,
     borderColor: Colors.border_color,
     borderWidth: 0.1,
@@ -301,14 +301,14 @@ export const AuthStyle = StyleSheet.create({
   registerContent: {
     marginHorizontal: 20,
   },
-  registrationContentTextStyle:{
+  registrationContentTextStyle: {
     fontFamily: FontFamily.RalewaRegular,
     color: Colors.black,
     fontSize: globals.font_12,
     justifyContent: "center",
   },
-  registernumView:{
-    marginTop:10,
-    marginBottom:20
-  }
+  registernumView: {
+    marginTop: 10,
+    marginBottom: 20,
+  },
 });
