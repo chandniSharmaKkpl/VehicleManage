@@ -6,6 +6,28 @@ import * as globals from "../../utils/Globals";
 import { color } from "react-native-reanimated";
 
 export const AuthStyle = StyleSheet.create({
+
+  primaryBG: {
+    height: "100%",
+    width: "100%",
+  },
+
+  //BG image container
+  imageOverlay: {
+    // backgroundColor: Colors.blackTransparent,
+    flex: 1,
+  },
+  spalshContainer:{
+    // justifyContent: "center",
+    alignSelf: "center",
+    flex: 1,
+  },
+  splash_imglogo: {
+    width: globals.deviceHeight * 0.35,
+    height: globals.deviceHeight * 0.35,
+    resizeMode: "contain",
+  },
+
   /// Common STyle of auth screen's
   onlyFlex: {
     flex: 1,
@@ -25,9 +47,8 @@ export const AuthStyle = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     marginTop:
-      Platform.OS == "ios"
-        ? globals.deviceHeight * 0.07
-        : globals.deviceHeight * 0.05,
+      
+        globals.deviceHeight * 0.09,
   },
   imglogo: {
     width: globals.deviceHeight * 0.25,
@@ -71,7 +92,7 @@ export const AuthStyle = StyleSheet.create({
     marginBottom: globals.deviceHeight * 0.04,
   },
   lineContainer: {
-    height: 0.7,
+    height:Platform.OS =='ios' ? 0.7 : 0.9,
     width: globals.deviceWidth * 0.4,
     backgroundColor: Colors.black,
   },
@@ -98,7 +119,7 @@ export const AuthStyle = StyleSheet.create({
     flex: 0.1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: globals.deviceHeight * 0.06,
+    marginTop: globals.deviceHeight * 0.1,
     flexDirection: "row",
   },
   smallNewAppText: {
@@ -118,7 +139,7 @@ export const AuthStyle = StyleSheet.create({
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
   bottomCurve: {
     flex: 1,
-    // flexGrow: 1,
+    flexGrow: 1,
     // height: 100,
     width: '100%',
     marginTop: globals.deviceHeight * 0.1,
@@ -139,7 +160,7 @@ export const AuthStyle = StyleSheet.create({
     elevation: 24,
     zIndex: 0,
     // position: 'absolute', //Here is the trick
-    bottom: 0, //Here is the trick
+    // bottom: 0, //Here is the trick
   },
   titleviewStyle: {
     marginTop: 28,
@@ -271,7 +292,7 @@ export const AuthStyle = StyleSheet.create({
 
   //// registration screen style
   registrationStyle: {
-    fontFamily: FontFamily.RalewaRegular,
+    fontFamily: FontFamily.RalewaySemiBold,
     textAlign: "left",
     color: Colors.black,
     fontSize: globals.font_20,

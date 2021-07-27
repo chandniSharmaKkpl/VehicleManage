@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   FlatList,
+  StatusBar,
 } from "react-native";
 import { connect } from "react-redux";
 import { ComponentStyle } from "../../assets/styles/ComponentStyle";
@@ -181,6 +182,7 @@ export class CreateSocialMediaProfile extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+       
           <Header
             onPress={() => this.gotoBackScreen()}
             isShowBack={true}

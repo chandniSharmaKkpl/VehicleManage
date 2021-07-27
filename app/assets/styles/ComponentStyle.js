@@ -157,6 +157,8 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
+    paddingTop: Platform.OS === 'android' ? 37 : 0
+   
   },
   headerContain: {
     flexDirection: "row",

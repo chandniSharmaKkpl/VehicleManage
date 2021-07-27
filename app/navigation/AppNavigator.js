@@ -7,11 +7,14 @@ import CreateProfileScreen from '..//modules/authentication/CreateProfileScreen'
 import ForgotPasswordScreen from '..//modules/authentication/ForgotPasswordScreen';
 import ResetPasswordScreen from '..//modules/authentication/ResetPasswordScreen';
 import CreateSocialMediaProfile from '..//modules/authentication/CreateSocialMediaProfile';
-import RegistrationDetailsScreen from '..//modules/authentication/RegistrationDetailsScreen'
+import RegistrationDetailsScreen from '..//modules/authentication/RegistrationDetailsScreen';
+import SplashScreen from '..//modules/SplashScreen';
 
 const AppNavigator = createStackNavigator(
   {
-    
+    Splash:{
+      screen:SplashScreen,
+    },
     SignUp: {
       screen: SignUpScreen,
     },
@@ -38,7 +41,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "Splash",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,
