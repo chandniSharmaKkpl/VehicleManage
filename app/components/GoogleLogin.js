@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Alert } from "react-native";
+import { View } from "react-native";
 import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
 import Colors from "../assets/Colors";
 import { AuthStyle } from "../assets/styles/AuthStyle";
@@ -10,9 +11,9 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { IMAGE } from "../assets/Images";
 
 const TAG = "FBLogin ::=";
-const googleButton_img = require("../assets/images/google-Button.png");
 
 class GoogleLogin extends Component {
   constructor(props) {
@@ -104,13 +105,15 @@ class GoogleLogin extends Component {
 
   render() {
     return (
+      <View style={{ marginHorizontal: 10}}>
       <PrimaryButtonwithIcon
         buttonStyle={{ backgroundColor: Colors.google_background }}
-        iconName={googleButton_img}
+        iconName={IMAGE.googleButton_img}
         iconStyle={AuthStyle.iconStyle}
         btnName={StaticTitle.loginwithGoogle}
         onPress={() => this.performGoogleLogin()}
       />
+      </View>
     );
   }
 }

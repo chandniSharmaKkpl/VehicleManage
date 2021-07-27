@@ -3,10 +3,18 @@ import { createStackNavigator } from "react-navigation-stack";
 import SignUpScreen from '..//modules/authentication/SignUpScreen';
 import SignInScreen from '..//modules/authentication/SignInScreen';
 import LoginScreen from '..//modules/authentication/LoginScreen';
+import CreateProfileScreen from '..//modules/authentication/CreateProfileScreen';
+import ForgotPasswordScreen from '..//modules/authentication/ForgotPasswordScreen';
+import ResetPasswordScreen from '..//modules/authentication/ResetPasswordScreen';
+import CreateSocialMediaProfile from '..//modules/authentication/CreateSocialMediaProfile';
+import RegistrationDetailsScreen from '..//modules/authentication/RegistrationDetailsScreen';
+import SplashScreen from '..//modules/SplashScreen';
 
 const AppNavigator = createStackNavigator(
   {
-    
+    Splash:{
+      screen:SplashScreen,
+    },
     SignUp: {
       screen: SignUpScreen,
     },
@@ -16,9 +24,24 @@ const AppNavigator = createStackNavigator(
     Login: {
       screen: LoginScreen,
     },
+    CreateProfile:{
+      screen:CreateProfileScreen
+    },
+    ForgotPassword:{
+      screen:ForgotPasswordScreen
+    },
+    ResetPassword:{
+      screen:ResetPasswordScreen
+    },
+    CreateSocialMediaProfile:{
+      screen:CreateSocialMediaProfile
+    },
+    RegistrationDetails:{
+      screen:RegistrationDetailsScreen
+    }
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "Splash",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,

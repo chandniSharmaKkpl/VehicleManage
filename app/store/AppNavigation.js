@@ -5,6 +5,7 @@ import {
   View,
   Platform,
   StatusBar,
+  Text,
 } from "react-native";
 import { NavigationActions } from "react-navigation";
 import NavigationService from "../utils/NavigationService";
@@ -13,6 +14,7 @@ import Loader from "../components/Loader";
 import { AppWithNavigationState } from "./index";
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
+import SplashScreen from "react-native-splash-screen";
 
 let STATUS_BAR_HEIGHT =
   Platform.OS === "ios"
@@ -24,12 +26,18 @@ class AppNavigation extends Component {
     super(props);
     this.exitCount = 0;
   }
+
   componentDidMount() {
+    // hide SplashScreen
+    // setTimeout(() => {
+    //   SplashScreen.hide();
+    // }, 5000);
+
     // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    Platform.OS == "android"
-      ? StatusBar.setBackgroundColor(Colors.primary, true)
-      : null; // add android statusbar color
+    // Platform.OS == "android"
+    //   ? StatusBar.setBackgroundColor(Colors.primary, true)
+    //   : null; // add android statusbar color
   }
 
   componentWillUnmount() {
@@ -62,9 +70,8 @@ class AppNavigation extends Component {
   // manage hardware backpress button in android
   onBackPress = () => {
     const { nav, dispatch } = this.props;
-    console.warn("i am in nav 0-Dispatch", nav, dispatch);
     if (nav.index === 0) {
-      console.warn("i amin 0 index");
+      console.log("i amin 0 index");
       this.exitApp();
     }
     dispatch(NavigationActions.back());
@@ -84,7 +91,7 @@ class AppNavigation extends Component {
             backgroundColor: Colors.primary,
           }}
         >
-          <StatusBar barStyle="light-content" backgroundColor="##FFBE0B" />
+          <StatusBar barStyle="light-content" backgroundColor="#FFBE0B" />
         </View> */}
         <AppWithNavigationState
           state={nav}

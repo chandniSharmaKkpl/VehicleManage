@@ -1,16 +1,22 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StatusBar,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { connect } from "react-redux";
-import Colors from "../../assets/Colors";
 import { StaticTitle } from "../../utils/StaticTitle";
 import PrimaryButton from "../../components/PrimaryButton";
 import FBLogin from "../../components/FBLogin";
 import GoogleLogin from "../../components/GoogleLogin";
 import NavigationService from "../../utils/NavigationService";
+import { IMAGE } from "../../assets/Images";
+import * as globals from "../../utils/Globals";
 
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
 const TAG = "LoginScreen ::=";
 
 export class LoginScreen extends Component {
@@ -32,41 +38,61 @@ export class LoginScreen extends Component {
   render() {
     return (
       <>
-        <View style={AuthStyle.logincontainer}>
+        <View style={AuthStyle.onlyFlex}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <View style={AuthStyle.imglogoContainer}>
-            <Image source={logo_img} style={AuthStyle.imglogo} />
+            <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
           </View>
 
           <View style={AuthStyle.imgcarContainer}>
-            <Image source={car_img} style={AuthStyle.imgcar} />
+            <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
           </View>
 
           <View style={AuthStyle.titleContainer}>
             <Text style={AuthStyle.titleText}>{StaticTitle.login}</Text>
           </View>
-
-          <View style={AuthStyle.loginContainer}>
-            <FBLogin />
-            <GoogleLogin />
-            <View style={AuthStyle.lineViewContainer}>
-              <View style={AuthStyle.lineContainer}></View>
-              <Text style={AuthStyle.smallText}>{StaticTitle.or}</Text>
-              <View style={AuthStyle.lineContainer}></View>
+          <ScrollView
+            ref={(node) => (this.scroll = node)}
+            automaticallyAdjustContentInsets={true}
+            enableOnAndroid={true}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="never"
+            style={[
+              AuthStyle.onlyFlex,
+              { marginBottom: globals.deviceHeight * 0.04, paddingBottom:globals.deviceHeight * 0.02 },
+            ]}
+          >
+            <View style={AuthStyle.onlyFlex}>
+              <FBLogin />
+              <GoogleLogin />
+              <View style={AuthStyle.lineViewContainer}>
+                <View style={AuthStyle.lineContainer}></View>
+                <Text style={AuthStyle.smallText}>{StaticTitle.or}</Text>
+                <View style={AuthStyle.lineContainer}></View>
+              </View>
+              <View style={[AuthStyle.signinbtnView, { paddingVertical: 0 }]}>
+                <PrimaryButton
+                  btnName={StaticTitle.loginwithEmail}
+                  onPress={() => this.performLoginwithEmail()}
+                />
+              </View>
             </View>
-            <PrimaryButton
-              btnName={StaticTitle.loginwithEmail}
-              onPress={() => this.performLoginwithEmail()}
-            />
-          </View>
 
-          <View style={AuthStyle.bottomContainer}>
-            <Text style={AuthStyle.smallNewAppText}>{StaticTitle.newApp}</Text>
-            <TouchableOpacity onPress={() => this.gotoSignUpscreen()}>
-              <Text style={AuthStyle.smallSignupText}>
-                {StaticTitle.signup}
+            <View style={AuthStyle.bottomContainer}>
+              <Text style={AuthStyle.smallNewAppText}>
+                {StaticTitle.newApp}
               </Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity onPress={() => this.gotoSignUpscreen()}>
+                <Text style={AuthStyle.smallSignupText}>
+                  {StaticTitle.signup}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       </>
     );

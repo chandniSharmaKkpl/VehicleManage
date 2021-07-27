@@ -8,6 +8,7 @@ import {
   ScrollView,
   Keyboard,
   Platform,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
@@ -15,11 +16,10 @@ import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
 import { PasswordInput, Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
-
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
+import { isEmpty, isEmail } from "../../utils/Validators";
+import { Messages } from "../../utils/Messages";
+import { IMAGE } from "../../assets/Images";
 
 const TAG = "SignInScreen ::=";
 
@@ -50,6 +50,11 @@ export class SignInScreen extends Component {
     NavigationService.navigate("Login");
   };
 
+  // user forgot their password then go to ForgotPassword screen
+  gotoForgotPasswordscreen = () => {
+    NavigationService.navigate("ForgotPassword");
+  };
+
   // This function show/hide the password
   showPassword() {
     this.setState({
@@ -57,21 +62,61 @@ export class SignInScreen extends Component {
     });
   }
 
+  // start of validation
+  checkValidation = () => {
+    const { txtEmail, txtPassword } = this.state;
+    if (isEmpty(txtEmail)) {
+      this.setState({
+        isEmailError: true,
+        emailValidMsg: Messages.email,
+      });
+      return false;
+    }
+    if (!isEmail(txtEmail)) {
+      this.setState({
+        isEmailError: true,
+        emailValidMsg: Messages.emailValid,
+      });
+      return false;
+    }
+    if (isEmpty(txtPassword)) {
+      this.setState({
+        isPasswordError: true,
+        passwdValidMsg: Messages.password,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  // Check all validation in this function if all values validate after the call Login API
+  gotoSignin = () => {
+    if (!this.checkValidation()) {
+      return;
+    }
+  };
+
   render() {
     return (
       <>
         <View style={AuthStyle.container}>
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={logo_img} style={AuthStyle.imglogo} />
+                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={car_img} style={AuthStyle.imgcar} />
+                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
@@ -85,7 +130,7 @@ export class SignInScreen extends Component {
                   keyboardShouldPersistTaps="never"
                   style={{ marginTop: globals.deviceHeight * 0.015 }}
                 >
-                  <View style={{ elevation: 2 }}>
+                  <View>
                     <View style={AuthStyle.titleviewStyle}>
                       <Text
                         style={[AuthStyle.titleText, { textAlign: "left" }]}
@@ -102,6 +147,7 @@ export class SignInScreen extends Component {
                       blurOnSubmit={false}
                       returnKeyType="next"
                       autoCapitalize={"none"}
+                      autoFocus={true}
                       keyboardType={"email-address"}
                       isValidationShow={this.state.isEmailError}
                       validateMesssage={this.state.emailValidMsg}
@@ -139,15 +185,20 @@ export class SignInScreen extends Component {
                       }
                     />
                     <View style={[AuthStyle.forgotPasswordContainer]}>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => this.gotoForgotPasswordscreen()}
+                      >
                         <Text style={[AuthStyle.resetText]}>
-                          {StaticTitle.forgotPassword}
+                          {StaticTitle.forgotPasswordSignin}
                         </Text>
                       </TouchableOpacity>
                     </View>
 
                     <View style={AuthStyle.signinbtnView}>
-                      <PrimaryButton btnName={StaticTitle.signin} />
+                      <PrimaryButton
+                        btnName={StaticTitle.signin}
+                        onPress={() => this.gotoSignin()}
+                      />
                     </View>
                     <View style={AuthStyle.bottomsignin}>
                       <Text style={AuthStyle.smallNewAppText}>
