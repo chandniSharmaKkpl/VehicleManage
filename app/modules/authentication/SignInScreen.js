@@ -17,7 +17,12 @@ import { StaticTitle } from "../../utils/StaticTitle";
 import { PasswordInput, Input, PrimaryButton, Loader } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
-import { isEmpty, isEmail } from "../../utils/Validators";
+import {
+  isEmpty,
+  isEmail,
+  isPasswordLength,
+  isPassword,
+} from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -106,6 +111,22 @@ export class SignInScreen extends Component {
       this.setState({
         isPasswordError: true,
         passwdValidMsg: Messages.password,
+      });
+      return false;
+    }
+
+    if (!isPasswordLength(txtPassword)) {
+      this.setState({
+        isPasswordError: true,
+        passwdValidMsg: Messages.passwordValidLength,
+      });
+      return false;
+    }
+
+    if (!isPassword(txtPassword)) {
+      this.setState({
+        isPasswordError: true,
+        passwdValidMsg: Messages.passwordValid,
       });
       return false;
     }
