@@ -29,6 +29,7 @@ export class SplashScreen extends Component {
     //   NavigationService.reset("Home");
     // }
   }
+  
   render() {
     return (
       <>

@@ -8,7 +8,7 @@ const Loader = ({ loaderMessage }) => (
     <View style={ComponentStyle.middleContainer}>
       <ActivityIndicator
         size={"small"}
-        color={Colors.customDarkPrimary}
+        color={Colors.primary}
         style={{ zIndex: 100 }}
       />
       <Text style={ComponentStyle.loadingText}>{loaderMessage}</Text>
