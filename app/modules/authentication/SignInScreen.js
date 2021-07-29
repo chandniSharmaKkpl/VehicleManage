@@ -14,7 +14,7 @@ import {
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { PasswordInput, Input, PrimaryButton } from "../../components";
+import { PasswordInput, Input, PrimaryButton, Loader } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
@@ -22,6 +22,8 @@ import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationEvents } from "react-navigation";
+import * as actions from "./redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "SignInScreen ::=";
 
@@ -30,8 +32,10 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      txtEmail: "",
-      txtPassword: "",
+      txtEmail: "lo@mailinator.com",
+      txtPassword: "ud@1234",
+      // txtEmail: "",
+      // txtPassword: "",
       isShowPassword: true,
       isEmailError: false,
       isPasswordError: false,
@@ -41,7 +45,6 @@ export class SignInScreen extends Component {
     this.input = {};
   }
 
-  
   componentDidMount = async () => {
     const fb_email = await AsyncStorage.getItem("FB_USEREMAIL");
     console.log(TAG, "fb_email--", fb_email);
@@ -115,16 +118,74 @@ export class SignInScreen extends Component {
     if (!this.checkValidation()) {
       return;
     }
-    NavigationService.navigate("CreateProfile");
+    Keyboard.dismiss();
+    this.signinAPICall();
+  };
+
+  //Call API
+  signinAPICall = async () => {
+    const { txtEmail, txtPassword } = this.state;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("email", txtEmail);
+    params.append("password", txtPassword);
+
+    const { login } = this.props;
+    login(params)
+      .then(async (res) => {
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.invalid_email) {
+            this.setState({
+              emailValidMsg: res.value.invalid_email,
+              isEmailError: true,
+            });
+          } else if (res.value && res.value.invalid_password) {
+            this.setState({
+              isPasswordError: true,
+              passwdValidMsg: res.value.invalid_password,
+            });
+          } else if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            NavigationService.navigate("CreateProfile");
+          } else {
+            this.setState({
+              isPasswordError: true,
+              emailValidMsg: res.value.invalid_email,
+              isEmailError: true,
+              passwdValidMsg: res.value.invalid_password,
+            });
+          }
+        } else {
+          if (res.value && res.value.data.error) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("i am in catch error login", err);
+      });
   };
 
   render() {
+    const { isLoading, loaderMessage } = this.props;
     return (
       <>
         <View style={AuthStyle.container}>
-          <NavigationEvents
-            onWillBlur={() => this.clearStates()}
-          />
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
           <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
@@ -245,9 +306,16 @@ export class SignInScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {};
+const mapStateToProps = (state) => {
+  return {
+    userDetails: state.auth.user.userDetails,
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
 
-// const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  login: (params) => dispatch(actions.login(params)),
+});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);
-export default SignInScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

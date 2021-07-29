@@ -7,7 +7,7 @@ import PasswordInput from "../components/PasswordInput";
 import Header from "../components/Header";
 import PrimaryTextinputwithIcon from '../components/PrimaryTextinputwithIcon';
 import MediaModel from '../components/MediaModel';
-
+import Loader from '../components/Loader';
 export {
   PrimaryButtonwithIcon,
   ButtonwithRightIcon,
@@ -17,5 +17,6 @@ export {
   PasswordInput,
   Header,
   PrimaryTextinputwithIcon,
-  MediaModel
+  MediaModel,
+  Loader
 };
