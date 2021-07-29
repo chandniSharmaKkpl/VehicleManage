@@ -17,6 +17,7 @@ import java.util.List;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

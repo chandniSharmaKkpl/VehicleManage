@@ -41,7 +41,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "Splash",
+    initialRouteName: "Login",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,
