@@ -37,7 +37,7 @@ const PrimaryTextinputwithIcon = ({
     <TouchableOpacity {...props} onPress={onPress}>
       <View style={[ComponentStyle.primaryBtnContainer, buttonStyle]}>
         <FastImage
-          style={[ComponentStyle.iconstyle, iconStyle]}
+          style={[ComponentStyle.PrimaryTextinputiconstyle, iconStyle]}
           source={iconName}
           resizeMode={FastImage.resizeMode.contain}
         />
@@ -64,7 +64,7 @@ const PrimaryTextinputwithIcon = ({
           autoCapitalize={autoCapitalize}
           underlineColorAndroid="transparent"
           multiline={multiline}
-          autoFocus={autoFocus}
+          autoFocus={false}
           numberOfLines={numberOfLines}
         />
       </View>

@@ -7,25 +7,23 @@ import {
   ScrollView,
   Keyboard,
   Platform,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import {
-  Input,
-  PrimaryButton,
-} from "../../components";
+import { Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
+import { NavigationEvents } from "react-navigation";
 
+const TAG = "CreateProfileScreen ::=";
 
-const TAG = "CreateProfile ::=";
-
-export class CreateProfile extends Component {
+export class CreateProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,13 +54,35 @@ export class CreateProfile extends Component {
     this.input[ref].focus();
   };
 
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
+      txtUserName: "",
+      txtCity: "",
+      txtModalofCar: "",
+      txtColorofCar: "",
+      txtDescription: "",
+
+      isUserNameError: false,
+      isCityError: false,
+      isModalofCarError: false,
+      isColorofCarError: false,
+      isDescriptionError: false,
+
+      userNameValidMsg: "",
+      cityValidMsg: "",
+      modalofCarValidMsg: "",
+      colorofCarValidMsg: "",
+      descriptionValidMsg: "",
+    });
+  };
+
   // create a new profile after check validation's
   createProfile = () => {
-    // if (!this.checkValidation()) {
-    //   return;
-    // }
+    if (!this.checkValidation()) {
+      return;
+    }
     NavigationService.navigate("CreateSocialMediaProfile");
-    
   };
 
   // start of validation
@@ -113,6 +133,12 @@ export class CreateProfile extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
@@ -300,5 +326,5 @@ export class CreateProfile extends Component {
 
 // const mapDispatchToProps = (dispatch) => ({});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CreateProfile);
-export default CreateProfile;
+// export default connect(mapStateToProps, mapDispatchToProps)(CreateProfileScreen);
+export default CreateProfileScreen;

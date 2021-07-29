@@ -81,6 +81,11 @@ export const allSpecialCharacter = (txtInput) => {
 };
 
 export const onlycharandnum = (value) => {
-  let regex = /^[^!-\\/:-@\\[-`{-~]+$/;
-  return regex.test(value);
+  // let regex = /^[^!-\\/:-@\\[-`{-~]+$/;
+  let regex = /[ ` !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+ 
+  if (!regex.test(value)) {
+    return true;
+  }
+  return false;
 };

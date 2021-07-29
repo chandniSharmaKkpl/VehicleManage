@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
-const facebook_img = require("../assets/images/facebook.png");
 import { StaticTitle } from "../utils/StaticTitle";
 import {
   LoginManager,
@@ -8,6 +7,10 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from "react-native-fbsdk-next";
+import { IMAGE } from "../assets/Images";
+import Colors from "../assets/Colors";
+import FontFamily from "../assets/styles/FontFamily";
+import * as globals from "../utils/Globals";
 
 const TAG = "FacebookIntegration ::=";
 
@@ -121,9 +124,18 @@ class FacebookIntegration extends Component {
   render() {
     return (
       <PrimaryButtonwithIcon
-        iconName={facebook_img}
-        btnName={StaticTitle.loginwithFB}
-        onPress={() => this.performFBLogin()}
+        iconName={IMAGE.fb_icon_square}
+        logoStyle={{
+          width: 25,
+          height: 25,
+          marginLeft: 20,
+          marginRight: 24,
+          marginVertical: 10,
+        }}
+        buttonStyle={{ backgroundColor: Colors.blue }}
+        btnName={StaticTitle.linkfb}
+        buttonTextStyle={{ fontFamily: FontFamily.RalewaRegular,fontSize: globals.font_15, }}
+        // onPress={() => this.performFBLogin()}
       />
     );
   }

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Keyboard,
   Platform,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
@@ -23,6 +24,7 @@ import {
 } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
+import { NavigationEvents } from "react-navigation";
 
 
 const TAG = "ResetPasswordScreen ::=";
@@ -43,6 +45,21 @@ export class ResetPasswordScreen extends Component {
   }
 
   componentDidMount() {}
+
+  
+
+  // clear States before leave this screen
+  clearStates =()=>{
+    this.setState({
+      txtConfirmCode: "",
+      txtConfirmPassword: "",
+      isShowConfirmPassword: true,
+      isConfirmCodeError: false,
+      isConfirmPasswordError: false,
+      ConfirmCodeValidMsg: "",
+      confirmPasswordValidMsg: "",
+    })
+  }
 
   // Focus on next input
   focusNextTextField = (ref) => {
@@ -66,6 +83,7 @@ export class ResetPasswordScreen extends Component {
     if (!this.checkValidation()) {
       return;
     }
+    NavigationService.navigate("SignIn");
   };
 
   // start of validation
@@ -103,6 +121,14 @@ export class ResetPasswordScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <NavigationEvents
+            onWillBlur={() => this.clearStates()}
+          />
+        <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
@@ -119,7 +145,7 @@ export class ResetPasswordScreen extends Component {
                 behavior={Platform.OS === "ios" ? "padding" : null}
                 style={[
                   AuthStyle.bottomCurve,
-                  { marginTop: globals.deviceHeight * 0.2 },
+                  {  },
                 ]}
               >
                 <ScrollView

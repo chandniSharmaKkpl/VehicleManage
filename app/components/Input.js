@@ -49,7 +49,7 @@ const Input = ({
         autoCapitalize={autoCapitalize}
         underlineColorAndroid="transparent"
         multiline={multiline}
-        autoFocus={autoFocus}
+        autoFocus={false}
         numberOfLines={numberOfLines}
       />
       {renderIf(

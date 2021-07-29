@@ -12,8 +12,9 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { IMAGE } from "../assets/Images";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const TAG = "FBLogin ::=";
+const TAG = "GoogleLogin ::=";
 
 class GoogleLogin extends Component {
   constructor(props) {
@@ -26,9 +27,8 @@ class GoogleLogin extends Component {
 
   async componentDidMount() {
     this.configureGoogleSignIn(); // configure Google SignIn
-    await this.getCurrentUser();   // check Current user 
+    await this.getCurrentUser(); // check Current user
   }
-
 
   // check Current user  Silently
   async getCurrentUser() {
@@ -56,8 +56,7 @@ class GoogleLogin extends Component {
     });
   }
 
-
-  // signout fb account from application 
+  // signout fb account from application
   _signOut = async () => {
     try {
       await GoogleSignin.revokeAccess();
@@ -79,7 +78,9 @@ class GoogleLogin extends Component {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
+      console.log(TAG, "userInfo---", userInfo);
       this.setState({ userInfo });
+      AsyncStorage.setItem("GOOGLE_USERINFO", JSON.stringify(userInfo.user));
     } catch (error) {
       switch (error.code) {
         case statusCodes.SIGN_IN_CANCELLED:
@@ -105,14 +106,14 @@ class GoogleLogin extends Component {
 
   render() {
     return (
-      <View style={{ marginHorizontal: 10}}>
-      <PrimaryButtonwithIcon
-        buttonStyle={{ backgroundColor: Colors.google_background }}
-        iconName={IMAGE.googleButton_img}
-        iconStyle={AuthStyle.iconStyle}
-        btnName={StaticTitle.loginwithGoogle}
-        onPress={() => this.performGoogleLogin()}
-      />
+      <View style={{ marginHorizontal: 10 }}>
+        <PrimaryButtonwithIcon
+          buttonStyle={{ backgroundColor: Colors.google_background }}
+          iconName={IMAGE.googleButton_img}
+          iconStyle={AuthStyle.iconStyle}
+          btnName={StaticTitle.loginwithGoogle}
+          onPress={() => this.performGoogleLogin()}
+        />
       </View>
     );
   }

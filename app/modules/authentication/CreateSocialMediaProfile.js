@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   FlatList,
+  StatusBar,
 } from "react-native";
 import { connect } from "react-redux";
 import { ComponentStyle } from "../../assets/styles/ComponentStyle";
@@ -36,7 +37,6 @@ export class CreateSocialMediaProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      profile_imagePath: "",
       photoUrl: "",
       photoObj: [],
       txtSnapName: "",
@@ -63,6 +63,11 @@ export class CreateSocialMediaProfile extends Component {
     NavigationService.back();
   }
 
+  // Navigate to Registration Details Screen
+  gotoRegistrationDetailsScreen = () => {
+    NavigationService.navigate("RegistrationDetails");
+  };
+
   //display gallry picker model
   displayGalleryPicker = () => {
     this.setState({ isGalleryPicker: !this.state.isGalleryPicker });
@@ -79,11 +84,11 @@ export class CreateSocialMediaProfile extends Component {
       <>
         <TouchableOpacity onPress={() => this.onselectOptions(item)}>
           <View style={ComponentStyle.viewPopupStyle}>
-            <Image
+            <FastImage
               resizeMethod="resize"
               style={ComponentStyle.imagePopupStyle}
               source={item.image}
-            ></Image>
+            ></FastImage>
 
             <Text style={ComponentStyle.textStylePopup}>{item.title}</Text>
           </View>
@@ -177,6 +182,7 @@ export class CreateSocialMediaProfile extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+       
           <Header
             onPress={() => this.gotoBackScreen()}
             isShowBack={true}
@@ -275,7 +281,10 @@ export class CreateSocialMediaProfile extends Component {
                     </Text>
                   </View>
 
-                  <TouchableOpacity style={AuthStyle.RectangleShapeView}>
+                  <TouchableOpacity
+                    style={AuthStyle.RectangleShapeView}
+                    onPress={() => this.gotoRegistrationDetailsScreen()}
+                  >
                     <Text style={AuthStyle.saText}>{StaticTitle.sa}</Text>
                     <Text style={AuthStyle.regoText}>{StaticTitle.rego}</Text>
                   </TouchableOpacity>

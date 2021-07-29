@@ -9,6 +9,7 @@ import {
   Keyboard,
   Platform,
   TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -18,9 +19,14 @@ import {
   Input,
   PrimaryButton,
   InputWithIcon,
+  Loader,
 } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
+import { NavigationEvents } from "react-navigation";
+import * as actions from "./redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 import {
   isEmpty,
   isEmail,
@@ -35,7 +41,6 @@ import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 
-
 const TAG = "SignUpScreen ::=";
 
 export class SignUpScreen extends Component {
@@ -43,6 +48,47 @@ export class SignUpScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
+
+      txtEmail: "hh2@gmail.com",
+      txtFirstName: "ssCss",
+      txtLastName: "ssDss",
+      txtPassword: "Abcd@1234",
+      txtConfirmPassword: "Abcd@1234",
+      txtDob: "",
+
+      // txtEmail: "",
+      // txtFirstName: "",
+      // txtLastName: "",
+      // txtPassword: "",
+      // txtConfirmPassword: "",
+      // txtDob: "",
+
+      isShowPassword: true,
+      isShowConfirmPassword: true,
+      isDatePickerVisible: false,
+
+      isEmailError: false,
+      isFirstNameError: false,
+      isLastNameError: false,
+      isPasswordError: false,
+      isConfirmPasswordError: false,
+      isDobError: false,
+
+      emailValidMsg: "",
+      firstNameValidMsg: "",
+      lastNameValidMsg: "",
+      passwdValidMsg: "",
+      confirmPasswordValidMsg: "",
+      dobValidMsg: "",
+    };
+    this.input = {};
+  }
+
+  componentDidMount() {}
+
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
       txtEmail: "",
       txtFirstName: "",
       txtLastName: "",
@@ -67,11 +113,8 @@ export class SignUpScreen extends Component {
       passwdValidMsg: "",
       confirmPasswordValidMsg: "",
       dobValidMsg: "",
-    };
-    this.input = {};
-  }
-
-  componentDidMount() {}
+    });
+  };
 
   // Focus on next input
   focusNextTextField = (ref) => {
@@ -98,11 +141,79 @@ export class SignUpScreen extends Component {
   }
 
   // Check all validation in this function, if all values validate after the call Register API
-  gotoSignup = () => {
-    // if (!this.checkValidation()) {
-    //   return;
-    // }
-    NavigationService.navigate("CreateProfile");
+  gotoSignup = async () => {
+    if (!this.checkValidation()) {
+      return;
+    }
+    Keyboard.dismiss();
+    this.sighUpAPIcall();
+  };
+
+  //Call API
+  sighUpAPIcall = async () => {
+    const {
+      txtEmail,
+      txtFirstName,
+      txtLastName,
+      txtPassword,
+      txtConfirmPassword,
+      txtDob,
+    } = this.state;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("name", txtFirstName);
+    params.append("surname", txtLastName);
+    params.append("email", txtEmail);
+    params.append("password", txtPassword);
+    params.append("password_confirm", txtConfirmPassword);
+    params.append("birth_date", txtDob);
+
+    const { registerUser } = this.props;
+
+    registerUser(params)
+      .then(async (res) => {
+        if (res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+
+          if (res.value && res.value.invalid_password) {
+            this.setState({
+              isPasswordError: true,
+              passwdValidMsg: res.value.invalid_password,
+            });
+          } else if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            NavigationService.navigate("CreateProfile");
+          } else {
+            this.setState({
+              isPasswordError: true,
+              emailValidMsg: res.value.data.email,
+              isEmailError: true,
+              passwdValidMsg: res.value.invalid_password,
+            });
+          }
+        } else {
+          if (res.value && res.value.data.email) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+            this.setState({
+              emailValidMsg: res.value.data.email,
+              isEmailError: true,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("i am in catch error registerUser", err);
+      });
   };
 
   // start of validation
@@ -243,8 +354,10 @@ export class SignUpScreen extends Component {
           isDobError: true,
           dobValidMsg: Messages.dobFail,
         });
+        return false;
+      } else {
+        return true;
       }
-      return false;
     }
 
     return true;
@@ -270,9 +383,19 @@ export class SignUpScreen extends Component {
   };
 
   render() {
+    const { isLoading, loaderMessage } = this.props;
     return (
       <>
         <View style={AuthStyle.container}>
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
@@ -475,9 +598,7 @@ export class SignUpScreen extends Component {
                     />
 
                     <View style={AuthStyle.signinbtnView}>
-                      <Text
-                        style={[AuthStyle.smallNewAppText, { marginBottom: 2 }]}
-                      >
+                      <Text style={[AuthStyle.smallNewAppText, {}]}>
                         {StaticTitle.termAndConditionText}
                         <TouchableOpacity
                           style={AuthStyle.termAndConditionView}
@@ -529,12 +650,15 @@ export class SignUpScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({
+  registerUser: (formData) => dispatch(actions.registerUser(formData)),
+});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
-export default SignUpScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);

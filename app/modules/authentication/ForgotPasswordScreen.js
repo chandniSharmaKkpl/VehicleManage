@@ -19,6 +19,7 @@ import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
+import { NavigationEvents } from "react-navigation";
 
 const TAG = "ForgotPasswordScreen ::=";
 
@@ -30,6 +31,15 @@ export class ForgotPasswordScreen extends Component {
 
   componentDidMount() {}
 
+  
+
+  // clear States before leave this screen
+  clearStates =()=>{
+    this.setState({
+      txtEmail: "", isEmailError: false, emailValidMsg: ""
+    })
+  }
+
   // sign in navigate to signin screen
   gotoSigninscreen = () => {
     NavigationService.navigate("SignIn");
@@ -37,9 +47,9 @@ export class ForgotPasswordScreen extends Component {
 
   // Check all validation in this function if all values validate after the call forgotpassword API
   PerformForgotPassAPI = () => {
-    // if (!this.checkValidation()) {
-    //   return;
-    // }
+    if (!this.checkValidation()) {
+      return;
+    }
     NavigationService.navigate("ResetPassword");
   };
 
@@ -68,6 +78,9 @@ export class ForgotPasswordScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <NavigationEvents
+            onWillBlur={() => this.clearStates()}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
@@ -84,7 +97,7 @@ export class ForgotPasswordScreen extends Component {
                 behavior={Platform.OS === "ios" ? "padding" : null}
                 style={[
                   AuthStyle.bottomCurve,
-                  { marginTop: globals.deviceHeight * 0.25 },
+                  {  },
                 ]}
               >
                 <ScrollView
@@ -93,7 +106,10 @@ export class ForgotPasswordScreen extends Component {
                   enableOnAndroid={true}
                   showsVerticalScrollIndicator={false}
                   keyboardShouldPersistTaps="never"
-                  style={{ marginTop: globals.deviceHeight * 0.015 }}
+                  style={{
+                    flex: 1,
+                    marginTop: globals.deviceHeight * 0.015,
+                  }}
                 >
                   <View>
                     <View style={AuthStyle.titleviewStyle}>
