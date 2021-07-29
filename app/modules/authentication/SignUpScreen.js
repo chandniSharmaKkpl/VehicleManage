@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   StatusBar,
+  Linking,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -26,6 +27,7 @@ import * as globals from "../../utils/Globals";
 import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { termsCondURL } from "../../config/BaseURL";
 
 import {
   isEmpty,
@@ -113,6 +115,18 @@ export class SignUpScreen extends Component {
       passwdValidMsg: "",
       confirmPasswordValidMsg: "",
       dobValidMsg: "",
+    });
+  };
+
+  /**
+   * Method for term&condition open in default browser
+   */
+  handletermconditionClick = () => {
+    Linking.canOpenURL(termsCondURL).then((supported) => {
+      if (supported) {
+        Linking.openURL(termsCondURL);
+      } else {
+      }
     });
   };
 
@@ -600,7 +614,7 @@ export class SignUpScreen extends Component {
                     <View style={AuthStyle.signinbtnView}>
                       <Text style={[AuthStyle.smallNewAppText, {}]}>
                         {StaticTitle.termAndConditionText}
-                        <TouchableOpacity
+                        <TouchableOpacity onPress={()=> this.handletermconditionClick()}
                           style={AuthStyle.termAndConditionView}
                         >
                           <Text
