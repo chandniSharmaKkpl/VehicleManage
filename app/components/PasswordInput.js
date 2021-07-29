@@ -33,7 +33,7 @@ const PasswordInput = ({
             ComponentStyle.passwordInputText,
             { borderColor: isValidationShow ? Colors.red : Colors.white },
           ]}
-          placeholderTextColor={Colors.lite_black}
+          placeholderTextColor={Colors.placeholderColor}
           ref={forwardRef}
           onSubmitEditing={onSubmitEditing}
           secureTextEntry={secureTextEntry}
@@ -45,6 +45,7 @@ const PasswordInput = ({
           onChangeText={onChangeText}
           keyboardType={keyboardType}
           placeholderStyle={placeholderStyle}
+          underlineColorAndroid="transparent"
           {...props}
         />
         <TouchableWithoutFeedback onPress={onPasswordShow}>
@@ -58,7 +59,7 @@ const PasswordInput = ({
               <Icon
                 name={isVisible ? "eye-slash" : "eye"}
                 size={18}
-                color={Colors.border_color}
+                color={isVisible ? Colors.placeholderColor : Colors.black}
               />
             </View>
           </View>

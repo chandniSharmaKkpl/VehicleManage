@@ -1,23 +1,23 @@
 const Messages = {
   //Authentication validation messages
-
-  username: "Please enter your username",
   email: "Please enter your email address",
   emailValid: "Please enter valid email address",
   name: "Please enter your name",
-  verifyCode: "Please enter your verification code",
-
   password: "Please enter your password",
   confirmPassword: "Please enter your confirm password",
-  passwordValid:
-    "Password must be 6 characters and contain 1x Uppercase letter 1x lowercase letter 1x symbol and 1x number",
-  matchPassword: "Your password do not match",
+  newPassword:'Please enter your new password',
+  passwordValidLength:"Password must be 8 characters",
+  passwordValid: "Password must contain letters and numbers",
+  matchPassword: "Password does not match",
+  nameFail:'Name must be 2-26 characters, cannot contain spaces or symbols.',
+  userNameFail:'Username must be 3-26 characters',
+  enterUsername:'Please enter user name',
+  emailFail:'Invalid email',
+  dobFail:'User must be 13 years or older',
+  enterDob:'Please choose date',
+  cityFail:"Please restrict location to 3-40 characters",
+  modalFail:'Please restrict Make and model to 3-40 characters',
+  colorFail:'Please restrict Make and model to 3-20 characters'
 
-  phoneNo: "Please enter contact number",
-  phoneNoValid: "Please enter valid contact number",
-
-  registerSuccess: "Your account is successfully registered",
-  emailFaild: "Please check your email and try again",
-  searchInvalid: "Please use valid characters",
 };
 export { Messages };

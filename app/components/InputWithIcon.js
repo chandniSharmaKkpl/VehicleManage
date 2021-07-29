@@ -11,20 +11,27 @@ import { ComponentStyle } from "../assets/styles/ComponentStyle";
 import { renderIf } from "../utils/Globals";
 import FastImage from "react-native-fast-image";
 
+const calendar_img = require("../assets/images/calendar.png");
+
 const InputWithIcon = ({
+  isShowPassword,
+  isVisible,
   placeholderText,
-  onPressIcon,
+  onPasswordShow,
   secureTextEntry,
   forwardRef,
   onSubmitEditing,
   blurOnSubmit,
   onChangeText,
   value,
-  isValidationShow,
   validateMesssage,
-  iconName,
-  editable,
+  isValidationShow,
+  keyboardType,
+  maxLength,
+  autoCapitalize,
   inputStyle,
+  returnKeyType,
+  onPressIcon,
   ...props
 }) => {
   return (
@@ -32,33 +39,36 @@ const InputWithIcon = ({
       <View {...props} style={[ComponentStyle.passwordInputContainer]}>
         <TextInput
           value={value}
-          style={[
-            ComponentStyle.iconInputText,
-            inputStyle,
-            { borderColor: isValidationShow ? Colors.red : Colors.white },
-          ]}
-          placeholderTextColor={Colors.labelPrimary}
+          returnKeyType={returnKeyType}
           ref={forwardRef}
           onSubmitEditing={onSubmitEditing}
-          secureTextEntry={secureTextEntry}
-          autoCapitalize="none"
+          style={[
+            ComponentStyle.passwordInputText,
+            inputStyle,
+            {
+              borderColor: isValidationShow ? Colors.red : Colors.white,
+            },
+          ]}
           placeholder={placeholderText}
-          returnKeyType={"next"}
+          placeholderTextColor={Colors.placeholderColor}
           blurOnSubmit={blurOnSubmit}
           onChangeText={onChangeText}
-          editable={editable}
+          keyboardType={keyboardType}
+          maxLength={maxLength}
+          autoCapitalize={autoCapitalize}
+          underlineColorAndroid='transparent'
         />
         <TouchableOpacity onPress={onPressIcon}>
           <View
             style={[
-              ComponentStyle.inputIconContainer,
+              ComponentStyle.eyeContainer,
               { borderColor: isValidationShow ? Colors.red : Colors.white },
             ]}
           >
             <View style={{ marginRight: 15 }}>
               <FastImage
-                style={[ComponentStyle.tabImage]}
-                source={iconName}
+                style={[ComponentStyle.tab_Image]}
+                source={calendar_img}
                 resizeMode={FastImage.resizeMode.contain}
               />
             </View>

@@ -43,6 +43,12 @@
 			<string>com.googleusercontent.apps.374701197391-9nk7besa55sffmjtb31fqbqomjcv3qa6</string>
 		</dict>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Roadie would like to use your camera</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Roadie would like access to your photo gallery</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fonts/Raleway-Black.ttf</string>
@@ -106,8 +112,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
