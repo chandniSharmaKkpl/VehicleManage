@@ -156,11 +156,12 @@ export class SignUpScreen extends Component {
 
   // Check all validation in this function, if all values validate after the call Register API
   gotoSignup = async () => {
-    if (!this.checkValidation()) {
-      return;
-    }
-    Keyboard.dismiss();
-    this.sighUpAPIcall();
+    // if (!this.checkValidation()) {
+    //   return;
+    // }
+    // Keyboard.dismiss();
+    // this.sighUpAPIcall();
+    NavigationService.navigate("CreateProfile");
   };
 
   //Call API

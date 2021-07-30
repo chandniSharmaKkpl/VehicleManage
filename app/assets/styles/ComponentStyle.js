@@ -81,7 +81,7 @@ export const ComponentStyle = StyleSheet.create({
     justifyContent: "space-evenly",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom:20
+    marginBottom: 20,
   },
   bigIconLabel: {
     fontFamily: FontFamily.RalewaRegular,
@@ -89,8 +89,8 @@ export const ComponentStyle = StyleSheet.create({
     color: Colors.white,
     textAlign: "left",
     justifyContent: "center",
-    width:globals.deviceWidth * 0.7,
-    paddingVertical:2
+    width: globals.deviceWidth * 0.7,
+    paddingVertical: 2,
   },
   //Custom Component name "BigIconButton" Finished....
 
@@ -108,7 +108,7 @@ export const ComponentStyle = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
   },
-  PrimaryTextinputiconstyle:{
+  PrimaryTextinputiconstyle: {
     width: 25,
     height: 25,
     marginLeft: 20,
@@ -165,8 +165,7 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === 'android' ? 37 : 0
-   
+    paddingTop: Platform.OS === "android" ? 37 : 0,
   },
   headerContain: {
     flexDirection: "row",
@@ -234,7 +233,7 @@ export const ComponentStyle = StyleSheet.create({
     paddingHorizontal: globals.deviceWidth * 0.03,
   },
   lineStyle1: {
-    height: (Platform.OS == 'ios') ?  0.1 : 0.5,
+    height: Platform.OS == "ios" ? 0.1 : 0.5,
     width: "100%",
     backgroundColor: Colors.black,
     opacity: 0.4,
@@ -243,5 +242,26 @@ export const ComponentStyle = StyleSheet.create({
     height: globals.deviceWidth * 0.05,
     width: globals.deviceWidth * 0.05,
     resizeMode: "contain",
+  },
+
+  //// Linear gradient button style
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
+  },
+  buttonText: {
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_15,
+    textAlign: "center",
+    color: Colors.white,
+  },
+  instaiconstyle: {
+    width: 25,
+    height: 25,
+    marginLeft: 20,
+    marginRight: 24,
+    marginVertical: 10,
   },
 });

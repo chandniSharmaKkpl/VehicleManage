@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
+import { Text, TouchableOpacity } from "react-native";
 import { StaticTitle } from "../utils/StaticTitle";
 import {
   LoginManager,
@@ -8,9 +8,9 @@ import {
   GraphRequestManager,
 } from "react-native-fbsdk-next";
 import { IMAGE } from "../assets/Images";
-import Colors from "../assets/Colors";
-import FontFamily from "../assets/styles/FontFamily";
-import * as globals from "../utils/Globals";
+import LinearGradient from "react-native-linear-gradient";
+import { ComponentStyle } from "../assets/styles/ComponentStyle";
+import FastImage from "react-native-fast-image";
 
 const TAG = "InstagramIntegration ::=";
 
@@ -123,20 +123,21 @@ class InstagramIntegration extends Component {
 
   render() {
     return (
-      <PrimaryButtonwithIcon
-        iconName={IMAGE.insta_icon_img}
-        logoStyle={{
-          width: 25,
-          height: 25,
-          marginLeft: 20,
-          marginRight: 24,
-          marginVertical: 10,
-        }}
-        btnName={StaticTitle.linkinsta}
-        buttonStyle={{ backgroundColor: Colors.blue }}
-        buttonTextStyle={{ fontFamily: FontFamily.RalewaRegular,fontSize: globals.font_15, }}
-        // onPress={() => this.performFBLogin()}
-      />
+      <TouchableOpacity onPress={() => this.performFBLogin()}>
+        <LinearGradient
+          start={{ x: 0.0, y: 0.5 }}
+          end={{ x: 0.7, y: 1.0 }}
+          colors={["#F67131", "#DD3770", "#A035B0"]}
+          style={ComponentStyle.primaryBtnContainer}
+        >
+          <FastImage
+            style={[ComponentStyle.instaiconstyle]}
+            source={IMAGE.insta_icon_img}
+            resizeMode={FastImage.resizeMode.contain}
+          />
+          <Text style={ComponentStyle.buttonText}>{StaticTitle.linkinsta}</Text>
+        </LinearGradient>
+      </TouchableOpacity>
     );
   }
 }
