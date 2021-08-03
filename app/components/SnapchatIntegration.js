@@ -62,7 +62,7 @@ class SnapchatIntegration extends Component {
           }}
           onPress={() => this.performSnapchatLogin()}
         />
-        <PrimaryButtonwithIcon
+        {/* <PrimaryButtonwithIcon
           iconName={IMAGE.snap_img}
           logoStyle={{
             width: 25,
@@ -79,7 +79,7 @@ class SnapchatIntegration extends Component {
             color: Colors.black,
           }}
           onPress={() => this.performSnapchatGetInfo()}
-        />
+        /> */}
       </>
     );
   }
