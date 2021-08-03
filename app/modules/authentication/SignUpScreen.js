@@ -9,6 +9,8 @@ import {
   Keyboard,
   Platform,
   TouchableWithoutFeedback,
+  StatusBar,
+  Linking,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -18,10 +20,15 @@ import {
   Input,
   PrimaryButton,
   InputWithIcon,
+  Loader,
 } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
+import { NavigationEvents } from "react-navigation";
+import * as actions from "./redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { termsCondURL } from "../../config/BaseURL";
+
 import {
   isEmpty,
   isEmail,
@@ -29,13 +36,12 @@ import {
   isValidComparedPassword,
   isName,
   isPasswordLength,
-  getAge,
+  onlycharandnum,
 } from "../../utils/Validators";
 import moment from "moment";
 import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
+import { IMAGE } from "../../assets/Images";
 
 const TAG = "SignUpScreen ::=";
 
@@ -44,6 +50,47 @@ export class SignUpScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
+
+      txtEmail: "hh2@gmail.com",
+      txtFirstName: "ssCss",
+      txtLastName: "ssDss",
+      txtPassword: "Abcd@1234",
+      txtConfirmPassword: "Abcd@1234",
+      txtDob: "",
+
+      // txtEmail: "",
+      // txtFirstName: "",
+      // txtLastName: "",
+      // txtPassword: "",
+      // txtConfirmPassword: "",
+      // txtDob: "",
+
+      isShowPassword: true,
+      isShowConfirmPassword: true,
+      isDatePickerVisible: false,
+
+      isEmailError: false,
+      isFirstNameError: false,
+      isLastNameError: false,
+      isPasswordError: false,
+      isConfirmPasswordError: false,
+      isDobError: false,
+
+      emailValidMsg: "",
+      firstNameValidMsg: "",
+      lastNameValidMsg: "",
+      passwdValidMsg: "",
+      confirmPasswordValidMsg: "",
+      dobValidMsg: "",
+    };
+    this.input = {};
+  }
+
+  componentDidMount() {}
+
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
       txtEmail: "",
       txtFirstName: "",
       txtLastName: "",
@@ -68,11 +115,20 @@ export class SignUpScreen extends Component {
       passwdValidMsg: "",
       confirmPasswordValidMsg: "",
       dobValidMsg: "",
-    };
-    this.input = {};
-  }
+    });
+  };
 
-  componentDidMount() {}
+  /**
+   * Method for term&condition open in default browser
+   */
+  handletermconditionClick = () => {
+    Linking.canOpenURL(termsCondURL).then((supported) => {
+      if (supported) {
+        Linking.openURL(termsCondURL);
+      } else {
+      }
+    });
+  };
 
   // Focus on next input
   focusNextTextField = (ref) => {
@@ -99,11 +155,80 @@ export class SignUpScreen extends Component {
   }
 
   // Check all validation in this function, if all values validate after the call Register API
-  gotoSignup = () => {
+  gotoSignup = async () => {
     // if (!this.checkValidation()) {
     //   return;
     // }
+    // Keyboard.dismiss();
+    // this.sighUpAPIcall();
     NavigationService.navigate("CreateProfile");
+  };
+
+  //Call API
+  sighUpAPIcall = async () => {
+    const {
+      txtEmail,
+      txtFirstName,
+      txtLastName,
+      txtPassword,
+      txtConfirmPassword,
+      txtDob,
+    } = this.state;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("name", txtFirstName);
+    params.append("surname", txtLastName);
+    params.append("email", txtEmail);
+    params.append("password", txtPassword);
+    params.append("password_confirm", txtConfirmPassword);
+    params.append("birth_date", txtDob);
+
+    const { registerUser } = this.props;
+
+    registerUser(params)
+      .then(async (res) => {
+        if (res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+
+          if (res.value && res.value.invalid_password) {
+            this.setState({
+              isPasswordError: true,
+              passwdValidMsg: res.value.invalid_password,
+            });
+          } else if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            NavigationService.navigate("CreateProfile");
+          } else {
+            this.setState({
+              isPasswordError: true,
+              emailValidMsg: res.value.data.email,
+              isEmailError: true,
+              passwdValidMsg: res.value.invalid_password,
+            });
+          }
+        } else {
+          if (res.value && res.value.data.email) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+            this.setState({
+              emailValidMsg: res.value.data.email,
+              isEmailError: true,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("i am in catch error registerUser", err);
+      });
   };
 
   // start of validation
@@ -130,6 +255,15 @@ export class SignUpScreen extends Component {
       });
       return false;
     }
+
+    if (!onlycharandnum(txtFirstName)) {
+      this.setState({
+        isFirstNameError: true,
+        firstNameValidMsg: Messages.nameFail,
+      });
+      return false;
+    }
+
     if (isEmpty(txtLastName)) {
       this.setState({
         isLastNameError: true,
@@ -138,6 +272,14 @@ export class SignUpScreen extends Component {
       return false;
     }
     if (!isName(txtLastName)) {
+      this.setState({
+        isLastNameError: true,
+        lastNameValidMsg: Messages.nameFail,
+      });
+      return false;
+    }
+
+    if (!onlycharandnum(txtLastName)) {
       this.setState({
         isLastNameError: true,
         lastNameValidMsg: Messages.nameFail,
@@ -227,8 +369,10 @@ export class SignUpScreen extends Component {
           isDobError: true,
           dobValidMsg: Messages.dobFail,
         });
+        return false;
+      } else {
+        return true;
       }
-      return false;
     }
 
     return true;
@@ -254,20 +398,30 @@ export class SignUpScreen extends Component {
   };
 
   render() {
+    const { isLoading, loaderMessage } = this.props;
     return (
       <>
         <View style={AuthStyle.container}>
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={logo_img} style={AuthStyle.imglogo} />
+                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={car_img} style={AuthStyle.imgcar} />
+                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
@@ -300,6 +454,7 @@ export class SignUpScreen extends Component {
                       }
                       blurOnSubmit={false}
                       returnKeyType="next"
+                      autoFocus={true}
                       autoCapitalize={"none"}
                       maxLength={26}
                       minLength={2}
@@ -458,11 +613,9 @@ export class SignUpScreen extends Component {
                     />
 
                     <View style={AuthStyle.signinbtnView}>
-                      <Text
-                        style={[AuthStyle.smallNewAppText, { marginBottom: 2 }]}
-                      >
+                      <Text style={[AuthStyle.smallNewAppText, {}]}>
                         {StaticTitle.termAndConditionText}
-                        <TouchableOpacity
+                        <TouchableOpacity onPress={()=> this.handletermconditionClick()}
                           style={AuthStyle.termAndConditionView}
                         >
                           <Text
@@ -512,12 +665,15 @@ export class SignUpScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({
+  registerUser: (formData) => dispatch(actions.registerUser(formData)),
+});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
-export default SignUpScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);

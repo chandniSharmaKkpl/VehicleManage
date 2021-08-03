@@ -10,14 +10,14 @@ const PrimaryButtonwithIcon = ({
   buttonTextStyle,
   onPress,
   iconName,
-  iconStyle,
+  logoStyle,
   ...props
 }) => {
   return (
     <TouchableOpacity {...props} onPress={onPress}>
       <View style={[ComponentStyle.primaryBtnContainer, buttonStyle]}>
         <FastImage
-          style={[ComponentStyle.iconstyle, iconStyle]}
+          style={[ComponentStyle.iconstyle, logoStyle]}
           source={iconName}
           resizeMode={FastImage.resizeMode.contain}
         />

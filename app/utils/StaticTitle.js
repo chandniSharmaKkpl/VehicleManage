@@ -28,7 +28,28 @@ const StaticTitle = {
     enterColor:'Enter Color of Car',
     addDescription:'Add a Description',
     forgotPassword:'Forgot Password',
-
+    resetpassword:'Reset Password',
+    confirmationCode:'Enter Confirmation Code',
+    enternewpassword:'Enter New Password',
+    addRegistrationDetail:'Add registration details',
+    linkyouraccount:'Link with your social media accounts',
+    rego:'REGO',
+    sa:'SA',
+    linkwithinsta:'Link with Instagram',
+    enterSnapName:'Enter Sanpchat Username',
+    captureimgfromCamera:'Capture Image from Camera',
+    uploadfromgallery:'Upload Image from Gallery',
+    filetoupload:'Choose File To Upload',
+    registartionDetail:'Registration Details',
+    registerContent:'To verify that this vehicle is yours, we require a copy of your registration papers. Only the vehicle registration number, vehicle make, color and registered owner name is required for confirmation and all other information can be omitted if required. Additionally a photo of your vehicle with the number plate visible is required. All information is deleted after confirmation.',
+    enterRegisterNumber:'Enter Registration Number',
+    attachPaper:'Attach Registration Paper',
+    attachPhoto:'Attach Vehicle Photo',
+    saveDetails:'Save Details',
+    attchDoc:'Attach Document/Photo',
+    linkfb:'Link with Facebook',
+    linkinsta:'Link with Instagram',
+    linksnap:'Link with Snapchat'
   };
   export { StaticTitle };
   

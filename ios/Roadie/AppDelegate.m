@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import <SCSDKLoginKit/SCSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -34,9 +35,14 @@ static void InitializeFlipper(UIApplication *application) {
                       sourceApplication:sourceApplication annotation:annotation];
 }
 
+
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
 ];
+  if ([SCSDKLoginClient application:application openURL:url options:options]) {
+    return YES;
+  }
 // Add any custom logic here.
 return handled;
 }
@@ -51,9 +57,9 @@ return handled;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef FB_SONARKIT_ENABLED
-  InitializeFlipper(application);
-#endif
+// #ifdef FB_SONARKIT_ENABLED
+//   InitializeFlipper(application);
+// #endif
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge

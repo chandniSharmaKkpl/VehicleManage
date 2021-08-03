@@ -15,6 +15,12 @@ const Colors = {
   google_background:'#4285F4',
   border_color:'#00000026',
   lite_black:'#080909',
+  snapChat:'#F7F400',
+  placeholderColor:'rgb(136,137,137)',
+  pink:'#DB3773',
+  blue:'#3B5998',
+ 
+  
 };
 
 export default Colors;

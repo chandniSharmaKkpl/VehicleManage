@@ -13,15 +13,13 @@ import {
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { PasswordInput, Input, PrimaryButton } from "../../components";
+import { Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
-
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
+import { IMAGE } from "../../assets/Images";
+import { NavigationEvents } from "react-navigation";
 
 const TAG = "ForgotPasswordScreen ::=";
 
@@ -33,6 +31,15 @@ export class ForgotPasswordScreen extends Component {
 
   componentDidMount() {}
 
+  
+
+  // clear States before leave this screen
+  clearStates =()=>{
+    this.setState({
+      txtEmail: "", isEmailError: false, emailValidMsg: ""
+    })
+  }
+
   // sign in navigate to signin screen
   gotoSigninscreen = () => {
     NavigationService.navigate("SignIn");
@@ -43,6 +50,7 @@ export class ForgotPasswordScreen extends Component {
     if (!this.checkValidation()) {
       return;
     }
+    NavigationService.navigate("ResetPassword");
   };
 
   // start of validation
@@ -70,23 +78,26 @@ export class ForgotPasswordScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+        <NavigationEvents
+            onWillBlur={() => this.clearStates()}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={logo_img} style={AuthStyle.imglogo} />
+                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={car_img} style={AuthStyle.imgcar} />
+                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
                 style={[
                   AuthStyle.bottomCurve,
-                  { marginTop: globals.deviceHeight * 0.25 },
+                  {  },
                 ]}
               >
                 <ScrollView
@@ -95,7 +106,10 @@ export class ForgotPasswordScreen extends Component {
                   enableOnAndroid={true}
                   showsVerticalScrollIndicator={false}
                   keyboardShouldPersistTaps="never"
-                  style={{ marginTop: globals.deviceHeight * 0.015 }}
+                  style={{
+                    flex: 1,
+                    marginTop: globals.deviceHeight * 0.015,
+                  }}
                 >
                   <View>
                     <View style={AuthStyle.titleviewStyle}>
@@ -108,9 +122,10 @@ export class ForgotPasswordScreen extends Component {
                     <Input
                       value={this.state.txtEmail}
                       placeholderText={StaticTitle.enterUsaerName}
-                      onSubmitEditing={() => Keyboard.dismiss}
+                      onSubmitEditing={Keyboard.dismiss}
                       blurOnSubmit={false}
                       returnKeyType="done"
+                      autoFocus={true}
                       autoCapitalize={"none"}
                       keyboardType={"email-address"}
                       isValidationShow={this.state.isEmailError}

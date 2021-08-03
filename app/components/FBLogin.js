@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { View } from "react-native";
 import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
-const facebook_img = require("../assets/images/facebook.png");
+import { IMAGE } from "../assets/Images";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { StaticTitle } from "../utils/StaticTitle";
 import {
   LoginManager,
@@ -61,8 +64,13 @@ class FBLogin extends Component {
                 } else {
                   console.log(TAG, `user result : ${JSON.stringify(result)}`);
                   if (result.hasOwnProperty("email")) {
-                    console.log("email===", result.email);
+                    // console.log("result===", result);
+                    // console.log("email===", result.email);
                     // this.setState({ userEmail: result.email });
+                    AsyncStorage.setItem(
+                      "FB_USERINFO",
+                      JSON.stringify(result)
+                    );
                   } else {
                     console.log(TAG, "email not exist in info");
                   }
@@ -120,11 +128,13 @@ class FBLogin extends Component {
 
   render() {
     return (
-      <PrimaryButtonwithIcon
-        iconName={facebook_img}
-        btnName={StaticTitle.loginwithFB}
-        onPress={() => this.performFBLogin()}
-      />
+      <View style={{ marginHorizontal: 10 }}>
+        <PrimaryButtonwithIcon
+          iconName={IMAGE.facebook_img}
+          btnName={StaticTitle.loginwithFB}
+          onPress={() => this.performFBLogin()}
+        />
+      </View>
     );
   }
 }
