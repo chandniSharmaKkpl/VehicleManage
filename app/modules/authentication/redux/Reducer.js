@@ -14,7 +14,6 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-
     //// LOGIN
     case actionTypes.USER_LOGIN_LOADING:
       return {
@@ -51,8 +50,8 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
-      //// REGISTER
-      case actionTypes.USER_REGISTER_LOADING:
+    //// REGISTER
+    case actionTypes.USER_REGISTER_LOADING:
       return {
         ...state,
         user: {
@@ -81,9 +80,36 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
+    /// FORGOT PASSWORD
+    case actionTypes.FORGOT_PASSWORD_LOADING:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.FORGOT_PASSWORD_SUCCESS:
+      return {
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.FORGOT_PASSWORD_ERROR:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
 
-      /// FORGOT PASSWORD
-   
     default:
       return state;
   }

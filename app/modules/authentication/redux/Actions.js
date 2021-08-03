@@ -29,7 +29,7 @@ export const login = (params) => ({
     }),
 });
 
-export const registerUser = (params) => ({
+export const registeruser = (params) => ({
   type: USER_REGISTER,
   payload: api
     .post("api/register", params)

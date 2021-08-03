@@ -183,9 +183,9 @@ export class SignUpScreen extends Component {
     params.append("password_confirm", txtConfirmPassword);
     params.append("birth_date", txtDob);
 
-    const { registerUser } = this.props;
+    const { registeruser } = this.props;
 
-    registerUser(params)
+    registeruser(params)
       .then(async (res) => {
         if (res.value.data.success == true) {
           //OK 200 The request was fulfilled
@@ -673,7 +673,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  registerUser: (formData) => dispatch(actions.registerUser(formData)),
+  registeruser: (formData) => dispatch(actions.registeruser(formData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
