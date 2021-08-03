@@ -29,9 +29,9 @@ class AppNavigation extends Component {
 
   componentDidMount() {
     // hide SplashScreen
-    // setTimeout(() => {
-    //   SplashScreen.hide();
-    // }, 5000);
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 5000);
 
     // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);

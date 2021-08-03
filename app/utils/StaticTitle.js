@@ -48,7 +48,8 @@ const StaticTitle = {
     saveDetails:'Save Details',
     attchDoc:'Attach Document/Photo',
     linkfb:'Link with Facebook',
-    linkinsta:'Link with Instagram'
+    linkinsta:'Link with Instagram',
+    linksnap:'Link with Snapchat'
   };
   export { StaticTitle };
   

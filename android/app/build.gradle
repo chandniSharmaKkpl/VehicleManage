@@ -188,6 +188,11 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation(project(":react-native-google-signin"))
+    implementation project(':react-native-snapchat-login')
+    implementation([
+           'com.snapchat.kit.sdk:login:1.10.0',
+           'com.snapchat.kit.sdk:core:1.10.0'
+   ])
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation platform('com.google.firebase:firebase-bom:28.2.1')
     implementation 'com.google.firebase:firebase-analytics'

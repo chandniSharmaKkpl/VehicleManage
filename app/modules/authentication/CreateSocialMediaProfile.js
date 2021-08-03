@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   FlatList,
   StatusBar,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import { ComponentStyle } from "../../assets/styles/ComponentStyle";
@@ -29,6 +30,7 @@ import { IMAGE } from "../../assets/Images";
 import InstagramIntegration from "../../components/InstagramIntegration";
 import FacebookIntegration from "../../components/FacebookIntegration";
 import PrimaryTextinputwithIcon from "../../components/PrimaryTextinputwithIcon";
+import SnapchatIntegration from '../../components/SnapchatIntegration';
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 
 const TAG = "CreateSocialMediaProfile ::=";
@@ -59,9 +61,9 @@ export class CreateSocialMediaProfile extends Component {
   }
 
   // Navigate to back screen
-  gotoBackScreen() {
+  gotoBackScreen = () => {
     NavigationService.back();
-  }
+  };
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
@@ -182,7 +184,6 @@ export class CreateSocialMediaProfile extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
-       
           <Header
             onPress={() => this.gotoBackScreen()}
             isShowBack={true}
@@ -303,7 +304,8 @@ export class CreateSocialMediaProfile extends Component {
                   >
                     <InstagramIntegration />
                     <FacebookIntegration />
-                    <PrimaryTextinputwithIcon
+                    <SnapchatIntegration />
+                    {/* <PrimaryTextinputwithIcon
                       iconName={IMAGE.snap_img}
                       buttonStyle={{ backgroundColor: Colors.snapChat }}
                       buttonTextStyle={AuthStyle.SnapText}
@@ -322,7 +324,7 @@ export class CreateSocialMediaProfile extends Component {
                           isSnapError: false,
                         })
                       }
-                    />
+                    /> */}
                   </View>
                   <View style={AuthStyle.signinbtnView}>
                     <PrimaryButton btnName={StaticTitle.continue} />

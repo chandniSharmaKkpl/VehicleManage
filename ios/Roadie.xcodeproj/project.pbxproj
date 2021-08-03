@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RoadieTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RoadieTests.m */; };
-		0357D9E26BC15C0A8BDC1DE7 /* libPods-Roadie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FB277C3EE9C2BCE88350B63 /* libPods-Roadie.a */; };
 		051081BA703D48F0B91A73BF /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAB79986E2D84DBBB8035FB1 /* MaterialCommunityIcons.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -28,10 +27,10 @@
 		B59CDD6701DC49A6ADD25C69 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE9D8CCDD7E04F7C91AF9273 /* FontAwesome5_Regular.ttf */; };
 		CF7A412326A54D820052D9D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CF7A412226A54D820052D9D9 /* GoogleService-Info.plist */; };
 		CF7CE4E126A6CEE60020FB90 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = CF7CE4E026A6CEE60020FB90 /* fonts */; };
-		CFEFFF142682EFD100A5B395 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CFEFFF132682EFD100A5B395 /* libswiftWebKit.tbd */; };
 		F44A175E5FF84729A4F74E13 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29E7307651D74168A8940A93 /* Ionicons.ttf */; };
 		F6917597FD9C4B609D7D2BF4 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 440EAC4B2A554726AEEEDE18 /* FontAwesome5_Solid.ttf */; };
 		F9715FC9F2BA42A9BC59BB30 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EFB36B4A0744999BEDD3093 /* Octicons.ttf */; };
+		FCB97C04896EBCD24837FC7E /* libPods-Roadie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FB277C3EE9C2BCE88350B63 /* libPods-Roadie.a */; };
 		FEA5A0E1859B49008F8747CC /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E5F0BCB4FB442E7AAC2595C /* SimpleLineIcons.ttf */; };
 /* End PBXBuildFile section */
 
@@ -98,8 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFEFFF142682EFD100A5B395 /* libswiftWebKit.tbd in Frameworks */,
-				0357D9E26BC15C0A8BDC1DE7 /* libPods-Roadie.a in Frameworks */,
+				FCB97C04896EBCD24837FC7E /* libPods-Roadie.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,7 +570,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Edward Deane (LW2KUYS5UD)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S3932B8UMW;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Roadie/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -583,15 +581,11 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.2excel.Roadie;
 				PRODUCT_NAME = Roadie;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "2Excel Development Profile";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Roadie-Bridging-Header.h";
@@ -612,7 +606,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Edward Deane (S3932B8UMW)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S3932B8UMW;
 				INFOPLIST_FILE = Roadie/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -622,15 +616,11 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.2excel.Roadie;
 				PRODUCT_NAME = Roadie;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "2Excel AdHoc Distribution Profile";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Roadie-Bridging-Header.h";
