@@ -68,7 +68,7 @@ axiosApi.interceptors.request.use((request) => {
     request.headers = makeGetHeaders();
   } else {
     console.warn("i am in url else", request.url);
-    if (request.url === "api/login" || request.url === "api/register") {
+    if (request.url === "api/login" || request.url === "api/register" || request.url === "api/forgot") {
       request.headers = makeAuthPostHeaders();
     } else if (
       request.url === "client-detail" ||

@@ -20,6 +20,8 @@ import { isEmpty, isEmail } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 import { NavigationEvents } from "react-navigation";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import * as actions from "./redux/Actions";
 
 const TAG = "ForgotPasswordScreen ::=";
 
@@ -31,14 +33,14 @@ export class ForgotPasswordScreen extends Component {
 
   componentDidMount() {}
 
-  
-
   // clear States before leave this screen
-  clearStates =()=>{
+  clearStates = () => {
     this.setState({
-      txtEmail: "", isEmailError: false, emailValidMsg: ""
-    })
-  }
+      txtEmail: "",
+      isEmailError: false,
+      emailValidMsg: "",
+    });
+  };
 
   // sign in navigate to signin screen
   gotoSigninscreen = () => {
@@ -50,7 +52,55 @@ export class ForgotPasswordScreen extends Component {
     if (!this.checkValidation()) {
       return;
     }
-    NavigationService.navigate("ResetPassword");
+    Keyboard.dismiss();
+    this.forgotPasswordAPICall();
+  };
+
+  // API CALL
+  forgotPasswordAPICall = async () => {
+    const { txtEmail, txtPassword } = this.state;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("email", txtEmail);
+
+    const { forgotpassword } = this.props;
+    forgotpassword(params)
+      .then(async (res) => {
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.invalid_email) {
+            this.setState({
+              emailValidMsg: res.value.invalid_email,
+              isEmailError: true,
+            });
+          } else if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            NavigationService.navigate("SignIn");
+          } else {
+            this.setState({
+              emailValidMsg: res.value.invalid_email,
+              isEmailError: true,
+            });
+          }
+        } else {
+          if (res.value && res.value.data.error) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("i am in catch error login", err);
+      });
   };
 
   // start of validation
@@ -78,9 +128,7 @@ export class ForgotPasswordScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
-        <NavigationEvents
-            onWillBlur={() => this.clearStates()}
-          />
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
@@ -95,10 +143,7 @@ export class ForgotPasswordScreen extends Component {
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
-                style={[
-                  AuthStyle.bottomCurve,
-                  {  },
-                ]}
+                style={[AuthStyle.bottomCurve]}
               >
                 <ScrollView
                   ref={(node) => (this.scroll = node)}
@@ -165,15 +210,18 @@ export class ForgotPasswordScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    userDetails: state.auth.user.userDetails,
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
+const mapDispatchToProps = (dispatch) => ({
+  forgotpassword: (params) => dispatch(actions.forgotpassword(params)),
+});
 
-// };
-
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(ForgotPasswordScreen);
-export default ForgotPasswordScreen;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ForgotPasswordScreen);
