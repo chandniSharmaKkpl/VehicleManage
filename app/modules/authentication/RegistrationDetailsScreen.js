@@ -78,10 +78,7 @@ export class RegistrationDetailsScreen extends Component {
     this.setState({ isattachphoto: false });
   };
 
-  // Navigate to back screen
-  gotoBackScreen = () => {
-    NavigationService.back();
-  };
+  
 
   // save all register details
   saveDeatils = () => {};
@@ -228,7 +225,7 @@ export class RegistrationDetailsScreen extends Component {
       <>
         <View style={AuthStyle.container}>
           <Header
-            onPress={() => this.gotoBackScreen()}
+            
             isShowBack={true}
             title={StaticTitle.registartionDetail}
           />
