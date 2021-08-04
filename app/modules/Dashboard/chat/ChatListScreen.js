@@ -14,9 +14,9 @@ import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import Header from "../../../components/Header";
 
-const TAG = "SearchScreen ::=";
+const TAG = "ChatListScreen ::=";
 
-export class SearchScreen extends Component {
+export class ChatListScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +38,7 @@ export class SearchScreen extends Component {
       <>
         <View style={AuthStyle.container}>
           <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <Header isShowBack={false} title={""} isShowRighttwo={true} />
+          <Header  title={StaticTitle.msges} isShowSidebar={true} />
           <Search
             blurOnSubmit={false}
             returnKeyType="done"
@@ -49,7 +49,7 @@ export class SearchScreen extends Component {
                 txtSearch: text,
               })
             }
-            placeholderText={StaticTitle.searchbyVehicalNum}
+            placeholderText={StaticTitle.searchbyNameNnum}
           />
         </View>
       </>
@@ -67,5 +67,5 @@ export class SearchScreen extends Component {
 // export default connect(
 //   mapStateToProps,
 //   mapDispatchToProps
-// )(SearchScreen);
-export default SearchScreen;
+// )(ChatListScreen);
+export default ChatListScreen;

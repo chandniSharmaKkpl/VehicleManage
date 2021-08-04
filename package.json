@@ -39,6 +39,7 @@
     "react-native-modal-datetime-picker": "^10.2.0",
     "react-native-paper": "^4.8.1",
     "react-native-reanimated": "^2.1.0",
+    "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.1.1",
     "react-native-snapchat-login": "^1.1.1",

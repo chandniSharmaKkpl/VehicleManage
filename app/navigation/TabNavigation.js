@@ -11,7 +11,9 @@ import { ComponentStyle } from "../assets/styles/ComponentStyle";
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../assets/Images";
 import SearchScreen from "../modules/Dashboard/search/SearchScreen";
-
+import FriendlistScreen from "../modules/Dashboard/social/FriendlistScreen";
+import ChatListScreen from "../modules/Dashboard/chat/ChatListScreen";
+import UserProfileScreen from '../modules/Dashboard/user/UserProfileScreen'
 const SearchStack = createStackNavigator(
   {
     Search: {
@@ -31,13 +33,13 @@ const SearchStack = createStackNavigator(
 
 const SocialStack = createStackNavigator(
   {
-    Search: {
-      screen: SearchScreen,
+    Friendlist: {
+      screen: FriendlistScreen,
     },
   },
   {
     headerMode: "none",
-    initialRouteParams: "Search",
+    initialRouteParams: "Friendlist",
 
     defaultNavigationOptions: {
       headerVisible: false,
@@ -48,13 +50,13 @@ const SocialStack = createStackNavigator(
 
 const ChatStack = createStackNavigator(
   {
-    Search: {
-      screen: SearchScreen,
+    ChatList: {
+      screen: ChatListScreen,
     },
   },
   {
     headerMode: "none",
-    initialRouteParams: "Search",
+    initialRouteParams: "ChatList",
 
     defaultNavigationOptions: {
       headerVisible: false,
@@ -65,13 +67,13 @@ const ChatStack = createStackNavigator(
 
 const UserStack = createStackNavigator(
   {
-    Search: {
-      screen: SearchScreen,
+    UserProfile: {
+      screen: UserProfileScreen,
     },
   },
   {
     headerMode: "none",
-    initialRouteParams: "Search",
+    initialRouteParams: "UserProfile",
 
     defaultNavigationOptions: {
       headerVisible: false,
@@ -122,13 +124,13 @@ const TabNavigator = createBottomTabNavigator(
           labelName = focused ? "Search" : "";
           iconName = IMAGE.search_circle_img;
         } else if (routeName === "Social") {
-          labelName = focused ? "Social" : "";
+          labelName = focused ? "Friends" : "";
           iconName = IMAGE.social_group_img;
         } else if (routeName === "Chat") {
-          labelName = focused ? "Chat" : "";
+          labelName = focused ? "Messages" : "";
           iconName = IMAGE.chatboxes_img;
         } else if (routeName === "User") {
-          labelName = focused ? "User" : "";
+          labelName = focused ? "Profile" : "";
           iconName = IMAGE.user_avatar_fill_img;
         }
         return (

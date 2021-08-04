@@ -52,7 +52,11 @@ const StaticTitle = {
     linksnap:'Link with Snapchat',
 
     /////// DASHBOARD
-    searchbyVehicalNum:'Search Users by Their Vehicle Number'
+    searchbyVehicalNum:'Search Users by Their Vehicle Number',
+    searchbyNameNnum:'Search by Name/Number Plate',
+    frndList:'Friends List',
+    userProfile:'User Profile',
+    msges:'Messages'
 
   };
   export { StaticTitle };

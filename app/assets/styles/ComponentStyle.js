@@ -14,6 +14,7 @@ export const ComponentStyle = StyleSheet.create({
   tabContainer: {
     width: "500%",
     alignItems: "center",
+    justifyContent:'center'
   },
   tabLabel: {
     fontFamily: FontFamily.RalewaRegular,
@@ -186,11 +187,13 @@ export const ComponentStyle = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingBottom: 10,
+   
   },
   titleText: {
     fontSize: RFPercentage(2.5),
-    fontFamily: FontFamily.RalewayBold,
+    fontFamily: FontFamily.RalewaySemiBold,
     color: Colors.white,
+   
   },
 
   /////// Social media textinput for snapchat

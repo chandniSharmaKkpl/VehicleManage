@@ -14,9 +14,9 @@ import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import Header from "../../../components/Header";
 
-const TAG = "SearchScreen ::=";
+const TAG = "UserProfileScreen ::=";
 
-export class SearchScreen extends Component {
+export class UserProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,19 +38,8 @@ export class SearchScreen extends Component {
       <>
         <View style={AuthStyle.container}>
           <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <Header isShowBack={false} title={""} isShowRighttwo={true} />
-          <Search
-            blurOnSubmit={false}
-            returnKeyType="done"
-            onSubmitEditing={Keyboard.dismiss}
-            autoCapitalize={"none"}
-            onChangeText={(text) =>
-              this.setState({
-                txtSearch: text,
-              })
-            }
-            placeholderText={StaticTitle.searchbyVehicalNum}
-          />
+          <Header isShowBack={true} title={StaticTitle.userProfile}  />
+          
         </View>
       </>
     );
@@ -67,5 +56,5 @@ export class SearchScreen extends Component {
 // export default connect(
 //   mapStateToProps,
 //   mapDispatchToProps
-// )(SearchScreen);
-export default SearchScreen;
+// )(UserProfileScreen);
+export default UserProfileScreen;

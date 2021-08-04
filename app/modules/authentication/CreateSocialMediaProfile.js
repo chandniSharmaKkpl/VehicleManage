@@ -26,7 +26,7 @@ import FastImage from "react-native-fast-image";
 import { IMAGE } from "../../assets/Images";
 import InstagramIntegration from "../../components/InstagramIntegration";
 import FacebookIntegration from "../../components/FacebookIntegration";
-import SnapchatIntegration from '../../components/SnapchatIntegration';
+import SnapchatIntegration from "../../components/SnapchatIntegration";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 
 const TAG = "CreateSocialMediaProfile ::=";
@@ -56,20 +56,15 @@ export class CreateSocialMediaProfile extends Component {
     };
   }
 
-  // Navigate to back screen
-  gotoBackScreen = () => {
-    NavigationService.back();
-  };
-
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
     NavigationService.navigate("RegistrationDetails");
   };
 
-  // Navigate to Dashboard screen 
-  gotoDashboard =()=>{
+  // Navigate to Dashboard screen
+  gotoDashboard = () => {
     NavigationService.navigate("Home");
-  }
+  };
 
   //display gallry picker model
   displayGalleryPicker = () => {
@@ -185,11 +180,7 @@ export class CreateSocialMediaProfile extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
-          <Header
-            onPress={() => this.gotoBackScreen()}
-            isShowBack={true}
-            title={StaticTitle.createProfile}
-          />
+          <Header isShowBack={true} title={StaticTitle.createProfile} />
 
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
@@ -328,7 +319,10 @@ export class CreateSocialMediaProfile extends Component {
                     /> */}
                   </View>
                   <View style={AuthStyle.signinbtnView}>
-                    <PrimaryButton btnName={StaticTitle.continue} onPress={()=> this.gotoDashboard()} />
+                    <PrimaryButton
+                      btnName={StaticTitle.continue}
+                      onPress={() => this.gotoDashboard()}
+                    />
                   </View>
                 </View>
               </SafeAreaView>
