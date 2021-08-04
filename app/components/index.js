@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import PrimaryTextinputwithIcon from '../components/PrimaryTextinputwithIcon';
 import MediaModel from '../components/MediaModel';
 import Loader from '../components/Loader';
+import Search from '../components/Search';
 export {
   PrimaryButtonwithIcon,
   ButtonwithRightIcon,
@@ -18,5 +19,6 @@ export {
   Header,
   PrimaryTextinputwithIcon,
   MediaModel,
-  Loader
+  Loader,
+  Search
 };

@@ -19,7 +19,7 @@ const Colors = {
   placeholderColor:'rgb(136,137,137)',
   pink:'#DB3773',
   blue:'#3B5998',
- 
+  search_placeholder:'#222222B3'
   
 };
 

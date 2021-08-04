@@ -18,18 +18,14 @@ import { connect } from "react-redux";
 import { ComponentStyle } from "../../assets/styles/ComponentStyle";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { Input, PrimaryButton, MediaModel } from "../../components";
+import { PrimaryButton, MediaModel } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
-import { isEmpty, isText } from "../../utils/Validators";
-import { Messages } from "../../utils/Messages";
 import Header from "../../components/Header";
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../../assets/Images";
 import InstagramIntegration from "../../components/InstagramIntegration";
 import FacebookIntegration from "../../components/FacebookIntegration";
-import PrimaryTextinputwithIcon from "../../components/PrimaryTextinputwithIcon";
 import SnapchatIntegration from '../../components/SnapchatIntegration';
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 
@@ -69,6 +65,11 @@ export class CreateSocialMediaProfile extends Component {
   gotoRegistrationDetailsScreen = () => {
     NavigationService.navigate("RegistrationDetails");
   };
+
+  // Navigate to Dashboard screen 
+  gotoDashboard =()=>{
+    NavigationService.navigate("Home");
+  }
 
   //display gallry picker model
   displayGalleryPicker = () => {
@@ -327,7 +328,7 @@ export class CreateSocialMediaProfile extends Component {
                     /> */}
                   </View>
                   <View style={AuthStyle.signinbtnView}>
-                    <PrimaryButton btnName={StaticTitle.continue} />
+                    <PrimaryButton btnName={StaticTitle.continue} onPress={()=> this.gotoDashboard()} />
                   </View>
                 </View>
               </SafeAreaView>
