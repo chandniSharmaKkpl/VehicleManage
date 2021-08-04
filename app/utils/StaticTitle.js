@@ -22,6 +22,12 @@ const StaticTitle = {
     alreadyHaveAccount:'Already have an account?',
     continue:'Continue',
     createProfile:'Create Profile',
+    userName:'Username',
+    city:'City or Suburb',
+    makeModal:'Make and Model of Car',
+    colors:'Color of Car',
+
+
     enterUserName:'Enter Username',
     enterCity:'Enter City or Suburb',
     makeModal:'Make and Model of Car',
@@ -56,7 +62,8 @@ const StaticTitle = {
     searchbyNameNnum:'Search by Name/Number Plate',
     frndList:'Friends List',
     userProfile:'User Profile',
-    msges:'Messages'
+    msges:'Messages',
+    changeRegistration:'Change Registration'
 
   };
   export { StaticTitle };

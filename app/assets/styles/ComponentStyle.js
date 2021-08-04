@@ -135,7 +135,7 @@ export const ComponentStyle = StyleSheet.create({
 
   // Login Input style started
   inputText: {
-    height: 55,
+    height: 45,
     marginHorizontal: 20,
     fontFamily: FontFamily.RalewaRegular,
     fontSize: globals.font_14,
@@ -152,7 +152,7 @@ export const ComponentStyle = StyleSheet.create({
     marginHorizontal: 15,
   },
   passwordInputText: {
-    height: 55,
+    height: 45,
     marginTop: 10,
     borderBottomWidth: 0.8,
     borderBottomColor: Colors.border_color,
@@ -165,7 +165,7 @@ export const ComponentStyle = StyleSheet.create({
     borderBottomWidth: 0.8,
     borderBottomColor: Colors.border_color,
     marginTop: 10,
-    height: 55,
+    height: 45,
     justifyContent: "center",
   },
 
@@ -181,7 +181,7 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ?17 : 0,
+    paddingTop: Platform.OS === "android" ?25 : 0,
   },
   headerContain: {
     flexDirection: "row",
