@@ -45,7 +45,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "CreateSocialMediaProfile",
+    initialRouteName: "Login",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,
