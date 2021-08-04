@@ -1,242 +1,169 @@
-// import React, { Component } from "react";
-// import { Image, View, Text, Platform, SafeAreaView } from "react-native";
-// import {
-//   TransitionPresets,
-//   createStackNavigator,
-// } from "react-navigation-stack";
-// // import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
-// import { createBottomTabNavigator, BottomTabBar } from "react-navigation-tabs";
-// import HomeScreen from "../modules/home/HomeScreen";
-// import SettingScreen from "../modules/settings/SettingScreen";
-// import InvoiceScreen from "../modules/invoice/InvoiceScreen";
-// import CalendarScreen from "../modules/calendar/CalendarScreen";
-// import ReportScreen from "../modules/reports/ReportScreen";
-// import AddHorseScreen from "../modules/horse/AddHorseScreen";
-// import AddClientScreen from "../modules/client/AddClientScreen";
-// import BookAppointmentScreen from "../modules/todolist/BookAppointmentScreen";
-// import ClientListScreen from "../modules/client/ClientListScreen";
-// import LogBookListScreen from "../modules/logbook/LogBookListScreen";
-// import ExpensesListScreen from "../modules/expenses/ExpensesListScreen";
-// import ClientMultiselectScreen from "../modules/client/ClientMultiselectScreen";
-// import ClientDetailScreen from "../modules/client/ClientDetailScreen";
-// import AfterSessionDetailScreen from "../modules/todolist/AfterSessionDetailScreen";
-// import TodoListScreen from "../modules/todolist/TodoListScreen";
-// import Colors from "../assets/styles/Colors";
-// import { ComponentStyle } from "../assets/styles/ComponentStyle";
-// import {
-//   renderIf,
-//   deviceWidth,
-//   deviceHeight,
-//   isTablat,
-// } from "../utils/Globles";
-// import FastImage from "react-native-fast-image";
-// import { IMAGE } from "../assets/styles/Images";
-// const HomeStack = createStackNavigator(
-//   {
-//     Home: {
-//       screen: HomeScreen,
-//     },
-//     BookAppointment: {
-//       screen: BookAppointmentScreen,
-//     },
-//     ClientList: {
-//       screen: ClientListScreen,
-//     },
-//     LogBookList: {
-//       screen: LogBookListScreen,
-//     },
-//     ExpensesList: {
-//       screen: ExpensesListScreen,
-//     },
-//     AddClient: {
-//       screen: AddClientScreen,
-//     },
-//     AddHorse: {
-//       screen: AddHorseScreen,
-//     },
-//     ClientMultiselect: {
-//       screen: ClientMultiselectScreen,
-//     },
-//     ClientDetail: {
-//       screen: ClientDetailScreen,
-//     },
-//     AfterSessionDetail: {
-//       screen: AfterSessionDetailScreen,
-//     },
-//     TodoList: {
-//       screen: TodoListScreen,
-//     },
-//   },
-//   {
-//     headerMode: "none",
-//     // initialRouteParams: "Home",
+import React, { Component } from "react";
+import { Image, View, Text, Platform, SafeAreaView } from "react-native";
+import {
+  TransitionPresets,
+  createStackNavigator,
+} from "react-navigation-stack";
+// import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createBottomTabNavigator, BottomTabBar } from "react-navigation-tabs";
+import Colors from "../assets/Colors";
+import { ComponentStyle } from "../assets/styles/ComponentStyle";
+import FastImage from "react-native-fast-image";
+import { IMAGE } from "../assets/Images";
+import SearchScreen from "../modules/Dashboard/search/SearchScreen";
 
-//     defaultNavigationOptions: {
-//       headerVisible: false,
-//       ...TransitionPresets.SlideFromRightIOS,
-//     },
-//   }
-// );
-// const SettingStack = createStackNavigator(
-//   {
-//     Setting: {
-//       screen: SettingScreen,
-//     },
-//   },
-//   {
-//     headerMode: "none",
-//     initialRouteParams: "Setting",
+const SearchStack = createStackNavigator(
+  {
+    Search: {
+      screen: SearchScreen,
+    },
+  },
+  {
+    headerMode: "none",
+    initialRouteParams: "Search",
 
-//     defaultNavigationOptions: {
-//       headerVisible: false,
-//       ...TransitionPresets.SlideFromRightIOS,
-//     },
-//   }
-// );
-// const InvoiceStack = createStackNavigator(
-//   {
-//     Invoice: {
-//       screen: InvoiceScreen,
-//     },
-//   },
-//   {
-//     headerMode: "none",
-//     initialRouteParams: "Invoice",
+    defaultNavigationOptions: {
+      headerVisible: false,
+      ...TransitionPresets.SlideFromRightIOS,
+    },
+  }
+);
 
-//     defaultNavigationOptions: {
-//       headerVisible: false,
-//       ...TransitionPresets.SlideFromRightIOS,
-//     },
-//   }
-// );
+const SocialStack = createStackNavigator(
+  {
+    Search: {
+      screen: SearchScreen,
+    },
+  },
+  {
+    headerMode: "none",
+    initialRouteParams: "Search",
 
-// const CalendarStack = createStackNavigator(
-//   {
-//     Calendar: {
-//       screen: CalendarScreen,
-//     },
-//   },
-//   {
-//     headerMode: "none",
-//     initialRouteParams: "Calendar",
+    defaultNavigationOptions: {
+      headerVisible: false,
+      ...TransitionPresets.SlideFromRightIOS,
+    },
+  }
+);
 
-//     defaultNavigationOptions: {
-//       headerVisible: false,
-//       ...TransitionPresets.SlideFromRightIOS,
-//     },
-//   }
-// );
+const ChatStack = createStackNavigator(
+  {
+    Search: {
+      screen: SearchScreen,
+    },
+  },
+  {
+    headerMode: "none",
+    initialRouteParams: "Search",
 
-// const ReportStack = createStackNavigator(
-//   {
-//     Report: {
-//       screen: ReportScreen,
-//     },
-//   },
-//   {
-//     headerMode: "none",
-//     initialRouteParams: "Report",
+    defaultNavigationOptions: {
+      headerVisible: false,
+      ...TransitionPresets.SlideFromRightIOS,
+    },
+  }
+);
 
-//     defaultNavigationOptions: {
-//       headerVisible: false,
-//       ...TransitionPresets.SlideFromRightIOS,
-//     },
-//   }
-// );
-// const TabNavigator = createBottomTabNavigator(
-//   {
-//     Home: {
-//       screen: HomeStack,
-//       navigationOptions: {
-//         tabBarLabel: () => {},
-//       },
-//     },
-//     Setting: {
-//       screen: SettingStack,
-//       navigationOptions: {
-//         tabBarLabel: () => {},
-//       },
-//     },
-//     Invoice: {
-//       screen: InvoiceStack,
-//       navigationOptions: {
-//         tabBarLabel: () => {},
-//       },
-//     },
-//     Calendar: {
-//       screen: CalendarStack,
-//       navigationOptions: {
-//         tabBarLabel: () => {},
-//       },
-//     },
-//     Report: {
-//       screen: ReportStack,
-//       navigationOptions: {
-//         tabBarLabel: () => {},
-//       },
-//     },
-//   },
+const UserStack = createStackNavigator(
+  {
+    Search: {
+      screen: SearchScreen,
+    },
+  },
+  {
+    headerMode: "none",
+    initialRouteParams: "Search",
 
-//   {
-//     defaultNavigationOptions: ({ navigation }) => ({
-//       initialRouteName: "Home",
-//       headerVisible: false,
-//       ...TransitionPresets.FadeFromBottomAndroid,
+    defaultNavigationOptions: {
+      headerVisible: false,
+      ...TransitionPresets.SlideFromRightIOS,
+    },
+  }
+);
+const TabNavigator = createBottomTabNavigator(
+  {
+    Search: {
+      screen: SearchStack,
+      navigationOptions: {
+        tabBarLabel: () => {},
+      },
+    },
+    Social: {
+      screen: SocialStack,
+      navigationOptions: {
+        tabBarLabel: () => {},
+      },
+    },
+    Chat: {
+      screen: ChatStack,
+      navigationOptions: {
+        tabBarLabel: () => {},
+      },
+    },
+    User: {
+      screen: UserStack,
+      navigationOptions: {
+        tabBarLabel: () => {},
+      },
+    },
+  },
 
-//       tabBarIcon: ({ focused }) => {
-//         const { routeName } = navigation.state;
-//         let iconName;
-//         let labelName = "";
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      initialRouteName: "Search",
+      headerVisible: false,
+      ...TransitionPresets.FadeFromBottomAndroid,
 
-//         if (routeName === "Home") {
-//           labelName = focused ? "Dashboard" : "";
-//           iconName = focused ? IMAGE.dashboard : IMAGE.dashboardOutline;
-//         } else if (routeName === "Setting") {
-//           labelName = focused ? "Setting" : "";
-//           iconName = focused ? IMAGE.settings : IMAGE.settingsOutline;
-//         } else if (routeName === "Invoice") {
-//           labelName = focused ? "Invoice" : "";
-//           iconName = focused ? IMAGE.dollar : IMAGE.dollarOutline;
-//         } else if (routeName === "Calendar") {
-//           labelName = focused ? "Calendar" : "";
-//           iconName = focused ? IMAGE.calendar : IMAGE.calendarOutline;
-//         } else if (routeName === "Report") {
-//           labelName = focused ? "Report" : "";
-//           iconName = focused ? IMAGE.file : IMAGE.fileOutline;
-//         }
-//         return (
-//           <SafeAreaView>
-//             <View style={[ComponentStyle.tabContainer]}>
-//               <FastImage
-//                 style={[ComponentStyle.tabImage]}
-//                 source={iconName}
-//                 resizeMode={FastImage.resizeMode.contain}
-//               />
-//               <Text style={[ComponentStyle.tabLabel]}>{labelName}</Text>
-//             </View>
-//           </SafeAreaView>
-//         );
-//       },
-//       //In this code to, flickering screen when navigate after any home screen
+      tabBarIcon: ({ focused }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        let labelName = "";
 
-//       // tabBarOnPress: ({ navigation }) => {
-//       //   const { routeName } = navigation.state;
-//       //   navigation.popToTop();
-//       //   navigation.navigate(routeName);
-//       // },
+        if (routeName === "Search") {
+          labelName = focused ? "Search" : "";
+          iconName = IMAGE.search_circle_img;
+        } else if (routeName === "Social") {
+          labelName = focused ? "Social" : "";
+          iconName = IMAGE.social_group_img;
+        } else if (routeName === "Chat") {
+          labelName = focused ? "Chat" : "";
+          iconName = IMAGE.chatboxes_img;
+        } else if (routeName === "User") {
+          labelName = focused ? "User" : "";
+          iconName = IMAGE.user_avatar_fill_img;
+        }
+        return (
+          <SafeAreaView>
+            <View style={[ComponentStyle.tabContainer]}>
+              <FastImage
+                style={[ComponentStyle.tabImage]}
+                source={iconName}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+              <Text style={[ComponentStyle.tabLabel]}>{labelName}</Text>
+            </View>
+          </SafeAreaView>
+        );
+      },
+      //In this code to, flickering screen when navigate after any home screen
 
-//       animationEnabled: true,
-//       swipeEnabled: true,
-//       unmountOnBlur: true,
-//       backBehavior: "none", // <-- Here
+      // tabBarOnPress: ({ navigation }) => {
+      //   const { routeName } = navigation.state;
+      //   navigation.popToTop();
+      //   navigation.navigate(routeName);
+      // },
 
-//       tabBarOptions: {
-//         style: {
-//           backgroundColor: Colors.tabBar,
-//           height: isTablat ? 100 : 50,
-//         },
-//       },
-//     }),
-//   }
-// );
-// export default TabNavigator;
+      animationEnabled: true,
+      swipeEnabled: true,
+      unmountOnBlur: true,
+      backBehavior: "none", // <-- Here
+
+      tabBarOptions: {
+        style: {
+          backgroundColor: Colors.primary,
+          height: 50,
+        },
+      },
+    }),
+  }
+);
+export default TabNavigator;

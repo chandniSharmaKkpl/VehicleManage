@@ -14,17 +14,31 @@ import { isTablat, renderIf } from "../utils/Globals";
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../assets/Images";
 
-const Header = ({ headerStyle, title, onPress, isShowBack, ...props }) => {
+const Header = ({
+  headerStyle,
+  title,
+  onPress,
+  isShowBack,
+  isShowSidebar,
+  ...props
+}) => {
   return (
     <SafeAreaView style={ComponentStyle.headerContainer}>
       <StatusBar
         barStyle="light-content"
-        backgroundColor={Colors.headerPrimary}
+        backgroundColor={Colors.primary}
       />
+
       <View
         style={[
           ComponentStyle.headerContain,
-          { justifyContent: isShowBack ? "space-between" : "center" },
+          {
+            justifyContent: isShowBack
+              ? "space-between"
+              : isShowSidebar
+              ? "flex-end"
+              : "center",
+          },
         ]}
       >
         {renderIf(
@@ -48,6 +62,35 @@ const Header = ({ headerStyle, title, onPress, isShowBack, ...props }) => {
           <View>
             <Text style={{ paddingRight: 20 }}></Text>
           </View>
+        )}
+        {renderIf(
+          isShowSidebar,
+          <TouchableOpacity onPress={onPress} style={{}}>
+            <View
+              style={{
+                paddingRight: 20,
+                
+              }}
+            >
+              <FastImage
+                style={[ComponentStyle.tab_Image]}
+                source={IMAGE.sidebar_img}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            </View>
+          </TouchableOpacity>
+        )}
+        {renderIf(
+          isShowSidebar,
+          <TouchableOpacity onPress={onPress} style={{}}>
+            <View style={{ paddingRight: 20,}}>
+              <FastImage
+                style={[ComponentStyle.tab_Image]}
+                source={IMAGE.sidebar_img}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            </View>
+          </TouchableOpacity>
         )}
       </View>
     </SafeAreaView>

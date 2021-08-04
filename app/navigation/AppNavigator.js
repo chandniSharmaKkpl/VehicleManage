@@ -9,9 +9,13 @@ import ResetPasswordScreen from '..//modules/authentication/ResetPasswordScreen'
 import CreateSocialMediaProfile from '..//modules/authentication/CreateSocialMediaProfile';
 import RegistrationDetailsScreen from '..//modules/authentication/RegistrationDetailsScreen';
 import SplashScreen from '..//modules/SplashScreen';
+import TabNavigation from "./TabNavigation";
 
 const AppNavigator = createStackNavigator(
   {
+    Home: {
+      screen: TabNavigation,
+    },
     Splash:{
       screen:SplashScreen,
     },
@@ -41,7 +45,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "CreateSocialMediaProfile",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,

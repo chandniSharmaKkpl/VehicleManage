@@ -13,6 +13,12 @@ const IMAGE = {
   primaryBackground:require("../assets/images/background.png"),
   insta_icon_img:require("../assets/images/instaIcon.png"),
   fb_icon_square:require("../assets/images/facebook_square.png"), 
+  user_avatar_fill_img:require("../assets/images/user-avatar-fill.png"), 
+  social_group_img:require("../assets/images/social-group.png"), 
+  sidebar_img:require("../assets/images/sidebar.png"), 
+  search_circle_img:require("../assets/images/search-circle.png"),
+  chatboxes_img:require("../assets/images/chatboxes.png"), 
+  search_img:require("../assets/images/search.png"), 
 };
 
 export { IMAGE };

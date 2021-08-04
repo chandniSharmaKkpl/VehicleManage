@@ -13,7 +13,7 @@ import {
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { Input, PrimaryButton } from "../../components";
+import { Input, PrimaryButton,Loader } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
@@ -125,9 +125,13 @@ export class ForgotPasswordScreen extends Component {
   };
 
   render() {
+    const { isLoading, loaderMessage } = this.props;
     return (
       <>
         <View style={AuthStyle.container}>
+        {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <NavigationEvents onWillBlur={() => this.clearStates()} />
           <TouchableWithoutFeedback
             accessible={false}

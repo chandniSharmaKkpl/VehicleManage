@@ -49,7 +49,11 @@ const StaticTitle = {
     attchDoc:'Attach Document/Photo',
     linkfb:'Link with Facebook',
     linkinsta:'Link with Instagram',
-    linksnap:'Link with Snapchat'
+    linksnap:'Link with Snapchat',
+
+    /////// DASHBOARD
+    searchbyVehicalNum:'Search Users by Their Vehicle Number'
+
   };
   export { StaticTitle };
   

@@ -8,6 +8,21 @@ export const ComponentStyle = StyleSheet.create({
   onlyFlex: {
     flex: 1,
   },
+
+  //Tab tool bar design mobile or iPad
+  //Custom Component name "TabNavigator" Starting....
+  tabContainer: {
+    width: "500%",
+    alignItems: "center",
+  },
+  tabLabel: {
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: RFPercentage(1.5),
+    color: Colors.white,
+  },
+  tabImage: { width: 25, height: 25, tintColor: Colors.primary },
+  //Custom Component name "TabNavigator" Finished...
+
   //Custom Component name "Loader" Starting....
   centerIndicator: {
     position: "absolute",
@@ -165,7 +180,7 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? 37 : 0,
+    paddingTop: Platform.OS === "android" ?17 : 0,
   },
   headerContain: {
     flexDirection: "row",
@@ -263,5 +278,42 @@ export const ComponentStyle = StyleSheet.create({
     marginLeft: 20,
     marginRight: 24,
     marginVertical: 10,
+  },
+
+  //// SEARCH COMPONENT
+  searchContainer: {
+    flexDirection: "row",
+    height: 45,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    marginVertical:5,
+    alignContent:'center',
+    alignItems:'center',justifyContent:'center',
+    marginHorizontal: globals.deviceWidth * 0.05,
+    marginVertical: globals.deviceHeight * 0.02,
+    backgroundColor: Colors.white,
+    borderColor: Colors.border_color,
+    borderWidth: 0.1,
+    borderRadius: 5,
+    shadowColor:(Platform.OS == 'android')? "#000" :Colors.blackTransparent,
+    shadowOffset: {
+      width: 2,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16,
+    elevation: 24,
+    zIndex: 0,
+  },
+  search_inputText: {
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_13,
+    width: globals.deviceWidth * 0.75,
+    color: Colors.search_placeholder,
+  },
+  search_icon: {
+    width: 15,
+    height: 15,
+    alignSelf: "center",
   },
 });
