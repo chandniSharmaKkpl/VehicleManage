@@ -105,8 +105,8 @@ export class FriendlistScreen extends Component {
             data={friendListData}
             style={{ flex: 1, marginVertical: 5 }}
             renderItem={(item, index) => this.renderFriendList(item, index)}
-            keyExtractor={(item) => {
-              item.Id.toString();
+            keyExtractor={(item, index) => {
+              return item.Id;
             }}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={this.SeparatorComponent}

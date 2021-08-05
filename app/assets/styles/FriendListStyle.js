@@ -35,7 +35,7 @@ export const FriendListStyle = StyleSheet.create({
     backgroundColor: Colors.lite_black,
     opacity: 0.045,
     paddingTop: 1,
-    marginHorizontal: 25,
+    marginHorizontal: 20,
   },
   imageStyle: {
     height: globals.deviceWidth * 0.15,

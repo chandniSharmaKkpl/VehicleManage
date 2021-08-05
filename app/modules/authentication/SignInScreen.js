@@ -37,8 +37,8 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      txtEmail: "lo@mailinator.com",
-      txtPassword: "ud@1234",
+      txtEmail: "udattani@mailinator.com",
+      txtPassword: "Abcd@1234",
       // txtEmail: "",
       // txtPassword: "",
       isShowPassword: true,
@@ -173,6 +173,8 @@ export class SignInScreen extends Component {
               icon: "info",
               duration: 4000,
             });
+
+            this.gotoSaveToken(res.value.data.data.token);
             NavigationService.navigate("CreateProfile");
           } else {
             this.setState({
@@ -197,6 +199,12 @@ export class SignInScreen extends Component {
         console.log("i am in catch error login", err);
       });
   };
+
+  // save access token
+  async gotoSaveToken(accessToken) {
+    await AsyncStorage.setItem("access_token", accessToken);
+    globals.access_token = accessToken;
+  }
 
   render() {
     const { isLoading, loaderMessage } = this.props;

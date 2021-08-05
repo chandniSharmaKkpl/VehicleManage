@@ -13,13 +13,15 @@ import {
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { Input, PrimaryButton } from "../../components";
+import { Input, PrimaryButton, Loader } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 import { NavigationEvents } from "react-navigation";
+import * as actions from "./redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "CreateProfileScreen ::=";
 
@@ -82,7 +84,56 @@ export class CreateProfileScreen extends Component {
     if (!this.checkValidation()) {
       return;
     }
-    NavigationService.navigate("CreateSocialMediaProfile");
+    Keyboard.dismiss();
+    this.createProfileAPICall();
+  };
+
+  createProfileAPICall = () => {
+    const {
+      txtUserName,
+      txtCity,
+      txtColorofCar,
+      txtModalofCar,
+      txtDescription,
+    } = this.state;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("username", txtUserName);
+    params.append("city", txtCity);
+    params.append("car_make_model", txtModalofCar);
+    params.append("car_colour", txtColorofCar);
+    params.append("car_description", txtDescription);
+
+    const { createprofile } = this.props;
+    createprofile(params)
+      .then(async (res) => {
+        console.log("res.value.data===", res.value.data);
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            NavigationService.navigate("CreateSocialMediaProfile");
+          } else {
+          }
+        } else {
+          if (res.value && res.value.data.error) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("i am in catch error login", err);
+      });
   };
 
   // start of validation
@@ -129,10 +180,32 @@ export class CreateProfileScreen extends Component {
     return true;
   };
 
+  // get car model from API
+  getcarModels = async (text) => {
+    const { txtModalofCar } = this.state;
+    await this.setState({
+      txtModalofCar: text,
+      isModalofCarError: false,
+    });
+    if (isText(txtModalofCar)) {
+      const { getcarmodel } = this.props;
+      getcarmodel(text).then((res) => {
+        console.warn("i am in res.data ===>", JSON.stringify(res.value));
+      });
+    }
+    
+  };
+
   render() {
+    const { isLoading, loaderMessage } = this.props;
+
     return (
       <>
         <View style={AuthStyle.container}>
+          {console.log("carModels--", this.props.carModels)}
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <NavigationEvents onWillBlur={() => this.clearStates()} />
           <StatusBar
             barStyle="light-content"
@@ -241,12 +314,7 @@ export class CreateProfileScreen extends Component {
                       autoCapitalize={"none"}
                       isValidationShow={this.state.isModalofCarError}
                       validateMesssage={this.state.modalofCarValidMsg}
-                      onChangeText={(text) =>
-                        this.setState({
-                          txtModalofCar: text,
-                          isModalofCarError: false,
-                        })
-                      }
+                      onChangeText={(text) => this.getcarModels(text)}
                     />
                     <Input
                       value={this.state.txtColorofCar}
@@ -322,9 +390,21 @@ export class CreateProfileScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {};
+const mapStateToProps = (state) => {
+  return {
+    carModels: state.auth.user.carModels,
+    userDetails: state.auth.user.userDetails,
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
 
-// const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  createprofile: (params) => dispatch(actions.createprofile(params)),
+  getcarmodel: (text) => dispatch(actions.getcarmodel(text)),
+});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CreateProfileScreen);
-export default CreateProfileScreen;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateProfileScreen);
