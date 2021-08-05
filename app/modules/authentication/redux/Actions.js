@@ -3,8 +3,9 @@ import {
   USER_LOGIN,
   USER_REGISTER,
   FORGOT_PASSWORD,
-  VERIFY_USER,
   SWITCH_THEME,
+  CREATE_PROFILE,
+  GET_CAR_MODEL,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -55,6 +56,43 @@ export const forgotpassword = (params) => ({
     })
     .catch((err) => {
       console.log("i'm in catch error api/forgot", JSON.stringify(err));
+      return err;
+    }),
+});
+
+export const createprofile = (params) => ({
+  type: CREATE_PROFILE,
+  payload: api
+    .post("api/createprofile1", params)
+    .then((res) => {
+      console.log("i am in api/createprofile1 api res", JSON.stringify(res));
+      // console.log("i am in api/register api res ststus", JSON.stringify(res.status));
+      return res;
+    })
+    .catch((err) => {
+      console.log("i'm in catch error api/createprofile1", JSON.stringify(err));
+      return err;
+    }),
+});
+
+export const getcarmodel = (text) => ({
+  
+  type: GET_CAR_MODEL,
+  payload: api
+    .get("autoload_car_make_model?q=" + text)
+    .then((res) => {
+      console.warn("i am in get car model res", res);
+      console.warn(
+        "i am in get carmodel res ststus",
+        JSON.stringify(res.status)
+      );
+      return res;
+    })
+    .catch((err) => {
+      console.warn(
+        "i'm in catch error get car model list",
+        JSON.stringify(err)
+      );
       return err;
     }),
 });

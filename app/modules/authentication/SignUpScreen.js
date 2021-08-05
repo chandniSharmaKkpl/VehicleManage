@@ -51,19 +51,19 @@ export class SignUpScreen extends Component {
     this.state = {
       //initialize variable
 
-      txtEmail: "hh2@gmail.com",
-      txtFirstName: "ssCss",
-      txtLastName: "ssDss",
-      txtPassword: "Abcd@1234",
-      txtConfirmPassword: "Abcd@1234",
-      txtDob: "",
-
-      // txtEmail: "",
-      // txtFirstName: "",
-      // txtLastName: "",
-      // txtPassword: "",
-      // txtConfirmPassword: "",
+      // txtEmail: "hh2@gmail.com",
+      // txtFirstName: "ssCss",
+      // txtLastName: "ssDss",
+      // txtPassword: "Abcd@1234",
+      // txtConfirmPassword: "Abcd@1234",
       // txtDob: "",
+
+      txtEmail: "",
+      txtFirstName: "",
+      txtLastName: "",
+      txtPassword: "",
+      txtConfirmPassword: "",
+      txtDob: "",
 
       isShowPassword: true,
       isShowConfirmPassword: true,
