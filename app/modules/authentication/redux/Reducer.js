@@ -1,108 +1,114 @@
 import * as actionTypes from "./ActionType";
-import { lightTheme, darkTheme } from '../../../assets/Theme'
+import { lightTheme, darkTheme } from "../../../assets/Theme";
 
 const initialState = {
-  isLoading: false,
-  isLoggedIn: false,
-  loaderMessage: "Loading...",
-  isInternetConnection: false,
-  theme: { ...lightTheme }
+  user: {
+    isLoading: false,
+    isLoggedIn: false,
+    userDetails: {},
+    loaderMessage: "Loading...",
+    isInternetConnection: false,
+    theme: { ...lightTheme },
+  },
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    //// LOGIN
     case actionTypes.USER_LOGIN_LOADING:
       return {
         ...state,
-        isLoading: true,
-        loaderMessage: "Please wait...",
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
       };
     case actionTypes.USER_LOGIN_SUCCESS:
+      const data = action.payload.data;
+      let apiData = [];
+      if (data.success === "true") {
+        apiData = data.data;
+      }
       return {
-        ...state,
-        isLoading: false,
-        isLoggedIn: true,
-        loaderMessage: "",
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          userDetails: apiData,
+          loaderMessage: "Loading...",
+        },
       };
     case actionTypes.USER_LOGIN_ERROR:
       return {
         ...state,
-        isLoading: false,
-        isLoggedIn: false,
-        loaderMessage: "",
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
       };
 
+    //// REGISTER
     case actionTypes.USER_REGISTER_LOADING:
       return {
         ...state,
-        isLoading: true,
-        loaderMessage: "Please wait...",
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
       };
     case actionTypes.USER_REGISTER_SUCCESS:
       return {
-        ...state,
-        isLoading: false,
-        isLoggedIn: true,
-        loaderMessage: "",
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
       };
     case actionTypes.USER_REGISTER_ERROR:
       return {
         ...state,
-        isLoading: false,
-        isLoggedIn: false,
-        loaderMessage: "",
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
       };
+
+    /// FORGOT PASSWORD
     case actionTypes.FORGOT_PASSWORD_LOADING:
       return {
         ...state,
-        isLoading: true,
-        loaderMessage: "Please wait...",
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
       };
     case actionTypes.FORGOT_PASSWORD_SUCCESS:
       return {
-        ...state,
-        isLoading: false,
-        isLoggedIn: true,
-        loaderMessage: "",
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
       };
     case actionTypes.FORGOT_PASSWORD_ERROR:
       return {
         ...state,
-        isLoading: false,
-        isLoggedIn: false,
-        loaderMessage: "",
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
       };
-    case actionTypes.VERIFY_USER_LOADING:
-      return {
-        ...state,
-        isLoading: true,
-        loaderMessage: "Please wait...",
-      };
-    case actionTypes.VERIFY_USER_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        isLoggedIn: true,
-        loaderMessage: "",
-      };
-    case actionTypes.VERIFY_USER_ERROR:
-      return {
-        ...state,
-        isLoading: false,
-        isLoggedIn: false,
-        loaderMessage: "",
-      };
-
-      case actionTypes.SWITCH_THEME:
-          return {
-            ...state,
-            home: {
-              ...state,
-              isLoading: false,
-              theme: {...action.payload.baseTheme} ,
-              loaderMessage: 'Loading...',
-            }
-          };
 
     default:
       return state;

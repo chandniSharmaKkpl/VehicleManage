@@ -51,7 +51,6 @@ const heightPercentageToDP = (heightPercent) => {
  *                      invoke setState method and trigger screen rerender (this.setState()).
  */
 const listenOrientationChange = (that) => {
-  console.warn("i am in listenOrientationChange", that);
   Dimensions.addEventListener("change", (newDimensions) => {
     // Retrieve and save new dimensions
     screenWidth = newDimensions.window.width;

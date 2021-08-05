@@ -1,0 +1,26 @@
+const IMAGE = {
+  backArrow: require("../assets/images/back-arrow.png"),
+  edit: require("../assets/images/edit.png"),
+  user: require("../assets/images/user.jpeg"),
+  logo_img: require("../assets/images/roadie_logo.png"),
+  car_img: require("../assets/images/car_bg.png"),
+  snap_img: require("../assets/images/snapchat.png"),
+  googleButton_img: require("../assets/images/google-Button.png"),
+  facebook_img: require("../assets/images/facebook.png"),
+  upload_img: require("../assets/images/upload.png"),
+  camera_img: require("../assets/images/camera.png"),
+  upload_doc_img: require("../assets/images/upload_doc.png"),
+  primaryBackground: require("../assets/images/background.png"),
+  insta_icon_img: require("../assets/images/instaIcon.png"),
+  fb_icon_square: require("../assets/images/facebook_square.png"),
+  user_avatar_fill_img: require("../assets/images/user-avatar-fill.png"),
+  social_group_img: require("../assets/images/social-group.png"),
+  sidebar_img: require("../assets/images/sidebar.png"),
+  search_circle_img: require("../assets/images/search-circle.png"),
+  chatboxes_img: require("../assets/images/chatboxes.png"),
+  search_img: require("../assets/images/search.png"),
+  navigate_img: require("../assets/images/navigate.png"),
+  settings_img:require("../assets/images/settings.png"),
+};
+
+export { IMAGE };

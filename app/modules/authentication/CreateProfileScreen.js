@@ -4,34 +4,26 @@ import {
   Text,
   Image,
   KeyboardAvoidingView,
-  TouchableOpacity,
   ScrollView,
   Keyboard,
   Platform,
+  StatusBar,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import {
-  PasswordInput,
-  Input,
-  PrimaryButton,
-  InputWithIcon,
-} from "../../components";
+import { Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
-import Colors from "../../assets/Colors";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
-import moment from "moment";
-import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
+import { IMAGE } from "../../assets/Images";
+import { NavigationEvents } from "react-navigation";
 
-const logo_img = require("../../assets/images/roadie_logo.png");
-const car_img = require("../../assets/images/car_bg.png");
-const TAG = "CreateProfile ::=";
+const TAG = "CreateProfileScreen ::=";
 
-export class CreateProfile extends Component {
+export class CreateProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,11 +54,35 @@ export class CreateProfile extends Component {
     this.input[ref].focus();
   };
 
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
+      txtUserName: "",
+      txtCity: "",
+      txtModalofCar: "",
+      txtColorofCar: "",
+      txtDescription: "",
+
+      isUserNameError: false,
+      isCityError: false,
+      isModalofCarError: false,
+      isColorofCarError: false,
+      isDescriptionError: false,
+
+      userNameValidMsg: "",
+      cityValidMsg: "",
+      modalofCarValidMsg: "",
+      colorofCarValidMsg: "",
+      descriptionValidMsg: "",
+    });
+  };
+
   // create a new profile after check validation's
   createProfile = () => {
     if (!this.checkValidation()) {
       return;
     }
+    NavigationService.navigate("CreateSocialMediaProfile");
   };
 
   // start of validation
@@ -117,17 +133,23 @@ export class CreateProfile extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
           <TouchableWithoutFeedback
             accessible={false}
             onPress={() => Keyboard.dismiss()}
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={logo_img} style={AuthStyle.imglogo} />
+                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={car_img} style={AuthStyle.imgcar} />
+                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
@@ -157,6 +179,7 @@ export class CreateProfile extends Component {
                       placeholderText={StaticTitle.enterUserName}
                       onSubmitEditing={() => this.focusNextTextField("txtCity")}
                       blurOnSubmit={false}
+                      autoFocus={true}
                       returnKeyType="next"
                       autoCapitalize={"none"}
                       maxLength={26}
@@ -256,7 +279,7 @@ export class CreateProfile extends Component {
                     <Input
                       value={this.state.txtDescription}
                       placeholderText={StaticTitle.addDescription}
-                      onSubmitEditing={() => Keyboard.dismiss}
+                      onSubmitEditing={Keyboard.dismiss}
                       forwardRef={(ref) => {
                         (this.input.txtDescription = ref),
                           this.input.txtDescription &&
@@ -303,5 +326,5 @@ export class CreateProfile extends Component {
 
 // const mapDispatchToProps = (dispatch) => ({});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CreateProfile);
-export default CreateProfile;
+// export default connect(mapStateToProps, mapDispatchToProps)(CreateProfileScreen);
+export default CreateProfileScreen;

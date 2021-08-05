@@ -50,7 +50,7 @@ const InputWithIcon = ({
             },
           ]}
           placeholder={placeholderText}
-          placeholderTextColor={Colors.lite_black}
+          placeholderTextColor={Colors.placeholderColor}
           blurOnSubmit={blurOnSubmit}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
@@ -67,7 +67,7 @@ const InputWithIcon = ({
           >
             <View style={{ marginRight: 15 }}>
               <FastImage
-                style={[ComponentStyle.calendar_Image]}
+                style={[ComponentStyle.tab_Image]}
                 source={calendar_img}
                 resizeMode={FastImage.resizeMode.contain}
               />

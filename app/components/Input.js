@@ -23,6 +23,7 @@ const Input = ({
   returnKeyType,
   multiline,
   numberOfLines,
+  autoFocus,
   ...props
 }) => {
   return (
@@ -40,7 +41,7 @@ const Input = ({
           },
         ]}
         placeholder={placeholderText}
-        placeholderTextColor={Colors.lite_black}
+        placeholderTextColor={Colors.placeholderColor}
         blurOnSubmit={blurOnSubmit}
         onChangeText={onChangeText}
         keyboardType={keyboardType}
@@ -48,6 +49,7 @@ const Input = ({
         autoCapitalize={autoCapitalize}
         underlineColorAndroid="transparent"
         multiline={multiline}
+        autoFocus={false}
         numberOfLines={numberOfLines}
       />
       {renderIf(
