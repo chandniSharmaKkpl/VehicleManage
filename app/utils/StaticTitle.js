@@ -63,7 +63,19 @@ const StaticTitle = {
     frndList:'Friends List',
     userProfile:'User Profile',
     msges:'Messages',
-    changeRegistration:'Change Registration'
+    changeRegistration:'Change Registration',
+
+
+    //// PRIVACY SETTINGS 
+    privacysettings:'Privacy Settings',
+    hideprofile:'Hide Profile',
+    hidecity:'Hide City/Suburb',
+    hidemodelofcar:'Hide Make/Model and Colour',
+    requestforsocial:'Required Request for Socials',
+    sharesocial:'Share Social when you Search Someone',
+    displayname:'Display Username Instead of Name',
+    premiumsetting:'Premium Settings',
+    hidesearchuser:'Hide when you Search Users'
 
   };
   export { StaticTitle };

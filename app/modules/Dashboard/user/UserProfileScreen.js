@@ -219,6 +219,11 @@ export class UserProfileScreen extends Component {
     NavigationService.navigate("RegistrationDetails");
   };
 
+  // Navigate to Settings  Screen
+  gotoSettings = () => {
+    NavigationService.navigate("PrivacySettings");
+  };
+
   render() {
     const { photoUrl, options, isGalleryPicker } = this.state;
 
@@ -320,7 +325,12 @@ export class UserProfileScreen extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity style={UserProfileStyle.squareView}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.gotoSettings();
+                }}
+                style={UserProfileStyle.squareView}
+              >
                 <FastImage
                   style={[UserProfileStyle.navigateimgStyle]}
                   source={IMAGE.settings_img}

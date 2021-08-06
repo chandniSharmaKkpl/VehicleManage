@@ -13,7 +13,8 @@ import { IMAGE } from "../assets/Images";
 import SearchScreen from "../modules/Dashboard/search/SearchScreen";
 import FriendlistScreen from "../modules/Dashboard/social/FriendlistScreen";
 import ChatListScreen from "../modules/Dashboard/chat/ChatListScreen";
-import UserProfileScreen from '../modules/Dashboard/user/UserProfileScreen'
+import UserProfileScreen from '../modules/Dashboard/user/UserProfileScreen';
+import PrivacySettingsScreen from '../modules/Dashboard/user/PrivacySettingsScreen';
 const SearchStack = createStackNavigator(
   {
     Search: {
@@ -70,6 +71,9 @@ const UserStack = createStackNavigator(
     UserProfile: {
       screen: UserProfileScreen,
     },
+    PrivacySettings:{
+      screen:PrivacySettingsScreen,
+    }
   },
   {
     headerMode: "none",

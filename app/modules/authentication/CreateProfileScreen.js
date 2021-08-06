@@ -187,12 +187,12 @@ export class CreateProfileScreen extends Component {
       txtModalofCar: text,
       isModalofCarError: false,
     });
-    if (isText(txtModalofCar)) {
-      const { getcarmodel } = this.props;
-      getcarmodel(text).then((res) => {
-        console.warn("i am in res.data ===>", JSON.stringify(res.value));
-      });
-    }
+    // if (isText(txtModalofCar)) {
+    //   const { getcarmodel } = this.props;
+    //   getcarmodel(text).then((res) => {
+    //     console.warn("i am in res.data ===>", JSON.stringify(res.value));
+    //   });
+    // }
     
   };
 
@@ -202,7 +202,7 @@ export class CreateProfileScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
-          {console.log("carModels--", this.props.carModels)}
+         
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}

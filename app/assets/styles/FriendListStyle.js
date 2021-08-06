@@ -3,7 +3,6 @@ import Colors from "../Colors";
 import { RFPercentage } from "../../utils/ResponsiveFont";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
-import { color } from "react-native-reanimated";
 
 export const FriendListStyle = StyleSheet.create({
   container: {
@@ -12,9 +11,9 @@ export const FriendListStyle = StyleSheet.create({
   },
   itemcell: {
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 10,
     // marginVertical: 2,
-    marginHorizontal: 12,
+    marginHorizontal: 4,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -70,5 +69,9 @@ export const FriendListStyle = StyleSheet.create({
   userdetail: {
     marginHorizontal: 15,
     width: "60%",
+  },
+  flatliststyle: {
+    flex: 1,
+    marginVertical: 5,
   },
 });
