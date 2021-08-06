@@ -103,7 +103,7 @@ export class FriendlistScreen extends Component {
           />
           <FlatList
             data={friendListData}
-            style={{ flex: 1, marginVertical: 5 }}
+            style={FriendListStyle.flatliststyle}
             renderItem={(item, index) => this.renderFriendList(item, index)}
             keyExtractor={(item, index) => {
               return item.Id;

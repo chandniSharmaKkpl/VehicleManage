@@ -3,7 +3,6 @@ import Colors from "../Colors";
 import { RFPercentage } from "../../utils/ResponsiveFont";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
-import { color } from "react-native-reanimated";
 
 export const UserProfileStyle = StyleSheet.create({
   container: {

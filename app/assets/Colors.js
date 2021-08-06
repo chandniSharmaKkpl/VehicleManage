@@ -19,7 +19,9 @@ const Colors = {
   placeholderColor:'rgb(136,137,137)',
   pink:'#DB3773',
   blue:'#3B5998',
-  search_placeholder:'#222222B3'
+  search_placeholder:'#222222B3',
+  switchtext:'#222222',
+  switchhide:'#3e3e3e'
   
 };
 
