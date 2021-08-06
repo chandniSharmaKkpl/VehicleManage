@@ -66,7 +66,10 @@ export class FriendlistScreen extends Component {
           <Text style={FriendListStyle.titleSmall}>{item.Name}</Text>
           <Text style={FriendListStyle.titleSmall}>{item.Num}</Text>
         </View>
-        <TouchableOpacity style={FriendListStyle.squareView}>
+        <TouchableOpacity
+          onPress={() => this.gotoFriendDetails(item)}
+          style={FriendListStyle.squareView}
+        >
           <FastImage
             style={[FriendListStyle.navigateimgStyle]}
             source={IMAGE.navigate_img}
@@ -74,6 +77,11 @@ export class FriendlistScreen extends Component {
         </TouchableOpacity>
       </View>
     );
+  };
+
+  // navigate to FriendDetails screen
+  gotoFriendDetails = (item) => {
+    NavigationService.navigate("FriendDetail", { FriendData: item });
   };
 
   // seprate component

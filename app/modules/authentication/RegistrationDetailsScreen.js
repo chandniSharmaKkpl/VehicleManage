@@ -78,8 +78,6 @@ export class RegistrationDetailsScreen extends Component {
     this.setState({ isattachphoto: false });
   };
 
-  
-
   // save all register details
   saveDeatils = () => {};
 
@@ -224,11 +222,7 @@ export class RegistrationDetailsScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
-          <Header
-            
-            isShowBack={true}
-            title={StaticTitle.registartionDetail}
-          />
+          <Header isShowBack={true} title={StaticTitle.registartionDetail} />
           <ScrollView
             ref={(node) => (this.scroll = node)}
             automaticallyAdjustContentInsets={true}
