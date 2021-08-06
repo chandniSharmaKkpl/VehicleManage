@@ -15,6 +15,7 @@ import FriendlistScreen from "../modules/Dashboard/social/FriendlistScreen";
 import ChatListScreen from "../modules/Dashboard/chat/ChatListScreen";
 import UserProfileScreen from '../modules/Dashboard/user/UserProfileScreen';
 import PrivacySettingsScreen from '../modules/Dashboard/user/PrivacySettingsScreen';
+import FriendDetailScreen from '../modules/Dashboard/social/FriendDetailScreen';
 const SearchStack = createStackNavigator(
   {
     Search: {
@@ -37,6 +38,9 @@ const SocialStack = createStackNavigator(
     Friendlist: {
       screen: FriendlistScreen,
     },
+    FriendDetail:{
+      screen:FriendDetailScreen
+    }
   },
   {
     headerMode: "none",

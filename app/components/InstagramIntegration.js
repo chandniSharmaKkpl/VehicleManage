@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { StaticTitle } from "../utils/StaticTitle";
+import Colors from "../assets/Colors";
 
 import { IMAGE } from "../assets/Images";
 import LinearGradient from "react-native-linear-gradient";
@@ -49,7 +50,7 @@ class InstagramIntegration extends Component {
             <LinearGradient
               start={{ x: 0.0, y: 0.5 }}
               end={{ x: 0.7, y: 1.0 }}
-              colors={["#F67131", "#DD3770", "#A035B0"]}
+              colors={[Colors.orange, Colors.pink, Colors.purple]}
               style={ComponentStyle.primaryBtnContainer}
             >
               <FastImage
