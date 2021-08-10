@@ -30,8 +30,10 @@ const StaticTitle = {
 
     enterUserName:'Enter Username',
     enterCity:'Enter City or Suburb',
-    makeModal:'Make and Model of Car',
+    selectCity:'Choose City or Suburb',
+    chooseModal:'Make and Model of Car',
     enterColor:'Enter Color of Car',
+    selectColor:'Choose Color of Car',
     addDescription:'Add a Description',
     forgotPassword:'Forgot Password',
     resetpassword:'Reset Password',

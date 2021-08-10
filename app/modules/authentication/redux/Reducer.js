@@ -6,7 +6,7 @@ const initialState = {
     isLoading: false,
     isLoggedIn: false,
     userDetails: {},
-    carModels:{},
+    
     loaderMessage: "Loading...",
     isInternetConnection: false,
     theme: { ...lightTheme },
@@ -111,7 +111,6 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
-
     /// CREATE PROFILE
     case actionTypes.CREATE_PROFILE_LOADING:
       return {
@@ -142,23 +141,18 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
-
     //// GET CAR MODEL
-    case actionTypes.GET_CAR_MODEL_LOADING:
+    case actionTypes.GET_CITY_LOADING:
+     
       return {
         ...state,
         user: {
           ...state.user,
-          isLoading: false,
+          isLoading: true,
           loaderMessage: "Please wait...",
         },
       };
-    case actionTypes.GET_CAR_MODEL_SUCCESS:
-      const cardata = action.payload.data;
-      let carmodelData = [];
-      if (cardata.success === "true") {
-        carmodelData = cardata.data;
-      }
+    case actionTypes.GET_CITY_SUCCESS:
       return {
         user: {
           ...state.user,
@@ -166,10 +160,10 @@ const authReducer = (state = initialState, action) => {
           isLoggedIn: true,
           ...action.payload,
           loaderMessage: "Loading...",
-          carModels: carmodelData,
+          
         },
       };
-    case actionTypes.GET_CAR_MODEL_ERROR:
+    case actionTypes.GET_CITY_ERROR:
       return {
         ...state,
         user: {
@@ -178,6 +172,8 @@ const authReducer = (state = initialState, action) => {
           loaderMessage: "Loading...",
         },
       };
+
+
 
     default:
       return state;

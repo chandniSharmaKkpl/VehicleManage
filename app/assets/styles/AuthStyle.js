@@ -3,7 +3,6 @@ import Colors from "../Colors";
 import { RFPercentage } from "../../utils/ResponsiveFont";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
-import { color } from "react-native-reanimated";
 
 export const AuthStyle = StyleSheet.create({
   primaryBG: {
@@ -40,10 +39,52 @@ export const AuthStyle = StyleSheet.create({
     backgroundColor: Colors.lite_background,
     padding: 10,
   },
+  dropdown_2: {
+    alignSelf: "flex-end",
+    width: 300,
+    marginTop: 32,
+    right: 8,
+    borderWidth: 0,
+    borderRadius: 3,
+    backgroundColor: "cornflowerblue",
+  },
+  dropdown_row: {
+    flexDirection: "row",
+    height: 40,
+    alignItems: "center",
+    backgroundColor: Colors.placeholderColor,
+    // opacity:0.5
+  },
+  dropdown_row_text: {
+    marginHorizontal: 14,
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_14,
+    color: Colors.white,
+    textAlignVertical: "center",
+    textAlign: "center",
+  },
+  dropdown: {
+    width: "90%",
+    height: 300,
+    // flex:1,
+  },
+  placeholder_font: {
+    color: Colors.placeholderColor,
+    fontFamily: FontFamily.RalewaRegular,
+    fontSize: globals.font_14,
+  },
+  pickerinput: {
+    height: 35,
+    marginHorizontal: 20,
+    borderBottomWidth: 0.8,
+    marginTop: 20,
+    borderBottomColor: Colors.border_color,
+    color: Colors.black,
+  },
   imglogoContainer: {
     // flex: 0.1,
     height: 50,
-   
+
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
@@ -158,7 +199,7 @@ export const AuthStyle = StyleSheet.create({
     shadowOpacity: 0.58,
     shadowRadius: 16,
     elevation: 24,
-    zIndex: 0,
+    // zIndex: 0,
     // position: 'absolute', //Here is the trick
     // bottom: 0, //Here is the trick
   },
@@ -209,6 +250,24 @@ export const AuthStyle = StyleSheet.create({
     marginBottom: 20,
     marginTop: 10,
   },
+  dateContainer: {
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    marginHorizontal: 20,
+    fontSize: 15,
+    fontFamily: FontFamily.RalewaRegular,
+    borderBottomColor: Colors.border_color,
+    borderBottomWidth: 0.8,
+    marginVertical: 4,
+  },
+  autocompleteContainer: {
+    flex: 1,
+    left: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
+    zIndex: 1,
+  },
   imageview: {
     marginVertical: globals.deviceHeight * 0.03,
     alignItems: "center",
@@ -255,6 +314,12 @@ export const AuthStyle = StyleSheet.create({
     color: Colors.black,
     textAlign: "center",
     justifyContent: "center",
+  },
+  separatorLine: {
+    height: 0.8,
+    backgroundColor: Colors.border_color,
+    marginHorizontal: 20,
+    marginTop: 10,
   },
   RectangleShapeView: {
     width: 70 * 2,
