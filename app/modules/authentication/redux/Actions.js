@@ -6,6 +6,8 @@ import {
   SWITCH_THEME,
   CREATE_PROFILE,
   GET_CAR_MODEL,
+  GET_CAR_COLOUR,
+  GET_CITY,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -20,12 +22,9 @@ export const login = (params) => ({
   payload: api
     .post("api/login", params)
     .then((res) => {
-      console.log("i am in login api res", JSON.stringify(res));
-      // console.log("i am in login api res ststus", JSON.stringify(res.status));
       return res;
     })
     .catch((err) => {
-      console.log("i'm in catch error login", JSON.stringify(err));
       return err;
     }),
 });
@@ -35,12 +34,9 @@ export const registeruser = (params) => ({
   payload: api
     .post("api/register", params)
     .then((res) => {
-      console.log("i am in api/register api res", JSON.stringify(res));
-      // console.log("i am in api/register api res ststus", JSON.stringify(res.status));
       return res;
     })
     .catch((err) => {
-      console.log("i'm in catch error api/register", JSON.stringify(err));
       return err;
     }),
 });
@@ -50,12 +46,9 @@ export const forgotpassword = (params) => ({
   payload: api
     .post("api/forgot", params)
     .then((res) => {
-      console.log("i am in api/forgot api res", JSON.stringify(res));
-      // console.log("i am in api/forgot api res ststus", JSON.stringify(res.status));
       return res;
     })
     .catch((err) => {
-      console.log("i'm in catch error api/forgot", JSON.stringify(err));
       return err;
     }),
 });
@@ -65,34 +58,45 @@ export const createprofile = (params) => ({
   payload: api
     .post("api/createprofile1", params)
     .then((res) => {
-      console.log("i am in api/createprofile1 api res", JSON.stringify(res));
-      // console.log("i am in api/register api res ststus", JSON.stringify(res.status));
       return res;
     })
     .catch((err) => {
-      console.log("i'm in catch error api/createprofile1", JSON.stringify(err));
       return err;
     }),
 });
 
-export const getcarmodel = (text) => ({
-  
+export const getcarmodel = () => ({
   type: GET_CAR_MODEL,
   payload: api
-    .get("autoload_car_make_model?q=" + text)
+    .get("api/autoload_car_make_model")
     .then((res) => {
-      console.warn("i am in get car model res", res);
-      console.warn(
-        "i am in get carmodel res ststus",
-        JSON.stringify(res.status)
-      );
       return res;
     })
     .catch((err) => {
-      console.warn(
-        "i'm in catch error get car model list",
-        JSON.stringify(err)
-      );
+      return err;
+    }),
+});
+
+export const getcarcolour = () => ({
+  type: GET_CAR_COLOUR,
+  payload: api
+    .get("api/autoload_car_colour")
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
+export const getcity = () => ({
+  type: GET_CITY,
+  payload: api
+    .get("api/autoload_city")
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
       return err;
     }),
 });

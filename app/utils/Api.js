@@ -19,14 +19,16 @@ function makeFormDataPostHeaders() {
 }
 
 function makeGetHeaders() {
-  console.log("I am in makeGetHeaders()");
+  // console.log("I am in makeGetHeaders()");
   let headerObj = {};
-  const accessToken =  globals.access_token;
-  headerObj = {
-    Authorization: `Bearer ${accessToken}`,
-    Accept: "application/json",
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
+  const getaccessToken =  globals.access_token;
+  if(getaccessToken && getaccessToken != null){
+    headerObj = {
+      Authorization: `Bearer ${getaccessToken}`,
+      Accept: "application/json",
+     
+    };
+  }
   return headerObj;
 }
 function makeAuthPostHeaders() {
@@ -75,7 +77,7 @@ axiosApi.interceptors.request.use((request) => {
       request.headers = makeFormDataPostHeaders();
     }
   }
-  console.log("<~~~~~~~~~~~ REQUEST:::=>" + JSON.stringify(request));
+  // console.log("<~~~~~~~~~~~ REQUEST:::=>" + JSON.stringify(request));
   return request;
 });
 

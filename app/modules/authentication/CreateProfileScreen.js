@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import {
   View,
   Text,
@@ -8,12 +8,14 @@ import {
   Keyboard,
   Platform,
   StatusBar,
+  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { Input, PrimaryButton, Loader } from "../../components";
+import { Input, PrimaryButton, Loader, DropDownPicker } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
@@ -25,11 +27,19 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "CreateProfileScreen ::=";
 
-export class CreateProfileScreen extends Component {
+export class CreateProfileScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       //initialize variable
+      cityList: [],
+      carModelList: [],
+      carColourList: [],
+
+      selectedCity: "",
+      selectedModel: "",
+      selectedColour: "",
+
       txtUserName: "",
       txtCity: "",
       txtModalofCar: "",
@@ -50,6 +60,55 @@ export class CreateProfileScreen extends Component {
     };
     this.input = {};
   }
+
+  componentDidMount = async () => {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
+    await this.getcarModelAPI();
+    await this.getcarColourAPI();
+    await this.getCityAPI();
+  };
+
+  /// get car model data from API
+
+  getcarModelAPI = () => {
+    const { getcarmodel } = this.props;
+    getcarmodel().then((res) => {
+      if (res.value && res.value.status === 200) {
+        let modelDataList = res.value.data.data;
+        this.setState({
+          carModelList: modelDataList,
+        });
+      }
+    });
+  };
+
+  /// get car colour data from API
+  getcarColourAPI = () => {
+    const { getcarcolour } = this.props;
+    getcarcolour().then((res) => {
+      if (res.value && res.value.status === 200) {
+        let colourDataList = res.value.data.data;
+
+        this.setState({
+          carColourList: colourDataList,
+        });
+      }
+    });
+  };
+
+  /// get city data from API
+  getCityAPI = () => {
+    const { getcity } = this.props;
+    getcity().then((res) => {
+      if (res.value && res.value.status === 200) {
+        let cityDataList = res.value.data.data;
+        this.setState({
+          cityList: cityDataList,
+        });
+      }
+    });
+  };
 
   // Focus on next input
   focusNextTextField = (ref) => {
@@ -88,6 +147,7 @@ export class CreateProfileScreen extends Component {
     this.createProfileAPICall();
   };
 
+  // API call begin
   createProfileAPICall = () => {
     const {
       txtUserName,
@@ -107,7 +167,6 @@ export class CreateProfileScreen extends Component {
     const { createprofile } = this.props;
     createprofile(params)
       .then(async (res) => {
-        console.log("res.value.data===", res.value.data);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -153,56 +212,54 @@ export class CreateProfileScreen extends Component {
       });
       return false;
     }
-    if (!isEmpty(txtCity) && !isText(txtCity)) {
-      this.setState({
-        isCityError: true,
-        cityValidMsg: Messages.cityFail,
-      });
-      return false;
-    }
+    // if (!isEmpty(txtCity) && !isText(txtCity)) {
+    //   this.setState({
+    //     isCityError: true,
+    //     cityValidMsg: Messages.cityFail,
+    //   });
+    //   return false;
+    // }
 
-    if (!isEmpty(txtModalofCar) && !isText(txtModalofCar)) {
-      this.setState({
-        isModalofCarError: true,
-        modalofCarValidMsg: Messages.modalFail,
-      });
-      return false;
-    }
+    // if (!isEmpty(txtModalofCar) && !isText(txtModalofCar)) {
+    //   this.setState({
+    //     isModalofCarError: true,
+    //     modalofCarValidMsg: Messages.modalFail,
+    //   });
+    //   return false;
+    // }
 
-    if (!isEmpty(txtColorofCar) && !isText(txtColorofCar)) {
-      this.setState({
-        isColorofCarError: true,
-        colorofCarValidMsg: Messages.colorFail,
-      });
-      return false;
-    }
-
+    // if (!isEmpty(txtColorofCar) && !isText(txtColorofCar)) {
+    //   this.setState({
+    //     isColorofCarError: true,
+    //     colorofCarValidMsg: Messages.colorFail,
+    //   });
+    //   return false;
+    // }
     return true;
   };
 
-  // get car model from API
-  getcarModels = async (text) => {
-    const { txtModalofCar } = this.state;
-    await this.setState({
-      txtModalofCar: text,
-      isModalofCarError: false,
-    });
-    // if (isText(txtModalofCar)) {
-    //   const { getcarmodel } = this.props;
-    //   getcarmodel(text).then((res) => {
-    //     console.warn("i am in res.data ===>", JSON.stringify(res.value));
-    //   });
-    // }
-    
+  /// set selected Colour
+  setselectedColour = (text) => {
+    this.setState({ selectedColour: text });
+  };
+
+  // set selected Model
+  setselectedModel = (text) => {
+    this.setState({ selectedModel: text });
+  };
+
+  // set selected City
+  setselectedCity = (text) => {
+    this.setState({ selectedCity: text });
   };
 
   render() {
     const { isLoading, loaderMessage } = this.props;
+    const { cityList, carModelList, carColourList } = this.state;
 
     return (
       <>
         <View style={AuthStyle.container}>
-         
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -229,11 +286,13 @@ export class CreateProfileScreen extends Component {
                 style={AuthStyle.bottomCurve}
               >
                 <ScrollView
+                  nestedScrollEnabled={true}
+                  keyboardShouldPersistTaps="always"
                   ref={(node) => (this.scroll = node)}
                   automaticallyAdjustContentInsets={true}
                   enableOnAndroid={true}
                   showsVerticalScrollIndicator={false}
-                  keyboardShouldPersistTaps="never"
+                  // keyboardShouldPersistTaps="never"
                   style={{ marginTop: globals.deviceHeight * 0.015 }}
                 >
                   <View>
@@ -267,81 +326,21 @@ export class CreateProfileScreen extends Component {
                       }
                     />
 
-                    <Input
-                      value={this.state.txtCity}
-                      placeholderText={StaticTitle.enterCity}
-                      onSubmitEditing={() =>
-                        this.focusNextTextField("txtModalofCar")
-                      }
-                      forwardRef={(ref) => {
-                        (this.input.txtCity = ref),
-                          this.input.txtCity &&
-                            this.input.txtCity.setNativeProps({
-                              style: { fontFamily: "Raleway-Regular" },
-                            });
-                      }}
-                      blurOnSubmit={false}
-                      maxLength={40}
-                      minLength={3}
-                      returnKeyType="next"
-                      autoCapitalize={"none"}
-                      isValidationShow={this.state.isCityError}
-                      validateMesssage={this.state.cityValidMsg}
-                      onChangeText={(text) =>
-                        this.setState({
-                          txtCity: text,
-                          isCityError: false,
-                        })
-                      }
+                    <DropDownPicker
+                      options={cityList}
+                      defaultValue={StaticTitle.selectCity}
+                      onSelect={(value) => this.setselectedCity(value)}
                     />
-                    <Input
-                      value={this.state.txtModalofCar}
-                      placeholderText={StaticTitle.makeModal}
-                      onSubmitEditing={() =>
-                        this.focusNextTextField("txtColorofCar")
-                      }
-                      forwardRef={(ref) => {
-                        (this.input.txtModalofCar = ref),
-                          this.input.txtModalofCar &&
-                            this.input.txtModalofCar.setNativeProps({
-                              style: { fontFamily: "Raleway-Regular" },
-                            });
-                      }}
-                      maxLength={40}
-                      minLength={3}
-                      blurOnSubmit={false}
-                      returnKeyType="next"
-                      autoCapitalize={"none"}
-                      isValidationShow={this.state.isModalofCarError}
-                      validateMesssage={this.state.modalofCarValidMsg}
-                      onChangeText={(text) => this.getcarModels(text)}
+
+                    <DropDownPicker
+                      options={carModelList}
+                      defaultValue={StaticTitle.chooseModal}
+                      onSelect={(value) => this.setselectedModel(value)}
                     />
-                    <Input
-                      value={this.state.txtColorofCar}
-                      placeholderText={StaticTitle.enterColor}
-                      onSubmitEditing={() =>
-                        this.focusNextTextField("txtDescription")
-                      }
-                      forwardRef={(ref) => {
-                        (this.input.txtColorofCar = ref),
-                          this.input.txtColorofCar &&
-                            this.input.txtColorofCar.setNativeProps({
-                              style: { fontFamily: "Raleway-Regular" },
-                            });
-                      }}
-                      maxLength={20}
-                      minLength={3}
-                      blurOnSubmit={false}
-                      returnKeyType="next"
-                      autoCapitalize={"none"}
-                      isValidationShow={this.state.isColorofCarError}
-                      validateMesssage={this.state.colorofCarValidMsg}
-                      onChangeText={(text) =>
-                        this.setState({
-                          txtColorofCar: text,
-                          isModalofCarError: false,
-                        })
-                      }
+                    <DropDownPicker
+                      options={carColourList}
+                      defaultValue={StaticTitle.selectColor}
+                      onSelect={(value) => this.setselectedColour(value)}
                     />
 
                     <Input
@@ -392,7 +391,6 @@ export class CreateProfileScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    carModels: state.auth.user.carModels,
     userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
@@ -402,6 +400,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   createprofile: (params) => dispatch(actions.createprofile(params)),
   getcarmodel: (text) => dispatch(actions.getcarmodel(text)),
+  getcarcolour: (text) => dispatch(actions.getcarcolour(text)),
+  getcity: (text) => dispatch(actions.getcity(text)),
 });
 
 export default connect(

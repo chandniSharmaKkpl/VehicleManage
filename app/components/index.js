@@ -9,6 +9,7 @@ import PrimaryTextinputwithIcon from '../components/PrimaryTextinputwithIcon';
 import MediaModel from '../components/MediaModel';
 import Loader from '../components/Loader';
 import Search from '../components/Search';
+import DropDownPicker from '../components/DropDownPicker';
 import SwitchComponent from '../components/SwitchComponent';
 export {
   PrimaryButtonwithIcon,
@@ -22,5 +23,6 @@ export {
   MediaModel,
   Loader,
   Search,
-  SwitchComponent
+  SwitchComponent,
+  DropDownPicker
 };
