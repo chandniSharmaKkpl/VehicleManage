@@ -21,6 +21,7 @@ const IMAGE = {
   search_img: require("../assets/images/search.png"),
   navigate_img: require("../assets/images/navigate.png"),
   settings_img:require("../assets/images/settings.png"),
+  notification_img:require("../assets/images/notification.png")
 };
 
 export { IMAGE };

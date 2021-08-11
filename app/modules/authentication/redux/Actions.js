@@ -8,6 +8,7 @@ import {
   GET_CAR_MODEL,
   GET_CAR_COLOUR,
   GET_CITY,
+  FB_LOGIN
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -100,3 +101,5 @@ export const getcity = () => ({
       return err;
     }),
 });
+
+

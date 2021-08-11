@@ -7,6 +7,7 @@ export const DummyData = [
     Name: "Quilpy",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=10",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 2,
@@ -14,6 +15,7 @@ export const DummyData = [
     Name: "William",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=11",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 3,
@@ -21,6 +23,7 @@ export const DummyData = [
     Name: "Yella",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=12",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 4,
@@ -28,6 +31,7 @@ export const DummyData = [
     Name: "Storm",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=13",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 5,
@@ -35,6 +39,7 @@ export const DummyData = [
     Name: "Quilpy",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=14",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 6,
@@ -42,6 +47,7 @@ export const DummyData = [
     Name: "William",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=14",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 7,
@@ -49,6 +55,7 @@ export const DummyData = [
     Name: "Yella",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=15",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 8,
@@ -56,6 +63,7 @@ export const DummyData = [
     Name: "Storm",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=16",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 9,
@@ -63,6 +71,7 @@ export const DummyData = [
     Name: "Quilpy",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=17",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 10,
@@ -70,6 +79,7 @@ export const DummyData = [
     Name: "William",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=18",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 11,
@@ -77,6 +87,7 @@ export const DummyData = [
     Name: "Yella",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=20",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 12,
@@ -84,6 +95,7 @@ export const DummyData = [
     Name: "Storm",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=21",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 13,
@@ -91,6 +103,7 @@ export const DummyData = [
     Name: "Quilpy",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=22",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 14,
@@ -98,6 +111,7 @@ export const DummyData = [
     Name: "William",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=23",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 15,
@@ -105,6 +119,7 @@ export const DummyData = [
     Name: "Yella",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=24",
+    NData:'10 People have searched you up!'
   },
   {
     Id: 16,
@@ -112,5 +127,6 @@ export const DummyData = [
     Name: "Storm",
     Num: "ISD 738",
     Img: "https://i.pravatar.cc/150?img=20",
+    NData:'10 People have searched you up!'
   },
 ];

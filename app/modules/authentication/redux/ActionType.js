@@ -40,5 +40,13 @@ export const GET_CITY_LOADING = "GET_CITY_LOADING";
 export const GET_CITY_SUCCESS = "GET_CITY_SUCCESS";
 export const GET_CITY_ERROR = "GET_CITY_ERROR";
 
+
+// fb login
+export const FB_LOGIN = "FB_LOGIN";
+export const FB_LOGIN_LOADING = "FB_LOGIN_LOADING";
+export const FB_LOGIN_SUCCESS = "FB_LOGIN_SUCCESS";
+export const FB_LOGIN_ERROR = "FB_LOGIN_ERROR";
+
+
 // ADD THEME LIGHT AND DARK
 export const SWITCH_THEME = 'SWITCH_THEME'

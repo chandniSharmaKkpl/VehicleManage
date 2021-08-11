@@ -74,4 +74,14 @@ export const FriendListStyle = StyleSheet.create({
     flex: 1,
     marginVertical: 5,
   },
+
+  ////// NOTIFICATIOn
+
+  notificationtext: {
+    fontFamily: FontFamily.RalewaySemiBold,
+    fontSize: globals.font_14,
+    color: Colors.black,
+    marginHorizontal: globals.deviceWidth * 0.04,
+    width: globals.deviceWidth * 0.65,
+  },
 });

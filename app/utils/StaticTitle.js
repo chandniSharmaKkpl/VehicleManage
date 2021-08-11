@@ -66,7 +66,8 @@ const StaticTitle = {
     userProfile:'User Profile',
     msges:'Messages',
     changeRegistration:'Change Registration',
-
+    notification:'Notifications',
+    whosearchyou:"Who's Searched You..",
 
     //// PRIVACY SETTINGS 
     privacysettings:'Privacy Settings',
