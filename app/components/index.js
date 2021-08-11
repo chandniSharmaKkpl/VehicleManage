@@ -11,6 +11,7 @@ import Loader from '../components/Loader';
 import Search from '../components/Search';
 import DropDownPicker from '../components/DropDownPicker';
 import SwitchComponent from '../components/SwitchComponent';
+import GenerateRandomFileName from '../components/GenerateRandomFileName';
 export {
   PrimaryButtonwithIcon,
   ButtonwithRightIcon,
@@ -24,5 +25,6 @@ export {
   Loader,
   Search,
   SwitchComponent,
-  DropDownPicker
+  DropDownPicker,
+  GenerateRandomFileName
 };

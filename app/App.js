@@ -60,7 +60,7 @@ export class App extends Component {
         <FlashMessage
           style={{
             paddingTop:
-              Platform.OS === "android" ? StatusBar.currentHeight + 5 : 0,
+              Platform.OS === "android" ? StatusBar.currentHeight + 15 : 0,
           }}
           position="top"
         />
