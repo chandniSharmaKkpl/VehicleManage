@@ -23,7 +23,8 @@ const Colors = {
   blue:'#3B5998',
   search_placeholder:'#222222B3',
   switchtext:'#222222',
-  switchhide:'#3e3e3e'
+  switchhide:'#3e3e3e',
+  msgBG:'#F7F6F1'
   
 };
 

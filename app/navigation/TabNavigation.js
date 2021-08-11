@@ -13,22 +13,23 @@ import { IMAGE } from "../assets/Images";
 import SearchScreen from "../modules/dashboard/search/SearchScreen";
 import FriendlistScreen from "../modules/dashboard/social/FriendlistScreen";
 import ChatListScreen from "../modules/dashboard/chat/ChatListScreen";
-import UserProfileScreen from '../modules/dashboard/user/UserProfileScreen';
-import PrivacySettingsScreen from '../modules/dashboard/user/PrivacySettingsScreen';
-import FriendDetailScreen from '../modules/dashboard/social/FriendDetailScreen';
-import NotificationScreen from '../modules/dashboard/search/NotificationScreen';
-import RecentViewersScreen from '../modules/dashboard/search/RecentViewersScreen';
+import UserProfileScreen from "../modules/dashboard/user/UserProfileScreen";
+import PrivacySettingsScreen from "../modules/dashboard/user/PrivacySettingsScreen";
+import FriendDetailScreen from "../modules/dashboard/social/FriendDetailScreen";
+import NotificationScreen from "../modules/dashboard/search/NotificationScreen";
+import RecentViewersScreen from "../modules/dashboard/search/RecentViewersScreen";
+import ChatMessagesScreen from "../modules/dashboard/chat/ChatMessagesScreen";
 const SearchStack = createStackNavigator(
   {
     Search: {
       screen: SearchScreen,
     },
-    Notification:{
-      screen:NotificationScreen
+    Notification: {
+      screen: NotificationScreen,
     },
-    RecentViewers:{
-      screen:RecentViewersScreen
-    }
+    RecentViewers: {
+      screen: RecentViewersScreen,
+    },
   },
   {
     headerMode: "none",
@@ -46,9 +47,9 @@ const SocialStack = createStackNavigator(
     Friendlist: {
       screen: FriendlistScreen,
     },
-    FriendDetail:{
-      screen:FriendDetailScreen
-    }
+    FriendDetail: {
+      screen: FriendDetailScreen,
+    },
   },
   {
     headerMode: "none",
@@ -65,6 +66,9 @@ const ChatStack = createStackNavigator(
   {
     ChatList: {
       screen: ChatListScreen,
+    },
+    ChatMessages: {
+      screen: ChatMessagesScreen,
     },
   },
   {
@@ -83,9 +87,9 @@ const UserStack = createStackNavigator(
     UserProfile: {
       screen: UserProfileScreen,
     },
-    PrivacySettings:{
-      screen:PrivacySettingsScreen,
-    }
+    PrivacySettings: {
+      screen: PrivacySettingsScreen,
+    },
   },
   {
     headerMode: "none",
@@ -184,4 +188,13 @@ const TabNavigator = createBottomTabNavigator(
     }),
   }
 );
+ChatStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+}
 export default TabNavigator;

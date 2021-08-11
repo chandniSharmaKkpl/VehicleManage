@@ -20,8 +20,11 @@ const IMAGE = {
   chatboxes_img: require("../assets/images/chatboxes.png"),
   search_img: require("../assets/images/search.png"),
   navigate_img: require("../assets/images/navigate.png"),
-  settings_img:require("../assets/images/settings.png"),
-  notification_img:require("../assets/images/notification.png")
+  settings_img: require("../assets/images/settings.png"),
+  notification_img: require("../assets/images/notification.png"),
+  info_button_img: require("../assets/images/info_button.png"),
+  share_arrow_img: require("../assets/images/share_arrow.png"),
+  happiness_img:require("../assets/images/happiness.png"),
 };
 
 export { IMAGE };
