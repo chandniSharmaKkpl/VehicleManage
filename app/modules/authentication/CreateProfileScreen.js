@@ -28,6 +28,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 const TAG = "CreateProfileScreen ::=";
 
 export class CreateProfileScreen extends PureComponent {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -62,6 +63,7 @@ export class CreateProfileScreen extends PureComponent {
   }
 
   componentDidMount = async () => {
+    this._isMounted = true;
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
     await this.getcarModelAPI();
@@ -69,16 +71,21 @@ export class CreateProfileScreen extends PureComponent {
     await this.getCityAPI();
   };
 
-  /// get car model data from API
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
+  /// get car model data from API
   getcarModelAPI = () => {
     const { getcarmodel } = this.props;
     getcarmodel().then((res) => {
       if (res.value && res.value.status === 200) {
         let modelDataList = res.value.data.data;
-        this.setState({
-          carModelList: modelDataList,
-        });
+        if (this._isMounted) {
+          this.setState({
+            carModelList: modelDataList,
+          });
+        }
       }
     });
   };
@@ -89,10 +96,11 @@ export class CreateProfileScreen extends PureComponent {
     getcarcolour().then((res) => {
       if (res.value && res.value.status === 200) {
         let colourDataList = res.value.data.data;
-
-        this.setState({
-          carColourList: colourDataList,
-        });
+        if (this._isMounted) {
+          this.setState({
+            carColourList: colourDataList,
+          });
+        }
       }
     });
   };
@@ -103,9 +111,11 @@ export class CreateProfileScreen extends PureComponent {
     getcity().then((res) => {
       if (res.value && res.value.status === 200) {
         let cityDataList = res.value.data.data;
-        this.setState({
-          cityList: cityDataList,
-        });
+        if (this._isMounted) {
+          this.setState({
+            cityList: cityDataList,
+          });
+        }
       }
     });
   };
@@ -359,7 +369,7 @@ export class CreateProfileScreen extends PureComponent {
                       autoCapitalize={"none"}
                       maxLength={280}
                       multiline={true}
-                      numberOfLines={4}
+                      // numberOfLines={4}
                       isValidationShow={this.state.isDescriptionError}
                       validateMesssage={this.state.descriptionValidMsg}
                       onChangeText={(text) =>

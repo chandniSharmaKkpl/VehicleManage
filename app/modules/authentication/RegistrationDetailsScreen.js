@@ -23,8 +23,10 @@ import {
   PrimaryButton,
   ButtonwithRightIcon,
   MediaModel,
+  GenerateRandomFileName,
 } from "../../components";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import {DefaultOptions} from "../../components/DefaultOptions";
 
 const TAG = "RegistrationDetailsScreen ::=";
 
@@ -43,18 +45,7 @@ export class RegistrationDetailsScreen extends Component {
       txtRegNumber: "",
       isRegNumberError: false,
       regNumberValidMsg: "",
-      options: [
-        {
-          image: IMAGE.camera_img,
-          title: StaticTitle.captureimgfromCamera,
-          id: 0,
-        },
-        {
-          image: IMAGE.upload_img,
-          title: StaticTitle.uploadfromgallery,
-          id: 1,
-        },
-      ],
+      options: DefaultOptions,
     };
   }
 
@@ -125,7 +116,7 @@ export class RegistrationDetailsScreen extends Component {
           uri: response.uri,
           name: response.fileName
             ? response.fileName
-            : this.generateRandomFileName(),
+            : <GenerateRandomFileName />,
           size: response.fileSize,
           type: response.type,
         };
@@ -133,36 +124,27 @@ export class RegistrationDetailsScreen extends Component {
           this.setState({
             isattachPaper: false,
             attachPaperUrl: response.uri,
-            attachPaperName: response.fileName
-              ? response.fileName
-              : this.generateRandomFileName(),
+            attachPaperName: response.fileName ? (
+              response.fileName
+            ) : (
+              <GenerateRandomFileName />
+            ),
             attachPaperObj: source,
           });
         } else {
           this.setState({
             isattachphoto: false,
             attachphotoUrl: response.uri,
-            attachphotoName: response.fileName
-              ? response.fileName
-              : this.generateRandomFileName(),
+            attachphotoName: response.fileName ? (
+              response.fileName
+            ) : (
+              <GenerateRandomFileName />
+            ),
             attachPaperObj: source,
           });
         }
       }
     );
-  };
-
-  // In Android file name is not getting by library so we are generating the random string to show the
-  generateRandomFileName = () => {
-    let length = 5;
-    var result = "";
-    var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
   };
 
   // choose profile photo from gallery
@@ -178,9 +160,11 @@ export class RegistrationDetailsScreen extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName
-            ? response.fileName
-            : this.generateRandomFileName(),
+          name: response.fileName ? (
+            response.fileName
+          ) : (
+            <GenerateRandomFileName />
+          ),
           size: response.fileSize,
           type: response.type,
         };
@@ -188,18 +172,22 @@ export class RegistrationDetailsScreen extends Component {
           this.setState({
             isattachPaper: false,
             attachPaperUrl: response.uri,
-            attachPaperName: response.fileName
-              ? response.fileName
-              : this.generateRandomFileName(),
+            attachPaperName: response.fileName ? (
+              response.fileName
+            ) : (
+              <GenerateRandomFileName />
+            ),
             attachPaperObj: source,
           });
         } else {
           this.setState({
             isattachphoto: false,
             attachphotoUrl: response.uri,
-            attachphotoName: response.fileName
-              ? response.fileName
-              : this.generateRandomFileName(),
+            attachphotoName: response.fileName ? (
+              response.fileName
+            ) : (
+              <GenerateRandomFileName />
+            ),
             attachphotoObj: source,
           });
         }
@@ -323,7 +311,7 @@ export class RegistrationDetailsScreen extends Component {
               <View style={AuthStyle.signinbtnView}>
                 <PrimaryButton
                   btnName={StaticTitle.saveDetails}
-                  onPress={() => this.saveDeatils()}
+                  // onPress={() => this.saveDeatils()}
                 />
               </View>
             </View>

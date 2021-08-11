@@ -10,12 +10,12 @@ import Colors from "../assets/Colors";
 import { ComponentStyle } from "../assets/styles/ComponentStyle";
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../assets/Images";
-import SearchScreen from "../modules/Dashboard/search/SearchScreen";
-import FriendlistScreen from "../modules/Dashboard/social/FriendlistScreen";
-import ChatListScreen from "../modules/Dashboard/chat/ChatListScreen";
-import UserProfileScreen from '../modules/Dashboard/user/UserProfileScreen';
-import PrivacySettingsScreen from '../modules/Dashboard/user/PrivacySettingsScreen';
-import FriendDetailScreen from '../modules/Dashboard/social/FriendDetailScreen';
+import SearchScreen from "../modules/dashboard/search/SearchScreen";
+import FriendlistScreen from "../modules/dashboard/social/FriendlistScreen";
+import ChatListScreen from "../modules/dashboard/chat/ChatListScreen";
+import UserProfileScreen from '../modules/dashboard/user/UserProfileScreen';
+import PrivacySettingsScreen from '../modules/dashboard/user/PrivacySettingsScreen';
+import FriendDetailScreen from '../modules/dashboard/social/FriendDetailScreen';
 const SearchStack = createStackNavigator(
   {
     Search: {

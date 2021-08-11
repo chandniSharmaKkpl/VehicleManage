@@ -18,7 +18,11 @@ import { connect } from "react-redux";
 import { ComponentStyle } from "../../assets/styles/ComponentStyle";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { PrimaryButton, MediaModel } from "../../components";
+import {
+  PrimaryButton,
+  MediaModel,
+  GenerateRandomFileName,
+} from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import Header from "../../components/Header";
@@ -28,7 +32,7 @@ import InstagramIntegration from "../../components/InstagramIntegration";
 import FacebookIntegration from "../../components/FacebookIntegration";
 import SnapchatIntegration from "../../components/SnapchatIntegration";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-
+import {DefaultOptions} from "../../components/DefaultOptions";
 const TAG = "CreateSocialMediaProfile ::=";
 
 export class CreateSocialMediaProfile extends Component {
@@ -41,18 +45,7 @@ export class CreateSocialMediaProfile extends Component {
       isSnapError: false,
       snapValidMsg: "",
       isGalleryPicker: false,
-      options: [
-        {
-          image: IMAGE.camera_img,
-          title: StaticTitle.captureimgfromCamera,
-          id: 0,
-        },
-        {
-          image: IMAGE.upload_img,
-          title: StaticTitle.uploadfromgallery,
-          id: 1,
-        },
-      ],
+      options: DefaultOptions,
     };
   }
 
@@ -118,9 +111,11 @@ export class CreateSocialMediaProfile extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName
-            ? response.fileName
-            : this.generateRandomFileName(),
+          name: response.fileName ? (
+            response.fileName
+          ) : (
+            <GenerateRandomFileName />
+          ),
           size: response.fileSize,
           type: response.type,
         };
@@ -131,19 +126,6 @@ export class CreateSocialMediaProfile extends Component {
         });
       }
     );
-  };
-
-  // In Android file name is not getting by library so we are generating the random string to show the
-  generateRandomFileName = () => {
-    let length = 5;
-    var result = "";
-    var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
   };
 
   // choose profile photo from gallery
@@ -159,9 +141,11 @@ export class CreateSocialMediaProfile extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName
-            ? response.fileName
-            : this.generateRandomFileName(),
+          name: response.fileName ? (
+            response.fileName
+          ) : (
+            <GenerateRandomFileName />
+          ),
           size: response.fileSize,
           type: response.type,
         };
