@@ -14,7 +14,7 @@ export const ComponentStyle = StyleSheet.create({
   tabContainer: {
     width: "500%",
     alignItems: "center",
-    justifyContent:'center'
+    justifyContent: "center",
   },
   tabLabel: {
     fontFamily: FontFamily.RalewaRegular,
@@ -181,19 +181,19 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ?39 : 0,
+    paddingTop: Platform.OS === "android" ? 39 : 0,
   },
   headerContain: {
     flexDirection: "row",
     alignItems: "center",
     paddingBottom: 10,
-   
   },
   titleText: {
     fontSize: RFPercentage(2.5),
     fontFamily: FontFamily.RalewaySemiBold,
     color: Colors.white,
-   
+    // backgroundColor:'red',
+    // width:globals.deviceWidth * 0.42
   },
 
   /////// Social media textinput for snapchat
@@ -289,16 +289,17 @@ export const ComponentStyle = StyleSheet.create({
     height: 45,
     paddingHorizontal: 10,
     paddingVertical: 3,
-    marginVertical:5,
-    alignContent:'center',
-    alignItems:'center',justifyContent:'center',
+    marginVertical: 5,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
     marginHorizontal: globals.deviceWidth * 0.05,
     marginVertical: globals.deviceHeight * 0.02,
     backgroundColor: Colors.white,
     borderColor: Colors.border_color,
     borderWidth: 0.1,
     borderRadius: 5,
-    shadowColor:(Platform.OS == 'android')? "#000" :Colors.blackTransparent,
+    shadowColor: Platform.OS == "android" ? "#000" : Colors.blackTransparent,
     shadowOffset: {
       width: 2,
       height: 12,
@@ -318,5 +319,14 @@ export const ComponentStyle = StyleSheet.create({
     width: 15,
     height: 15,
     alignSelf: "center",
+  },
+
+  /// CHAT HEADER
+  circleview: {
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    justifyContent:'center',
+    backgroundColor: "red",
   },
 });

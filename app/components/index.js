@@ -5,13 +5,14 @@ import Input from "../components/Input";
 import InputWithIcon from "../components/InputWithIcon";
 import PasswordInput from "../components/PasswordInput";
 import Header from "../components/Header";
-import PrimaryTextinputwithIcon from '../components/PrimaryTextinputwithIcon';
-import MediaModel from '../components/MediaModel';
-import Loader from '../components/Loader';
-import Search from '../components/Search';
-import DropDownPicker from '../components/DropDownPicker';
-import SwitchComponent from '../components/SwitchComponent';
-import GenerateRandomFileName from '../components/GenerateRandomFileName';
+import PrimaryTextinputwithIcon from "../components/PrimaryTextinputwithIcon";
+import MediaModel from "../components/MediaModel";
+import Loader from "../components/Loader";
+import Search from "../components/Search";
+import DropDownPicker from "../components/DropDownPicker";
+import SwitchComponent from "../components/SwitchComponent";
+import GenerateRandomFileName from "../components/GenerateRandomFileName";
+import ChatHeader from "../components/ChatHeader";
 export {
   PrimaryButtonwithIcon,
   ButtonwithRightIcon,
@@ -26,5 +27,6 @@ export {
   Search,
   SwitchComponent,
   DropDownPicker,
-  GenerateRandomFileName
+  GenerateRandomFileName,
+  ChatHeader,
 };
