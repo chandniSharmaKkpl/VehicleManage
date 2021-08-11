@@ -173,6 +173,38 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
+      // 
+    //    //// GET CAR MODEL
+    // case actionTypes.FB_LOGIN_LOADING:
+     
+    //   return {
+    //     ...state,
+    //     user: {
+    //       ...state.user,
+    //       isLoading: true,
+    //       loaderMessage: "Please wait...",
+    //     },
+    //   };
+    // case actionTypes.FB_LOGIN_SUCCESS:
+    //   return {
+    //     user: {
+    //       ...state.user,
+    //       isLoading: false,
+    //       isLoggedIn: true,
+    //       ...action.payload,
+    //       loaderMessage: "Loading...",
+          
+    //     },
+    //   };
+    // case actionTypes.FB_LOGIN_ERROR:
+    //   return {
+    //     ...state,
+    //     user: {
+    //       ...state.user,
+    //       isLoading: false,
+    //       loaderMessage: "Loading...",
+    //     },
+    //   };
 
 
     default:

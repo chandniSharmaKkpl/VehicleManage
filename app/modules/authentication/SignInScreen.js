@@ -52,7 +52,6 @@ export class SignInScreen extends Component {
 
   componentDidMount = async () => {
     const fb_email = await AsyncStorage.getItem("FB_USEREMAIL");
-    console.log(TAG, "fb_email--", fb_email);
   };
 
   // clear States before leave this screen
@@ -202,6 +201,7 @@ export class SignInScreen extends Component {
 
   // save access token
   async gotoSaveToken(accessToken) {
+    console.log(TAG, "access_token=====", accessToken);
     await AsyncStorage.setItem("access_token", accessToken);
     globals.access_token = accessToken;
   }

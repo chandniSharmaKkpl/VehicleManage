@@ -26,6 +26,7 @@ const Header = ({
   isShowBack,
   isShowRighttwo,
   isShowSidebar,
+  isFrom,
   ...props
 }) => {
   const gotoProfile = async () => {
@@ -33,6 +34,9 @@ const Header = ({
   };
   const gotoBack = async () => {
     NavigationService.back();
+  };
+  const gotoNotification = async () => {
+    NavigationService.navigate("Notification");
   };
   return (
     <SafeAreaView style={ComponentStyle.headerContainer}>
@@ -82,16 +86,21 @@ const Header = ({
         {isShowRighttwo == true ? (
           <>
             <TouchableOpacity
-              style={{ width: wp(5), height: hp(5), justifyContent: "center" }}
+              onPress={gotoNotification}
+              style={{
+                width: wp(5),
+                marginLeft: 35,
+                height: hp(5),
+                padding: 5,
+                justifyContent: "center",
+              }}
             >
               <FastImage
                 style={{
                   width: wp(5.5),
                   height: wp(5.5),
-                  marginLeft: 15,
-                  marginRight: 15,
                 }}
-                source={IMAGE.sidebar_img}
+                source={IMAGE.notification_img}
                 resizeMode={FastImage.resizeMode.contain}
               />
             </TouchableOpacity>
@@ -99,6 +108,9 @@ const Header = ({
               style={{
                 width: wp(5),
                 height: hp(5),
+                marginLeft: 35,
+                marginRight: 15,
+                padding: 5,
                 justifyContent: "center",
               }}
               onPress={gotoProfile}
@@ -107,8 +119,6 @@ const Header = ({
                 style={{
                   width: wp(5.5),
                   height: wp(5.5),
-                  marginLeft: 35,
-                  marginRight: 15,
                 }}
                 source={IMAGE.sidebar_img}
                 resizeMode={FastImage.resizeMode.contain}
@@ -131,7 +141,11 @@ const Header = ({
                 marginLeft: 15,
                 marginRight: 20,
               }}
-              source={IMAGE.sidebar_img}
+              source={
+                isFrom == "Notification"
+                  ? IMAGE.notification_img
+                  : IMAGE.sidebar_img
+              }
               resizeMode={FastImage.resizeMode.contain}
             />
           </TouchableOpacity>

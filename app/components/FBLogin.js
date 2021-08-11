@@ -64,7 +64,7 @@ class FBLogin extends Component {
                 } else {
                   console.log(TAG, `user result : ${JSON.stringify(result)}`);
                   if (result.hasOwnProperty("email")) {
-                    // console.log("result===", result);
+                    console.log("result===", result);
                     // console.log("email===", result.email);
                     // this.setState({ userEmail: result.email });
                     AsyncStorage.setItem(

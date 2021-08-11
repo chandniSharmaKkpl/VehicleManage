@@ -16,11 +16,19 @@ import ChatListScreen from "../modules/dashboard/chat/ChatListScreen";
 import UserProfileScreen from '../modules/dashboard/user/UserProfileScreen';
 import PrivacySettingsScreen from '../modules/dashboard/user/PrivacySettingsScreen';
 import FriendDetailScreen from '../modules/dashboard/social/FriendDetailScreen';
+import NotificationScreen from '../modules/dashboard/search/NotificationScreen';
+import RecentViewersScreen from '../modules/dashboard/search/RecentViewersScreen';
 const SearchStack = createStackNavigator(
   {
     Search: {
       screen: SearchScreen,
     },
+    Notification:{
+      screen:NotificationScreen
+    },
+    RecentViewers:{
+      screen:RecentViewersScreen
+    }
   },
   {
     headerMode: "none",
