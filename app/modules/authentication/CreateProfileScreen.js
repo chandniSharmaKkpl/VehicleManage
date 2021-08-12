@@ -319,10 +319,10 @@ export class CreateProfileScreen extends PureComponent {
                       value={this.state.txtUserName}
                       inputStyle={{ marginTop: 0 }}
                       placeholderText={StaticTitle.enterUserName}
-                      onSubmitEditing={() => this.focusNextTextField("txtCity")}
+                      onSubmitEditing={Keyboard.dismiss}
                       blurOnSubmit={false}
                       autoFocus={true}
-                      returnKeyType="next"
+                      returnKeyType="done"
                       autoCapitalize={"none"}
                       maxLength={26}
                       minLength={3}

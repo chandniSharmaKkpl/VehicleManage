@@ -10,7 +10,7 @@ import {
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { connect } from "react-redux";
 import { StaticTitle } from "../../utils/StaticTitle";
-import PrimaryButton from "../../components/PrimaryButton";
+import { PrimaryButton, Loader } from "../../components";
 import FBLogin from "../../components/FBLogin";
 import GoogleLogin from "../../components/GoogleLogin";
 import NavigationService from "../../utils/NavigationService";
@@ -26,8 +26,6 @@ export class LoginScreen extends Component {
     this.state = {};
   }
 
-  
-
   // Login with Email navigate to sign in screen
   performLoginwithEmail = () => {
     NavigationService.navigate("SignIn");
@@ -39,9 +37,13 @@ export class LoginScreen extends Component {
   };
 
   render() {
+    const { isLoading, loaderMessage } = this.props;
     return (
       <>
         <View style={AuthStyle.onlyFlex}>
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
@@ -66,7 +68,10 @@ export class LoginScreen extends Component {
             keyboardShouldPersistTaps="never"
             style={[
               AuthStyle.onlyFlex,
-              { marginBottom: globals.deviceHeight * 0.04, paddingBottom:globals.deviceHeight * 0.02 },
+              {
+                marginBottom: globals.deviceHeight * 0.04,
+                paddingBottom: globals.deviceHeight * 0.02,
+              },
             ]}
           >
             <View style={AuthStyle.onlyFlex}>
@@ -102,9 +107,13 @@ export class LoginScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {};
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
 
-// const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
-export default LoginScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

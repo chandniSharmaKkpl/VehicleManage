@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-import {PrimaryButtonwithIcon, Loader} from "../components";
+import { PrimaryButtonwithIcon, Loader } from "../components";
 import { IMAGE } from "../assets/Images";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
@@ -87,7 +87,7 @@ class FBLogin extends Component {
                               icon: "info",
                               duration: 4000,
                             });
-                            let authToken = res.value.data.data.token
+                            let authToken = res.value.data.data.token;
                             await AsyncStorage.setItem(
                               "access_token",
                               authToken
@@ -161,23 +161,16 @@ class FBLogin extends Component {
     );
   };
 
-  
-
   render() {
-    const { isLoading, loaderMessage } = this.props;
     return (
       <>
-       {/* {isLoading && (
-            <Loader isOverlay={true} loaderMessage={loaderMessage} />
-          )} */}
-      <View style={{ marginHorizontal: 10 }}>
-        
-        <PrimaryButtonwithIcon
-          iconName={IMAGE.facebook_img}
-          btnName={StaticTitle.loginwithFB}
-          onPress={() => this.performFBLogin(this.props)}
-        />
-      </View>
+        <View style={{ marginHorizontal: 10 }}>
+          <PrimaryButtonwithIcon
+            iconName={IMAGE.facebook_img}
+            btnName={StaticTitle.loginwithFB}
+            onPress={() => this.performFBLogin(this.props)}
+          />
+        </View>
       </>
     );
   }
