@@ -176,11 +176,7 @@ export class UserProfileScreen extends Component {
     this.setState({ isGalleryPicker: !this.state.isGalleryPicker });
   };
 
-  // close media modal
-  closemediaPicker = () => {
-    this.setState({ isGalleryPicker: false });
-  };
-
+ 
   // Render modal faltlist view to choose camera or gallery
   renderOptionsview = (item, index) => {
     return (

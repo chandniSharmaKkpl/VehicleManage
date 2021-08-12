@@ -28,18 +28,22 @@ export const ChatStyle = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  hapinessicon:{
+    height: 20,
+    width: 20,
+  },
   sendIcon: {
     fontSize: 25,
     color: Colors.white
   },
   inputToolBar: {
     marginHorizontal: 15,
-    // marginBottom: 10,
+    marginBottom:(Platform.OS =='ios')? 10:20,
     borderRadius: 10,
     borderTopWidth: 4,
     borderTopColor: "transparent",
     height: 50,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,

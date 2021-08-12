@@ -25,6 +25,8 @@ const IMAGE = {
   info_button_img: require("../assets/images/info_button.png"),
   share_arrow_img: require("../assets/images/share_arrow.png"),
   happiness_img:require("../assets/images/happiness.png"),
+  report_user_img:require("../assets/images/report_user.png"),
+  block_user_img:require("../assets/images/block_user.png"),
 };
 
 export { IMAGE };
