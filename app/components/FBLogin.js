@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
+import {PrimaryButtonwithIcon, Loader} from "../components";
 import { IMAGE } from "../assets/Images";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { connect } from "react-redux";
+import * as actions from "../modules/authentication/redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import * as globals from "../utils/Globals";
+import NavigationService from "../utils/NavigationService";
 import { StaticTitle } from "../utils/StaticTitle";
 import {
   LoginManager,
@@ -13,23 +17,18 @@ import {
 } from "react-native-fbsdk-next";
 
 const TAG = "FBLogin ::=";
-
+let tempuser;
 class FBLogin extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userEmail: "",
-      userName: "",
-      userFbId: "",
-      profilePic: "",
-    };
+    this.state = {};
   }
 
   /**
    * Method for login with facebook
    * @function performFBLogin
    */
-  performFBLogin = () => {
+  performFBLogin = (props) => {
     LoginManager.logOut();
     LoginManager.logInWithPermissions(["public_profile", "email"]).then(
       function (result) {
@@ -53,6 +52,7 @@ class FBLogin extends Component {
           // AsyncStorage.setItem(globals.FB_LOGINKEY, JSON.stringify(result.isCancelled));
           AccessToken.getCurrentAccessToken()
             .then((user) => {
+              tempuser = user;
               console.log(TAG, `user info : ${JSON.stringify(user)}`);
               return user;
             })
@@ -64,20 +64,57 @@ class FBLogin extends Component {
                 } else {
                   console.log(TAG, `user result : ${JSON.stringify(result)}`);
                   if (result.hasOwnProperty("email")) {
-                    console.log("result===", result);
-                    // console.log("email===", result.email);
-                    // this.setState({ userEmail: result.email });
-                    AsyncStorage.setItem(
-                      "FB_USERINFO",
-                      JSON.stringify(result)
-                    );
+                    // console.log("result===", result);
+                    // console.log("tempuser==", tempuser);
+                    let params = new URLSearchParams();
+                    // Collect the necessary params
+                    params.append("accessToken", tempuser.accessToken);
+                    params.append("provider", "facebook");
+                    params.append("provider_id", result.id);
+                    params.append("name", result.name);
+                    params.append("email", result.email);
+
+                    const { sociallogin } = props;
+                    sociallogin(params)
+                      .then(async (res) => {
+                        console.log("res----", res.value.data);
+                        if (res.value && res.value.data.success == true) {
+                          //OK 200 The request was fulfilled
+                          if (res.value && res.value.status === 200) {
+                            await showMessage({
+                              message: res.value.data.message,
+                              type: "success",
+                              icon: "info",
+                              duration: 4000,
+                            });
+                            let authToken = res.value.data.data.token
+                            await AsyncStorage.setItem(
+                              "access_token",
+                              authToken
+                            );
+                            globals.access_token = authToken;
+                            NavigationService.navigate("CreateProfile");
+                          }
+                        } else {
+                          if (res.value && res.value.data.error) {
+                            await showMessage({
+                              message: res.value.message,
+                              type: "danger",
+                              icon: "info",
+                              duration: 4000,
+                            });
+                          }
+                        }
+                      })
+                      .catch((err) => {
+                        console.log("i am in catch error login", err);
+                      });
                   } else {
                     console.log(TAG, "email not exist in info");
                   }
 
                   if (result.hasOwnProperty("first_name")) {
                     console.log("first_name===", result.first_name);
-                    // this.setState({ userName: result.first_name });
                   } else {
                     console.log(TAG, "first_name not exist in info");
                   }
@@ -89,13 +126,11 @@ class FBLogin extends Component {
                   }
 
                   if (result.hasOwnProperty("name")) {
-                    // this.setState({ userName: result.name });
                   } else {
                     console.log(TAG, "name not exist in info");
                   }
 
                   if (result.hasOwnProperty("id")) {
-                    // this.setState({ userFbId: result.id });
                   } else {
                     console.log(TAG, "id not exist in info");
                   }
@@ -126,16 +161,36 @@ class FBLogin extends Component {
     );
   };
 
+  
+
   render() {
+    const { isLoading, loaderMessage } = this.props;
     return (
+      <>
+       {/* {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )} */}
       <View style={{ marginHorizontal: 10 }}>
+        
         <PrimaryButtonwithIcon
           iconName={IMAGE.facebook_img}
           btnName={StaticTitle.loginwithFB}
-          onPress={() => this.performFBLogin()}
+          onPress={() => this.performFBLogin(this.props)}
         />
       </View>
+      </>
     );
   }
 }
-export default FBLogin;
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  sociallogin: (params) => dispatch(actions.sociallogin(params)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FBLogin);
