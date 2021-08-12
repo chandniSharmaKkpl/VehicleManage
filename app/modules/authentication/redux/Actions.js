@@ -8,7 +8,7 @@ import {
   GET_CAR_MODEL,
   GET_CAR_COLOUR,
   GET_CITY,
-  FB_LOGIN
+  SOCIAL_LOGIN,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -102,4 +102,15 @@ export const getcity = () => ({
     }),
 });
 
+export const sociallogin = (params) => ({
+  type: SOCIAL_LOGIN,
+  payload: api
+    .post("api/socialLoginRegister", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
 

@@ -8,7 +8,7 @@ import * as globals from "../utils/Globals";
 function makeFormDataPostHeaders() {
   // console.log("I am in makePostHeaders()");
   let headerObj = {};
-  const accessToken =  globals.access_token;
+  const accessToken = globals.access_token;
   headerObj = {
     Authorization: `Bearer ${accessToken}`,
     Accept: "application/json",
@@ -21,12 +21,11 @@ function makeFormDataPostHeaders() {
 function makeGetHeaders() {
   // console.log("I am in makeGetHeaders()");
   let headerObj = {};
-  const getaccessToken =  globals.access_token;
-  if(getaccessToken && getaccessToken != null){
+  const getaccessToken = globals.access_token;
+  if (getaccessToken && getaccessToken != null) {
     headerObj = {
       Authorization: `Bearer ${getaccessToken}`,
       Accept: "application/json",
-     
     };
   }
   return headerObj;
@@ -40,18 +39,18 @@ function makeAuthPostHeaders() {
   return headerObj;
 }
 
- function makeURLencodedPostHeaders() {
+function makeURLencodedPostHeaders() {
   // console.warn("I am in makeURLencodedPostHeaders()");
   let headerObj = {};
-  const accessToken =  globals.access_token;
-  if(accessToken && accessToken != null){
+  const accessToken = globals.access_token;
+  if (accessToken && accessToken != null) {
     headerObj = {
       Authorization: `Bearer ${accessToken}`,
       Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
     };
   }
-  
+
   return headerObj;
 }
 
@@ -68,7 +67,8 @@ axiosApi.interceptors.request.use((request) => {
     if (
       request.url === "api/login" ||
       request.url === "api/register" ||
-      request.url === "api/forgot"
+      request.url === "api/forgot" ||
+      request.url === "api/socialLoginRegister"
     ) {
       request.headers = makeAuthPostHeaders();
     } else if (request.url === "api/createprofile1") {

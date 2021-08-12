@@ -11,18 +11,20 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { connect } from "react-redux";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import { IMAGE } from "../assets/Images";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as globals from "../utils/Globals";
+import NavigationService from "../utils/NavigationService";
+import * as actions from "../modules/authentication/redux/Actions";
 
 const TAG = "GoogleLogin ::=";
 
 class GoogleLogin extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userInfo: null,
-      gettingLoginStatus: null,
-    };
+    this.state = {};
   }
 
   async componentDidMount() {
@@ -34,15 +36,14 @@ class GoogleLogin extends Component {
   async getCurrentUser() {
     try {
       const userInfo = await GoogleSignin.signInSilently();
-      this.setState({ userInfo });
+      // console.log("userinfo check Current user  Silently", userInfo);
     } catch (error) {
       const errorMessage =
         error.code === statusCodes.SIGN_IN_REQUIRED
           ? "Please sign in :)"
           : error.message;
-      this.setState({
-        error: new Error(errorMessage),
-      });
+
+      console.log("error", new Error(errorMessage));
     }
   }
 
@@ -61,12 +62,8 @@ class GoogleLogin extends Component {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-
-      this.setState({ userInfo: null });
     } catch (error) {
-      this.setState({
-        error,
-      });
+      console.log("Error", error);
     }
   };
 
@@ -74,13 +71,52 @@ class GoogleLogin extends Component {
    * Method for login with Google
    * @function performGoogleLogin
    */
-  performGoogleLogin = async () => {
+  performGoogleLogin = async (props) => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(TAG, "userInfo---", userInfo);
-      this.setState({ userInfo });
-      AsyncStorage.setItem("GOOGLE_USERINFO", JSON.stringify(userInfo.user));
+      let params = new URLSearchParams();
+      // Collect the necessary params
+      params.append("accessToken", userInfo.idToken);
+      params.append("provider", "google");
+      params.append("provider_id", userInfo.user.id);
+      params.append("name", userInfo.user.name);
+      params.append("email", userInfo.user.email);
+
+      const { sociallogin } = props;
+
+      sociallogin(params)
+        .then(async (res) => {
+          console.log("res----", res.value.data);
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              let authToken = res.value.data.data.token;
+              await AsyncStorage.setItem("access_token", authToken);
+              globals.access_token = authToken;
+              NavigationService.navigate("CreateProfile");
+            }
+          } else {
+            if (res.value && res.value.data.error) {
+              await showMessage({
+                message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("i am in catch error login", err);
+        });
     } catch (error) {
       switch (error.code) {
         case statusCodes.SIGN_IN_CANCELLED:
@@ -97,9 +133,7 @@ class GoogleLogin extends Component {
           break;
         default:
           Alert.alert("Something went wrong", error.toString());
-          this.setState({
-            error,
-          });
+          console.log("err0r-, error", error);
       }
     }
   };
@@ -112,10 +146,21 @@ class GoogleLogin extends Component {
           iconName={IMAGE.googleButton_img}
           iconStyle={AuthStyle.iconStyle}
           btnName={StaticTitle.loginwithGoogle}
-          onPress={() => this.performGoogleLogin()}
+          onPress={() => this.performGoogleLogin(this.props)}
         />
       </View>
     );
   }
 }
-export default GoogleLogin;
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  sociallogin: (params) => dispatch(actions.sociallogin(params)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoogleLogin);
