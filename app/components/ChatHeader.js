@@ -27,15 +27,15 @@ const ChatHeader = ({
   isShowRighttwo,
   isShowSidebar,
   isFrom,
+  isMsgReportPicker,
   ...props
 }) => {
-  const gotoProfile = async () => {
-    NavigationService.navigate("UserProfile");
-  };
+  
+  
   const gotoBack = async () => {
     NavigationService.back();
   };
-  const gotoNotification = async () => {
+  const gotoForword = async () => {
     NavigationService.navigate("Notification");
   };
   return (
@@ -87,10 +87,15 @@ const ChatHeader = ({
             /> */}
           </View>
 
-          <Text numberOfLines={1}
+          <Text
+            numberOfLines={1}
             style={[
               ComponentStyle.titleText,
-              { alignSelf: "center", marginLeft: 10, width:globals.deviceWidth * 0.4 },
+              {
+                alignSelf: "center",
+                marginLeft: 10,
+                width: globals.deviceWidth * 0.4,
+              },
             ]}
           >
             {title}
@@ -99,7 +104,7 @@ const ChatHeader = ({
         {isShowRighttwo == true ? (
           <>
             <TouchableOpacity
-              onPress={gotoNotification}
+              onPress={gotoForword}
               style={{
                 width: wp(5),
                 marginLeft: 25,
@@ -126,7 +131,7 @@ const ChatHeader = ({
                 padding: 5,
                 justifyContent: "center",
               }}
-              onPress={gotoProfile}
+              onPress={isMsgReportPicker}
             >
               <FastImage
                 style={{

@@ -1,5 +1,4 @@
 import { IMAGE } from "../assets/Images";
-import StaticTitle from '../utils/StaticTitle'
 
 export const DefaultOptions = [
   {

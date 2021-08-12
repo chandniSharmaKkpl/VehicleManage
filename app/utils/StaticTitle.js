@@ -85,6 +85,7 @@ const StaticTitle = {
 
     //// CHAT
     chatinput:'Type a message',
+    moreactions:'More Actions'
   };
   export { StaticTitle };
   
