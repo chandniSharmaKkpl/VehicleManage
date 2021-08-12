@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Switch, TouchableOpacity } from "react-native";
+import { View, Text, Switch, TouchableOpacity ,Platform} from "react-native";
 import { ComponentStyle } from "../assets/styles/ComponentStyle";
 import Colors from "../assets/Colors";
 
@@ -7,7 +7,7 @@ const SwitchComponent = ({ value, onValueChange, ...props }) => {
   return (
     <Switch
       style={{
-        transform: [{ scaleX: 0.99 }, { scaleY: 0.9 }],
+        transform:(Platform.OS =='ios')? [{ scaleX: 0.99 }, { scaleY: 0.9 }] : [{ scaleX: 1.2 }, { scaleY: 1.2 }],
         alignSelf: "flex-end",
       }}
       trackColor={{ false: Colors.switchhide, true: Colors.primary }}
