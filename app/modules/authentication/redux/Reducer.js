@@ -6,7 +6,6 @@ const initialState = {
     isLoading: false,
     isLoggedIn: false,
     userDetails: {},
-    
     loaderMessage: "Loading...",
     isInternetConnection: false,
     theme: { ...lightTheme },
@@ -141,9 +140,38 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
+    /// CREATE_SOCIAL_PROFILE
+    case actionTypes.CREATE_SOCIAL_PROFILE_LOADING:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.CREATE_SOCIAL_PROFILE_SUCCESS:
+      return {
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.CREATE_SOCIAL_PROFILE_ERROR:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
     //// GET CAR MODEL
     case actionTypes.GET_CITY_LOADING:
-     
       return {
         ...state,
         user: {
@@ -160,7 +188,6 @@ const authReducer = (state = initialState, action) => {
           isLoggedIn: true,
           ...action.payload,
           loaderMessage: "Loading...",
-          
         },
       };
     case actionTypes.GET_CITY_ERROR:
@@ -173,10 +200,8 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
-      
-       //// LOGIN WITH SOCIAL
+    //// LOGIN WITH SOCIAL
     case actionTypes.SOCIAL_LOGIN_LOADING:
-     
       return {
         ...state,
         user: {
@@ -193,7 +218,6 @@ const authReducer = (state = initialState, action) => {
           isLoggedIn: true,
           ...action.payload,
           loaderMessage: "Loading...",
-          
         },
       };
     case actionTypes.SOCIAL_LOGIN_ERROR:
@@ -206,6 +230,35 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
+    //// REGISTER_DETAIL
+    case actionTypes.REGISTER_DETAIL_LOADING:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.REGISTER_DETAIL_SUCCESS:
+      return {
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.REGISTER_DETAIL_ERROR:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
 
     default:
       return state;

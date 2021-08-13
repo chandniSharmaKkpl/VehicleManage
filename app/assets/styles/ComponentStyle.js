@@ -181,7 +181,7 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? globals.deviceHeight*0.01 : 0,
+    paddingTop: Platform.OS === "android" ? globals.deviceHeight*0.02 : 0,
   },
   headerContain: {
     flexDirection: "row",

@@ -9,6 +9,8 @@ import {
   GET_CAR_COLOUR,
   GET_CITY,
   SOCIAL_LOGIN,
+  CREATE_SOCIAL_PROFILE,
+  REGISTER_DETAIL,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -57,7 +59,7 @@ export const forgotpassword = (params) => ({
 export const createprofile = (params) => ({
   type: CREATE_PROFILE,
   payload: api
-    .post("api/createprofile1", params)
+    .post("api/createprofileone", params)
     .then((res) => {
       return res;
     })
@@ -65,6 +67,31 @@ export const createprofile = (params) => ({
       return err;
     }),
 });
+
+export const createSocialprofile = (params) => ({
+  type: CREATE_SOCIAL_PROFILE,
+  payload: api
+    .post("api/createprofiletwo", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
+export const registerdetail = (params) => ({
+  type: REGISTER_DETAIL,
+  payload: api
+    .post("api/register_detail", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
 
 export const getcarmodel = () => ({
   type: GET_CAR_MODEL,
@@ -113,4 +140,3 @@ export const sociallogin = (params) => ({
       return err;
     }),
 });
-

@@ -177,6 +177,7 @@ export class CreateProfileScreen extends PureComponent {
     const { createprofile } = this.props;
     createprofile(params)
       .then(async (res) => {
+        // console.log("res---", res);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -201,7 +202,7 @@ export class CreateProfileScreen extends PureComponent {
         }
       })
       .catch((err) => {
-        console.log("i am in catch error login", err);
+        console.log(TAG,"i am in catch error create profile one", err);
       });
   };
 

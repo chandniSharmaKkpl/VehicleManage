@@ -99,7 +99,7 @@ export class ForgotPasswordScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log("i am in catch error login", err);
+        console.log(TAG,"i am in catch error forgot passeord", err);
       });
   };
 
