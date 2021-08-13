@@ -58,7 +58,7 @@ export class ChatListScreen extends Component {
           <Text style={FriendListStyle.titleSmall}>{item.Num}</Text>
         </View>
         <TouchableOpacity
-          onPress={() => this.gotoChatDetails()}
+          // onPress={() => this.gotoChatDetails()}
           style={FriendListStyle.squareView}
         >
           <FastImage

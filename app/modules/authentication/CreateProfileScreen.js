@@ -202,7 +202,7 @@ export class CreateProfileScreen extends PureComponent {
         }
       })
       .catch((err) => {
-        console.log(TAG,"i am in catch error create profile one", err);
+        console.log(TAG, "i am in catch error create profile one", err);
       });
   };
 
