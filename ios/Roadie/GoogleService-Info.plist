@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>374701197391-9nk7besa55sffmjtb31fqbqomjcv3qa6.apps.googleusercontent.com</string>
+	<string>374701197391-enld102pd3k2aqkfcf7j525pikk6i65v.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.374701197391-9nk7besa55sffmjtb31fqbqomjcv3qa6</string>
+	<string>com.googleusercontent.apps.374701197391-enld102pd3k2aqkfcf7j525pikk6i65v</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>374701197391-hdd60f73tklc3ss2vspafhgcj8phq0j8.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDJ53AR8GeUaxIz6uuM7FrgJvZTH9A_-Eo</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,22 +15,22 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.Roadie</string>
+	<string>com.2excel.Roadie</string>
 	<key>PROJECT_ID</key>
 	<string>roadie-4f4f5</string>
 	<key>STORAGE_BUCKET</key>
 	<string>roadie-4f4f5.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:374701197391:ios:5377a039af0b20ab9b423a</string>
+	<string>1:374701197391:ios:8a6d99986b56974f9b423a</string>
 </dict>
 </plist>

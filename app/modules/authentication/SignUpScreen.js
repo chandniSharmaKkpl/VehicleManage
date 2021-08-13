@@ -156,12 +156,12 @@ export class SignUpScreen extends Component {
 
   // Check all validation in this function, if all values validate after the call Register API
   gotoSignup = async () => {
-    // if (!this.checkValidation()) {
-    //   return;
-    // }
-    // Keyboard.dismiss();
-    // this.sighUpAPIcall();
-    NavigationService.navigate("CreateProfile");
+    if (!this.checkValidation()) {
+      return;
+    }
+    Keyboard.dismiss();
+    this.sighUpAPIcall();
+    // NavigationService.navigate("CreateProfile");
   };
 
   //Call API
@@ -214,7 +214,7 @@ export class SignUpScreen extends Component {
         } else {
           if (res.value && res.value.data.email) {
             await showMessage({
-              message: res.value.message,
+              message: res.value.data.email,
               type: "danger",
               icon: "info",
               duration: 4000,

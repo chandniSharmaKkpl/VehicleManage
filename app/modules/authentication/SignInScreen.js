@@ -37,10 +37,10 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      txtEmail: "udattani@mailinator.com",
-      txtPassword: "Abcd@1234",
-      // txtEmail: "",
-      // txtPassword: "",
+      // txtEmail: "udattani@mailinator.com",
+      // txtPassword: "Abcd@1234",
+      txtEmail: "",
+      txtPassword: "",
       isShowPassword: true,
       isEmailError: false,
       isPasswordError: false,

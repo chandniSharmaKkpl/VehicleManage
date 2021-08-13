@@ -109,10 +109,10 @@ export class RegistrationDetailsScreen extends Component {
     params.append("registration_paper", attachPaperObj);
     const { registerdetail } = this.props;
 
-    console.log("params----------", JSON.stringify(params));
+    // console.log("params----------", JSON.stringify(params));
     registerdetail(params)
       .then(async (res) => {
-        console.log("res.value.data---", res.value.data);
+        // console.log("res.value.data---", res.value.data);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
