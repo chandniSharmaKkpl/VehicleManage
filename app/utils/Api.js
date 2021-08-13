@@ -9,12 +9,14 @@ function makeFormDataPostHeaders() {
   // console.log("I am in makePostHeaders()");
   let headerObj = {};
   const accessToken = globals.access_token;
-  headerObj = {
-    Authorization: `Bearer ${accessToken}`,
-    Accept: "application/json",
-    "Content-Type": "multipart/form-data",
-    mimeType: "multipart/form-data",
-  };
+  if (accessToken && accessToken != null) {
+    headerObj = {
+      Authorization: `Bearer ${accessToken}`,
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      mimeType: "multipart/form-data",
+    };
+  }
   return headerObj;
 }
 
@@ -71,7 +73,7 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/socialLoginRegister"
     ) {
       request.headers = makeAuthPostHeaders();
-    } else if (request.url === "api/createprofile1") {
+    } else if (request.url === "api/createprofileone") {
       request.headers = makeURLencodedPostHeaders();
     } else {
       request.headers = makeFormDataPostHeaders();

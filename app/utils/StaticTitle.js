@@ -26,8 +26,10 @@ const StaticTitle = {
     city:'City or Suburb',
     makeModal:'Make and Model of Car',
     colors:'Color of Car',
-
-
+    imgfiledrequired:'The image field is required.',
+    registrationpaper:'The registration paper field is required.',
+    vehicalphotorequired:'The vehicle photo field is required.',
+    registernumberfieldrequire:'The registration number field is required.',
     enterUserName:'Enter Username',
     enterCity:'Enter City or Suburb',
     selectCity:'Choose City or Suburb',
@@ -45,6 +47,8 @@ const StaticTitle = {
     sa:'SA',
     linkwithinsta:'Link with Instagram',
     enterSnapName:'Enter Sanpchat Username',
+    enterinstname:'Enter Instagram Username',
+    enterfbname:'Enter Facebook Username',
     captureimgfromCamera:'Capture Image from Camera',
     uploadfromgallery:'Upload Image from Gallery',
     filetoupload:'Choose File To Upload',

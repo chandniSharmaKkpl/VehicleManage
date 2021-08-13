@@ -51,9 +51,9 @@ class GoogleLogin extends Component {
   configureGoogleSignIn() {
     GoogleSignin.configure({
       webClientId: WEB_CLIENT_ID,
-      androidClientId: WEB_CLIENT_ID,
-      offlineAccess: true,
-      forceConsentPrompt: true,
+      // androidClientId: WEB_CLIENT_ID,
+      // offlineAccess: true,
+      // forceConsentPrompt: true,
     });
   }
 
@@ -115,7 +115,7 @@ class GoogleLogin extends Component {
           }
         })
         .catch((err) => {
-          console.log("i am in catch error login", err);
+          console.log("i am in catch error google login", err);
         });
     } catch (error) {
       switch (error.code) {

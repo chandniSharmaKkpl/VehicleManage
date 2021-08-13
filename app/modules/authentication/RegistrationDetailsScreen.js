@@ -23,11 +23,14 @@ import {
   PrimaryButton,
   ButtonwithRightIcon,
   MediaModel,
+  Loader,
   GenerateRandomFileName,
 } from "../../components";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import {DefaultOptions} from "../../components/DefaultOptions";
-
+import { DefaultOptions } from "../../components/DefaultOptions";
+import * as actions from "./redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { isEmpty } from "../../utils/Validators";
 const TAG = "RegistrationDetailsScreen ::=";
 
 export class RegistrationDetailsScreen extends Component {
@@ -57,9 +60,7 @@ export class RegistrationDetailsScreen extends Component {
   // close Attch Paper popup
   closeAttchPaper = () => {
     this.setState({ isattachPaper: false });
-  };
-
-  //display Attch Photo picker model
+  }; //display Attch Photo picker model
   displayAttchPhoto = () => {
     this.setState({ isattachphoto: !this.state.isattachphoto });
   };
@@ -70,7 +71,82 @@ export class RegistrationDetailsScreen extends Component {
   };
 
   // save all register details
-  saveDeatils = () => {};
+  saveDeatils = async () => {
+    const { txtRegNumber, attachphotoUrl, attachPaperUrl } = this.state;
+    if (isEmpty(txtRegNumber)) {
+      await showMessage({
+        message: StaticTitle.registernumberfieldrequire,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+    } else if (attachPaperUrl == "") {
+      await showMessage({
+        message: StaticTitle.registrationpaper,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+    } else if (attachphotoUrl == "") {
+      await showMessage({
+        message: StaticTitle.vehicalphotorequired,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+    } else {
+      this.registerDetailAPIcall();
+    }
+  };
+
+  // API CALL begin
+  registerDetailAPIcall = () => {
+    const { txtRegNumber, attachPaperObj, attachphotoObj } = this.state;
+    var params = new FormData();
+    // Collect the necessary params
+    params.append("vehicle_photo", attachphotoObj);
+    params.append("registration_number", txtRegNumber);
+    params.append("registration_paper", attachPaperObj);
+    const { registerdetail } = this.props;
+
+    console.log("params----------", JSON.stringify(params));
+    registerdetail(params)
+      .then(async (res) => {
+        console.log("res.value.data---", res.value.data);
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            NavigationService.back();
+          } else {
+          }
+        } else {
+          if (res.value && res.value.data.registration_paper) {
+            await showMessage({
+              message: res.value.data.registration_paper,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          } else if (res.value && res.value.data.vehicle_photo) {
+            await showMessage({
+              message: res.value.data.vehicle_photo,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error Register screen", err);
+      });
+  };
 
   // Render modal faltlist view to choose camera or gallery
   renderOptionsview = (item, index) => {
@@ -114,9 +190,11 @@ export class RegistrationDetailsScreen extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName
-            ? response.fileName
-            : <GenerateRandomFileName />,
+          name: response.fileName ? (
+            response.fileName
+          ) : (
+            <GenerateRandomFileName />
+          ),
           size: response.fileSize,
           type: response.type,
         };
@@ -198,8 +276,6 @@ export class RegistrationDetailsScreen extends Component {
   render() {
     const {
       attachphotoUrl,
-      attachPaperObj,
-      attachphotoObj,
       attachPaperUrl,
       attachPaperName,
       attachphotoName,
@@ -207,9 +283,14 @@ export class RegistrationDetailsScreen extends Component {
       options,
       isattachphoto,
     } = this.state;
+    const { isLoading, loaderMessage } = this.props;
+
     return (
       <>
         <View style={AuthStyle.container}>
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <Header isShowBack={true} title={StaticTitle.registartionDetail} />
           <ScrollView
             ref={(node) => (this.scroll = node)}
@@ -311,7 +392,7 @@ export class RegistrationDetailsScreen extends Component {
               <View style={AuthStyle.signinbtnView}>
                 <PrimaryButton
                   btnName={StaticTitle.saveDetails}
-                  // onPress={() => this.saveDeatils()}
+                  onPress={() => this.saveDeatils()}
                 />
               </View>
             </View>
@@ -322,9 +403,17 @@ export class RegistrationDetailsScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {};
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
+const mapDispatchToProps = (dispatch) => ({
+  registerdetail: (params) => dispatch(actions.registerdetail(params)),
+});
 
-// const mapDispatchToProps = (dispatch) => ({});
-
-// export default connect(mapStateToProps, mapDispatchToProps)(RegistrationDetailsScreen);
-export default RegistrationDetailsScreen;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RegistrationDetailsScreen);

@@ -22,6 +22,8 @@ import {
   PrimaryButton,
   MediaModel,
   GenerateRandomFileName,
+  PrimaryTextinputwithIcon,
+  Loader,
 } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
@@ -32,7 +34,11 @@ import InstagramIntegration from "../../components/InstagramIntegration";
 import FacebookIntegration from "../../components/FacebookIntegration";
 import SnapchatIntegration from "../../components/SnapchatIntegration";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import {DefaultOptions} from "../../components/DefaultOptions";
+import { DefaultOptions } from "../../components/DefaultOptions";
+import * as actions from "./redux/Actions";
+import Colors from "../../assets/Colors";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 const TAG = "CreateSocialMediaProfile ::=";
 
 export class CreateSocialMediaProfile extends Component {
@@ -42,12 +48,22 @@ export class CreateSocialMediaProfile extends Component {
       photoUrl: "",
       photoObj: [],
       txtSnapName: "",
+      txtInstaName: "",
+      txtFbName: "",
       isSnapError: false,
+      isInstError: false,
+      isFbError: false,
       snapValidMsg: "",
       isGalleryPicker: false,
       options: DefaultOptions,
     };
+    this.input = {};
   }
+
+  // Focus on next input
+  focusNextTextField = (ref) => {
+    this.input[ref].focus();
+  };
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
@@ -56,17 +72,59 @@ export class CreateSocialMediaProfile extends Component {
 
   // Navigate to Dashboard screen
   gotoDashboard = () => {
-    NavigationService.navigate("Home");
+    this.createSocialProfileAPICall();
+  };
+
+  // API call begin
+  createSocialProfileAPICall = () => {
+    const { txtFbName, txtInstaName, txtSnapName, photoUrl, photoObj } =
+      this.state;
+    var params = new FormData();
+    // Collect the necessary params
+    if (photoObj.length > 0) {
+      params.append("image", photoObj);
+    } else {
+      params.append("image", "");
+    }
+    params.append("fb_username", txtFbName);
+    params.append("instalgram_username", txtInstaName);
+    params.append("snapchat_username", txtSnapName);
+
+    const { createSocialprofile } = this.props;
+    createSocialprofile(params)
+      .then(async (res) => {
+        // console.log("res.value.data---", res);
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            NavigationService.navigate("Home");
+          } else {
+          }
+        } else {
+          if (res.value) {
+            await showMessage({
+              message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error create social profile", err);
+      });
   };
 
   //display gallry picker model
   displayGalleryPicker = () => {
     this.setState({ isGalleryPicker: !this.state.isGalleryPicker });
-  };
-
-  // close media modal
-  closemediaPicker = () => {
-    this.setState({ isGalleryPicker: false });
   };
 
   // Render modal faltlist view to choose camera or gallery
@@ -160,10 +218,13 @@ export class CreateSocialMediaProfile extends Component {
 
   render() {
     const { photoUrl, isGalleryPicker, options } = this.state;
-
+    const { isLoading, loaderMessage } = this.props;
     return (
       <>
         <View style={AuthStyle.container}>
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <Header isShowBack={true} title={StaticTitle.createProfile} />
 
           <KeyboardAvoidingView
@@ -278,13 +339,64 @@ export class CreateSocialMediaProfile extends Component {
                       { marginHorizontal: globals.deviceWidth * 0.03 },
                     ]}
                   >
-                    <InstagramIntegration />
+                    {/* <InstagramIntegration />
                     <FacebookIntegration />
-                    <SnapchatIntegration />
-                    {/* <PrimaryTextinputwithIcon
-                      iconName={IMAGE.snap_img}
+                    <SnapchatIntegration /> */}
+
+                    <PrimaryTextinputwithIcon
+                      isFrom="Instagram"
+                      iconName={IMAGE.insta_icon_img}
                       buttonStyle={{ backgroundColor: Colors.snapChat }}
                       buttonTextStyle={AuthStyle.SnapText}
+                      value={this.state.txtInstaName}
+                      placeholderText={StaticTitle.enterinstname}
+                      onSubmitEditing={() =>
+                        this.focusNextTextField("txtFbName")
+                      }
+                      blurOnSubmit={false}
+                      returnKeyType="next"
+                      autoCapitalize={"none"}
+                      autoFocus={false}
+                      isValidationShow={this.state.isInstError}
+                      onChangeText={(text) =>
+                        this.setState({
+                          txtInstaName: text,
+                          isInstError: false,
+                        })
+                      }
+                    />
+                    <PrimaryTextinputwithIcon
+                      iconName={IMAGE.fb_icon_square}
+                      buttonStyle={{ backgroundColor: Colors.blue }}
+                      buttonTextStyle={AuthStyle.SnapText}
+                      value={this.state.txtFbName}
+                      placeholderText={StaticTitle.enterfbname}
+                      onSubmitEditing={() =>
+                        this.focusNextTextField("txtSnapName")
+                      }
+                      forwardRef={(ref) => {
+                        (this.input.txtFbName = ref),
+                          this.input.txtFbName &&
+                            this.input.txtFbName.setNativeProps({
+                              style: { fontFamily: "Raleway-Regular" },
+                            });
+                      }}
+                      blurOnSubmit={false}
+                      returnKeyType="next"
+                      autoCapitalize={"none"}
+                      autoFocus={false}
+                      isValidationShow={this.state.isFbError}
+                      onChangeText={(text) =>
+                        this.setState({
+                          txtFbName: text,
+                          isFbError: false,
+                        })
+                      }
+                    />
+                    <PrimaryTextinputwithIcon
+                      iconName={IMAGE.snap_img}
+                      buttonStyle={{ backgroundColor: Colors.snapChat }}
+                      isFrom="Snap"
                       value={this.state.txtSnapName}
                       placeholderText={StaticTitle.enterSnapName}
                       onSubmitEditing={Keyboard.dismiss}
@@ -293,14 +405,20 @@ export class CreateSocialMediaProfile extends Component {
                       autoCapitalize={"none"}
                       autoFocus={false}
                       isValidationShow={this.state.isSnapError}
-                      validateMesssage={this.state.snapValidMsg}
                       onChangeText={(text) =>
                         this.setState({
                           txtSnapName: text,
                           isSnapError: false,
                         })
                       }
-                    /> */}
+                      forwardRef={(ref) => {
+                        (this.input.txtSnapName = ref),
+                          this.input.txtSnapName &&
+                            this.input.txtSnapName.setNativeProps({
+                              style: { fontFamily: "Raleway-Regular" },
+                            });
+                      }}
+                    />
                   </View>
                   <View style={AuthStyle.signinbtnView}>
                     <PrimaryButton
@@ -318,9 +436,18 @@ export class CreateSocialMediaProfile extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {};
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+  };
+};
+const mapDispatchToProps = (dispatch) => ({
+  createSocialprofile: (params) =>
+    dispatch(actions.createSocialprofile(params)),
+});
 
-// const mapDispatchToProps = (dispatch) => ({});
-
-// export default connect(mapStateToProps, mapDispatchToProps)(CreateSocialMediaProfile);
-export default CreateSocialMediaProfile;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateSocialMediaProfile);
