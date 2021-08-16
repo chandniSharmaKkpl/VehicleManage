@@ -85,9 +85,13 @@ export class UserProfileScreen extends Component {
     this._isMounted = true;
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-    await this.getcarModelAPI();
-    await this.getcarColourAPI();
-    await this.getCityAPI();
+    if (globals.isInternetConnected == true) {
+      await this.getcarModelAPI();
+      await this.getcarColourAPI();
+      await this.getCityAPI();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   componentWillUnmount() {
@@ -176,7 +180,6 @@ export class UserProfileScreen extends Component {
     this.setState({ isGalleryPicker: !this.state.isGalleryPicker });
   };
 
- 
   // Render modal faltlist view to choose camera or gallery
   renderOptionsview = (item, index) => {
     return (

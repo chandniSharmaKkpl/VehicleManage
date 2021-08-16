@@ -10,6 +10,7 @@ import {
   StatusBar,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
@@ -66,9 +67,13 @@ export class CreateProfileScreen extends PureComponent {
     this._isMounted = true;
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-    await this.getcarModelAPI();
-    await this.getcarColourAPI();
-    await this.getCityAPI();
+    if (globals.isInternetConnected == true) {
+      await this.getcarModelAPI();
+      await this.getcarColourAPI();
+      await this.getCityAPI();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   componentWillUnmount() {
@@ -173,37 +178,40 @@ export class CreateProfileScreen extends PureComponent {
     params.append("car_make_model", txtModalofCar);
     params.append("car_colour", txtColorofCar);
     params.append("car_description", txtDescription);
-
-    const { createprofile } = this.props;
-    createprofile(params)
-      .then(async (res) => {
-        // console.log("res---", res);
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
-            NavigationService.navigate("CreateSocialMediaProfile");
+    if (globals.isInternetConnected == true) {
+      const { createprofile } = this.props;
+      createprofile(params)
+        .then(async (res) => {
+          // console.log("res---", res);
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              NavigationService.navigate("CreateSocialMediaProfile");
+            } else {
+            }
           } else {
+            if (res.value && res.value.data.error) {
+              await showMessage({
+                message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
           }
-        } else {
-          if (res.value && res.value.data.error) {
-            await showMessage({
-              message: res.value.message,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG, "i am in catch error create profile one", err);
-      });
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error create profile one", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   // start of validation

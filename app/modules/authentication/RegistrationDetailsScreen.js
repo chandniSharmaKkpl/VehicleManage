@@ -6,6 +6,7 @@ import {
   Keyboard,
   FlatList,
   Image,
+  Alert,
   TouchableOpacity,
 } from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -110,7 +111,8 @@ export class RegistrationDetailsScreen extends Component {
     const { registerdetail } = this.props;
 
     // console.log("params----------", JSON.stringify(params));
-    registerdetail(params)
+    if (globals.isInternetConnected == true){
+      registerdetail(params)
       .then(async (res) => {
         // console.log("res.value.data---", res.value.data);
         if (res.value && res.value.data.success == true) {
@@ -146,6 +148,10 @@ export class RegistrationDetailsScreen extends Component {
       .catch((err) => {
         console.log(TAG, "i am in catch error Register screen", err);
       });
+    }
+    else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   // Render modal faltlist view to choose camera or gallery

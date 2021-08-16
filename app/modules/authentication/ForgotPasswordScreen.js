@@ -8,6 +8,7 @@ import {
   ScrollView,
   Keyboard,
   Platform,
+  Alert,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
@@ -64,7 +65,8 @@ export class ForgotPasswordScreen extends Component {
     params.append("email", txtEmail);
 
     const { forgotpassword } = this.props;
-    forgotpassword(params)
+    if (globals.isInternetConnected == true){
+      forgotpassword(params)
       .then(async (res) => {
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
@@ -101,6 +103,10 @@ export class ForgotPasswordScreen extends Component {
       .catch((err) => {
         console.log(TAG,"i am in catch error forgot passeord", err);
       });
+    }
+    else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   // start of validation

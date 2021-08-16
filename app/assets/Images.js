@@ -27,6 +27,7 @@ const IMAGE = {
   happiness_img:require("../assets/images/happiness.png"),
   report_user_img:require("../assets/images/report_user.png"),
   block_user_img:require("../assets/images/block_user.png"),
+  send_icon_img:require("../assets/images/send_icon.png"),
 };
 
 export { IMAGE };
