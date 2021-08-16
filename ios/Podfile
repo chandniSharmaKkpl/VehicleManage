@@ -11,8 +11,16 @@ target 'Roadie' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
-  # add the Firebase pod for Google Analytics
-  pod 'Firebase/Analytics'
+  pod 'GoogleSignIn', '~> 5.0.2'
+
+  pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
+  pod 'SnapchatLogin', :path => '../node_modules/react-native-snapchat-login'
 
   target 'RoadieTests' do
     inherit! :complete
@@ -23,9 +31,9 @@ target 'Roadie' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
+  # use_flipper!()
 
-  post_install do |installer|
-    react_native_post_install(installer)
-  end
+  # post_install do |installer|
+  #   react_native_post_install(installer)
+  # end
 end

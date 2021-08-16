@@ -2,6 +2,9 @@
   package="com.roadie">
 
     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
       android:name=".MainApplication"
@@ -9,10 +12,10 @@
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+      android:usesCleartextTraffic="true">
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-        android:value="@string/facebook_app_id"/>
+     
 
       <activity
         android:name=".MainActivity"
@@ -20,11 +23,35 @@
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
         android:screenOrientation="portrait"
-        android:windowSoftInputMode="adjustResize">
+        android:windowSoftInputMode="adjustPan">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+         <meta-data android:name="com.facebook.sdk.ApplicationId"
+        android:value="@string/facebook_app_id"/>
+         <meta-data android:name="com.snapchat.kit.sdk.clientId" android:value="df42b7d8-156f-41f8-bb9c-098574ea1ec4" />
+      <meta-data android:name="com.snapchat.kit.sdk.redirectUrl" android:value="example://snap-kit/oauth2" />
+      <meta-data android:name="com.snapchat.kit.sdk.scopes" android:resource="@array/snap_connect_scopes" />
+
+       <activity
+        android:name="com.snapchat.kit.sdk.SnapKitActivity"
+        android:launchMode="singleTask"
+      >
+
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data
+            android:scheme="example"
+            android:host="snap-kit"
+            android:path="/oauth2"
+          />
+        </intent-filter>
+      </activity>
+      
+        
     </application>
 </manifest>

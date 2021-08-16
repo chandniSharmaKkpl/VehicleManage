@@ -7,13 +7,22 @@ buildscript {
         compileSdkVersion = 29
         targetSdkVersion = 29
         ndkVersion = "20.1.5948944"
+        supportLibVersion = "27.1.1"
+        googlePlayServicesAuthVersion = "16.0.1" // <--- use this version or newer
+        snapKitSdkVersion = '1.4.0'
     }
     repositories {
+        mavenLocal()
         google()
         jcenter()
+         maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url "$rootDir/../node_modules/react-native/android"
+        }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.1.0")
+        classpath 'com.google.gms:google-services:4.1.0' // <--- use this version or newer
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -29,6 +38,12 @@ allprojects {
         maven {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        maven {
+            url "https://storage.googleapis.com/snap-kit-build/maven"
+        }
+        maven {
+            url "https://raw.githubusercontent.com/Snap-Kit/release-maven/repo"
         }
 
         google()

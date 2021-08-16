@@ -4,12 +4,21 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.mduthey.snapchat.SnapchatLoginPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import java.util.List;
+import android.content.res.Configuration;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -43,8 +52,18 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    adjustFontScale(getResources().getConfiguration());
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+  }
+
+  public void adjustFontScale(Configuration configuration) {
+      configuration.fontScale = (float) 1.0;
+      DisplayMetrics metrics = getResources().getDisplayMetrics();
+      WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+      wm.getDefaultDisplay().getMetrics(metrics);
+      metrics.scaledDensity = configuration.fontScale * metrics.density;
+      getBaseContext().getResources().updateConfiguration(configuration, metrics);
   }
 
   /**
