@@ -11,6 +11,8 @@ export const timeoutDuration = 30000;
 export const appName = "Roadie";
 export const isInternetConnected = true;
 export let isTablat = iPad.indexOf("iPad") != -1 || DeviceInfo.isTablet();
+export const warning = "Warning!";
+export const noInternet ="This Application Require Network Connection!";
 
 // ADD theme modes
 export const THEME_MODE = {

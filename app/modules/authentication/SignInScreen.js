@@ -9,6 +9,7 @@ import {
   Keyboard,
   Platform,
   StatusBar,
+  Alert,
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
@@ -37,10 +38,10 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      // txtEmail: "udattani@mailinator.com",
-      // txtPassword: "Abcd@1234",
-      txtEmail: "",
-      txtPassword: "",
+      txtEmail: "udattani@mailinator.com",
+      txtPassword: "Abcd@1234",
+      // txtEmail: "",
+      // txtPassword: "",
       isShowPassword: true,
       isEmailError: false,
       isPasswordError: false,
@@ -151,7 +152,8 @@ export class SignInScreen extends Component {
     params.append("password", txtPassword);
 
     const { login } = this.props;
-    login(params)
+    if (globals.isInternetConnected == true){
+      login(params)
       .then(async (res) => {
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
@@ -197,6 +199,10 @@ export class SignInScreen extends Component {
       .catch((err) => {
         console.log(TAG,"i am in catch error sign in", err);
       });
+    }
+    else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   // save access token

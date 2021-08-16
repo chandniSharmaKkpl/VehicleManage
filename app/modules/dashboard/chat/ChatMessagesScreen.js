@@ -11,16 +11,23 @@ import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import * as globals from "../../../utils/Globals";
 import { DefaultChatOptions } from "../../../components/DefaultChatOptions";
+import { GiftedChat } from "react-native-gifted-chat";
 import {
-  GiftedChat,
-  Bubble,
-  InputToolbar,
-  Send,
-  Actions,
-} from "react-native-gifted-chat";
-import Ionicons from "react-native-vector-icons/Ionicons";
+  renderAvatar,
+  renderBubble,
+  renderSystemMessage,
+  renderMessage,
+  renderMessageText,
+  renderCustomView,
+} from "../../../components/MessageContainer";
 import Colors from "../../../assets/Colors";
-
+import {
+  renderInputToolbar,
+  renderActions,
+  renderComposer,
+  renderSend,
+} from "../../../components/InputToolbar";
+import ChatMessages from "../../../dummyData/ChatMessages";
 const TAG = "ChatMessagesScreen ::=";
 
 export class ChatMessagesScreen extends Component {
@@ -28,7 +35,7 @@ export class ChatMessagesScreen extends Component {
     super(props);
     this.state = {
       message: "",
-      messageText: "",
+      txtmessage: "",
       currentUserId: 1,
       messages: [],
       isMsgReportPicker: false,
@@ -38,37 +45,7 @@ export class ChatMessagesScreen extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: "My message",
-          createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-          user: {
-            _id: 2,
-            name: "React Native",
-          },
-          image: "https://facebook.github.io/react/img/logo_og.png",
-          sent: true,
-          received: true,
-          pending: true,
-        },
-        {
-          _id: 2,
-          text: "My message",
-          createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-          user: {
-            _id: 2,
-            name: "React Native",
-          },
-          video:
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-          sent: true,
-          received: true,
-          pending: true,
-        },
-      ],
-    });
+    this.setState({ messages: ChatMessages.reverse() });
   }
 
   onSend(messages = []) {
@@ -77,16 +54,6 @@ export class ChatMessagesScreen extends Component {
         messages: GiftedChat.append(previousState.messages, messages),
       };
     });
-  }
-
-  renderInputToolbar(props) {
-    return (
-      <InputToolbar
-        {...props}
-        containerStyle={ChatStyle.inputToolBar}
-        primaryStyle={{ alignItems: "center" }}
-      />
-    );
   }
 
   // Render modal faltlist view to choose camera or gallery
@@ -114,8 +81,13 @@ export class ChatMessagesScreen extends Component {
     this.setState({ isMsgReportPicker: !this.state.isMsgReportPicker });
   };
 
+  setsendText = (text) => {
+    this.setState({ txtmessage: text });
+  };
+
   render() {
-    const { isMsgReportPicker, options } = this.state;
+    const { isMsgReportPicker, options, txtmessage, messages } = this.state;
+    console.log("messages-------", messages);
     return (
       <>
         <View style={ChatStyle.container}>
@@ -160,89 +132,39 @@ export class ChatMessagesScreen extends Component {
             </MediaModel>
           </View>
           <GiftedChat
-            messages={this.state.messages}
+            text={txtmessage}
+            onInputTextChanged={(text) => this.setsendText(text)}
+            messages={messages}
             onSend={this.onSend}
-            showUserAvatar={false}
             user={{
               _id: 1,
             }}
+            minInputToolbarHeight={60}
+            alwaysShowSend
+            scrollToBottom
+            renderUsernameOnMessage
+            bottomOffset={26}
+            onPressAvatar={console.log("onPressAvatar")}
             isTyping={true}
-            minInputToolbarHeight={90}
-            renderInputToolbar={this.renderInputToolbar}
             alwaysShowSends
             placeholder={StaticTitle.chatinput}
-            alwaysShowSend={true}
-            renderActions={(props) => (
-              <View style={ChatStyle.sendContainer}>
-                <TouchableOpacity {...props} containerStyle={ChatStyle.send}>
-                  <View
-                    style={[
-                      ChatStyle.sendIconContainer,
-                      { backgroundColor: Colors.white },
-                    ]}
-                  >
-                    <FastImage
-                      style={ChatStyle.hapinessicon}
-                      source={IMAGE.happiness_img}
-                      resizeMode={FastImage.resizeMode.contain}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-            )}
-            renderSend={(props) => (
-              <View style={ChatStyle.sendContainer}>
-                <Send {...props} containerStyle={ChatStyle.send}>
-                  <View style={ChatStyle.sendIconContainer}>
-                    <Ionicons
-                      name="send"
-                      type="MaterialIcons"
-                      style={ChatStyle.sendIcon}
-                    />
-                  </View>
-                </Send>
-              </View>
-            )}
-            renderBubble={(props) => {
-              return (
-                <View>
-                  <Bubble
-                    {...props}
-                    timeTextStyle={{
-                      right: { color: Colors.black },
-                      left: { color: Colors.black },
-                    }}
-                    textStyle={{
-                      right: {
-                        color: Colors.black,
-                      },
-                    }}
-                    wrapperStyle={{
-                      left: {
-                        backgroundColor: Colors.msgBG,
-                        marginBottom: 10,
-                      },
-                      right: {
-                        backgroundColor: Colors.msgBG,
-                        marginBottom: 10,
-                      },
-                    }}
-                    containerToPreviousStyle={{
-                      right: { borderTopRightRadius: 10 },
-                      left: { borderTopLeftRadius: 10 },
-                    }}
-                    containerToNextStyle={{
-                      right: { borderTopRightRadius: 10 },
-                      left: { borderTopLeftRadius: 10 },
-                    }}
-                    containerStyle={{
-                      right: { borderTopRightRadius: 10 },
-                      left: { borderTopLeftRadius: 10 },
-                    }}
-                  />
-                </View>
-              );
-            }}
+            renderInputToolbar={renderInputToolbar}
+            renderActions={renderActions}
+            renderComposer={renderComposer}
+            renderSend={renderSend}
+            renderAvatar={renderAvatar}
+            renderBubble={renderBubble}
+            renderMessage={renderMessage}
+            renderMessageText={renderMessageText}
+            isCustomViewBottom
+            messagesContainerStyle={{ backgroundColor: Colors.lite_background }}
+            parsePatterns={(linkStyle) => [
+              {
+                pattern: /#(\w+)/,
+                style: linkStyle,
+                onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
+              },
+            ]}
           />
         </View>
       </>

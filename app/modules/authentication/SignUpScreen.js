@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   StatusBar,
   Linking,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -184,8 +185,8 @@ export class SignUpScreen extends Component {
     params.append("birth_date", txtDob);
 
     const { registeruser } = this.props;
-
-    registeruser(params)
+    if (globals.isInternetConnected == true){
+      registeruser(params)
       .then(async (res) => {
         if (res.value.data.success == true) {
           //OK 200 The request was fulfilled
@@ -229,6 +230,10 @@ export class SignUpScreen extends Component {
       .catch((err) => {
         console.log("i am in catch error registerUser", err);
       });
+    }
+    else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   // start of validation

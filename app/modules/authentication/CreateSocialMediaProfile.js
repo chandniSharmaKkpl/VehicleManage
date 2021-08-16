@@ -91,7 +91,8 @@ export class CreateSocialMediaProfile extends Component {
     params.append("snapchat_username", txtSnapName);
 
     const { createSocialprofile } = this.props;
-    createSocialprofile(params)
+    if (globals.isInternetConnected == true){
+      createSocialprofile(params)
       .then(async (res) => {
         // console.log("res.value.data---", res);
         if (res.value && res.value.data.success == true) {
@@ -120,6 +121,10 @@ export class CreateSocialMediaProfile extends Component {
       .catch((err) => {
         console.log(TAG, "i am in catch error create social profile", err);
       });
+    }
+    else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   //display gallry picker model
