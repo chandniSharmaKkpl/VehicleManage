@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   Alert,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -279,19 +280,20 @@ export class CreateProfileScreen extends PureComponent {
     return (
       <>
         <View style={AuthStyle.container}>
-          {isLoading && (
-            <Loader isOverlay={true} loaderMessage={loaderMessage} />
-          )}
-          <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent={true}
-          />
-          <TouchableWithoutFeedback
-            accessible={false}
-            onPress={() => Keyboard.dismiss()}
+          <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            scrollIndicatorInsets={{ right: 1 }}
           >
+            {isLoading && (
+              <Loader isOverlay={true} loaderMessage={loaderMessage} />
+            )}
+            <NavigationEvents onWillBlur={() => this.clearStates()} />
+            <StatusBar
+              barStyle="light-content"
+              backgroundColor="transparent"
+              translucent={true}
+            />
+
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
                 <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
@@ -300,18 +302,14 @@ export class CreateProfileScreen extends PureComponent {
               <View style={AuthStyle.imgcarContainer}>
                 <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
               </View>
-              <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : null}
-                style={AuthStyle.bottomCurve}
-              >
+              <View style={AuthStyle.bottomCurve}>
                 <ScrollView
-                  nestedScrollEnabled={true}
-                  keyboardShouldPersistTaps="always"
                   ref={(node) => (this.scroll = node)}
                   automaticallyAdjustContentInsets={true}
                   enableOnAndroid={true}
                   showsVerticalScrollIndicator={false}
-                  // keyboardShouldPersistTaps="never"
+                  bounces={false}
+                  keyboardShouldPersistTaps="never"
                   style={{ marginTop: globals.deviceHeight * 0.015 }}
                 >
                   <View>
@@ -378,7 +376,7 @@ export class CreateProfileScreen extends PureComponent {
                       autoCapitalize={"none"}
                       maxLength={280}
                       multiline={true}
-                      // numberOfLines={4}
+                      numberOfLines={4}
                       isValidationShow={this.state.isDescriptionError}
                       validateMesssage={this.state.descriptionValidMsg}
                       onChangeText={(text) =>
@@ -399,9 +397,9 @@ export class CreateProfileScreen extends PureComponent {
                     </View>
                   </View>
                 </ScrollView>
-              </KeyboardAvoidingView>
+              </View>
             </View>
-          </TouchableWithoutFeedback>
+          </KeyboardAwareScrollView>
         </View>
       </>
     );

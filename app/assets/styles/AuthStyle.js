@@ -65,8 +65,8 @@ export const AuthStyle = StyleSheet.create({
   },
   dropdown: {
     width: "90%",
-    height: 300,
-    // flex:1,
+    // height: 300,
+    flex:1,
   },
   placeholder_font: {
     color: Colors.placeholderColor,
@@ -79,7 +79,7 @@ export const AuthStyle = StyleSheet.create({
     borderBottomWidth: 0.8,
     marginTop: 20,
     borderBottomColor: Colors.border_color,
-    color: Colors.black,
+    color: Colors.red,
   },
   imglogoContainer: {
     // flex: 0.1,
@@ -180,8 +180,8 @@ export const AuthStyle = StyleSheet.create({
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
   bottomCurve: {
     flex: 1,
-    // flexGrow: 1,
-    height: 100,
+    flexGrow: 1,
+    // height: 100,
     width: "100%",
     marginTop: globals.deviceHeight * 0.1,
     borderColor: Colors.border_color,
@@ -323,7 +323,7 @@ export const AuthStyle = StyleSheet.create({
   },
   RectangleShapeView: {
     width: 70 * 2,
-    height: 50,
+    height: 60,
     backgroundColor: Colors.white,
     borderColor: Colors.black,
     borderWidth: 2,
