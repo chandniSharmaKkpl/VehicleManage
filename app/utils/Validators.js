@@ -9,8 +9,7 @@ export const isEmail = (value) => {
 };
 
 export const isPassword = (value) => {
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
   return passwordRegex.test(value);
 };
 
@@ -83,7 +82,7 @@ export const allSpecialCharacter = (txtInput) => {
 export const onlycharandnum = (value) => {
   // let regex = /^[^!-\\/:-@\\[-`{-~]+$/;
   let regex = /[ ` !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
- 
+
   if (!regex.test(value)) {
     return true;
   }

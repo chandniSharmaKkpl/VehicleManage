@@ -55,8 +55,8 @@ export class SignUpScreen extends Component {
       // txtEmail: "hh2@gmail.com",
       // txtFirstName: "ssCss",
       // txtLastName: "ssDss",
-      // txtPassword: "Abcd@1234",
-      // txtConfirmPassword: "Abcd@1234",
+      // txtPassword: "Abcdsdffsdf",
+      // txtConfirmPassword: "Abcdsdffsdf",
       // txtDob: "",
 
       txtEmail: "",

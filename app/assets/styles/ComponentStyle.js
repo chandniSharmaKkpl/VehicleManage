@@ -181,7 +181,7 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? globals.deviceHeight*0.02 : 0,
+    paddingTop: Platform.OS === "android" ? globals.deviceHeight*0.03 : 0,
   },
   headerContain: {
     flexDirection: "row",
@@ -286,7 +286,7 @@ export const ComponentStyle = StyleSheet.create({
   //// SEARCH COMPONENT
   searchContainer: {
     flexDirection: "row",
-    height: 45,
+    height: 49,
     paddingHorizontal: 10,
     paddingVertical: 3,
     marginVertical: 5,
