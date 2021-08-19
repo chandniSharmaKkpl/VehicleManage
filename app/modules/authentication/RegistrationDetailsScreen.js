@@ -124,6 +124,7 @@ export class RegistrationDetailsScreen extends Component {
               icon: "info",
               duration: 4000,
             });
+            globals.isRegistrationDeatils = true;
             NavigationService.back();
           } else {
           }

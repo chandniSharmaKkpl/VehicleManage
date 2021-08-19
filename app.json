@@ -1,4 +1,5 @@
 {
   "name": "Roadie",
-  "displayName": "Roadie"
+  "displayName": "Roadie",
+  "userInterfaceStyle": "automatic"
 }

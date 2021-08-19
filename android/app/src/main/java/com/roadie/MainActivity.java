@@ -1,7 +1,6 @@
 package com.roadie;
 
 import android.os.Bundle;
-
 import com.facebook.react.ReactActivity;
 import android.content.Intent; 
 import org.devio.rn.splashscreen.SplashScreen;

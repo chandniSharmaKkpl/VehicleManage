@@ -84,7 +84,7 @@ export const AuthStyle = StyleSheet.create({
   imglogoContainer: {
     // flex: 0.1,
     height: 50,
-
+    
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
@@ -325,7 +325,7 @@ export const AuthStyle = StyleSheet.create({
     width: 70 * 2,
     height: 60,
     backgroundColor: Colors.white,
-    borderColor: Colors.black,
+    
     borderWidth: 2,
     borderRadius: 8,
     alignSelf: "center",

@@ -25,18 +25,12 @@ const authReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.USER_LOGIN_SUCCESS:
-      const data = action.payload.data;
-      let apiData = [];
-      if (data.success === "true") {
-        apiData = data.data;
-      }
       return {
         user: {
           ...state.user,
           isLoading: false,
           isLoggedIn: true,
           ...action.payload,
-          userDetails: apiData,
           loaderMessage: "Loading...",
         },
       };
@@ -127,6 +121,7 @@ const authReducer = (state = initialState, action) => {
           isLoading: false,
           isLoggedIn: true,
           ...action.payload,
+
           loaderMessage: "Loading...",
         },
       };
@@ -151,12 +146,18 @@ const authReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.CREATE_SOCIAL_PROFILE_SUCCESS:
+      const data = action.payload.data;
+      let apiData = [];
+      if (data.success === "true") {
+        apiData = data.data;
+      }
       return {
         user: {
           ...state.user,
           isLoading: false,
           isLoggedIn: true,
           ...action.payload,
+          userDetails: apiData,
           loaderMessage: "Loading...",
         },
       };
@@ -256,6 +257,17 @@ const authReducer = (state = initialState, action) => {
         user: {
           ...state.user,
           isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SWITCH_THEME:
+      // console.log("actionTypes.SWITCH_THEME action.baseTheme :->"+JSON.stringify(action.payload.baseTheme));
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: false,
+          theme: { ...action.payload.baseTheme },
           loaderMessage: "Loading...",
         },
       };

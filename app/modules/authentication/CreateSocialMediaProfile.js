@@ -14,6 +14,7 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 import { ComponentStyle } from "../../assets/styles/ComponentStyle";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -40,7 +41,7 @@ import Colors from "../../assets/Colors";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "CreateSocialMediaProfile ::=";
-
+let isRegisterPending = false;
 export class CreateSocialMediaProfile extends Component {
   constructor(props) {
     super(props);
@@ -71,8 +72,18 @@ export class CreateSocialMediaProfile extends Component {
   };
 
   // Navigate to Dashboard screen
-  gotoDashboard = () => {
+  gotoDashboard = async () => {
+    // if (globals.isRegistrationDeatils == false) {
+      // isRegisterPending= true
+    //   await showMessage({
+    //     message: "You have to fill registration details (REGO)",
+    //     type: "danger",
+    //     icon: "info",
+    //     duration: 4000,
+    //   });
+    // } else {
     this.createSocialProfileAPICall();
+    // }
   };
 
   // API call begin
@@ -91,40 +102,51 @@ export class CreateSocialMediaProfile extends Component {
     params.append("snapchat_username", txtSnapName);
 
     const { createSocialprofile } = this.props;
-    if (globals.isInternetConnected == true){
+    if (globals.isInternetConnected == true) {
       createSocialprofile(params)
-      .then(async (res) => {
-        // console.log("res.value.data---", res);
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
-            NavigationService.navigate("Home");
+        .then(async (res) => {
+          console.log(
+            TAG,
+            "res.value.data---",
+            JSON.stringify(res.value.data.data)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              this.setUser(res.value.data.data);
+            } else {
+            }
           } else {
+            if (res.value) {
+              await showMessage({
+                message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
           }
-        } else {
-          if (res.value) {
-            await showMessage({
-              message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG, "i am in catch error create social profile", err);
-      });
-    }
-    else {
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error create social profile", err);
+        });
+    } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
+  };
+
+  // save user info in asynch
+  setUser = async (data) => {
+    await AsyncStorage.setItem("user", JSON.stringify(data)).catch(
+      (error) => {}
+    );
+    NavigationService.navigate("Home");
   };
 
   //display gallry picker model
@@ -325,7 +347,15 @@ export class CreateSocialMediaProfile extends Component {
                   </View>
 
                   <TouchableOpacity
-                    style={AuthStyle.RectangleShapeView}
+                    style={[
+                      AuthStyle.RectangleShapeView,
+                      {
+                        borderColor:
+                        isRegisterPending == true
+                            ? Colors.red
+                            : Colors.black,
+                      },
+                    ]}
                     onPress={() => this.gotoRegistrationDetailsScreen()}
                   >
                     <Text style={AuthStyle.saText}>{StaticTitle.sa}</Text>
