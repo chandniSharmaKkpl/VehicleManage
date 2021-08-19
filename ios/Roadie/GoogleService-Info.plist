@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>374701197391-enld102pd3k2aqkfcf7j525pikk6i65v.apps.googleusercontent.com</string>
+	<string>374701197391-020kchofv4uignia61j2vjdp13elku4d.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.374701197391-enld102pd3k2aqkfcf7j525pikk6i65v</string>
+	<string>com.googleusercontent.apps.374701197391-020kchofv4uignia61j2vjdp13elku4d</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>374701197391-hdd60f73tklc3ss2vspafhgcj8phq0j8.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.2excel.Roadie</string>
+	<string>com.2excel.RoadieApp</string>
 	<key>PROJECT_ID</key>
 	<string>roadie-4f4f5</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:374701197391:ios:8a6d99986b56974f9b423a</string>
+	<string>1:374701197391:ios:7c352ebc72f4e14a9b423a</string>
 </dict>
 </plist>
