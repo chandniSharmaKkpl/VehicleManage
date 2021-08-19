@@ -583,9 +583,9 @@
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.2excel.Roadie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.2excel.RoadieApp;
 				PRODUCT_NAME = Roadie;
-				PROVISIONING_PROFILE_SPECIFIER = "2Excel Development Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "Roadie Development Profile";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Roadie-Bridging-Header.h";
@@ -618,9 +618,9 @@
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.2excel.Roadie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.2excel.RoadieApp;
 				PRODUCT_NAME = Roadie;
-				PROVISIONING_PROFILE_SPECIFIER = "2Excel AdHoc Distribution Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "Roadie AppStore Distribution Profile";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Roadie-Bridging-Header.h";
