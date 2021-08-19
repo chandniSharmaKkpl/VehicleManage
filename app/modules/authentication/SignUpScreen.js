@@ -43,6 +43,7 @@ import moment from "moment";
 import DateTimePickerModal from "../../libs/react-native-modal-datetime-picker";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "SignUpScreen ::=";
 
@@ -185,53 +186,54 @@ export class SignUpScreen extends Component {
     params.append("birth_date", txtDob);
 
     const { registeruser } = this.props;
-    if (globals.isInternetConnected == true){
+    if (globals.isInternetConnected == true) {
       registeruser(params)
-      .then(async (res) => {
-        if (res.value.data.success == true) {
-          //OK 200 The request was fulfilled
+        .then(async (res) => {
+          console.log("res======signup", res.value.data.data);
+          if (res.value.data.success == true) {
+            //OK 200 The request was fulfilled
 
-          if (res.value && res.value.invalid_password) {
-            this.setState({
-              isPasswordError: true,
-              passwdValidMsg: res.value.invalid_password,
-            });
-          } else if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
-            NavigationService.navigate("CreateProfile");
+            if (res.value && res.value.invalid_password) {
+              this.setState({
+                isPasswordError: true,
+                passwdValidMsg: res.value.invalid_password,
+              });
+            } else if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+
+              NavigationService.navigate("SignIn");
+            } else {
+              this.setState({
+                isPasswordError: true,
+                emailValidMsg: res.value.data.email,
+                isEmailError: true,
+                passwdValidMsg: res.value.invalid_password,
+              });
+            }
           } else {
-            this.setState({
-              isPasswordError: true,
-              emailValidMsg: res.value.data.email,
-              isEmailError: true,
-              passwdValidMsg: res.value.invalid_password,
-            });
+            if (res.value && res.value.data.email) {
+              await showMessage({
+                message: res.value.data.email,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+              this.setState({
+                emailValidMsg: res.value.data.email,
+                isEmailError: true,
+              });
+            }
           }
-        } else {
-          if (res.value && res.value.data.email) {
-            await showMessage({
-              message: res.value.data.email,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-            this.setState({
-              emailValidMsg: res.value.data.email,
-              isEmailError: true,
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("i am in catch error registerUser", err);
-      });
-    }
-    else {
+        })
+        .catch((err) => {
+          console.log("i am in catch error registerUser", err);
+        });
+    } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
   };
@@ -620,7 +622,8 @@ export class SignUpScreen extends Component {
                     <View style={AuthStyle.signinbtnView}>
                       <Text style={[AuthStyle.smallNewAppText, {}]}>
                         {StaticTitle.termAndConditionText}
-                        <TouchableOpacity onPress={()=> this.handletermconditionClick()}
+                        <TouchableOpacity
+                          onPress={() => this.handletermconditionClick()}
                           style={AuthStyle.termAndConditionView}
                         >
                           <Text

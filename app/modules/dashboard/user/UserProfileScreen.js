@@ -31,6 +31,7 @@ import {
   GenerateRandomFileName,
   DropDownPicker,
   Loader,
+  PrimaryTextinputwithIcon,
 } from "../../../components";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -39,6 +40,7 @@ import FacebookIntegration from "../../../components/FacebookIntegration";
 import SnapchatIntegration from "../../../components/SnapchatIntegration";
 import { DefaultOptions } from "../../../components/DefaultOptions";
 import * as Authactions from "../../authentication/redux/Actions";
+import Colors from "../../../assets/Colors";
 
 const TAG = "UserProfileScreen ::=";
 
@@ -50,16 +52,17 @@ export class UserProfileScreen extends Component {
       cityList: [],
       carModelList: [],
       carColourList: [],
+      userDetails: {},
 
       selectedCity: "",
       selectedModel: "",
       selectedColour: "",
 
       txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
       txtDescription: "",
+      txtSnapName: "",
+      txtInstaName: "",
+      txtFbName: "",
 
       isUserNameError: false,
       isCityError: false,
@@ -83,8 +86,10 @@ export class UserProfileScreen extends Component {
 
   componentDidMount = async () => {
     this._isMounted = true;
-    let token = await AsyncStorage.getItem("access_token");
-    globals.access_token = token;
+    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
+    console.log("USER==", user);
+    this.setUserInfo(user);
+    globals.access_token = user.user_data.token;
     if (globals.isInternetConnected == true) {
       await this.getcarModelAPI();
       await this.getcarColourAPI();
@@ -97,6 +102,22 @@ export class UserProfileScreen extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
+
+  // set userInformation
+  setUserInfo = (user) => {
+    this.setState({
+      userDetails: user.user_data,
+      selectedCity: user.user_data.city,
+      selectedModel: user.user_data.car_make_model,
+      selectedColour: user.user_data.car_colour,
+      txtUserName: user.user_data.username,
+      txtDescription: user.user_data.car_description,
+      photoUrl: user.user_data.user_photo,
+      txtSnapName: user.user_data.snapchat_username,
+      txtInstaName: user.user_data.instagram_username,
+      txtFbName: user.user_data.fb_username,
+    });
+  };
 
   /// get car model data from API
   getcarModelAPI = () => {
@@ -148,32 +169,7 @@ export class UserProfileScreen extends Component {
     this.input[ref].focus();
   };
 
-  // clear States before leave this screen
-  clearStates = () => {
-    this.setState({
-      isGalleryPicker: false,
-      photoUrl: "",
-      photoObj: [],
-
-      txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
-      txtDescription: "",
-
-      isUserNameError: false,
-      isCityError: false,
-      isModalofCarError: false,
-      isColorofCarError: false,
-      isDescriptionError: false,
-
-      userNameValidMsg: "",
-      cityValidMsg: "",
-      modalofCarValidMsg: "",
-      colorofCarValidMsg: "",
-      descriptionValidMsg: "",
-    });
-  };
+  
 
   //display gallry picker model
   displayGalleryPicker = () => {
@@ -303,6 +299,7 @@ export class UserProfileScreen extends Component {
       cityList,
       carModelList,
       carColourList,
+      userDetails,
     } = this.state;
     return (
       <>
@@ -310,7 +307,6 @@ export class UserProfileScreen extends Component {
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <NavigationEvents onWillBlur={() => this.clearStates()} />
           <Header title={StaticTitle.userProfile} isShowSidebar={true} />
 
           <View>
@@ -510,9 +506,83 @@ export class UserProfileScreen extends Component {
                     },
                   ]}
                 >
-                  <InstagramIntegration />
+                  {/* <InstagramIntegration />
                   <FacebookIntegration />
-                  <SnapchatIntegration />
+                  <SnapchatIntegration /> */}
+                  <PrimaryTextinputwithIcon
+                    isFrom="Instagram"
+                    iconName={IMAGE.insta_icon_img}
+                    buttonStyle={{ backgroundColor: Colors.snapChat }}
+                    buttonTextStyle={AuthStyle.SnapText}
+                    value={this.state.txtInstaName}
+                    placeholderText={StaticTitle.enterinstname}
+                    onSubmitEditing={() => this.focusNextTextField("txtFbName")}
+                    blurOnSubmit={false}
+                    returnKeyType="next"
+                    autoCapitalize={"none"}
+                    autoFocus={false}
+                    isValidationShow={this.state.isInstError}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtInstaName: text,
+                        isInstError: false,
+                      })
+                    }
+                  />
+                  <PrimaryTextinputwithIcon
+                    iconName={IMAGE.fb_icon_square}
+                    buttonStyle={{ backgroundColor: Colors.blue }}
+                    buttonTextStyle={AuthStyle.SnapText}
+                    value={this.state.txtFbName}
+                    placeholderText={StaticTitle.enterfbname}
+                    onSubmitEditing={() =>
+                      this.focusNextTextField("txtSnapName")
+                    }
+                    forwardRef={(ref) => {
+                      (this.input.txtFbName = ref),
+                        this.input.txtFbName &&
+                          this.input.txtFbName.setNativeProps({
+                            style: { fontFamily: "Raleway-Regular" },
+                          });
+                    }}
+                    blurOnSubmit={false}
+                    returnKeyType="next"
+                    autoCapitalize={"none"}
+                    autoFocus={false}
+                    isValidationShow={this.state.isFbError}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtFbName: text,
+                        isFbError: false,
+                      })
+                    }
+                  />
+                  <PrimaryTextinputwithIcon
+                    iconName={IMAGE.snap_img}
+                    buttonStyle={{ backgroundColor: Colors.snapChat }}
+                    isFrom="Snap"
+                    value={this.state.txtSnapName}
+                    placeholderText={StaticTitle.enterSnapName}
+                    onSubmitEditing={Keyboard.dismiss}
+                    blurOnSubmit={false}
+                    returnKeyType="done"
+                    autoCapitalize={"none"}
+                    autoFocus={false}
+                    isValidationShow={this.state.isSnapError}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtSnapName: text,
+                        isSnapError: false,
+                      })
+                    }
+                    forwardRef={(ref) => {
+                      (this.input.txtSnapName = ref),
+                        this.input.txtSnapName &&
+                          this.input.txtSnapName.setNativeProps({
+                            style: { fontFamily: "Raleway-Regular" },
+                          });
+                    }}
+                  />
                 </View>
               </View>
             </ScrollView>
@@ -525,7 +595,6 @@ export class UserProfileScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
   };

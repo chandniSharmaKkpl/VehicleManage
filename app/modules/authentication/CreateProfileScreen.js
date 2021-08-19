@@ -28,7 +28,17 @@ import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "CreateProfileScreen ::=";
-
+const DEMO_OPTIONS_1 = [
+  "option 1",
+  "option 2",
+  "option 3",
+  "option 4",
+  "option 5",
+  "option 6",
+  "option 7",
+  "option 8",
+  "option 9",
+];
 export class CreateProfileScreen extends PureComponent {
   _isMounted = false;
   constructor(props) {
@@ -44,9 +54,7 @@ export class CreateProfileScreen extends PureComponent {
       selectedColour: "",
 
       txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
+
       txtDescription: "",
 
       isUserNameError: false,
@@ -99,6 +107,7 @@ export class CreateProfileScreen extends PureComponent {
   /// get car colour data from API
   getcarColourAPI = () => {
     const { getcarcolour } = this.props;
+
     getcarcolour().then((res) => {
       if (res.value && res.value.status === 200) {
         let colourDataList = res.value.data.data;
@@ -134,12 +143,6 @@ export class CreateProfileScreen extends PureComponent {
   // clear States before leave this screen
   clearStates = () => {
     this.setState({
-      txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
-      txtDescription: "",
-
       isUserNameError: false,
       isCityError: false,
       isModalofCarError: false,
@@ -167,23 +170,24 @@ export class CreateProfileScreen extends PureComponent {
   createProfileAPICall = () => {
     const {
       txtUserName,
-      txtCity,
-      txtColorofCar,
-      txtModalofCar,
+      selectedCity,
+      selectedModel,
+      selectedColour,
       txtDescription,
     } = this.state;
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("username", txtUserName);
-    params.append("city", txtCity);
-    params.append("car_make_model", txtModalofCar);
-    params.append("car_colour", txtColorofCar);
+    params.append("city", selectedCity);
+    params.append("car_make_model", selectedModel);
+    params.append("car_colour", selectedColour);
     params.append("car_description", txtDescription);
     if (globals.isInternetConnected == true) {
       const { createprofile } = this.props;
+      console.log("params0=====", params);
       createprofile(params)
         .then(async (res) => {
-          // console.log("res---", res);
+          console.log("res---", JSON.stringify(res.value.data.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -217,7 +221,7 @@ export class CreateProfileScreen extends PureComponent {
 
   // start of validation
   checkValidation = () => {
-    const { txtUserName, txtCity, txtColorofCar, txtModalofCar } = this.state;
+    const { txtUserName } = this.state;
     if (isEmpty(txtUserName)) {
       this.setState({
         isUserNameError: true,
@@ -232,29 +236,7 @@ export class CreateProfileScreen extends PureComponent {
       });
       return false;
     }
-    // if (!isEmpty(txtCity) && !isText(txtCity)) {
-    //   this.setState({
-    //     isCityError: true,
-    //     cityValidMsg: Messages.cityFail,
-    //   });
-    //   return false;
-    // }
 
-    // if (!isEmpty(txtModalofCar) && !isText(txtModalofCar)) {
-    //   this.setState({
-    //     isModalofCarError: true,
-    //     modalofCarValidMsg: Messages.modalFail,
-    //   });
-    //   return false;
-    // }
-
-    // if (!isEmpty(txtColorofCar) && !isText(txtColorofCar)) {
-    //   this.setState({
-    //     isColorofCarError: true,
-    //     colorofCarValidMsg: Messages.colorFail,
-    //   });
-    //   return false;
-    // }
     return true;
   };
 
@@ -276,7 +258,6 @@ export class CreateProfileScreen extends PureComponent {
   render() {
     const { isLoading, loaderMessage } = this.props;
     const { cityList, carModelList, carColourList } = this.state;
-
     return (
       <>
         <View style={AuthStyle.container}>
@@ -346,18 +327,21 @@ export class CreateProfileScreen extends PureComponent {
                     <DropDownPicker
                       options={cityList}
                       defaultValue={StaticTitle.selectCity}
-                      onSelect={(value) => this.setselectedCity(value)}
+                      renderButtonText={(value) => this.setselectedCity(value)}
                     />
 
                     <DropDownPicker
                       options={carModelList}
                       defaultValue={StaticTitle.chooseModal}
-                      onSelect={(value) => this.setselectedModel(value)}
+                      renderButtonText={(value) => this.setselectedModel(value)}
                     />
+
                     <DropDownPicker
                       options={carColourList}
                       defaultValue={StaticTitle.selectColor}
-                      onSelect={(value) => this.setselectedColour(value)}
+                      renderButtonText={(value) =>
+                        this.setselectedColour(value)
+                      }
                     />
 
                     <Input

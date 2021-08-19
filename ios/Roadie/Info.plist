@@ -24,7 +24,7 @@
 	<array>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string></string>
+			<string/>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
@@ -72,7 +72,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Roadie would like to use your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Roadie would like access to your photo gallery</string>
 	<key>SCSDKClientId</key>

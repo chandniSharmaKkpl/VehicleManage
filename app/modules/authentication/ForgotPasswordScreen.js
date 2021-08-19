@@ -222,7 +222,6 @@ export class ForgotPasswordScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
   };
