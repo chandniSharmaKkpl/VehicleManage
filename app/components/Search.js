@@ -19,9 +19,11 @@ const Search = ({
   autoCapitalize,
   iconStyle,
   onPress,
+  value,
 }) => (
   <View style={ComponentStyle.searchContainer}>
     <TextInput
+      value={value}
       searchMessage={searchMessage}
       returnKeyType={returnKeyType}
       ref={forwardRef}

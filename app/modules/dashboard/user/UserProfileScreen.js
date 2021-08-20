@@ -220,11 +220,7 @@ export class UserProfileScreen extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -250,11 +246,7 @@ export class UserProfileScreen extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -614,9 +606,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getcarmodel: (text) => dispatch(Authactions.getcarmodel(text)),
-  getcarcolour: (text) => dispatch(Authactions.getcarcolour(text)),
-  getcity: (text) => dispatch(Authactions.getcity(text)),
+  getcarmodel: (params) => dispatch(Authactions.getcarmodel(params)),
+  getcarcolour: (params) => dispatch(Authactions.getcarcolour(params)),
+  getcity: (params) => dispatch(Authactions.getcity(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileScreen);
