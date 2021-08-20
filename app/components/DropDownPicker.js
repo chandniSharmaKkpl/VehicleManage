@@ -15,8 +15,6 @@ const dropdown_renderRow = (rowData) => {
   );
 };
 
-
-
 const DropDownPicker = ({
   ref,
   options,
@@ -33,7 +31,7 @@ const DropDownPicker = ({
       showsVerticalScrollIndicator={false}
       textStyle={[
         AuthStyle.placeholder_font,
-        { color: defaultValue ? Colors.placeholderColor : Colors.black },
+        { color: Colors.placeholderColor },
       ]}
       defaultValue={defaultValue}
       dropdownStyle={AuthStyle.dropdown}

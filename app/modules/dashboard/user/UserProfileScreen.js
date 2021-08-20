@@ -88,8 +88,8 @@ export class UserProfileScreen extends Component {
     this._isMounted = true;
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
     console.log("USER==", user);
-    this.setUserInfo(user);
     globals.access_token = user.user_data.token;
+    this.setUserInfo(user);
     if (globals.isInternetConnected == true) {
       await this.getcarModelAPI();
       await this.getcarColourAPI();
@@ -104,19 +104,23 @@ export class UserProfileScreen extends Component {
   }
 
   // set userInformation
-  setUserInfo = (user) => {
-    this.setState({
-      userDetails: user.user_data,
-      selectedCity: user.user_data.city,
-      selectedModel: user.user_data.car_make_model,
-      selectedColour: user.user_data.car_colour,
-      txtUserName: user.user_data.username,
-      txtDescription: user.user_data.car_description,
-      photoUrl: user.user_data.user_photo,
-      txtSnapName: user.user_data.snapchat_username,
-      txtInstaName: user.user_data.instagram_username,
-      txtFbName: user.user_data.fb_username,
-    });
+  setUserInfo = async (user) => {
+    if (this._isMounted) {
+      if (user && user.user_data) {
+        this.setState({
+          userDetails: user.user_data,
+          selectedCity: user.user_data.city,
+          selectedModel: user.user_data.car_make_model,
+          selectedColour: user.user_data.car_colour,
+          txtUserName: user.user_data.username,
+          txtDescription: user.user_data.car_description,
+          photoUrl: user.user_data.user_photo,
+          txtSnapName: user.user_data.snapchat_username,
+          txtInstaName: user.user_data.instagram_username,
+          txtFbName: user.user_data.fb_username,
+        });
+      }
+    }
   };
 
   /// get car model data from API
@@ -168,8 +172,6 @@ export class UserProfileScreen extends Component {
   focusNextTextField = (ref) => {
     this.input[ref].focus();
   };
-
-  
 
   //display gallry picker model
   displayGalleryPicker = () => {
@@ -300,7 +302,11 @@ export class UserProfileScreen extends Component {
       carModelList,
       carColourList,
       userDetails,
+      selectedColour,
+      selectedModel,
+      selectedCity,
     } = this.state;
+
     return (
       <>
         <View style={UserProfileStyle.container}>
@@ -429,6 +435,7 @@ export class UserProfileScreen extends Component {
                 <Input
                   value={this.state.txtDescription}
                   placeholderText={StaticTitle.addDescription}
+                  inputStyle={{ color: Colors.placeholderColor }}
                   onSubmitEditing={() => this.focusNextTextField("txtUserName")}
                   forwardRef={(ref) => {
                     (this.input.txtDescription = ref),
@@ -455,7 +462,7 @@ export class UserProfileScreen extends Component {
                 <Input
                   value={this.state.txtUserName}
                   placeholderText={StaticTitle.userName}
-                  inputStyle={{ marginTop: 8 }}
+                  inputStyle={{ marginTop: 8, color: Colors.placeholderColor }}
                   onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}
                   forwardRef={(ref) => {
@@ -482,18 +489,24 @@ export class UserProfileScreen extends Component {
 
                 <DropDownPicker
                   options={cityList}
-                  defaultValue={StaticTitle.selectCity}
+                  defaultValue={
+                    selectedCity ? selectedCity : StaticTitle.selectCity
+                  }
                   onSelect={(value) => this.setselectedCity(value)}
                 />
 
                 <DropDownPicker
                   options={carModelList}
-                  defaultValue={StaticTitle.chooseModal}
+                  defaultValue={
+                    selectedModel ? selectedModel : StaticTitle.chooseModal
+                  }
                   onSelect={(value) => this.setselectedModel(value)}
                 />
                 <DropDownPicker
                   options={carColourList}
-                  defaultValue={StaticTitle.selectColor}
+                  defaultValue={
+                    selectedColour ? selectedColour : StaticTitle.selectColor
+                  }
                   onSelect={(value) => this.setselectedColour(value)}
                 />
 

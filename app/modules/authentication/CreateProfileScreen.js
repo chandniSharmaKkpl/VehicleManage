@@ -26,19 +26,10 @@ import { IMAGE } from "../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import Colors from "../../assets/Colors";
 
 const TAG = "CreateProfileScreen ::=";
-const DEMO_OPTIONS_1 = [
-  "option 1",
-  "option 2",
-  "option 3",
-  "option 4",
-  "option 5",
-  "option 6",
-  "option 7",
-  "option 8",
-  "option 9",
-];
+
 export class CreateProfileScreen extends PureComponent {
   _isMounted = false;
   constructor(props) {
@@ -261,13 +252,14 @@ export class CreateProfileScreen extends PureComponent {
     return (
       <>
         <View style={AuthStyle.container}>
+        {isLoading && (
+              <Loader isOverlay={true} loaderMessage={loaderMessage} />
+            )}
           <KeyboardAwareScrollView
             showsVerticalScrollIndicator={false}
             scrollIndicatorInsets={{ right: 1 }}
           >
-            {isLoading && (
-              <Loader isOverlay={true} loaderMessage={loaderMessage} />
-            )}
+            
             <NavigationEvents onWillBlur={() => this.clearStates()} />
             <StatusBar
               barStyle="light-content"
@@ -305,7 +297,7 @@ export class CreateProfileScreen extends PureComponent {
                     </View>
                     <Input
                       value={this.state.txtUserName}
-                      inputStyle={{ marginTop: 0 }}
+                      inputStyle={{ marginTop: 0 , color:Colors.placeholderColor}}
                       placeholderText={StaticTitle.enterUserName}
                       onSubmitEditing={Keyboard.dismiss}
                       blurOnSubmit={false}
@@ -346,6 +338,7 @@ export class CreateProfileScreen extends PureComponent {
 
                     <Input
                       value={this.state.txtDescription}
+                      inputStyle={{ color:Colors.placeholderColor}}
                       placeholderText={StaticTitle.addDescription}
                       onSubmitEditing={Keyboard.dismiss}
                       forwardRef={(ref) => {

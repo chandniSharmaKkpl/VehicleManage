@@ -41,7 +41,6 @@ import Colors from "../../assets/Colors";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "CreateSocialMediaProfile ::=";
-let isRegisterPending = false;
 export class CreateSocialMediaProfile extends Component {
   constructor(props) {
     super(props);
@@ -73,17 +72,16 @@ export class CreateSocialMediaProfile extends Component {
 
   // Navigate to Dashboard screen
   gotoDashboard = async () => {
-    // if (globals.isRegistrationDeatils == false) {
-      // isRegisterPending= true
-    //   await showMessage({
-    //     message: "You have to fill registration details (REGO)",
-    //     type: "danger",
-    //     icon: "info",
-    //     duration: 4000,
-    //   });
-    // } else {
-    this.createSocialProfileAPICall();
-    // }
+    if (globals.isRegistrationDeatils == false) {
+      await showMessage({
+        message: "You have to fill registration details (REGO)",
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+    } else {
+      this.createSocialProfileAPICall();
+    }
   };
 
   // API call begin
@@ -92,10 +90,11 @@ export class CreateSocialMediaProfile extends Component {
       this.state;
     var params = new FormData();
     // Collect the necessary params
-    if (photoObj.length > 0) {
+  
+    if (photoObj != []) {
       params.append("image", photoObj);
     } else {
-      params.append("image", "");
+      params.append("image", null);
     }
     params.append("fb_username", txtFbName);
     params.append("instalgram_username", txtInstaName);
@@ -103,6 +102,7 @@ export class CreateSocialMediaProfile extends Component {
 
     const { createSocialprofile } = this.props;
     if (globals.isInternetConnected == true) {
+      console.log("params======", params);
       createSocialprofile(params)
         .then(async (res) => {
           console.log(
@@ -350,10 +350,7 @@ export class CreateSocialMediaProfile extends Component {
                     style={[
                       AuthStyle.RectangleShapeView,
                       {
-                        borderColor:
-                        isRegisterPending == true
-                            ? Colors.red
-                            : Colors.black,
+                        borderColor: Colors.black,
                       },
                     ]}
                     onPress={() => this.gotoRegistrationDetailsScreen()}

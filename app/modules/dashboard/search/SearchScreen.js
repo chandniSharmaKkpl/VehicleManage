@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
- 
-  Keyboard,
- 
-} from "react-native";
+import { View, Keyboard } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -33,6 +28,10 @@ export class SearchScreen extends Component {
     });
   };
 
+  getSearchResult=()=>{
+
+  }
+
   render() {
     return (
       <>
@@ -50,6 +49,7 @@ export class SearchScreen extends Component {
               })
             }
             placeholderText={StaticTitle.searchbyVehicalNum}
+            onPress={()=> this.getSearchResult()}
           />
         </View>
       </>
@@ -57,15 +57,9 @@ export class SearchScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+// const mapStateToProps = (state) => {};
 
-// };
+// const mapDispatchToProps = (dispatch) => ({});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(SearchScreen);
+// export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);
 export default SearchScreen;

@@ -29,6 +29,7 @@ const StaticTitle = {
     imgfiledrequired:'The image field is required.',
     registrationpaper:'The registration paper field is required.',
     vehicalphotorequired:'The vehicle photo field is required.',
+    registernumberfieldvalidation:'The registration number may only contain letters and numbers.',
     registernumberfieldrequire:'The registration number field is required.',
     enterUserName:'Enter Username',
     enterCity:'Enter City or Suburb',

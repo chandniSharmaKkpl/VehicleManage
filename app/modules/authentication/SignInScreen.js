@@ -38,10 +38,10 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      txtEmail: "udattani@mailinator.com",
-      txtPassword: "Abcd@1234",
-      // txtEmail: "",
-      // txtPassword: "",
+      // txtEmail: "udattani@mailinator.com",
+      // txtPassword: "Abcd@1234",
+      txtEmail: "",
+      txtPassword: "",
       isShowPassword: true,
       isEmailError: false,
       isPasswordError: false,
@@ -204,6 +204,7 @@ export class SignInScreen extends Component {
 
   // save access token
   async gotoSaveToken(accessToken) {
+    console.log(TAG, "accessToken===", accessToken);
     await AsyncStorage.setItem("access_token", accessToken);
     globals.access_token = accessToken;
   }

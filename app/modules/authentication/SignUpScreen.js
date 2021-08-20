@@ -347,10 +347,24 @@ export class SignUpScreen extends Component {
       });
       return false;
     }
-    if (!isPassword(txtConfirmPassword)) {
+    if (!onlycharandnum(txtPassword)) {
+      this.setState({
+        isPasswordError: true,
+        passwdValidMsg: Messages.passwordValid,
+      });
+      return false;
+    }
+    if (!onlycharandnum(txtConfirmPassword)) {
       this.setState({
         isConfirmPasswordError: true,
         confirmPasswordValidMsg: Messages.passwordValid,
+      });
+      return false;
+    }
+    if (!isPassword(txtPassword)) {
+      this.setState({
+        isPasswordError: true,
+        passwdValidMsg: Messages.passwordValid,
       });
       return false;
     }
