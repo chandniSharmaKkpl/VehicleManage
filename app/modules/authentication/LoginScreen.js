@@ -25,11 +25,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const TAG = "LoginScreen ::=";
 
 export class LoginScreen extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
       theme: {},
     };
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
@@ -38,10 +43,11 @@ export class LoginScreen extends Component {
   };
 
   componentDidMount = async () => {
-    await this.fetchUserDetails();
+    this._isMounted = true;
     let them_mode = await AsyncStorage.getItem("them_mode");
+    await this.fetchUserDetails();
+     
     console.log(TAG, "componentDidMount ======them_mode", them_mode);
-
     var newTheme = lightTheme;
     if (them_mode === globals.THEME_MODE.DARK) {
       newTheme = darkTheme;
@@ -58,7 +64,7 @@ export class LoginScreen extends Component {
   // fetch user info from asynch storage
   fetchUserDetails = async () => {
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log("USER==", user);
+
     if (user && user.user_data) {
       NavigationService.reset("Home");
     } else {

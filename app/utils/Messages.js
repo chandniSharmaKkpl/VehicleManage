@@ -17,7 +17,8 @@ const Messages = {
   enterDob:'Please choose date',
   cityFail:"Please restrict location to 3-40 characters",
   modalFail:'Please restrict Make and model to 3-40 characters',
-  colorFail:'Please restrict Make and model to 3-20 characters'
+  colorFail:'Please restrict Make and model to 3-20 characters',
+  registernumberfieldvalidation:'The registration number may only contain letters and numbers.',
 
 };
 export { Messages };
