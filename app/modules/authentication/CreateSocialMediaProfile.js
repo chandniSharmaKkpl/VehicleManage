@@ -67,14 +67,14 @@ export class CreateSocialMediaProfile extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails");
+    NavigationService.navigate("RegistrationDetails",{isFrom :'SocialProfile'});
   };
 
   // Navigate to Dashboard screen
   gotoDashboard = async () => {
     if (globals.isRegistrationDeatils == false) {
       await showMessage({
-        message: "You have to fill registration details (REGO)",
+        message: StaticTitle.registerinfoneeded,
         type: "danger",
         icon: "info",
         duration: 4000,

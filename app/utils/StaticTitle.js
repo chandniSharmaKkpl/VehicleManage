@@ -63,6 +63,7 @@ const StaticTitle = {
     linkfb:'Link with Facebook',
     linkinsta:'Link with Instagram',
     linksnap:'Link with Snapchat',
+    registerinfoneeded:'You have to fill registration details (REGO)',
 
     /////// DASHBOARD
     searchbyVehicalNum:'Search Users by Their Vehicle Number',
@@ -90,7 +91,12 @@ const StaticTitle = {
 
     //// CHAT
     chatinput:'Type a message',
-    moreactions:'More Actions'
+    moreactions:'More Actions',
+
+
+    /// PROFILE
+    update:'Update',
+    updatedetail:'Update Deatils',
   };
   export { StaticTitle };
   
