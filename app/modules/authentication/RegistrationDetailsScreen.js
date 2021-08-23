@@ -54,6 +54,7 @@ export class RegistrationDetailsScreen extends Component {
       isRegNumberError: false,
       regNumberValidMsg: "",
       options: DefaultOptions,
+      isFrom: this.props.navigation.state.params.isFrom,
     };
   }
 
@@ -369,9 +370,9 @@ export class RegistrationDetailsScreen extends Component {
       isattachPaper,
       options,
       isattachphoto,
+      isFrom,
     } = this.state;
     const { isLoading, loaderMessage } = this.props;
-
     return (
       <>
         <View style={AuthStyle.container}>
@@ -481,7 +482,11 @@ export class RegistrationDetailsScreen extends Component {
               </View>
               <View style={AuthStyle.signinbtnView}>
                 <PrimaryButton
-                  btnName={StaticTitle.saveDetails}
+                  btnName={
+                    isFrom == "Profile"
+                      ? StaticTitle.updatedetail
+                      : StaticTitle.saveDetails
+                  }
                   onPress={() => this.saveDeatils()}
                 />
               </View>

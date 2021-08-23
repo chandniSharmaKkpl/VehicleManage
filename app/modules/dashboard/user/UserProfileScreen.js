@@ -31,6 +31,7 @@ import {
   GenerateRandomFileName,
   DropDownPicker,
   Loader,
+  PrimaryButton,
   PrimaryTextinputwithIcon,
 } from "../../../components";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
@@ -261,7 +262,7 @@ export class UserProfileScreen extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails");
+    NavigationService.navigate("RegistrationDetails",{isFrom :'Profile'});
   };
 
   // Navigate to Settings  Screen
@@ -283,6 +284,9 @@ export class UserProfileScreen extends Component {
   setselectedCity = (text) => {
     this.setState({ selectedCity: text });
   };
+
+  // Update profile API call
+  updateProfile = () => {};
 
   render() {
     const { isLoading, loaderMessage } = this.props;
@@ -588,6 +592,15 @@ export class UserProfileScreen extends Component {
                           });
                     }}
                   />
+
+                  <View
+                    style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
+                  >
+                    <PrimaryButton
+                      btnName={StaticTitle.update}
+                      onPress={() => this.updateProfile()}
+                    />
+                  </View>
                 </View>
               </View>
             </ScrollView>

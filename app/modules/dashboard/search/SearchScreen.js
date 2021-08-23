@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Keyboard, Alert, FlatList } from "react-native";
+import {
+  View,
+  Keyboard,
+  Alert,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -47,14 +54,13 @@ export class SearchScreen extends Component {
     // Collect the necessary params
     params.append("search_by_vehicle", txtSearch);
     if (globals.isInternetConnected == true) {
-      console.log("params----", params);
       searchvehicle(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "response of search vehical",
-            JSON.stringify(res.value.data.data)
-          );
+          // console.log(
+          //   TAG,
+          //   "response of search vehical",
+          //   JSON.stringify(res.value.data.data)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -87,14 +93,12 @@ export class SearchScreen extends Component {
 
   /// set Search data List
   setSearchdataList = (data) => {
-    console.log("data--setSearchdataList-", data.search_data);
+    Keyboard.dismiss();
     this.setState({ searchListdata: data.search_data });
   };
 
   // render SearchList dataItem
   renderSearchList = ({ item, index }) => {
-    console.log("renderSearchList---", item);
-
     return (
       <View style={FriendListStyle.itemcell}>
         {item.user_photo ? (
@@ -116,9 +120,15 @@ export class SearchScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>{item.name + item.surname}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.car_make_model}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.registration_number}</Text>
+          <Text style={FriendListStyle.titleBig}>
+            {item.name + item.surname}
+          </Text>
+          <Text style={FriendListStyle.titleSmall}>
+            {item.car_make_model ? item.car_make_model : "-"}
+          </Text>
+          <Text style={FriendListStyle.titleSmall}>
+            {item.registration_number ? item.registration_number : "-"}
+          </Text>
         </View>
         <TouchableOpacity style={FriendListStyle.squareView}>
           <FastImage
@@ -138,8 +148,6 @@ export class SearchScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { txtSearch, searchListdata } = this.state;
-    console.log("RENDER searchListdata----", searchListdata);
-    console.log("RENDER searchListdata--length--", searchListdata.length);
 
     return (
       <>
@@ -153,7 +161,7 @@ export class SearchScreen extends Component {
             value={txtSearch}
             blurOnSubmit={false}
             returnKeyType="done"
-            onSubmitEditing={Keyboard.dismiss}
+            onSubmitEditing={() => this.getSearchResult()}
             autoCapitalize={"none"}
             onChangeText={(text) =>
               this.setState({
@@ -168,9 +176,7 @@ export class SearchScreen extends Component {
               data={searchListdata}
               style={FriendListStyle.flatliststyle}
               renderItem={(item, index) => this.renderSearchList(item, index)}
-              keyExtractor={(item, index) => {
-                return item.Id;
-              }}
+              keyExtractor={(item, index) => "D" + index.toString()}
               showsVerticalScrollIndicator={false}
               ItemSeparatorComponent={this.separatorComponent}
             />
