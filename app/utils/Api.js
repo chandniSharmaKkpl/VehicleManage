@@ -73,7 +73,11 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/socialLoginRegister"
     ) {
       request.headers = makeAuthPostHeaders();
-    } else if (request.url === "api/createprofileone" || request.url === "api/search_by_vehicle") {
+    } else if (
+      request.url === "api/createprofileone" ||
+      request.url === "api/search_by_vehicle" ||
+      request.url === "api/updateProfile"
+    ) {
       request.headers = makeURLencodedPostHeaders();
     } else {
       request.headers = makeFormDataPostHeaders();
