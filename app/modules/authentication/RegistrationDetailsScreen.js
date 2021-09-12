@@ -55,6 +55,7 @@ export class RegistrationDetailsScreen extends Component {
       regNumberValidMsg: "",
       options: DefaultOptions,
       isFrom: this.props.navigation.state.params.isFrom,
+      user:{}
     };
   }
 
@@ -72,9 +73,11 @@ export class RegistrationDetailsScreen extends Component {
   // set userInformation
   setUserInfo = async () => {
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
+    console.log(TAG,"user==setUserInfo===", user);
     if (this._isMounted) {
       if (user && user.user_data) {
         this.setState({
+          user:user,
           attachPaperUrl: user.user_data.registration_paper,
           attachphotoUrl: user.user_data.vehicle_photo,
           txtRegNumber: user.user_data.registration_number,
@@ -127,9 +130,11 @@ export class RegistrationDetailsScreen extends Component {
     this.setState({ isattachphoto: false });
   };
 
+
+
   // save all register details
   saveDeatils = async () => {
-    const { txtRegNumber, attachphotoUrl, attachPaperUrl } = this.state;
+    const { txtRegNumber, attachphotoUrl, attachPaperUrl, isFrom } = this.state;
     if (isEmpty(txtRegNumber)) {
       await showMessage({
         message: StaticTitle.registernumberfieldrequire,
@@ -163,13 +168,79 @@ export class RegistrationDetailsScreen extends Component {
         duration: 4000,
       });
     } else {
-      this.registerDetailAPIcall();
+      if (isFrom == "Profile") {
+        this.updateRegisterDetailAPIcall();
+      } else {
+        this.registerDetailAPIcall();
+      }
     }
   };
 
+  // API CALL begin of update
+  updateRegisterDetailAPIcall= () => {
+    const { txtRegNumber, attachPaperObj, attachphotoObj, user } = this.state;
+    var params = new FormData();
+    // Collect the necessary params
+    params.append("email", user.user_data.email);
+    params.append("vehicle_photo", attachphotoObj);
+    params.append("registration_number", txtRegNumber);
+    params.append("registration_paper", attachPaperObj);
+    const { updateRegistrationDetail } = this.props;
+
+    console.log("updateRegisterDetailAPIcall params----------", JSON.stringify(params));
+    if (globals.isInternetConnected == true) {
+      updateRegistrationDetail(params)
+        .then(async (res) => {
+          console.log("updateRegisterDetailAPIcall res.value.data---", JSON.stringify(res.value.data.data));
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+            } else {
+            }
+          } else {
+            if (res.value && res.value.data.registration_paper) {
+              await showMessage({
+                message: res.value.data.registration_paper,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.vehicle_photo) {
+              await showMessage({
+                message: res.value.data.vehicle_photo,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.registration_number) {
+              await showMessage({
+                message: res.value.data.registration_number,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error Register screen", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
+
   // API CALL begin
   registerDetailAPIcall = () => {
+   
     const { txtRegNumber, attachPaperObj, attachphotoObj } = this.state;
+  
     var params = new FormData();
     // Collect the necessary params
     params.append("vehicle_photo", attachphotoObj);
@@ -177,11 +248,11 @@ export class RegistrationDetailsScreen extends Component {
     params.append("registration_paper", attachPaperObj);
     const { registerdetail } = this.props;
 
-    console.log("params----------", JSON.stringify(params));
+    // console.log("params----------", JSON.stringify(params));
     if (globals.isInternetConnected == true) {
       registerdetail(params)
         .then(async (res) => {
-          console.log("res.value.data---", JSON.stringify(res.value.data.data));
+          // console.log("res.value.data---", JSON.stringify(res.value.data.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -305,7 +376,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachPaperObj: source,
+              attachphotoObj: source,
           });
         } else {
           this.setState({
@@ -506,6 +577,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   registerdetail: (params) => dispatch(actions.registerdetail(params)),
+  updateRegistrationDetail: (params) =>
+    dispatch(actions.updateRegistrationDetail(params)),
 });
 
 export default connect(

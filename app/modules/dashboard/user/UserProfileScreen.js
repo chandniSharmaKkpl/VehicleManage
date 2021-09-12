@@ -42,6 +42,8 @@ import SnapchatIntegration from "../../../components/SnapchatIntegration";
 import { DefaultOptions } from "../../../components/DefaultOptions";
 import * as Authactions from "../../authentication/redux/Actions";
 import Colors from "../../../assets/Colors";
+import * as actions from "../redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "UserProfileScreen ::=";
 
@@ -85,10 +87,10 @@ export class UserProfileScreen extends Component {
     this.input = {};
   }
 
-  componentDidMount = async () => {
+  componentdidMount = async () => {
     this._isMounted = true;
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log("USER==", user);
+    console.log("USER== componentWillMount", user);
     globals.access_token = user.user_data.token;
     this.setUserInfo(user);
     if (globals.isInternetConnected == true) {
@@ -262,7 +264,7 @@ export class UserProfileScreen extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails",{isFrom :'Profile'});
+    NavigationService.navigate("RegistrationDetails", { isFrom: "Profile" });
   };
 
   // Navigate to Settings  Screen
@@ -286,7 +288,82 @@ export class UserProfileScreen extends Component {
   };
 
   // Update profile API call
-  updateProfile = () => {};
+  updateProfileApiCall = () => {
+    const {
+      userDetails,
+      selectedColour,
+      selectedModel,
+      selectedCity,
+      photoObj,
+      txtSnapName,
+      txtInstaName,
+      txtFbName,
+      txtDescription,
+      txtUserName,
+    } = this.state;
+    var params = new FormData();
+
+    // Collect the necessary params
+    const { updateprofile } = this.props;
+    console.log("photoObj=====", photoObj);
+    params.append("email", userDetails.email);
+    params.append("username", txtUserName);
+    if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
+      params.append("image", "");
+    } else {
+      params.append("image", photoObj);
+    }
+    params.append("city", selectedCity);
+    params.append("car_make_model", selectedModel);
+    params.append("car_colour", selectedColour);
+    params.append("car_description", txtDescription);
+    params.append("fb_username", txtFbName);
+    params.append("instalgram_username", txtInstaName);
+    params.append("snapchat_username", txtSnapName);
+
+    if (globals.isInternetConnected == true) {
+      console.log("params======", JSON.stringify(params));
+      updateprofile(params)
+        .then(async (res) => {
+          console.log(TAG, "res.value.data---", JSON.stringify(res.value.data.data));
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              this.setUser(res.value.data.data);
+            } else {
+            }
+          } else {
+            if (res.value) {
+              // await showMessage({
+              //   message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
+              //   type: "danger",
+              //   icon: "info",
+              //   duration: 4000,
+              // });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error update profile", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
+
+  // save user info in asynch
+  setUser = async (data) => {
+    console.log("set user======data", data);
+    await AsyncStorage.setItem("user", JSON.stringify(data)).catch(
+      (error) => {}
+    );
+  };
 
   render() {
     const { isLoading, loaderMessage } = this.props;
@@ -302,7 +379,7 @@ export class UserProfileScreen extends Component {
       selectedModel,
       selectedCity,
     } = this.state;
-
+    console.log("photoUrl===", photoUrl);
     return (
       <>
         <View style={UserProfileStyle.container}>
@@ -488,7 +565,7 @@ export class UserProfileScreen extends Component {
                   defaultValue={
                     selectedCity ? selectedCity : StaticTitle.selectCity
                   }
-                  onSelect={(value) => this.setselectedCity(value)}
+                  renderButtonText={(value) => this.setselectedCity(value)}
                 />
 
                 <DropDownPicker
@@ -496,14 +573,14 @@ export class UserProfileScreen extends Component {
                   defaultValue={
                     selectedModel ? selectedModel : StaticTitle.chooseModal
                   }
-                  onSelect={(value) => this.setselectedModel(value)}
+                  renderButtonText={(value) => this.setselectedModel(value)}
                 />
                 <DropDownPicker
                   options={carColourList}
                   defaultValue={
                     selectedColour ? selectedColour : StaticTitle.selectColor
                   }
-                  onSelect={(value) => this.setselectedColour(value)}
+                  renderButtonText={(value) => this.setselectedColour(value)}
                 />
 
                 <View
@@ -598,7 +675,7 @@ export class UserProfileScreen extends Component {
                   >
                     <PrimaryButton
                       btnName={StaticTitle.update}
-                      onPress={() => this.updateProfile()}
+                      onPress={() => this.updateProfileApiCall()}
                     />
                   </View>
                 </View>
@@ -613,8 +690,9 @@ export class UserProfileScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.auth.user.isLoading,
-    loaderMessage: state.auth.user.loaderMessage,
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    
   };
 };
 
@@ -622,6 +700,7 @@ const mapDispatchToProps = (dispatch) => ({
   getcarmodel: (params) => dispatch(Authactions.getcarmodel(params)),
   getcarcolour: (params) => dispatch(Authactions.getcarcolour(params)),
   getcity: (params) => dispatch(Authactions.getcity(params)),
+  updateprofile: (params) => dispatch(actions.updateprofile(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileScreen);

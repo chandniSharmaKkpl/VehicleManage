@@ -11,6 +11,7 @@ import {
   SOCIAL_LOGIN,
   CREATE_SOCIAL_PROFILE,
   REGISTER_DETAIL,
+  UPDATE_REGISTER_DETAIL,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -84,6 +85,18 @@ export const registerdetail = (params) => ({
   type: REGISTER_DETAIL,
   payload: api
     .post("api/register_detail", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
+export const updateRegistrationDetail = (params) => ({
+  type: UPDATE_REGISTER_DETAIL,
+  payload: api
+    .post("api/updateRegistrationDetail", params)
     .then((res) => {
       return res;
     })

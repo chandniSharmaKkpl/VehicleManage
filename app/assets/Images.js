@@ -28,6 +28,9 @@ const IMAGE = {
   report_user_img:require("../assets/images/report_user.png"),
   block_user_img:require("../assets/images/block_user.png"),
   send_icon_img:require("../assets/images/send_icon.png"),
+  terms_conditions_img:require("../assets/images/terms_conditions.png"),
+  subscription_img:require("../assets/images/subscription.png"),
+  sign_out_img:require("../assets/images/sign_out.png"),
 };
 
 export { IMAGE };

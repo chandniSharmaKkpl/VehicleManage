@@ -52,12 +52,11 @@ function makeURLencodedPostHeaders() {
       "Content-Type": "application/x-www-form-urlencoded",
     };
   }
-
   return headerObj;
 }
 
 const axiosApi = axios.create({
-  // withCredentials: true,
+  withCredentials: true,
   baseURL: `${BASE_URL}`,
 });
 
@@ -73,7 +72,12 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/socialLoginRegister"
     ) {
       request.headers = makeAuthPostHeaders();
-    } else if (request.url === "api/createprofileone" || request.url === "api/search_by_vehicle") {
+    } else if (
+      request.url === "api/createprofileone" ||
+      request.url === "api/search_by_vehicle" ||
+      request.url === "api/updateProfile" ||
+      request.url === "api/friend_list"
+    ) {
       request.headers = makeURLencodedPostHeaders();
     } else {
       request.headers = makeFormDataPostHeaders();

@@ -6,31 +6,91 @@ import {
   TouchableWithoutFeedback,
   Text,
   Image,
+  Alert,
   TouchableOpacity,
 } from "react-native";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
-import { Search, Header } from "../../../components";
+import { Search, Header, Loader } from "../../../components";
 import NavigationService from "../../../utils/NavigationService";
 import { Messages } from "../../../utils/Messages";
 import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import { DummyData } from "../../../dummyData/DummyData";
 import FastImage from "react-native-fast-image";
+import * as actions from "../redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as globals from "../../../utils/Globals";
 
 const TAG = "FriendlistScreen ::=";
 
 export class FriendlistScreen extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
       txtSearch: "",
-      friendListData: DummyData,
+      friendListData: [],
+      user: {},
     };
   }
 
-  componentDidMount() {}
+  componentDidMount = async () => {
+    this._isMounted = true;
+    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
+    console.log(TAG, "USER== componentDidMount", user);
+    globals.access_token = user.user_data.token;
+    this.setState({ user: user });
+    if (globals.isInternetConnected == true) {
+      await this.getfriendListAPI();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
+
+  // search vechicle by name
+  getfriendListAPI = () => {
+    const { txtSearch, friendListData } = this.state;
+    const { getfriendlist } = this.props;
+    let params = new URLSearchParams();
+
+    // Collect the necessary params
+    params.append("user_id", "39");
+    getfriendlist(params)
+      .then(async (res) => {
+        // console.log(
+        //   TAG,
+        //   "response of get friendlist",
+        //   JSON.stringify(res.value.data.data)
+        // );
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.status === 200) {
+            await showMessage({
+              message: res.value.data.message,
+              type: "success",
+              icon: "info",
+              duration: 4000,
+            });
+            this.setState({ friendListData: res.value.data.data.user_data });
+          }
+        } else {
+          if (res.value && res.value.data.error) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error search by vehical name", err);
+      });
+  };
 
   // clear States before leave this screen
   clearStates = () => {
@@ -43,12 +103,12 @@ export class FriendlistScreen extends Component {
   renderFriendList = ({ item, index }) => {
     return (
       <View style={FriendListStyle.itemcell}>
-        {item.Img ? (
+        {item.image_path ? (
           <View style={FriendListStyle.imageStyle}>
             <FastImage
               style={[FriendListStyle.imageStyle]}
               source={{
-                uri: item.Img,
+                uri: item.image_path,
               }}
             />
           </View>
@@ -62,8 +122,8 @@ export class FriendlistScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>{item.Owner_Name}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.Name}</Text>
+          <Text style={FriendListStyle.titleBig}>{item.name}</Text>
+          <Text style={FriendListStyle.titleSmall}>{item.car_make_model}</Text>
           <Text style={FriendListStyle.titleSmall}>{item.Num}</Text>
         </View>
         <TouchableOpacity
@@ -91,10 +151,14 @@ export class FriendlistScreen extends Component {
 
   render() {
     const { friendListData } = this.state;
+    const { isLoading, loaderMessage, theme } = this.props;
 
     return (
       <>
         <View style={FriendListStyle.container}>
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <NavigationEvents onWillBlur={() => this.clearStates()} />
           <Header title={StaticTitle.frndList} isShowSidebar={true} />
           <Search
@@ -113,9 +177,7 @@ export class FriendlistScreen extends Component {
             data={friendListData}
             style={FriendListStyle.flatliststyle}
             renderItem={(item, index) => this.renderFriendList(item, index)}
-            keyExtractor={(item, index) => {
-              return item.Id;
-            }}
+            keyExtractor={(item, index) => "D" + index.toString()}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={this.separatorComponent}
           />
@@ -125,15 +187,15 @@ export class FriendlistScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({
+  getfriendlist: (params) => dispatch(actions.getfriendlist(params)),
+});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(FriendlistScreen);
-export default FriendlistScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(FriendlistScreen);
