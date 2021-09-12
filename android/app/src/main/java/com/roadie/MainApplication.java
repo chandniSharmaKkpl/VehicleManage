@@ -54,7 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     adjustFontScale(getResources().getConfiguration());
     SoLoader.init(this, /* native exopackage */ false);
-    initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    // initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 
   public void adjustFontScale(Configuration configuration) {

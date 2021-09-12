@@ -1,5 +1,5 @@
 import api from "../../../utils/Api";
-import { SEARCH_BY_VECHICLE, UPDATE_PROFILE } from "./ActionType";
+import { SEARCH_BY_VECHICLE, UPDATE_PROFILE, GET_FRIEND_LIST } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
   type: SWITCH_THEME,
@@ -31,3 +31,16 @@ export const updateprofile = (params) => ({
       return err;
     }),
 });
+
+export const getfriendlist = (params) => ({
+  type: GET_FRIEND_LIST,
+  payload: api
+    .post("api/friend_list", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+

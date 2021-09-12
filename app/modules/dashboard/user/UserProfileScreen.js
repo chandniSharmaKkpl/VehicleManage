@@ -87,10 +87,10 @@ export class UserProfileScreen extends Component {
     this.input = {};
   }
 
-  componentDidMount = async () => {
+  componentdidMount = async () => {
     this._isMounted = true;
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log("USER==", user);
+    console.log("USER== componentWillMount", user);
     globals.access_token = user.user_data.token;
     this.setUserInfo(user);
     if (globals.isInternetConnected == true) {
@@ -379,8 +379,7 @@ export class UserProfileScreen extends Component {
       selectedModel,
       selectedCity,
     } = this.state;
-    console.log("carModelList===", carModelList);
-    console.log("carColourList===", carColourList);
+    console.log("photoUrl===", photoUrl);
     return (
       <>
         <View style={UserProfileStyle.container}>
