@@ -260,6 +260,37 @@ const authReducer = (state = initialState, action) => {
           loaderMessage: "Loading...",
         },
       };
+
+       //// UPDATE_REGISTER_DETAIL
+    case actionTypes.UPDATE_REGISTER_DETAIL_LOADING:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.UPDATE_REGISTER_DETAIL_SUCCESS:
+      return {
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.UPDATE_REGISTER_DETAIL_ERROR:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
     case actionTypes.SWITCH_THEME:
       // console.log("actionTypes.SWITCH_THEME action.baseTheme :->"+JSON.stringify(action.payload.baseTheme));
       return {

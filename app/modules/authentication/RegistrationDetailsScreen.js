@@ -54,6 +54,8 @@ export class RegistrationDetailsScreen extends Component {
       isRegNumberError: false,
       regNumberValidMsg: "",
       options: DefaultOptions,
+      isFrom: this.props.navigation.state.params.isFrom,
+      user: {},
     };
   }
 
@@ -65,15 +67,19 @@ export class RegistrationDetailsScreen extends Component {
     // get asynchg stored value
     // await this.setRegistrationDetailInfo();
     this._isMounted = true;
-    this.setUserInfo();
+    if (this.state.isFrom == "Profile") {
+      this.setUserInfo();
+    }
   };
 
   // set userInformation
   setUserInfo = async () => {
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
+    console.log(TAG, "user==setUserInfo===", user);
     if (this._isMounted) {
       if (user && user.user_data) {
         this.setState({
+          user: user,
           attachPaperUrl: user.user_data.registration_paper,
           attachphotoUrl: user.user_data.vehicle_photo,
           txtRegNumber: user.user_data.registration_number,
@@ -128,7 +134,7 @@ export class RegistrationDetailsScreen extends Component {
 
   // save all register details
   saveDeatils = async () => {
-    const { txtRegNumber, attachphotoUrl, attachPaperUrl } = this.state;
+    const { txtRegNumber, attachphotoUrl, attachPaperUrl, isFrom } = this.state;
     if (isEmpty(txtRegNumber)) {
       await showMessage({
         message: StaticTitle.registernumberfieldrequire,
@@ -162,13 +168,84 @@ export class RegistrationDetailsScreen extends Component {
         duration: 4000,
       });
     } else {
-      this.registerDetailAPIcall();
+      if (isFrom == "Profile") {
+        this.updateRegisterDetailAPIcall();
+      } else {
+        this.registerDetailAPIcall();
+      }
+    }
+  };
+
+  // API CALL begin of update
+  updateRegisterDetailAPIcall = () => {
+    const { txtRegNumber, attachPaperObj, attachphotoObj, user } = this.state;
+    var params = new FormData();
+    // Collect the necessary params
+    params.append("email", user.user_data.email);
+    params.append("vehicle_photo", attachphotoObj);
+    params.append("registration_number", txtRegNumber);
+    params.append("registration_paper", attachPaperObj);
+    const { updateRegistrationDetail } = this.props;
+
+    console.log(
+      "updateRegisterDetailAPIcall params----------",
+      JSON.stringify(params)
+    );
+    if (globals.isInternetConnected == true) {
+      updateRegistrationDetail(params)
+        .then(async (res) => {
+          console.log(
+            "updateRegisterDetailAPIcall res.value.data---",
+            JSON.stringify(res.value.data.data)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+            } else {
+            }
+          } else {
+            if (res.value && res.value.data.registration_paper) {
+              await showMessage({
+                message: res.value.data.registration_paper,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.vehicle_photo) {
+              await showMessage({
+                message: res.value.data.vehicle_photo,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.registration_number) {
+              await showMessage({
+                message: res.value.data.registration_number,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error Register screen", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
     }
   };
 
   // API CALL begin
   registerDetailAPIcall = () => {
     const { txtRegNumber, attachPaperObj, attachphotoObj } = this.state;
+
     var params = new FormData();
     // Collect the necessary params
     params.append("vehicle_photo", attachphotoObj);
@@ -304,7 +381,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachPaperObj: source,
+            attachphotoObj: source,
           });
         } else {
           this.setState({
@@ -369,9 +446,9 @@ export class RegistrationDetailsScreen extends Component {
       isattachPaper,
       options,
       isattachphoto,
+      isFrom,
     } = this.state;
     const { isLoading, loaderMessage } = this.props;
-
     return (
       <>
         <View style={AuthStyle.container}>
@@ -481,7 +558,11 @@ export class RegistrationDetailsScreen extends Component {
               </View>
               <View style={AuthStyle.signinbtnView}>
                 <PrimaryButton
-                  btnName={StaticTitle.saveDetails}
+                  btnName={
+                    isFrom == "Profile"
+                      ? StaticTitle.updatedetail
+                      : StaticTitle.saveDetails
+                  }
                   onPress={() => this.saveDeatils()}
                 />
               </View>
@@ -501,6 +582,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   registerdetail: (params) => dispatch(actions.registerdetail(params)),
+  updateRegistrationDetail: (params) =>
+    dispatch(actions.updateRegistrationDetail(params)),
 });
 
 export default connect(

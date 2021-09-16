@@ -7,7 +7,7 @@ import * as globals from "../../utils/Globals";
 export const UserProfileStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lite_background,
+    backgroundColor: Colors.liteBg,
   },
   imageview: {
     marginTop: globals.deviceHeight * 0.02,

@@ -38,8 +38,8 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      // txtEmail: "udattani@mailinator.com",
-      // txtPassword: "Abcd@1234",
+      // txtEmail: "2@mailinator.com",
+      // txtPassword: "Abcd1234",
       txtEmail: "",
       txtPassword: "",
       isShowPassword: true,
@@ -77,8 +77,19 @@ export class SignInScreen extends Component {
   };
 
   // user forgot their password then go to ForgotPassword screen
-  gotoForgotPasswordscreen = () => {
-    NavigationService.navigate("ForgotPassword");
+  gotoForgotPasswordscreen = async () => {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
+    if (globals.access_token) {
+      NavigationService.navigate("ForgotPassword");
+    } else {
+      showMessage({
+        message: StaticTitle.forgotpasserror,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+    }
   };
 
   // This function show/hide the password
@@ -210,10 +221,15 @@ export class SignInScreen extends Component {
   }
 
   render() {
-    const { isLoading, loaderMessage,theme } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={[AuthStyle.container,{backgroundColor: theme.PRIMARY_BACKGROUND_COLOR}]}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}

@@ -22,7 +22,6 @@ import { UserProfileStyle } from "../../../assets/styles/UserProfileStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
 import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
-import { NavigationEvents } from "react-navigation";
 import FastImage from "react-native-fast-image";
 import {
   Input,
@@ -31,6 +30,7 @@ import {
   GenerateRandomFileName,
   DropDownPicker,
   Loader,
+  PrimaryButton,
   PrimaryTextinputwithIcon,
 } from "../../../components";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
@@ -41,6 +41,9 @@ import SnapchatIntegration from "../../../components/SnapchatIntegration";
 import { DefaultOptions } from "../../../components/DefaultOptions";
 import * as Authactions from "../../authentication/redux/Actions";
 import Colors from "../../../assets/Colors";
+import * as actions from "../redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { NavigationEvents } from "react-navigation";
 
 const TAG = "UserProfileScreen ::=";
 
@@ -84,10 +87,17 @@ export class UserProfileScreen extends Component {
     this.input = {};
   }
 
-  componentDidMount = async () => {
+  async componentDidMount() {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.onFocusFunction();
+    });
+  }
+
+  /// call everytime didmount
+  onFocusFunction = async () => {
     this._isMounted = true;
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log("USER==", user);
+    console.log("user====didmount", user);
     globals.access_token = user.user_data.token;
     this.setUserInfo(user);
     if (globals.isInternetConnected == true) {
@@ -101,6 +111,7 @@ export class UserProfileScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    this.focusListener.remove();
   }
 
   // set userInformation
@@ -220,11 +231,7 @@ export class UserProfileScreen extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -250,11 +257,7 @@ export class UserProfileScreen extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -269,7 +272,7 @@ export class UserProfileScreen extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails");
+    NavigationService.navigate("RegistrationDetails", { isFrom: "Profile" });
   };
 
   // Navigate to Settings  Screen
@@ -292,6 +295,103 @@ export class UserProfileScreen extends Component {
     this.setState({ selectedCity: text });
   };
 
+  // Update profile API call
+  updateProfileApiCall = () => {
+    const {
+      userDetails,
+      selectedColour,
+      selectedModel,
+      selectedCity,
+      photoObj,
+      txtSnapName,
+      txtInstaName,
+      txtFbName,
+      txtDescription,
+      txtUserName,
+    } = this.state;
+    var params = new FormData();
+
+    // Collect the necessary params
+    const { updateprofile } = this.props;
+    params.append("email", userDetails.email);
+    params.append("username", txtUserName);
+    if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
+      params.append("image", "");
+    } else {
+      params.append("image", photoObj);
+    }
+    params.append("city", selectedCity);
+    params.append("car_make_model", selectedModel);
+    params.append("car_colour", selectedColour);
+    params.append("car_description", txtDescription);
+    params.append("fb_username", txtFbName);
+    params.append("instalgram_username", txtInstaName);
+    params.append("snapchat_username", txtSnapName);
+
+    if (globals.isInternetConnected == true) {
+      console.log("params======", JSON.stringify(params));
+      updateprofile(params)
+        .then(async (res) => {
+          console.log(
+            TAG,
+            "updateprofile res.value.data---",
+            JSON.stringify(res.value.data)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              let userInfo = res.value.data.data;
+              console.log("userInfo====", userInfo.user_data.user_photo);
+              this.setState({
+                userDetails: userInfo.user_data,
+                selectedCity: userInfo.user_data.city,
+                selectedModel: userInfo.user_data.car_make_model,
+                selectedColour: userInfo.user_data.car_colour,
+                txtUserName: userInfo.user_data.username,
+                txtDescription: userInfo.user_data.car_description,
+                photoUrl: userInfo.user_data.user_photo,
+                txtSnapName: userInfo.user_data.snapchat_username,
+                txtInstaName: userInfo.user_data.instagram_username,
+                txtFbName: userInfo.user_data.fb_username,
+              });
+              this.setUser(res.value.data.data);
+              this.forceUpdate();
+            } else {
+            }
+          } else {
+            if (res.value) {
+              // await showMessage({
+              //   message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
+              //   type: "danger",
+              //   icon: "info",
+              //   duration: 4000,
+              // });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error update profile", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
+
+  // save user info in asynch
+  setUser = async (data) => {
+    console.log("set user======data", data);
+    await AsyncStorage.setItem("user", JSON.stringify(data)).catch(
+      (error) => {}
+    );
+    console.log("AsyncStorage responses", JSON.parse(await AsyncStorage.getItem("user")));
+  };
+
   render() {
     const { isLoading, loaderMessage } = this.props;
     const {
@@ -310,6 +410,7 @@ export class UserProfileScreen extends Component {
     return (
       <>
         <View style={UserProfileStyle.container}>
+          {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -357,12 +458,12 @@ export class UserProfileScreen extends Component {
                   }}
                   style={UserProfileStyle.beforeimgView}
                 >
-                  <FastImage
+                  <Image
                     style={[UserProfileStyle.imageStyle]}
                     source={{
-                      uri: photoUrl,
-                      priority: FastImage.priority.normal,
+                      uri: photoUrl,cache: 'reload'
                     }}
+                    key={photoUrl}
                   />
                 </TouchableOpacity>
               ) : (
@@ -394,6 +495,7 @@ export class UserProfileScreen extends Component {
                 />
               </TouchableOpacity>
               <View style={UserProfileStyle.registrationView}>
+                <Text style={UserProfileStyle.changeRegText}>{photoUrl}</Text>
                 <Text style={UserProfileStyle.changeRegText}>
                   {StaticTitle.changeRegistration}
                 </Text>
@@ -492,7 +594,7 @@ export class UserProfileScreen extends Component {
                   defaultValue={
                     selectedCity ? selectedCity : StaticTitle.selectCity
                   }
-                  onSelect={(value) => this.setselectedCity(value)}
+                  renderButtonText={(value) => this.setselectedCity(value)}
                 />
 
                 <DropDownPicker
@@ -500,14 +602,14 @@ export class UserProfileScreen extends Component {
                   defaultValue={
                     selectedModel ? selectedModel : StaticTitle.chooseModal
                   }
-                  onSelect={(value) => this.setselectedModel(value)}
+                  renderButtonText={(value) => this.setselectedModel(value)}
                 />
                 <DropDownPicker
                   options={carColourList}
                   defaultValue={
                     selectedColour ? selectedColour : StaticTitle.selectColor
                   }
-                  onSelect={(value) => this.setselectedColour(value)}
+                  renderButtonText={(value) => this.setselectedColour(value)}
                 />
 
                 <View
@@ -596,6 +698,15 @@ export class UserProfileScreen extends Component {
                           });
                     }}
                   />
+
+                  <View
+                    style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
+                  >
+                    <PrimaryButton
+                      btnName={StaticTitle.update}
+                      onPress={() => this.updateProfileApiCall()}
+                    />
+                  </View>
                 </View>
               </View>
             </ScrollView>
@@ -608,15 +719,16 @@ export class UserProfileScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.auth.user.isLoading,
-    loaderMessage: state.auth.user.loaderMessage,
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getcarmodel: (text) => dispatch(Authactions.getcarmodel(text)),
-  getcarcolour: (text) => dispatch(Authactions.getcarcolour(text)),
-  getcity: (text) => dispatch(Authactions.getcity(text)),
+  getcarmodel: (params) => dispatch(Authactions.getcarmodel(params)),
+  getcarcolour: (params) => dispatch(Authactions.getcarcolour(params)),
+  getcity: (params) => dispatch(Authactions.getcity(params)),
+  updateprofile: (params) => dispatch(actions.updateprofile(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileScreen);

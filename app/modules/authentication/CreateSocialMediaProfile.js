@@ -67,14 +67,14 @@ export class CreateSocialMediaProfile extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails");
+    NavigationService.navigate("RegistrationDetails",{isFrom :'SocialProfile'});
   };
 
   // Navigate to Dashboard screen
   gotoDashboard = async () => {
     if (globals.isRegistrationDeatils == false) {
       await showMessage({
-        message: "You have to fill registration details (REGO)",
+        message: StaticTitle.registerinfoneeded,
         type: "danger",
         icon: "info",
         duration: 4000,
@@ -90,11 +90,11 @@ export class CreateSocialMediaProfile extends Component {
       this.state;
     var params = new FormData();
     // Collect the necessary params
-  
-    if (photoObj != []) {
-      params.append("image", photoObj);
+
+    if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
+      params.append("image", "");
     } else {
-      params.append("image", null);
+      params.append("image", photoObj);
     }
     params.append("fb_username", txtFbName);
     params.append("instalgram_username", txtInstaName);
@@ -102,7 +102,7 @@ export class CreateSocialMediaProfile extends Component {
 
     const { createSocialprofile } = this.props;
     if (globals.isInternetConnected == true) {
-      console.log("params======", params);
+      console.log("params======", JSON.stringify(params));
       createSocialprofile(params)
         .then(async (res) => {
           console.log(
@@ -196,11 +196,7 @@ export class CreateSocialMediaProfile extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -226,11 +222,7 @@ export class CreateSocialMediaProfile extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };

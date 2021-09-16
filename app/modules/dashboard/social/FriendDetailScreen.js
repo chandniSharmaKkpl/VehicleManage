@@ -3,7 +3,7 @@ import {
   View,
   Keyboard,
   FlatList,
-  TouchableWithoutFeedback,
+  Alert,
   Text,
   Image,
   StatusBar,
@@ -13,7 +13,7 @@ import {
 import { connect } from "react-redux";
 import { FriendDetailStyle } from "../../../assets/styles/FriendDetailStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
-import { Search, Header } from "../../../components";
+import { Loader } from "../../../components";
 import NavigationService from "../../../utils/NavigationService";
 import { Messages } from "../../../utils/Messages";
 import { IMAGE } from "../../../assets/Images";
@@ -22,6 +22,9 @@ import FastImage from "react-native-fast-image";
 import Colors from "../../../assets/Colors";
 import LinearGradient from "react-native-linear-gradient";
 import * as globals from "../../../utils/Globals";
+import * as actions from "../redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "FriendDetailScreen ::=";
 
@@ -29,36 +32,148 @@ export class FriendDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      FriendData: this.props.navigation.state.params.FriendData,
+      isfriend: false,
+      getfriendData: this.props.navigation.state.params.FriendData,
+      friendDetail: [],
+      user: {},
     };
   }
 
-  componentDidMount() {}
+  componentDidMount = async () => {
+    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
+    console.log(TAG, "USER== componentDidMount", user);
+    this.setState({ user: user }, () => {
+      this.getuserDetail();
+    });
+  };
+
+  // API call of get user details
+  getuserDetail = async () => {
+    const { getfriendData } = this.state;
+    const { getfriendDetails } = this.props;
+    let params = new URLSearchParams();
+    console.log("getfriendData.id====", getfriendData.id);
+    // Collect the necessary params
+    if (globals.isInternetConnected == true) {
+      params.append("friend_id", getfriendData.id);
+      getfriendDetails(params)
+        .then(async (res) => {
+          console.log(
+            TAG,
+            "response of getfriend Details",
+            JSON.stringify(res.value.data.data)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              this.setState({ friendDetail: res.value.data.data.user_data });
+            }
+          } else {
+            if (res.value && res.value.data.error) {
+              await showMessage({
+                message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error getfriendDetails", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
 
   // Navigate to back friend list screen
   gotoback = () => {
     NavigationService.back();
   };
 
-  render() {
-    const { FriendData } = this.state;
+  // AddasFriend API
+  AddasFriend = () => {
+    const { getfriendData, user } = this.state;
+    const { addfriend } = this.props;
+    let params = new URLSearchParams();
+    console.log("getfriendData.id====", getfriendData.id);
+    // Collect the necessary params
+    if (globals.isInternetConnected == true) {
+      params.append("user_id", user.user_data.user_id);
+      params.append("friend_id", getfriendData.id);
+      console.log("params====", JSON.stringify(params));
+      addfriend(params)
+        .then(async (res) => {
+          console.log(TAG, "response of addfriend", JSON.stringify(res));
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              this.setState({ isfriend: true });
+            }
+          } else {
+            if (res.value && res.value.data.error) {
+              await showMessage({
+                message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error addfriend", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
 
+  render() {
+    const { isLoading, loaderMessage, theme } = this.props;
+
+    const { friendDetail } = this.state;
     return (
       <>
         <View style={FriendDetailStyle.container}>
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
             translucent={true}
           />
           <View style={FriendDetailStyle.halfContainer}>
-            <FastImage
-              style={FriendDetailStyle.imageStyle}
-              source={{
-                uri: FriendData.Img,
-                priority: FastImage.priority.normal,
-              }}
-            />
+            {friendDetail.user_photo ? (
+              <FastImage
+                style={[FriendDetailStyle.imageStyle]}
+                source={{
+                  uri: friendDetail.user_photo,
+                  priority: FastImage.priority.normal,
+                }}
+              />
+            ) : (
+              <Image
+                resizeMethod="resize"
+                source={IMAGE.user}
+                style={[FriendDetailStyle.imageStyle]}
+              />
+            )}
+
             <View style={FriendDetailStyle.backbtnview}>
               <TouchableOpacity
                 onPress={() => this.gotoback()}
@@ -73,14 +188,15 @@ export class FriendDetailScreen extends Component {
             </View>
             <View style={FriendDetailStyle.userdetailview}>
               <Text numberOfLines={2} style={FriendDetailStyle.headingtitle}>
-                {FriendData.Owner_Name}
+                {friendDetail.username}
               </Text>
               <Text numberOfLines={1} style={FriendDetailStyle.titletext}>
-                {FriendData.Name}
+                {friendDetail.city}
               </Text>
             </View>
             <View style={FriendDetailStyle.middleview}>
               <TouchableOpacity
+                onPress={() => this.AddasFriend()}
                 style={[
                   FriendDetailStyle.circleview,
                   { backgroundColor: Colors.primary },
@@ -131,7 +247,7 @@ export class FriendDetailScreen extends Component {
           <View style={FriendDetailStyle.secondhalfview}>
             <View style={FriendDetailStyle.descriptionContainer}>
               <Text numberOfLines={1} style={FriendDetailStyle.dectext}>
-                {FriendData.Owner_Name}
+                {"About" + " " + friendDetail.username}
               </Text>
               <ScrollView
                 ref={(node) => (this.scroll = node)}
@@ -139,23 +255,29 @@ export class FriendDetailScreen extends Component {
                 enableOnAndroid={true}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="never"
-                  style={{ height: globals.deviceHeight * 0.25,}}
+                style={{ height: globals.deviceHeight * 0.25 }}
               >
                 <Text style={FriendDetailStyle.itemtext}>
-                  {StaticTitle.dummy}
+                  {friendDetail.user_description}
                 </Text>
               </ScrollView>
             </View>
           </View>
           <View style={FriendDetailStyle.bottomview}>
             <TouchableOpacity
-              style={[FriendDetailStyle.bottomcircleview]}
+              style={[
+                FriendDetailStyle.bottomcircleview,
+                {
+                  opacity: this.state.isfriend == true ? 0.5 : 0.5,
+                  // backgroundColor: this.state.isfriend == true ?Colors.btnSecondaryPrimary :Colors.btnSecondaryPrimary,
+                },
+              ]}
             >
               <FastImage
-                  style={[FriendDetailStyle.bottomicon]}
-                  source={IMAGE.chatboxes_img}
-                  tintColor={Colors.white}
-                />
+                style={[FriendDetailStyle.bottomicon]}
+                source={IMAGE.chatboxes_img}
+                tintColor={Colors.white}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -164,15 +286,16 @@ export class FriendDetailScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({
+  getfriendDetails: (params) => dispatch(actions.getfriendDetails(params)),
+  addfriend: (params) => dispatch(actions.addfriend(params)),
+});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(FriendDetailScreen);
-export default FriendDetailScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(FriendDetailScreen);

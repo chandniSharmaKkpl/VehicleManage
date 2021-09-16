@@ -32,7 +32,7 @@ export const AuthStyle = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.lite_background,
+    backgroundColor: Colors.liteBg,
   },
   logincontainer: {
     flex: 1,
@@ -52,7 +52,7 @@ export const AuthStyle = StyleSheet.create({
     flexDirection: "row",
     height: 40,
     alignItems: "center",
-    backgroundColor: Colors.placeholderColor,
+    backgroundColor: Colors.primary,
     // opacity:0.5
   },
   dropdown_row_text: {
@@ -67,6 +67,9 @@ export const AuthStyle = StyleSheet.create({
     width: "90%",
     // height: 300,
     flex:1,
+    borderWidth: 8,
+    borderRadius:8,
+    borderColor: 'white',
   },
   placeholder_font: {
     color: Colors.placeholderColor,
@@ -74,7 +77,7 @@ export const AuthStyle = StyleSheet.create({
     fontSize: globals.font_14,
   },
   pickerinput: {
-    height: 35,
+    height: 45,
     marginHorizontal: 20,
     borderBottomWidth: 0.8,
     marginTop: 20,
