@@ -30,6 +30,9 @@ const SearchStack = createStackNavigator(
     RecentViewers: {
       screen: RecentViewersScreen,
     },
+    FriendDetail: {
+      screen: FriendDetailScreen,
+    },
   },
   {
     headerMode: "none",
@@ -166,13 +169,13 @@ const TabNavigator = createBottomTabNavigator(
           </SafeAreaView>
         );
       },
-      //In this code to, flickering screen when navigate after any home screen
+      // In this code to, flickering screen when navigate after any home screen
 
-      // tabBarOnPress: ({ navigation }) => {
-      //   const { routeName } = navigation.state;
-      //   navigation.popToTop();
-      //   navigation.navigate(routeName);
-      // },
+      tabBarOnPress: ({ navigation }) => {
+        const { routeName } = navigation.state;
+        navigation.popToTop();
+        navigation.navigate(routeName);
+      },
 
       animationEnabled: true,
       swipeEnabled: true,

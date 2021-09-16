@@ -55,7 +55,7 @@ export class RegistrationDetailsScreen extends Component {
       regNumberValidMsg: "",
       options: DefaultOptions,
       isFrom: this.props.navigation.state.params.isFrom,
-      user:{}
+      user: {},
     };
   }
 
@@ -67,17 +67,19 @@ export class RegistrationDetailsScreen extends Component {
     // get asynchg stored value
     // await this.setRegistrationDetailInfo();
     this._isMounted = true;
-    this.setUserInfo();
+    if (this.state.isFrom == "Profile") {
+      this.setUserInfo();
+    }
   };
 
   // set userInformation
   setUserInfo = async () => {
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log(TAG,"user==setUserInfo===", user);
+    console.log(TAG, "user==setUserInfo===", user);
     if (this._isMounted) {
       if (user && user.user_data) {
         this.setState({
-          user:user,
+          user: user,
           attachPaperUrl: user.user_data.registration_paper,
           attachphotoUrl: user.user_data.vehicle_photo,
           txtRegNumber: user.user_data.registration_number,
@@ -130,8 +132,6 @@ export class RegistrationDetailsScreen extends Component {
     this.setState({ isattachphoto: false });
   };
 
-
-
   // save all register details
   saveDeatils = async () => {
     const { txtRegNumber, attachphotoUrl, attachPaperUrl, isFrom } = this.state;
@@ -177,7 +177,7 @@ export class RegistrationDetailsScreen extends Component {
   };
 
   // API CALL begin of update
-  updateRegisterDetailAPIcall= () => {
+  updateRegisterDetailAPIcall = () => {
     const { txtRegNumber, attachPaperObj, attachphotoObj, user } = this.state;
     var params = new FormData();
     // Collect the necessary params
@@ -187,11 +187,17 @@ export class RegistrationDetailsScreen extends Component {
     params.append("registration_paper", attachPaperObj);
     const { updateRegistrationDetail } = this.props;
 
-    console.log("updateRegisterDetailAPIcall params----------", JSON.stringify(params));
+    console.log(
+      "updateRegisterDetailAPIcall params----------",
+      JSON.stringify(params)
+    );
     if (globals.isInternetConnected == true) {
       updateRegistrationDetail(params)
         .then(async (res) => {
-          console.log("updateRegisterDetailAPIcall res.value.data---", JSON.stringify(res.value.data.data));
+          console.log(
+            "updateRegisterDetailAPIcall res.value.data---",
+            JSON.stringify(res.value.data.data)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -234,13 +240,12 @@ export class RegistrationDetailsScreen extends Component {
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
-  }
+  };
 
   // API CALL begin
   registerDetailAPIcall = () => {
-   
     const { txtRegNumber, attachPaperObj, attachphotoObj } = this.state;
-  
+
     var params = new FormData();
     // Collect the necessary params
     params.append("vehicle_photo", attachphotoObj);
@@ -248,11 +253,11 @@ export class RegistrationDetailsScreen extends Component {
     params.append("registration_paper", attachPaperObj);
     const { registerdetail } = this.props;
 
-    // console.log("params----------", JSON.stringify(params));
+    console.log("params----------", JSON.stringify(params));
     if (globals.isInternetConnected == true) {
       registerdetail(params)
         .then(async (res) => {
-          // console.log("res.value.data---", JSON.stringify(res.value.data.data));
+          console.log("res.value.data---", JSON.stringify(res.value.data.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -376,7 +381,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-              attachphotoObj: source,
+            attachphotoObj: source,
           });
         } else {
           this.setState({

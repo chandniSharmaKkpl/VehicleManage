@@ -38,6 +38,7 @@ const DropDownPicker = ({
       renderRow={dropdown_renderRow}
       onSelect={onSelect}
       renderButtonText={renderButtonText}
+      keyboardShouldPersistTaps={"handled"}
     />
   );
 };

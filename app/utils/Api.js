@@ -76,7 +76,9 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/createprofileone" ||
       request.url === "api/search_by_vehicle" ||
       request.url === "api/updateProfile" ||
-      request.url === "api/friend_list"
+      request.url === "api/friend_list" ||
+      request.url === "api/friend_detail" ||
+      request.url === "add_friend"
     ) {
       request.headers = makeURLencodedPostHeaders();
     } else {
