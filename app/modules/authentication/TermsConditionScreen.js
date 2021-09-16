@@ -5,6 +5,7 @@ import { Header, Loader } from "../../components";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import NavigationService from "../../utils/NavigationService";
 import { termsCondURL } from "../../config/BaseURL";
+import { connect } from "react-redux";
 
 export class TermsConditionScreen extends Component {
   constructor(props) {
@@ -28,15 +29,20 @@ export class TermsConditionScreen extends Component {
     this.backHandler.remove();
   }
   render() {
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage,theme } = this.props;
 
     return (
       <>
-        <View style={[AuthStyle.container]}>
+       <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           <Header
-            onPress={() => this.gotoBackScreen()}
             isShowBack={true}
             title={"Terms And Condition"}
+            theme={theme}
           />
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
@@ -57,4 +63,18 @@ export class TermsConditionScreen extends Component {
   }
 }
 
-export default TermsConditionScreen;
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.user.isLoading,
+    loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
+  };
+};
+const mapDispatchToProps = () => ({
+  
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TermsConditionScreen);

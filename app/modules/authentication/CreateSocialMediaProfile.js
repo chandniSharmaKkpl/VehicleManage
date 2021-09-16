@@ -67,7 +67,9 @@ export class CreateSocialMediaProfile extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails",{isFrom :'SocialProfile'});
+    NavigationService.navigate("RegistrationDetails", {
+      isFrom: "SocialProfile",
+    });
   };
 
   // Navigate to Dashboard screen
@@ -237,14 +239,19 @@ export class CreateSocialMediaProfile extends Component {
 
   render() {
     const { photoUrl, isGalleryPicker, options } = this.state;
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <Header isShowBack={true} title={StaticTitle.createProfile} />
+          <Header isShowBack={true} title={StaticTitle.createProfile} theme={theme} />
 
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
@@ -342,6 +349,7 @@ export class CreateSocialMediaProfile extends Component {
                     style={[
                       AuthStyle.RectangleShapeView,
                       {
+                        backgroundColor: Colors.white,
                         borderColor: Colors.black,
                       },
                     ]}
@@ -464,6 +472,7 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

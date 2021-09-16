@@ -448,14 +448,23 @@ export class RegistrationDetailsScreen extends Component {
       isattachphoto,
       isFrom,
     } = this.state;
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <Header isShowBack={true} title={StaticTitle.registartionDetail} />
+          <Header
+            isShowBack={true}
+            title={StaticTitle.registartionDetail}
+            theme={theme}
+          />
           <ScrollView
             ref={(node) => (this.scroll = node)}
             automaticallyAdjustContentInsets={true}
@@ -504,7 +513,14 @@ export class RegistrationDetailsScreen extends Component {
                 </Text>
               </View>
               <View style={[AuthStyle.registerContent]}>
-                <Text style={[AuthStyle.registrationContentTextStyle]}>
+                <Text
+                  style={[
+                    AuthStyle.registrationContentTextStyle,
+                    {
+                      color: theme.LITE_FONT_COLOR,
+                    },
+                  ]}
+                >
                   {StaticTitle.registerContent}
                 </Text>
               </View>
@@ -578,6 +594,7 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

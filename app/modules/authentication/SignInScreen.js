@@ -38,10 +38,10 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      // txtEmail: "2@mailinator.com",
-      // txtPassword: "Abcd1234",
-      txtEmail: "",
-      txtPassword: "",
+      txtEmail: "22@mailinator.com",
+      txtPassword: "Abcd1234",
+      // txtEmail: "",
+      // txtPassword: "",
       isShowPassword: true,
       isEmailError: false,
       isPasswordError: false,
@@ -222,6 +222,7 @@ export class SignInScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
+   
     return (
       <>
         <View
@@ -245,15 +246,28 @@ export class SignInScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
+                  }
+                  style={AuthStyle.imglogo}
+                />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
+                  }
+                  style={AuthStyle.imgcar}
+                />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
-                style={AuthStyle.bottomCurve}
+                style={[
+                  AuthStyle.bottomCurve,
+                  { backgroundColor: theme.CURVE_BG_COLORS },
+                ]}
               >
                 <ScrollView
                   ref={(node) => (this.scroll = node)}

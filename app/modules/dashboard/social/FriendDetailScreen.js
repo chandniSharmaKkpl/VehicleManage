@@ -111,7 +111,7 @@ export class FriendDetailScreen extends Component {
       console.log("params====", JSON.stringify(params));
       addfriend(params)
         .then(async (res) => {
-          console.log(TAG, "response of addfriend", JSON.stringify(res));
+          console.log(TAG, "response of addfriend", JSON.stringify(res.value));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -148,7 +148,12 @@ export class FriendDetailScreen extends Component {
     const { friendDetail } = this.state;
     return (
       <>
-        <View style={FriendDetailStyle.container}>
+        <View
+          style={[
+            FriendDetailStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -244,7 +249,12 @@ export class FriendDetailScreen extends Component {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={FriendDetailStyle.secondhalfview}>
+          <View
+            style={[
+              FriendDetailStyle.secondhalfview,
+              { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+            ]}
+          >
             <View style={FriendDetailStyle.descriptionContainer}>
               <Text numberOfLines={1} style={FriendDetailStyle.dectext}>
                 {"About" + " " + friendDetail.username}
@@ -257,7 +267,12 @@ export class FriendDetailScreen extends Component {
                 keyboardShouldPersistTaps="never"
                 style={{ height: globals.deviceHeight * 0.25 }}
               >
-                <Text style={FriendDetailStyle.itemtext}>
+                <Text
+                  style={[
+                    FriendDetailStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {friendDetail.user_description}
                 </Text>
               </ScrollView>
@@ -268,8 +283,7 @@ export class FriendDetailScreen extends Component {
               style={[
                 FriendDetailStyle.bottomcircleview,
                 {
-                  opacity: this.state.isfriend == true ? 0.5 : 0.5,
-                  // backgroundColor: this.state.isfriend == true ?Colors.btnSecondaryPrimary :Colors.btnSecondaryPrimary,
+                  backgroundColor:theme.CHAT_BTN_COLOR,
                 },
               ]}
             >
@@ -290,6 +304,7 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
   };
 };
 

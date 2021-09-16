@@ -247,19 +247,23 @@ export class CreateProfileScreen extends PureComponent {
   };
 
   render() {
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     const { cityList, carModelList, carColourList } = this.state;
     return (
       <>
-        <View style={AuthStyle.container}>
-        {isLoading && (
-              <Loader isOverlay={true} loaderMessage={loaderMessage} />
-            )}
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
           <KeyboardAwareScrollView
             showsVerticalScrollIndicator={false}
             scrollIndicatorInsets={{ right: 1 }}
           >
-            
             <NavigationEvents onWillBlur={() => this.clearStates()} />
             <StatusBar
               barStyle="light-content"
@@ -269,13 +273,28 @@ export class CreateProfileScreen extends PureComponent {
 
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
+                  }
+                  style={AuthStyle.imglogo}
+                />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
+                  }
+                  style={AuthStyle.imgcar}
+                />
               </View>
-              <View style={AuthStyle.bottomCurve}>
+              <View
+                style={[
+                  AuthStyle.bottomCurve,
+                  { backgroundColor: theme.CURVE_BG_COLORS },
+                ]}
+              >
                 <ScrollView
                   ref={(node) => (this.scroll = node)}
                   automaticallyAdjustContentInsets={true}
@@ -297,7 +316,10 @@ export class CreateProfileScreen extends PureComponent {
                     </View>
                     <Input
                       value={this.state.txtUserName}
-                      inputStyle={{ marginTop: 0 , color:Colors.placeholderColor}}
+                      inputStyle={{
+                        marginTop: 0,
+                        color: Colors.placeholderColor,
+                      }}
                       placeholderText={StaticTitle.enterUserName}
                       onSubmitEditing={Keyboard.dismiss}
                       blurOnSubmit={false}
@@ -338,7 +360,7 @@ export class CreateProfileScreen extends PureComponent {
 
                     <Input
                       value={this.state.txtDescription}
-                      inputStyle={{ color:Colors.placeholderColor}}
+                      inputStyle={{ color: Colors.placeholderColor }}
                       placeholderText={StaticTitle.addDescription}
                       onSubmitEditing={Keyboard.dismiss}
                       forwardRef={(ref) => {
@@ -388,6 +410,7 @@ const mapStateToProps = (state) => {
     userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 

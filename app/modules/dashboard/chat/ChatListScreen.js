@@ -25,10 +25,13 @@ export class ChatListScreen extends Component {
     super(props);
     this.state = {
       chatListData: DummyData,
+      theme: {},
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({ theme: this.props.theme });
+  }
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
@@ -54,12 +57,29 @@ export class ChatListScreen extends Component {
         )}
         <View style={FriendListStyle.userdetail}>
           <Text style={FriendListStyle.titleBig}>{item.Owner_Name}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.Name}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.Num}</Text>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.Name}
+          </Text>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.Num}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() => this.gotoChatDetails()}
-          style={FriendListStyle.squareView}
+          style={[
+            FriendListStyle.squareView,
+            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+          ]}
         >
           <FastImage
             style={[FriendListStyle.navigateimgStyle]}
@@ -82,11 +102,22 @@ export class ChatListScreen extends Component {
 
   render() {
     const { chatListData } = this.state;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={FriendListStyle.container}>
-          <Header title={StaticTitle.msges} isShowSidebar={true} />
+        <View
+          style={[
+            FriendListStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
+          <Header
+            title={StaticTitle.msges}
+            isShowSidebar={true}
+            theme={theme}
+          />
           <Search
+            theme={theme}
             blurOnSubmit={false}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
@@ -114,15 +145,15 @@ export class ChatListScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(ChatListScreen);
-export default ChatListScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(ChatListScreen);
+// export default ChatListScreen;

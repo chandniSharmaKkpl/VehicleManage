@@ -20,8 +20,9 @@ const Search = ({
   iconStyle,
   onPress,
   value,
+  theme,
 }) => (
-  <View style={ComponentStyle.searchContainer}>
+  <View style={[ComponentStyle.searchContainer,{ backgroundColor: theme.CURVE_BG_COLORS,}]}>
     <TextInput
       value={value}
       searchMessage={searchMessage}

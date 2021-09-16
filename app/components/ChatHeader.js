@@ -20,6 +20,7 @@ import NavigationService from "../utils/NavigationService";
 import * as globals from "../utils/Globals";
 
 const ChatHeader = ({
+  theme,
   headerStyle,
   title,
   onPress,
@@ -39,8 +40,8 @@ const ChatHeader = ({
     NavigationService.navigate("Notification");
   };
   return (
-    <SafeAreaView style={ComponentStyle.headerContainer}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <SafeAreaView style={[ComponentStyle.headerContainer,{ backgroundColor: theme.ANDROID_STATUR_BAR_COLOR}]}>
+      <StatusBar barStyle="light-content" backgroundColor={theme.ANDROID_STATUR_BAR_COLOR} />
 
       <View
         style={[

@@ -70,10 +70,20 @@ export class PrivacySettingsScreen extends Component {
       isHideDisplayName,
       isHideSearchUser,
     } = this.state;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={PrivacySettingStyle.container}>
-          <Header isShowBack={true} title={StaticTitle.privacysettings} />
+        <View
+          style={[
+            PrivacySettingStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
+          <Header
+            isShowBack={true}
+            title={StaticTitle.privacysettings}
+            theme={theme}
+          />
           <View style={PrivacySettingStyle.maincontainer}>
             <Text style={PrivacySettingStyle.headingtitle}>
               {StaticTitle.privacysettings}
@@ -87,10 +97,16 @@ export class PrivacySettingsScreen extends Component {
               keyboardShouldPersistTaps="never"
             >
               <View style={PrivacySettingStyle.itemview}>
-                <Text style={PrivacySettingStyle.itemtext}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.hideprofile}
                 </Text>
                 <SwitchComponent
+                  theme={theme}
                   value={isHideProfile}
                   onValueChange={this.changeHideProfile}
                 />
@@ -98,10 +114,16 @@ export class PrivacySettingsScreen extends Component {
               <View style={PrivacySettingStyle.separatorLine}></View>
 
               <View style={PrivacySettingStyle.itemview}>
-                <Text style={PrivacySettingStyle.itemtext}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.hidecity}
                 </Text>
                 <SwitchComponent
+                  theme={theme}
                   value={isHideCity}
                   onValueChange={this.changeHideCity}
                 />
@@ -109,10 +131,16 @@ export class PrivacySettingsScreen extends Component {
               <View style={PrivacySettingStyle.separatorLine}></View>
 
               <View style={PrivacySettingStyle.itemview}>
-                <Text style={PrivacySettingStyle.itemtext}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.hidemodelofcar}
                 </Text>
                 <SwitchComponent
+                  theme={theme}
                   value={isHideCarModel}
                   onValueChange={this.changeHideCarModel}
                 />
@@ -120,10 +148,16 @@ export class PrivacySettingsScreen extends Component {
               <View style={PrivacySettingStyle.separatorLine}></View>
 
               <View style={PrivacySettingStyle.itemview}>
-                <Text style={PrivacySettingStyle.itemtext}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.requestforsocial}
                 </Text>
                 <SwitchComponent
+                  theme={theme}
                   value={isHideRequestSocial}
                   onValueChange={this.changeHideRequestSocial}
                 />
@@ -131,10 +165,16 @@ export class PrivacySettingsScreen extends Component {
               <View style={PrivacySettingStyle.separatorLine}></View>
 
               <View style={PrivacySettingStyle.itemview}>
-                <Text style={PrivacySettingStyle.itemtext}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.sharesocial}
                 </Text>
                 <SwitchComponent
+                  theme={theme}
                   value={isHideShareSocial}
                   onValueChange={this.changeHideShareSocial}
                 />
@@ -142,10 +182,16 @@ export class PrivacySettingsScreen extends Component {
               <View style={PrivacySettingStyle.separatorLine}></View>
 
               <View style={PrivacySettingStyle.itemview}>
-                <Text style={PrivacySettingStyle.itemtext}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.displayname}
                 </Text>
                 <SwitchComponent
+                  theme={theme}
                   value={isHideDisplayName}
                   onValueChange={this.changeHideDisplayName}
                 />
@@ -162,10 +208,16 @@ export class PrivacySettingsScreen extends Component {
               </Text>
               <View style={PrivacySettingStyle.separatorLine}></View>
               <View style={PrivacySettingStyle.itemview}>
-                <Text style={PrivacySettingStyle.itemtext}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.hidesearchuser}
                 </Text>
                 <SwitchComponent
+                  theme={theme}
                   value={isHideSearchUser}
                   onValueChange={this.changeHideSearchUser}
                 />
@@ -179,15 +231,17 @@ export class PrivacySettingsScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(PrivacySettingsScreen);
-export default PrivacySettingsScreen;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PrivacySettingsScreen);

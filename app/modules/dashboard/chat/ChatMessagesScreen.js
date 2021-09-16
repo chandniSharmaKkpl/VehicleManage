@@ -87,11 +87,12 @@ export class ChatMessagesScreen extends Component {
 
   render() {
     const { isMsgReportPicker, options, txtmessage, messages } = this.state;
-    console.log("messages-------", messages);
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
         <View style={ChatStyle.container}>
           <ChatHeader
+            theme={theme}
             isShowBack={true}
             title={"URvi"}
             isShowRighttwo={true}
@@ -157,7 +158,7 @@ export class ChatMessagesScreen extends Component {
             renderMessage={renderMessage}
             renderMessageText={renderMessageText}
             isCustomViewBottom
-            messagesContainerStyle={{ backgroundColor: Colors.lite_background }}
+            messagesContainerStyle={{ backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }}
             parsePatterns={(linkStyle) => [
               {
                 pattern: /#(\w+)/,
@@ -172,15 +173,14 @@ export class ChatMessagesScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(ChatMessagesScreen);
-export default ChatMessagesScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(ChatMessagesScreen);
