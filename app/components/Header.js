@@ -20,6 +20,7 @@ import {
 import NavigationService from "../utils/NavigationService";
 
 const Header = ({
+  theme,
   headerStyle,
   title,
   onPress,
@@ -39,8 +40,8 @@ const Header = ({
     NavigationService.navigate("Notification");
   };
   return (
-    <SafeAreaView style={ComponentStyle.headerContainer}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <SafeAreaView style={[ComponentStyle.headerContainer,{ backgroundColor: theme.ANDROID_STATUR_BAR_COLOR}]}>
+      <StatusBar barStyle="light-content" backgroundColor={theme.ANDROID_STATUR_BAR_COLOR} />
 
       <View
         style={[

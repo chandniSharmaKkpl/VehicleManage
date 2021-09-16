@@ -46,7 +46,7 @@ export class LoginScreen extends Component {
     this._isMounted = true;
     let them_mode = await AsyncStorage.getItem("them_mode");
     await this.fetchUserDetails();
-     
+
     console.log(TAG, "componentDidMount ======them_mode", them_mode);
     var newTheme = lightTheme;
     if (them_mode === globals.THEME_MODE.DARK) {
@@ -85,7 +85,7 @@ export class LoginScreen extends Component {
   render() {
     const { isLoading, loaderMessage } = this.props;
     const { theme } = this.state;
-    // console.log("render state", this.state.theme);
+    
 
     if (theme == undefined || theme.PRIMARY_BACKGROUND_COLOR === undefined) {
       return <></>;
@@ -107,11 +107,18 @@ export class LoginScreen extends Component {
             translucent={true}
           />
           <View style={AuthStyle.imglogoContainer}>
-            <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
+            <Image
+              source={
+                theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
+              }
+              style={AuthStyle.imglogo}
+            />
           </View>
 
           <View style={AuthStyle.imgcarContainer}>
-            <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
+            <Image source={
+                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
+                  } style={AuthStyle.imgcar} />
           </View>
 
           <View style={AuthStyle.titleContainer}>

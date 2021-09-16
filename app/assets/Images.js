@@ -31,6 +31,8 @@ const IMAGE = {
   terms_conditions_img:require("../assets/images/terms_conditions.png"),
   subscription_img:require("../assets/images/subscription.png"),
   sign_out_img:require("../assets/images/sign_out.png"),
+  dark_Logo_img :require("../assets/images/dark_Logo.png"),
+  dark_Car_img:require("../assets/images/dark_Car.png"),
 };
 
 export { IMAGE };

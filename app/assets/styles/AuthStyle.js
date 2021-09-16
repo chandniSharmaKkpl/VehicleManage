@@ -66,10 +66,10 @@ export const AuthStyle = StyleSheet.create({
   dropdown: {
     width: "90%",
     // height: 300,
-    flex:1,
+    flex: 1,
     borderWidth: 8,
-    borderRadius:8,
-    borderColor: 'white',
+    borderRadius: 8,
+    borderColor: "white",
   },
   placeholder_font: {
     color: Colors.placeholderColor,
@@ -82,12 +82,11 @@ export const AuthStyle = StyleSheet.create({
     borderBottomWidth: 0.8,
     marginTop: 20,
     borderBottomColor: Colors.border_color,
-    color: Colors.red,
   },
   imglogoContainer: {
     // flex: 0.1,
     height: 50,
-    
+
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
@@ -138,7 +137,7 @@ export const AuthStyle = StyleSheet.create({
   lineContainer: {
     height: Platform.OS == "ios" ? 0.7 : 0.9,
     width: globals.deviceWidth * 0.4,
-    backgroundColor: Colors.black,
+    // backgroundColor: Colors.black,
   },
   smallText: {
     fontFamily: FontFamily.RalewayMedium,
@@ -328,7 +327,7 @@ export const AuthStyle = StyleSheet.create({
     width: 70 * 2,
     height: 60,
     backgroundColor: Colors.white,
-    
+
     borderWidth: 2,
     borderRadius: 8,
     alignSelf: "center",

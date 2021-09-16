@@ -34,15 +34,28 @@ export class FriendlistScreen extends Component {
       txtSearch: "",
       friendListData: [],
       user: {},
+      theme: {},
     };
   }
 
-  componentDidMount = async () => {
+  async componentDidMount() {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.onFocusFunction();
+    });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    this.focusListener.remove();
+  }
+  
+  /// call everytime didmount
+  onFocusFunction = async () => {
     this._isMounted = true;
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
     console.log(TAG, "USER== componentDidMount", user);
     globals.access_token = user.user_data.token;
-    this.setState({ user: user });
+    this.setState({ user: user, theme: this.props.theme });
     if (globals.isInternetConnected == true) {
       await this.getfriendListAPI();
     } else {
@@ -74,7 +87,11 @@ export class FriendlistScreen extends Component {
               icon: "info",
               duration: 4000,
             });
-            this.setState({ friendListData: res.value.data.data.friend_list });
+            if (this._isMounted) {
+              this.setState({
+                friendListData: res.value.data.data.friend_list,
+              });
+            }
           }
         } else {
           if (res.value && res.value.data.error) {
@@ -125,16 +142,29 @@ export class FriendlistScreen extends Component {
           <Text style={FriendListStyle.titleBig}>
             {item.name ? item.name : "-"}
           </Text>
-          <Text style={FriendListStyle.titleSmall}>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.car_make_model ? item.car_make_model : "-"}
           </Text>
-          <Text style={FriendListStyle.titleSmall}>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.registration_number ? item.registration_number : "-"}
           </Text>
         </View>
         <TouchableOpacity
           onPress={() => this.gotoFriendDetails(item)}
-          style={FriendListStyle.squareView}
+          style={[
+            FriendListStyle.squareView,
+            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+          ]}
         >
           <FastImage
             style={[FriendListStyle.navigateimgStyle]}
@@ -158,16 +188,26 @@ export class FriendlistScreen extends Component {
   render() {
     const { friendListData } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
-    
+
     return (
       <>
-        <View style={FriendListStyle.container}>
+        <View
+          style={[
+            FriendListStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
           <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <Header title={StaticTitle.frndList} isShowSidebar={true} />
+          <Header
+            title={StaticTitle.frndList}
+            isShowSidebar={true}
+            theme={theme}
+          />
           <Search
+            theme={theme}
             blurOnSubmit={false}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
@@ -205,6 +245,7 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
   };
 };
 

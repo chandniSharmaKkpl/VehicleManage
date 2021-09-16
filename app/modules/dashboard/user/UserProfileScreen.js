@@ -389,11 +389,14 @@ export class UserProfileScreen extends Component {
     await AsyncStorage.setItem("user", JSON.stringify(data)).catch(
       (error) => {}
     );
-    console.log("AsyncStorage responses", JSON.parse(await AsyncStorage.getItem("user")));
+    console.log(
+      "AsyncStorage responses",
+      JSON.parse(await AsyncStorage.getItem("user"))
+    );
   };
 
   render() {
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     const {
       photoUrl,
       options,
@@ -409,12 +412,16 @@ export class UserProfileScreen extends Component {
 
     return (
       <>
-        <View style={UserProfileStyle.container}>
+        <View style={[UserProfileStyle.container,{ backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }]}>
           {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <Header title={StaticTitle.userProfile} isShowSidebar={true} />
+          <Header
+            title={StaticTitle.userProfile}
+            isShowSidebar={true}
+            theme={theme}
+          />
 
           <View>
             <MediaModel
@@ -461,7 +468,8 @@ export class UserProfileScreen extends Component {
                   <Image
                     style={[UserProfileStyle.imageStyle]}
                     source={{
-                      uri: photoUrl,cache: 'reload'
+                      uri: photoUrl,
+                      cache: "reload",
                     }}
                     key={photoUrl}
                   />
@@ -495,7 +503,7 @@ export class UserProfileScreen extends Component {
                 />
               </TouchableOpacity>
               <View style={UserProfileStyle.registrationView}>
-                <Text style={UserProfileStyle.changeRegText}>{photoUrl}</Text>
+                {/* <Text style={UserProfileStyle.changeRegText}>{photoUrl}</Text> */}
                 <Text style={UserProfileStyle.changeRegText}>
                   {StaticTitle.changeRegistration}
                 </Text>
@@ -721,6 +729,7 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
   };
 };
 

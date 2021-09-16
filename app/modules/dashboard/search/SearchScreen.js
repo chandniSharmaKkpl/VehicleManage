@@ -30,12 +30,14 @@ export class SearchScreen extends Component {
     this.state = {
       txtSearch: "Gj",
       searchListdata: [],
+      theme: {},
     };
   }
 
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
+    this.setState({ theme: this.props.theme });
   }
 
   // clear States before leave this screen
@@ -101,12 +103,12 @@ export class SearchScreen extends Component {
   renderSearchList = ({ item, index }) => {
     return (
       <View style={FriendListStyle.itemcell}>
-        {item.user_photo ? (
+        {item.avatar ? (
           <View style={FriendListStyle.imageStyle}>
             <FastImage
               style={[FriendListStyle.imageStyle]}
               source={{
-                uri: item.user_photo,
+                uri: item.avatar,
               }}
             />
           </View>
@@ -123,15 +125,28 @@ export class SearchScreen extends Component {
           <Text style={FriendListStyle.titleBig}>
             {item.name + item.surname}
           </Text>
-          <Text style={FriendListStyle.titleSmall}>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.car_make_model ? item.car_make_model : "-"}
           </Text>
-          <Text style={FriendListStyle.titleSmall}>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.registration_number ? item.registration_number : "-"}
           </Text>
         </View>
         <TouchableOpacity
-          style={FriendListStyle.squareView}
+          style={[
+            FriendListStyle.squareView,
+            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+          ]}
           onPress={() => this.navigateToDetailScreen(item, index)}
         >
           <FastImage
@@ -156,16 +171,26 @@ export class SearchScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { txtSearch, searchListdata } = this.state;
-
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
           <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <Header isShowBack={false} title={""} isShowRighttwo={true} />
+          <Header
+            isShowBack={false}
+            title={""}
+            isShowRighttwo={true}
+            theme={theme}
+          />
           <Search
+            theme={theme}
             value={txtSearch}
             blurOnSubmit={false}
             returnKeyType="done"
@@ -179,16 +204,22 @@ export class SearchScreen extends Component {
             placeholderText={StaticTitle.searchbyVehicalNum}
             onPress={() => this.getSearchResult()}
           />
-          {searchListdata ? (
-            <FlatList
-              data={searchListdata}
-              style={FriendListStyle.flatliststyle}
-              renderItem={(item, index) => this.renderSearchList(item, index)}
-              keyExtractor={(item, index) => "D" + index.toString()}
-              showsVerticalScrollIndicator={false}
-              ItemSeparatorComponent={this.separatorComponent}
-            />
-          ) : null}
+          {/* {searchListdata.length == 0 || searchListdata == [] ? (
+            <View style={FriendListStyle.emptyview}>
+              <Text numberOfLines={2} style={FriendListStyle.emptytext}>
+                {StaticTitle.noFrnds}
+              </Text>
+            </View>
+          ) : ( */}
+          <FlatList
+            data={searchListdata}
+            style={[FriendListStyle.flatliststyle]}
+            renderItem={(item, index) => this.renderSearchList(item, index)}
+            keyExtractor={(item, index) => "D" + index.toString()}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={this.separatorComponent}
+          />
+          {/* )} */}
         </View>
       </>
     );
@@ -199,6 +230,7 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
