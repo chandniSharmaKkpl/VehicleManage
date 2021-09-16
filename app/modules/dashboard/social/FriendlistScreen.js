@@ -52,19 +52,19 @@ export class FriendlistScreen extends Component {
 
   // search vechicle by name
   getfriendListAPI = () => {
-    const { txtSearch, friendListData } = this.state;
+    const { txtSearch, friendListData, user } = this.state;
     const { getfriendlist } = this.props;
     let params = new URLSearchParams();
 
     // Collect the necessary params
-    params.append("user_id", "39");
+    params.append("user_id", user.user_data.user_id);
     getfriendlist(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get friendlist",
-        //   JSON.stringify(res.value.data.data)
-        // );
+        console.log(
+          TAG,
+          "response of get friendlist",
+          JSON.stringify(res.value.data.data)
+        );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -74,7 +74,7 @@ export class FriendlistScreen extends Component {
               icon: "info",
               duration: 4000,
             });
-            this.setState({ friendListData: res.value.data.data.user_data });
+            this.setState({ friendListData: res.value.data.data.friend_list });
           }
         } else {
           if (res.value && res.value.data.error) {
@@ -122,9 +122,15 @@ export class FriendlistScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>{item.name}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.car_make_model}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.Num}</Text>
+          <Text style={FriendListStyle.titleBig}>
+            {item.name ? item.name : "-"}
+          </Text>
+          <Text style={FriendListStyle.titleSmall}>
+            {item.car_make_model ? item.car_make_model : "-"}
+          </Text>
+          <Text style={FriendListStyle.titleSmall}>
+            {item.registration_number ? item.registration_number : "-"}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() => this.gotoFriendDetails(item)}
@@ -152,7 +158,7 @@ export class FriendlistScreen extends Component {
   render() {
     const { friendListData } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
-
+    
     return (
       <>
         <View style={FriendListStyle.container}>
@@ -173,14 +179,22 @@ export class FriendlistScreen extends Component {
             }
             placeholderText={StaticTitle.searchbyNameNnum}
           />
-          <FlatList
-            data={friendListData}
-            style={FriendListStyle.flatliststyle}
-            renderItem={(item, index) => this.renderFriendList(item, index)}
-            keyExtractor={(item, index) => "D" + index.toString()}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={this.separatorComponent}
-          />
+          {friendListData.length == 0 || friendListData == [] ? (
+            <View style={FriendListStyle.emptyview}>
+              <Text numberOfLines={2} style={FriendListStyle.emptytext}>
+                {StaticTitle.noFrnds}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={friendListData}
+              style={FriendListStyle.flatliststyle}
+              renderItem={(item, index) => this.renderFriendList(item, index)}
+              keyExtractor={(item, index) => "D" + index.toString()}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={this.separatorComponent}
+            />
+          )}
         </View>
       </>
     );

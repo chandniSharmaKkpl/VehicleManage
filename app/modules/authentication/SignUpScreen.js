@@ -53,11 +53,11 @@ export class SignUpScreen extends Component {
     this.state = {
       //initialize variable
 
-      // txtEmail: "hh2@gmail.com",
+      // txtEmail: "2@mailinator.com",
       // txtFirstName: "ssCss",
       // txtLastName: "ssDss",
-      // txtPassword: "Abcdsdffsdf",
-      // txtConfirmPassword: "Abcdsdffsdf",
+      // txtPassword: "Abcd1234",
+      // txtConfirmPassword: "Abcd1234",
       // txtDob: "",
 
       txtEmail: "",
@@ -124,12 +124,13 @@ export class SignUpScreen extends Component {
    * Method for term&condition open in default browser
    */
   handletermconditionClick = () => {
-    Linking.canOpenURL(termsCondURL).then((supported) => {
-      if (supported) {
-        Linking.openURL(termsCondURL);
-      } else {
-      }
-    });
+    // Linking.canOpenURL(termsCondURL).then((supported) => {
+    //   if (supported) {
+    //     Linking.openURL(termsCondURL);
+    //   } else {
+    //   }
+    // });
+    NavigationService.navigate("TermsCondition");
   };
 
   // Focus on next input
@@ -205,7 +206,7 @@ export class SignUpScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
-
+              this.gotoSaveToken(res.value.data.data.token);
               NavigationService.navigate("SignIn");
             } else {
               this.setState({
@@ -237,6 +238,12 @@ export class SignUpScreen extends Component {
       Alert.alert(globals.warning, globals.noInternet);
     }
   };
+
+  // save access token
+  async gotoSaveToken(accessToken) {
+    await AsyncStorage.setItem("access_token", accessToken);
+    globals.access_token = accessToken;
+  }
 
   // start of validation
   checkValidation = () => {

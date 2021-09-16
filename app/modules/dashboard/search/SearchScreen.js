@@ -28,7 +28,7 @@ export class SearchScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      txtSearch: "",
+      txtSearch: "Gj",
       searchListdata: [],
     };
   }
@@ -56,11 +56,11 @@ export class SearchScreen extends Component {
     if (globals.isInternetConnected == true) {
       searchvehicle(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "response of search vehical",
-          //   JSON.stringify(res)
-          // );
+          console.log(
+            TAG,
+            "response of search vehical",
+            JSON.stringify(res.value.data.data)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -130,7 +130,10 @@ export class SearchScreen extends Component {
             {item.registration_number ? item.registration_number : "-"}
           </Text>
         </View>
-        <TouchableOpacity style={FriendListStyle.squareView}>
+        <TouchableOpacity
+          style={FriendListStyle.squareView}
+          onPress={() => this.navigateToDetailScreen(item, index)}
+        >
           <FastImage
             style={[FriendListStyle.navigateimgStyle]}
             source={IMAGE.navigate_img}
@@ -138,6 +141,11 @@ export class SearchScreen extends Component {
         </TouchableOpacity>
       </View>
     );
+  };
+
+  // navigate to detailed scren
+  navigateToDetailScreen = (item, index) => {
+    NavigationService.navigate("FriendDetail", { FriendData: item });
   };
 
   // seprate component

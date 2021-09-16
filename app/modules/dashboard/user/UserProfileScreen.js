@@ -22,7 +22,6 @@ import { UserProfileStyle } from "../../../assets/styles/UserProfileStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
 import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
-import { NavigationEvents } from "react-navigation";
 import FastImage from "react-native-fast-image";
 import {
   Input,
@@ -44,6 +43,7 @@ import * as Authactions from "../../authentication/redux/Actions";
 import Colors from "../../../assets/Colors";
 import * as actions from "../redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { NavigationEvents } from "react-navigation";
 
 const TAG = "UserProfileScreen ::=";
 
@@ -87,10 +87,17 @@ export class UserProfileScreen extends Component {
     this.input = {};
   }
 
-  componentdidMount = async () => {
+  async componentDidMount() {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.onFocusFunction();
+    });
+  }
+
+  /// call everytime didmount
+  onFocusFunction = async () => {
     this._isMounted = true;
     var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log("USER== componentWillMount", user);
+    console.log("user====didmount", user);
     globals.access_token = user.user_data.token;
     this.setUserInfo(user);
     if (globals.isInternetConnected == true) {
@@ -104,6 +111,7 @@ export class UserProfileScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    this.focusListener.remove();
   }
 
   // set userInformation
@@ -305,7 +313,6 @@ export class UserProfileScreen extends Component {
 
     // Collect the necessary params
     const { updateprofile } = this.props;
-    console.log("photoObj=====", photoObj);
     params.append("email", userDetails.email);
     params.append("username", txtUserName);
     if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
@@ -325,7 +332,11 @@ export class UserProfileScreen extends Component {
       console.log("params======", JSON.stringify(params));
       updateprofile(params)
         .then(async (res) => {
-          console.log(TAG, "res.value.data---", JSON.stringify(res.value.data.data));
+          console.log(
+            TAG,
+            "updateprofile res.value.data---",
+            JSON.stringify(res.value.data)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -335,7 +346,22 @@ export class UserProfileScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
+              let userInfo = res.value.data.data;
+              console.log("userInfo====", userInfo.user_data.user_photo);
+              this.setState({
+                userDetails: userInfo.user_data,
+                selectedCity: userInfo.user_data.city,
+                selectedModel: userInfo.user_data.car_make_model,
+                selectedColour: userInfo.user_data.car_colour,
+                txtUserName: userInfo.user_data.username,
+                txtDescription: userInfo.user_data.car_description,
+                photoUrl: userInfo.user_data.user_photo,
+                txtSnapName: userInfo.user_data.snapchat_username,
+                txtInstaName: userInfo.user_data.instagram_username,
+                txtFbName: userInfo.user_data.fb_username,
+              });
               this.setUser(res.value.data.data);
+              this.forceUpdate();
             } else {
             }
           } else {
@@ -363,6 +389,7 @@ export class UserProfileScreen extends Component {
     await AsyncStorage.setItem("user", JSON.stringify(data)).catch(
       (error) => {}
     );
+    console.log("AsyncStorage responses", JSON.parse(await AsyncStorage.getItem("user")));
   };
 
   render() {
@@ -379,10 +406,11 @@ export class UserProfileScreen extends Component {
       selectedModel,
       selectedCity,
     } = this.state;
-    console.log("photoUrl===", photoUrl);
+
     return (
       <>
         <View style={UserProfileStyle.container}>
+          {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -430,12 +458,12 @@ export class UserProfileScreen extends Component {
                   }}
                   style={UserProfileStyle.beforeimgView}
                 >
-                  <FastImage
+                  <Image
                     style={[UserProfileStyle.imageStyle]}
                     source={{
-                      uri: photoUrl,
-                      priority: FastImage.priority.normal,
+                      uri: photoUrl,cache: 'reload'
                     }}
+                    key={photoUrl}
                   />
                 </TouchableOpacity>
               ) : (
@@ -467,6 +495,7 @@ export class UserProfileScreen extends Component {
                 />
               </TouchableOpacity>
               <View style={UserProfileStyle.registrationView}>
+                <Text style={UserProfileStyle.changeRegText}>{photoUrl}</Text>
                 <Text style={UserProfileStyle.changeRegText}>
                   {StaticTitle.changeRegistration}
                 </Text>
@@ -692,7 +721,6 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
-    
   };
 };
 

@@ -7,7 +7,7 @@ import * as globals from "../../utils/Globals";
 export const FriendListStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lite_background,
+    backgroundColor: Colors.liteBg,
   },
   itemcell: {
     paddingHorizontal: 20,
@@ -73,6 +73,21 @@ export const FriendListStyle = StyleSheet.create({
   flatliststyle: {
     flex: 1,
     marginVertical: 5,
+  },
+  emptyview: {
+    flex: 1,
+    alignItems: "center",
+    // backgroundColor: 'red',
+    justifyContent: "center",
+  },
+  emptytext: {
+    color: Colors.placeholderColor,
+    fontSize: globals.font_14,
+    fontWeight: "bold",
+    width: globals.deviceWidth,
+    fontFamily: FontFamily.RalewaRegular,
+    alignSelf: "center",
+    textAlign: "center",
   },
 
   ////// NOTIFICATIOn
