@@ -7,6 +7,7 @@ import Colors from "../assets/Colors";
 import FontFamily from "../assets/styles/FontFamily";
 import * as globals from "../utils/Globals";
 import SnapchatLogin from "react-native-snapchat-login";
+import { Linking } from "react-native";
 
 const TAG = "SnapchatIntegration ::=";
 
@@ -41,6 +42,24 @@ class SnapchatIntegration extends Component {
     });
   };
 
+  // navigate Social Profiles
+  navigatetoSocialProfiles = (isFrom, name) => {
+    let SocialURL;
+
+    if (isFrom == "Snap") {
+      SocialURL = name;
+    } else {
+      SocialURL = "https://www.google.com" + name;
+    }
+
+    Linking.canOpenURL(SocialURL).then((supported) => {
+      if (supported) {
+        Linking.openURL(SocialURL);
+      } else {
+      }
+    });
+  };
+
   render() {
     return (
       <>
@@ -60,7 +79,9 @@ class SnapchatIntegration extends Component {
             fontSize: globals.font_15,
             color: Colors.black,
           }}
-          onPress={() => this.performSnapchatLogin()}
+          onPress={() => this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)}
+
+          // onPress={() => this.performSnapchatLogin()}
         />
         {/* <PrimaryButtonwithIcon
           iconName={IMAGE.snap_img}

@@ -272,7 +272,10 @@ export class UserProfileScreen extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails", { isFrom: "Profile", user:this.props.userDetails });
+    NavigationService.navigate("RegistrationDetails", {
+      isFrom: "Profile",
+      user: this.props.userDetails,
+    });
   };
 
   // Navigate to Settings  Screen
@@ -414,7 +417,7 @@ export class UserProfileScreen extends Component {
       selectedCity,
     } = this.state;
     // console.log("user=====RENDER=", user);
-    // console.log("user.user_data.instagram_username====", user.instagram_username);
+
     return (
       <>
         <View
@@ -639,10 +642,20 @@ export class UserProfileScreen extends Component {
                     },
                   ]}
                 >
-                  {/* <InstagramIntegration />
-                  <FacebookIntegration />
-                  <SnapchatIntegration /> */}
-                  <PrimaryTextinputwithIcon
+                  <InstagramIntegration
+                    isFrom="Instagram"
+                    URL={user.instagram_username}
+                  />
+                  <FacebookIntegration
+                    isFrom="Facebook"
+                    URL={user.fb_username}
+                  />
+                  <SnapchatIntegration
+                    isFrom="Snap"
+                    URL={user.snapchat_username}
+                  />
+
+                  {/* <PrimaryTextinputwithIcon
                     isFrom="Instagram"
                     iconName={IMAGE.insta_icon_img}
                     buttonStyle={{ backgroundColor: Colors.snapChat }}
@@ -715,7 +728,7 @@ export class UserProfileScreen extends Component {
                             style: { fontFamily: "Raleway-Regular" },
                           });
                     }}
-                  />
+                  /> */}
 
                   <View
                     style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
