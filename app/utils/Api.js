@@ -4,6 +4,7 @@ import { Alert, DeviceEventEmitter } from "react-native";
 import { BASE_URL } from "../config/BaseURL";
 import NavigationService from "../utils/NavigationService";
 import * as globals from "../utils/Globals";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 function makeFormDataPostHeaders() {
   // console.log("I am in makePostHeaders()");
@@ -78,7 +79,8 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/updateProfile" ||
       request.url === "api/friend_list" ||
       request.url === "api/friend_detail" ||
-      request.url === "add_friend"
+      request.url === "api/add_friend" ||
+      request.url === "api/init_app"
     ) {
       request.headers = makeURLencodedPostHeaders();
     } else {
@@ -100,40 +102,36 @@ axiosApi.interceptors.response.use(
     return response;
   },
   (error) => {
+    return Promise.reject(error.response.data);
+
+    // if (error.response.status === 401) {
+    //   return Promise.reject(error.response);
+    // } else if (error.response.status === 402) {
+    //   showMessage({
+    //     message: error.response.data.error,
+    //     type: "danger",
+    //     icon: "danger",
+    //     duration: 4000,
+    //   });
+    //   AsyncStorage.clear();
+    //   NavigationService.reset("Login");
+    // }
+    // else {
+    //   // showMessage({
+    //   //   message: "Device offline",
+    //   //   type: "danger",
+    //   //   icon: "danger",
+    //   //   duration: 10000,
+    //   // });
+    // }
     // console.log("i am in axios get error", error);
-    console.log("error.response.data", error.response.data);
+    // console.log("error.response.data", error.response.data);
     // console.log("error.response.headers", error.response.headers);
     // console.log("error.response.status", error.response.status);
     // console.log("error.request", error.request);
     // console.log("ErrorErrormsg", error.message);
     // console.log("error.config", error.config);
-
-    // try {
-    //   showMessage({
-    //     // message:
-    //     //   err.response.data.message === undefined
-    //     //     ? err.response.data.message
-    //     //     : "Your credentials are incorrect. Please try again",
-    //     message: "Your credentials are incorrect. Please try again",
-    //     type: "danger",
-    //     icon: "danger",
-    //   });
-    // } catch (e) {
-    //   console.log("i am in catch");
-    //   // showMessage({
-    //   //   message: err.response.data.message,
-    //   //   type: "danger",
-    //   //   icon: "danger",
-    //   // });
-    // }
-    // // Alert.alert("EPH", "This Application Require Network Connection!");
-    // if (err.response && err.response.status === 401) {
-    //   // if you don't return here, then an error will be thrown and you will see a loader infinitely
-    //   return true;
-    // }
-    // if (err.response && err.response.status === 500) {
-    // }
-    return Promise.reject(error.response.data);
+    // return Promise.reject(error.response);
   }
 );
 

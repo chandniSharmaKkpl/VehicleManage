@@ -64,8 +64,6 @@ export class RegistrationDetailsScreen extends Component {
   }
 
   componentDidMount = async () => {
-    // get asynchg stored value
-    // await this.setRegistrationDetailInfo();
     this._isMounted = true;
     if (this.state.isFrom == "Profile") {
       this.setUserInfo();
@@ -74,7 +72,7 @@ export class RegistrationDetailsScreen extends Component {
 
   // set userInformation
   setUserInfo = async () => {
-    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
+    var user = this.props.navigation.state.params.user;
     console.log(TAG, "user==setUserInfo===", user);
     if (this._isMounted) {
       if (user && user.user_data) {
@@ -86,30 +84,6 @@ export class RegistrationDetailsScreen extends Component {
         });
       }
     }
-  };
-
-  setRegistrationDetailInfo = async () => {
-    const [
-      [, RegNumber],
-      [, attachPaper],
-      [, attachphoto],
-      [, attachphotoUrl],
-      [, attachPaperUrl],
-    ] = await AsyncStorage.multiGet([
-      "@RegNumber",
-      "@attachPaper",
-      "@attachphoto",
-      "@attachphotoUrl",
-      "@attachPaperUrl",
-    ]);
-
-    this.setState({
-      txtRegNumber: RegNumber,
-      attachPaperName: attachPaper,
-      attachphotoName: attachphoto,
-      attachphotoUrl: attachphotoUrl,
-      attachPaperUrl: attachPaperUrl,
-    });
   };
 
   //display Attch Paper picker model
@@ -178,13 +152,26 @@ export class RegistrationDetailsScreen extends Component {
 
   // API CALL begin of update
   updateRegisterDetailAPIcall = () => {
-    const { txtRegNumber, attachPaperObj, attachphotoObj, user } = this.state;
+    const {
+      txtRegNumber,
+      attachPaperObj,
+      attachphotoObj,
+      user,
+      attachPaperUrl,
+      attachphotoUrl,
+    } = this.state;
     var params = new FormData();
     // Collect the necessary params
     params.append("email", user.user_data.email);
-    params.append("vehicle_photo", attachphotoObj);
+    params.append(
+      "vehicle_photo",
+      attachphotoUrl ? attachphotoUrl : attachphotoObj
+    );
     params.append("registration_number", txtRegNumber);
-    params.append("registration_paper", attachPaperObj);
+    params.append(
+      "registration_paper",
+      attachPaperUrl ? attachPaperUrl : attachPaperObj
+    );
     const { updateRegistrationDetail } = this.props;
 
     console.log(
@@ -196,7 +183,7 @@ export class RegistrationDetailsScreen extends Component {
         .then(async (res) => {
           console.log(
             "updateRegisterDetailAPIcall res.value.data---",
-            JSON.stringify(res.value.data.data)
+            JSON.stringify(res.value)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
@@ -268,7 +255,7 @@ export class RegistrationDetailsScreen extends Component {
                 duration: 4000,
               });
               globals.isRegistrationDeatils = true;
-              this.setRegistrationDetail();
+              NavigationService.back();
             } else {
             }
           } else {
@@ -302,30 +289,6 @@ export class RegistrationDetailsScreen extends Component {
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
-  };
-
-  // save user registration detail in  in asynch
-  setRegistrationDetail = async () => {
-    ////// SAVE DEAILS IN ASYNC
-
-    // const {
-    //   txtRegNumber,
-    //   attachPaperName,
-    //   attachphotoName,
-    //   attachphotoObj,
-    //   attachphotoUrl,
-    //   attachPaperObj,
-    //   attachPaperUrl,
-    // } = this.state;
-    // await AsyncStorage.multiSet([
-    //   ["@RegNumber", txtRegNumber],
-    //   ["@attachPaper", attachPaperName],
-    //   ["@attachphoto", attachphotoName],
-    //   ["@attachphotoUrl", attachphotoUrl],
-    //   ["@attachPaperUrl", attachPaperUrl],
-    // ]);
-
-    NavigationService.back();
   };
 
   // Render modal faltlist view to choose camera or gallery
@@ -581,7 +544,7 @@ export class RegistrationDetailsScreen extends Component {
                   }
                   onPress={() => this.saveDeatils()}
                 />
-              </View>
+              </View>                                                                         
             </View>
           </ScrollView>
         </View>

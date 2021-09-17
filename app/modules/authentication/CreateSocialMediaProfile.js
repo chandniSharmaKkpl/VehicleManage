@@ -121,7 +121,7 @@ export class CreateSocialMediaProfile extends Component {
                 icon: "info",
                 duration: 4000,
               });
-              this.setUser(res.value.data.data);
+              this.getUserData();
             } else {
             }
           } else {
@@ -143,13 +143,17 @@ export class CreateSocialMediaProfile extends Component {
     }
   };
 
-  // save user info in asynch
-  setUser = async (data) => {
-    await AsyncStorage.setItem("user", JSON.stringify(data)).catch(
-      (error) => {}
-    );
-    NavigationService.navigate("Home");
-  };
+  // get user information
+  getUserData() {
+    const { initializeApp } = this.props;
+    initializeApp().then((res) => {
+      if (res.value.status === 200) {
+        NavigationService.reset("Home");
+      } else {
+        NavigationService.reset("Login");
+      }
+    });
+  }
 
   //display gallry picker model
   displayGalleryPicker = () => {
@@ -251,7 +255,11 @@ export class CreateSocialMediaProfile extends Component {
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <Header isShowBack={true} title={StaticTitle.createProfile} theme={theme} />
+          <Header
+            isShowBack={true}
+            title={StaticTitle.createProfile}
+            theme={theme}
+          />
 
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
@@ -478,6 +486,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   createSocialprofile: (params) =>
     dispatch(actions.createSocialprofile(params)),
+  initializeApp: (params) => dispatch(actions.initializeApp(params)),
 });
 
 export default connect(

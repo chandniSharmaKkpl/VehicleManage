@@ -45,7 +45,7 @@ export class LoginScreen extends Component {
   componentDidMount = async () => {
     this._isMounted = true;
     let them_mode = await AsyncStorage.getItem("them_mode");
-    await this.fetchUserDetails();
+
 
     console.log(TAG, "componentDidMount ======them_mode", them_mode);
     var newTheme = lightTheme;
@@ -61,16 +61,7 @@ export class LoginScreen extends Component {
     this.setState({ theme: newTheme });
   };
 
-  // fetch user info from asynch storage
-  fetchUserDetails = async () => {
-    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-
-    if (user && user.user_data) {
-      NavigationService.reset("Home");
-    } else {
-      // NavigationService.reset("Login");
-    }
-  };
+  
 
   // Login with Email navigate to sign in screen
   performLoginwithEmail = () => {
@@ -193,7 +184,6 @@ const mapStateToProps = (state) => {
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
     theme: state.auth.user.theme,
-    userDetails: state.auth.user.userDetails,
   };
 };
 

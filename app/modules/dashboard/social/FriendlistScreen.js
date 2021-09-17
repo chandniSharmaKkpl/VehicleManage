@@ -48,29 +48,32 @@ export class FriendlistScreen extends Component {
     this._isMounted = false;
     this.focusListener.remove();
   }
-  
+
   /// call everytime didmount
   onFocusFunction = async () => {
+    
     this._isMounted = true;
-    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log(TAG, "USER== componentDidMount", user);
-    globals.access_token = user.user_data.token;
-    this.setState({ user: user, theme: this.props.theme });
-    if (globals.isInternetConnected == true) {
-      await this.getfriendListAPI();
-    } else {
-      Alert.alert(globals.warning, globals.noInternet);
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setState(
+        { user: this.props.userDetails.user_data, theme: this.props.theme },
+        () => {
+          if (globals.isInternetConnected == true) {
+            this.getfriendListAPI();
+          } else {
+            Alert.alert(globals.warning, globals.noInternet);
+          }
+        }
+      );
     }
   };
 
   // search vechicle by name
   getfriendListAPI = () => {
-    const { txtSearch, friendListData, user } = this.state;
+    const { user } = this.state;
     const { getfriendlist } = this.props;
     let params = new URLSearchParams();
-
     // Collect the necessary params
-    params.append("user_id", user.user_data.user_id);
+    params.append("user_id", user.user_id);
     getfriendlist(params)
       .then(async (res) => {
         console.log(
@@ -188,13 +191,12 @@ export class FriendlistScreen extends Component {
   render() {
     const { friendListData } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
-
     return (
       <>
         <View
           style={[
             FriendListStyle.container,
-            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
           {isLoading && (
@@ -246,6 +248,7 @@ const mapStateToProps = (state) => {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
+    userDetails: state.auth.user.userDetails,
   };
 };
 

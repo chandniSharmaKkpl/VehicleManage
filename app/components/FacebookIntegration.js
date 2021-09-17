@@ -40,7 +40,6 @@ class FacebookIntegration extends Component {
             JSON.stringify(result.isCancelled)
           );
 
-          // AsyncStorage.setItem(globals.FB_LOGINKEY, JSON.stringify(result.isCancelled));
         } else {
           console.log(
             `Login success with permissions: ${result.grantedPermissions.toString()}`
@@ -50,7 +49,6 @@ class FacebookIntegration extends Component {
             "result.cancelable ::",
             JSON.stringify(result.isCancelled)
           );
-          // AsyncStorage.setItem(globals.FB_LOGINKEY, JSON.stringify(result.isCancelled));
           AccessToken.getCurrentAccessToken()
             .then((user) => {
               console.log(TAG, `user info : ${JSON.stringify(user)}`);

@@ -12,6 +12,7 @@ import {
   CREATE_SOCIAL_PROFILE,
   REGISTER_DETAIL,
   UPDATE_REGISTER_DETAIL,
+  INIT_APP,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -73,6 +74,18 @@ export const createSocialprofile = (params) => ({
   type: CREATE_SOCIAL_PROFILE,
   payload: api
     .post("api/createprofiletwo", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
+export const initializeApp = () => ({
+  type: INIT_APP,
+  payload: api
+    .post("api/init_app")
     .then((res) => {
       return res;
     })

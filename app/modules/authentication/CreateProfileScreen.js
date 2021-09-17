@@ -407,7 +407,6 @@ export class CreateProfileScreen extends PureComponent {
 
 const mapStateToProps = (state) => {
   return {
-    userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
     theme: state.auth.user.theme,

@@ -12,7 +12,7 @@ import ForgotPasswordScreen from "..//modules/authentication/ForgotPasswordScree
 import ResetPasswordScreen from "..//modules/authentication/ResetPasswordScreen";
 import CreateSocialMediaProfile from "..//modules/authentication/CreateSocialMediaProfile";
 import RegistrationDetailsScreen from "..//modules/authentication/RegistrationDetailsScreen";
-import TermsConditionScreen from '..//modules/authentication/TermsConditionScreen';
+import TermsConditionScreen from "..//modules/authentication/TermsConditionScreen";
 import SplashScreen from "..//modules/SplashScreen";
 import TabNavigation from "./TabNavigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
@@ -61,12 +61,9 @@ const DrawerNavigator = createDrawerNavigator(
 
 const AppNavigator = createStackNavigator(
   {
-    // FirstScreen: {
-    //   screen: FirstScreen,
-    //   navigationOptions: {
-    //     header: null,
-    //   },
-    // },
+    FirstScreen: {
+      screen: FirstScreen,
+    },
     Home: {
       screen: TabNavigation,
     },
@@ -91,8 +88,8 @@ const AppNavigator = createStackNavigator(
     ResetPassword: {
       screen: ResetPasswordScreen,
     },
-    TermsCondition:{
-      screen:TermsConditionScreen
+    TermsCondition: {
+      screen: TermsConditionScreen,
     },
     CreateSocialMediaProfile: {
       screen: CreateSocialMediaProfile,
@@ -102,7 +99,7 @@ const AppNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "FirstScreen",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,
