@@ -55,7 +55,7 @@ export class UserProfileScreen extends Component {
       cityList: [],
       carModelList: [],
       carColourList: [],
-      userDetails: {},
+      user: {},
 
       selectedCity: "",
       selectedModel: "",
@@ -96,10 +96,10 @@ export class UserProfileScreen extends Component {
   /// call everytime didmount
   onFocusFunction = async () => {
     this._isMounted = true;
-    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log("user====didmount", user);
-    globals.access_token = user.user_data.token;
-    this.setUserInfo(user);
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setUserInfo(this.props.userDetails);
+    }
+
     if (globals.isInternetConnected == true) {
       await this.getcarModelAPI();
       await this.getcarColourAPI();
@@ -119,7 +119,7 @@ export class UserProfileScreen extends Component {
     if (this._isMounted) {
       if (user && user.user_data) {
         this.setState({
-          userDetails: user.user_data,
+          user: user.user_data,
           selectedCity: user.user_data.city,
           selectedModel: user.user_data.car_make_model,
           selectedColour: user.user_data.car_colour,
@@ -272,7 +272,7 @@ export class UserProfileScreen extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails", { isFrom: "Profile" });
+    NavigationService.navigate("RegistrationDetails", { isFrom: "Profile", user:this.props.userDetails });
   };
 
   // Navigate to Settings  Screen
@@ -298,7 +298,7 @@ export class UserProfileScreen extends Component {
   // Update profile API call
   updateProfileApiCall = () => {
     const {
-      userDetails,
+      user,
       selectedColour,
       selectedModel,
       selectedCity,
@@ -313,7 +313,7 @@ export class UserProfileScreen extends Component {
 
     // Collect the necessary params
     const { updateprofile } = this.props;
-    params.append("email", userDetails.email);
+    params.append("email", user.email);
     params.append("username", txtUserName);
     if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
       params.append("image", "");
@@ -346,21 +346,7 @@ export class UserProfileScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
-              let userInfo = res.value.data.data;
-              console.log("userInfo====", userInfo.user_data.user_photo);
-              this.setState({
-                userDetails: userInfo.user_data,
-                selectedCity: userInfo.user_data.city,
-                selectedModel: userInfo.user_data.car_make_model,
-                selectedColour: userInfo.user_data.car_colour,
-                txtUserName: userInfo.user_data.username,
-                txtDescription: userInfo.user_data.car_description,
-                photoUrl: userInfo.user_data.user_photo,
-                txtSnapName: userInfo.user_data.snapchat_username,
-                txtInstaName: userInfo.user_data.instagram_username,
-                txtFbName: userInfo.user_data.fb_username,
-              });
-              this.setUser(res.value.data.data);
+              this.getUserData();
               this.forceUpdate();
             } else {
             }
@@ -383,17 +369,35 @@ export class UserProfileScreen extends Component {
     }
   };
 
-  // save user info in asynch
-  setUser = async (data) => {
-    console.log("set user======data", data);
-    await AsyncStorage.setItem("user", JSON.stringify(data)).catch(
-      (error) => {}
-    );
-    console.log(
-      "AsyncStorage responses",
-      JSON.parse(await AsyncStorage.getItem("user"))
-    );
-  };
+  getUserData() {
+    if (globals.isInternetConnected == true) {
+      const { initializeApp } = this.props;
+      initializeApp().then((res) => {
+        // console.log("res=getUserData===", res);
+        if (res.value && res.value.data.success == true) {
+          if (res.value && res.value.status === 200) {
+            let userInfo = res.value.data.data;
+            console.log("userInfo====", userInfo.user_data.user_photo);
+            // this.setState({
+            //   user: userInfo.user_data,
+            //   selectedCity: userInfo.user_data.city,
+            //   selectedModel: userInfo.user_data.car_make_model,
+            //   selectedColour: userInfo.user_data.car_colour,
+            //   txtUserName: userInfo.user_data.username,
+            //   txtDescription: userInfo.user_data.car_description,
+            //   photoUrl: userInfo.user_data.user_photo,
+            //   txtSnapName: userInfo.user_data.snapchat_username,
+            //   txtInstaName: userInfo.user_data.instagram_username,
+            //   txtFbName: userInfo.user_data.fb_username,
+            // });
+          } else {
+          }
+        }
+      });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
@@ -404,15 +408,21 @@ export class UserProfileScreen extends Component {
       cityList,
       carModelList,
       carColourList,
-      userDetails,
+      user,
       selectedColour,
       selectedModel,
       selectedCity,
     } = this.state;
-
+    // console.log("user=====RENDER=", user);
+    // console.log("user.user_data.instagram_username====", user.instagram_username);
     return (
       <>
-        <View style={[UserProfileStyle.container,{ backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }]}>
+        <View
+          style={[
+            UserProfileStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
@@ -469,7 +479,7 @@ export class UserProfileScreen extends Component {
                     style={[UserProfileStyle.imageStyle]}
                     source={{
                       uri: photoUrl,
-                      cache: "reload",
+                      cache: "force-cache",
                     }}
                     key={photoUrl}
                   />
@@ -730,6 +740,7 @@ const mapStateToProps = (state) => {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
+    userDetails: state.auth.user.userDetails,
   };
 };
 
@@ -738,6 +749,7 @@ const mapDispatchToProps = (dispatch) => ({
   getcarcolour: (params) => dispatch(Authactions.getcarcolour(params)),
   getcity: (params) => dispatch(Authactions.getcity(params)),
   updateprofile: (params) => dispatch(actions.updateprofile(params)),
+  initializeApp: (params) => dispatch(Authactions.initializeApp(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileScreen);

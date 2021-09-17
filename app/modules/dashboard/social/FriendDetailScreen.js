@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {
   View,
-  Keyboard,
+  Linking,
   FlatList,
   Alert,
   Text,
@@ -40,11 +40,15 @@ export class FriendDetailScreen extends Component {
   }
 
   componentDidMount = async () => {
-    var user = JSON.parse(await AsyncStorage.getItem("user")) || {};
-    console.log(TAG, "USER== componentDidMount", user);
-    this.setState({ user: user }, () => {
-      this.getuserDetail();
-    });
+    console.log(
+      "this.props.navigation.state.params.FriendData====",
+      this.props.navigation.state.params.FriendData
+    );
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setState({ user: this.props.userDetails.user_data }, () => {
+        this.getuserDetail();
+      });
+    }
   };
 
   // API call of get user details
@@ -52,7 +56,7 @@ export class FriendDetailScreen extends Component {
     const { getfriendData } = this.state;
     const { getfriendDetails } = this.props;
     let params = new URLSearchParams();
-    console.log("getfriendData.id====", getfriendData.id);
+    console.log("getfriendData.id====", getfriendData);
     // Collect the necessary params
     if (globals.isInternetConnected == true) {
       params.append("friend_id", getfriendData.id);
@@ -106,13 +110,17 @@ export class FriendDetailScreen extends Component {
     console.log("getfriendData.id====", getfriendData.id);
     // Collect the necessary params
     if (globals.isInternetConnected == true) {
-      params.append("user_id", user.user_data.user_id);
+      params.append("user_id", user.user_id);
       params.append("friend_id", getfriendData.id);
       console.log("params====", JSON.stringify(params));
       addfriend(params)
         .then(async (res) => {
-          console.log(TAG, "response of addfriend", JSON.stringify(res.value));
-          if (res.value && res.value.data.success == true) {
+          console.log(
+            TAG,
+            "response of addfriend",
+            JSON.stringify(res.value.data)
+          );
+          if (res.value && res.value.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
               await showMessage({
@@ -142,10 +150,31 @@ export class FriendDetailScreen extends Component {
     }
   };
 
+  // navigate Social Profiles
+  navigatetoSocialProfiles = (isFrom, name) => {
+    let SocialURL;
+    if (isFrom == "Fb") {
+      SocialURL = "https://www.facebook.com/" + name;
+    } else if (isFrom == "Insta") {
+      SocialURL = "https://www.instagram.com/" + name;
+    } else if (isFrom == "Snap") {
+      SocialURL = "https://www.snapchat.com/" + name;
+    } else {
+      SocialURL = "https://www.google.com" + name;
+    }
+
+    Linking.canOpenURL(SocialURL).then((supported) => {
+      if (supported) {
+        Linking.openURL(SocialURL);
+      } else {
+      }
+    });
+  };
+
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
 
-    const { friendDetail } = this.state;
+    const { friendDetail, isfriend } = this.state;
     return (
       <>
         <View
@@ -200,19 +229,25 @@ export class FriendDetailScreen extends Component {
               </Text>
             </View>
             <View style={FriendDetailStyle.middleview}>
+              {isfriend == false ? (
+                <TouchableOpacity
+                  onPress={() => this.AddasFriend()}
+                  style={[
+                    FriendDetailStyle.circleview,
+                    { backgroundColor: Colors.primary },
+                  ]}
+                >
+                  <FastImage
+                    style={[FriendDetailStyle.socialicon]}
+                    source={IMAGE.social_group_img}
+                  />
+                </TouchableOpacity>
+              ) : null}
+
               <TouchableOpacity
-                onPress={() => this.AddasFriend()}
-                style={[
-                  FriendDetailStyle.circleview,
-                  { backgroundColor: Colors.primary },
-                ]}
-              >
-                <FastImage
-                  style={[FriendDetailStyle.socialicon]}
-                  source={IMAGE.social_group_img}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
+                onPress={() =>
+                  this.navigatetoSocialProfiles("Fb", friendDetail.username)
+                }
                 style={[
                   FriendDetailStyle.circleview,
                   { backgroundColor: Colors.blue },
@@ -223,7 +258,11 @@ export class FriendDetailScreen extends Component {
                   source={IMAGE.fb_icon_square}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  this.navigatetoSocialProfiles("Insta", friendDetail.username)
+                }
+              >
                 <LinearGradient
                   start={{ x: 0.0, y: 0.5 }}
                   end={{ x: 0.7, y: 1.0 }}
@@ -237,6 +276,9 @@ export class FriendDetailScreen extends Component {
                 </LinearGradient>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() =>
+                  this.navigatetoSocialProfiles("Snap", friendDetail.username)
+                }
                 style={[
                   FriendDetailStyle.circleview,
                   { backgroundColor: Colors.snapChat },
@@ -278,22 +320,24 @@ export class FriendDetailScreen extends Component {
               </ScrollView>
             </View>
           </View>
-          <View style={FriendDetailStyle.bottomview}>
-            <TouchableOpacity
-              style={[
-                FriendDetailStyle.bottomcircleview,
-                {
-                  backgroundColor:theme.CHAT_BTN_COLOR,
-                },
-              ]}
-            >
-              <FastImage
-                style={[FriendDetailStyle.bottomicon]}
-                source={IMAGE.chatboxes_img}
-                tintColor={Colors.white}
-              />
-            </TouchableOpacity>
-          </View>
+          {isfriend == true ? (
+            <View style={FriendDetailStyle.bottomview}>
+              <TouchableOpacity
+                style={[
+                  FriendDetailStyle.bottomcircleview,
+                  {
+                    backgroundColor: theme.CHAT_BTN_COLOR,
+                  },
+                ]}
+              >
+                <FastImage
+                  style={[FriendDetailStyle.bottomicon]}
+                  source={IMAGE.chatboxes_img}
+                  tintColor={Colors.white}
+                />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       </>
     );
@@ -305,6 +349,7 @@ const mapStateToProps = (state) => {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
+    userDetails: state.auth.user.userDetails,
   };
 };
 

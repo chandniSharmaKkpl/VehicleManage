@@ -171,12 +171,13 @@ export class SearchScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { txtSearch, searchListdata } = this.state;
+    
     return (
       <>
         <View
           style={[
             AuthStyle.container,
-            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
           {isLoading && (

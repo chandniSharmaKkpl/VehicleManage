@@ -14,6 +14,43 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    //// INIT_APP
+    case actionTypes.INIT_APP_LOADING:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.INIT_APP_SUCCESS:
+      const data = action.payload.data.data;
+      console.log("data=====INIT_APP_SUCCESS", data);
+      let apiData = [];
+      if (data.user_data) {
+        apiData = data;
+      }
+      return {
+        user: {
+          ...state.user,
+          isLoading: false,
+          isLoggedIn: true,
+          userDetails: apiData,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.INIT_APP_ERROR:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
     //// LOGIN
     case actionTypes.USER_LOGIN_LOADING:
       return {
@@ -146,18 +183,18 @@ const authReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.CREATE_SOCIAL_PROFILE_SUCCESS:
-      const data = action.payload.data;
-      let apiData = [];
-      if (data.success === "true") {
-        apiData = data.data;
-      }
+      // const data = action.payload.data;
+      // let apiData = [];
+      // if (data.success === "true") {
+      //   apiData = data.data;
+      // }
       return {
         user: {
           ...state.user,
           isLoading: false,
           isLoggedIn: true,
           ...action.payload,
-          userDetails: apiData,
+          // userDetails: apiData,
           loaderMessage: "Loading...",
         },
       };
@@ -261,7 +298,7 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
-       //// UPDATE_REGISTER_DETAIL
+    //// UPDATE_REGISTER_DETAIL
     case actionTypes.UPDATE_REGISTER_DETAIL_LOADING:
       return {
         ...state,
