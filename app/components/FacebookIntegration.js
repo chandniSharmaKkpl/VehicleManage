@@ -11,7 +11,7 @@ import { IMAGE } from "../assets/Images";
 import Colors from "../assets/Colors";
 import FontFamily from "../assets/styles/FontFamily";
 import * as globals from "../utils/Globals";
-
+import { Linking } from "react-native";
 const TAG = "FacebookIntegration ::=";
 
 class FacebookIntegration extends Component {
@@ -39,7 +39,6 @@ class FacebookIntegration extends Component {
             "result.cancelable ::",
             JSON.stringify(result.isCancelled)
           );
-
         } else {
           console.log(
             `Login success with permissions: ${result.grantedPermissions.toString()}`
@@ -119,6 +118,24 @@ class FacebookIntegration extends Component {
     );
   };
 
+  // navigate Social Profiles
+  navigatetoSocialProfiles = (isFrom, name) => {
+    let SocialURL;
+
+    if (isFrom == "Facebook") {
+      SocialURL = name;
+    } else {
+      SocialURL = "https://www.google.com" + name;
+    }
+
+    Linking.canOpenURL(SocialURL).then((supported) => {
+      if (supported) {
+        Linking.openURL(SocialURL);
+      } else {
+      }
+    });
+  };
+
   render() {
     return (
       <PrimaryButtonwithIcon
@@ -132,8 +149,14 @@ class FacebookIntegration extends Component {
         }}
         buttonStyle={{ backgroundColor: Colors.blue }}
         btnName={StaticTitle.linkfb}
-        buttonTextStyle={{ fontFamily: FontFamily.RalewaRegular,fontSize: globals.font_15, }}
+        buttonTextStyle={{
+          fontFamily: FontFamily.RalewaRegular,
+          fontSize: globals.font_15,
+        }}
         // onPress={() => this.performFBLogin()}
+        onPress={() =>
+          this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)
+        }
       />
     );
   }

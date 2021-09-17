@@ -61,7 +61,7 @@ export class SearchScreen extends Component {
           console.log(
             TAG,
             "response of search vehical",
-            JSON.stringify(res.value.data.data)
+            JSON.stringify(res.value)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
@@ -75,7 +75,7 @@ export class SearchScreen extends Component {
               this.setSearchdataList(res.value.data.data);
             }
           } else {
-            if (res.value && res.value.data.error) {
+            if (res.value && res.value.message) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
@@ -171,7 +171,7 @@ export class SearchScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { txtSearch, searchListdata } = this.state;
-    
+
     return (
       <>
         <View
