@@ -29,11 +29,11 @@ export class TermsConditionScreen extends Component {
     this.backHandler.remove();
   }
   render() {
-    const { isLoading, loaderMessage,theme } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
 
     return (
       <>
-       <View
+        <View
           style={[
             AuthStyle.container,
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
@@ -70,9 +70,7 @@ const mapStateToProps = (state) => {
     theme: state.auth.user.theme,
   };
 };
-const mapDispatchToProps = () => ({
-  
-});
+const mapDispatchToProps = () => ({});
 
 export default connect(
   mapStateToProps,

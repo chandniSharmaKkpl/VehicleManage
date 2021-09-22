@@ -416,7 +416,6 @@ export class UserProfileScreen extends Component {
       selectedModel,
       selectedCity,
     } = this.state;
-    // console.log("user=====RENDER=", user);
 
     return (
       <>
@@ -478,13 +477,11 @@ export class UserProfileScreen extends Component {
                   }}
                   style={UserProfileStyle.beforeimgView}
                 >
-                  <Image
+                  <FastImage
                     style={[UserProfileStyle.imageStyle]}
                     source={{
                       uri: photoUrl,
-                      cache: "force-cache",
                     }}
-                    key={photoUrl}
                   />
                 </TouchableOpacity>
               ) : (
