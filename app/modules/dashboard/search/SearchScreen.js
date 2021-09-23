@@ -61,7 +61,7 @@ export class SearchScreen extends Component {
           console.log(
             TAG,
             "response of search vehical",
-            JSON.stringify(res.value)
+            JSON.stringify(res.value.data.data)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled

@@ -163,15 +163,18 @@ export class RegistrationDetailsScreen extends Component {
     var params = new FormData();
     // Collect the necessary params
     params.append("email", user.user_data.email);
-    params.append(
-      "vehicle_photo",
-      attachphotoUrl ? attachphotoUrl : attachphotoObj
-    );
+    if (attachphotoObj.uri == undefined || (attachphotoObj.uri == "") != []) {
+      params.append("vehicle_photo", "");
+    } else {
+      params.append("vehicle_photo", attachphotoObj);
+    }
+    if (attachPaperObj.uri == undefined || (attachPaperObj.uri == "") != []) {
+      params.append("registration_paper", "");
+    } else {
+      params.append("registration_paper", attachPaperObj);
+    }
     params.append("registration_number", txtRegNumber);
-    params.append(
-      "registration_paper",
-      attachPaperUrl ? attachPaperUrl : attachPaperObj
-    );
+
     const { updateRegistrationDetail } = this.props;
 
     console.log(
@@ -544,7 +547,7 @@ export class RegistrationDetailsScreen extends Component {
                   }
                   onPress={() => this.saveDeatils()}
                 />
-              </View>                                                                         
+              </View>
             </View>
           </ScrollView>
         </View>
