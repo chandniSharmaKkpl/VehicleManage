@@ -32,7 +32,6 @@ export class FriendDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isfriend: false,
       getfriendData: this.props.navigation.state.params.FriendData,
       friendDetail: [],
       user: {},
@@ -129,7 +128,6 @@ export class FriendDetailScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
-              this.setState({ isfriend: true });
             }
           } else {
             if (res.value && res.value.data.error) {
@@ -174,7 +172,7 @@ export class FriendDetailScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
 
-    const { friendDetail, isfriend } = this.state;
+    const { friendDetail } = this.state;
     return (
       <>
         <View
@@ -229,20 +227,18 @@ export class FriendDetailScreen extends Component {
               </Text>
             </View>
             <View style={FriendDetailStyle.middleview}>
-              {isfriend == false ? (
-                <TouchableOpacity
-                  onPress={() => this.AddasFriend()}
-                  style={[
-                    FriendDetailStyle.circleview,
-                    { backgroundColor: Colors.primary },
-                  ]}
-                >
-                  <FastImage
-                    style={[FriendDetailStyle.socialicon]}
-                    source={IMAGE.social_group_img}
-                  />
-                </TouchableOpacity>
-              ) : null}
+              <TouchableOpacity
+                onPress={() => this.AddasFriend()}
+                style={[
+                  FriendDetailStyle.circleview,
+                  { backgroundColor: Colors.primary },
+                ]}
+              >
+                <FastImage
+                  style={[FriendDetailStyle.socialicon]}
+                  source={IMAGE.social_group_img}
+                />
+              </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() =>
@@ -320,24 +316,23 @@ export class FriendDetailScreen extends Component {
               </ScrollView>
             </View>
           </View>
-          {isfriend == true ? (
-            <View style={FriendDetailStyle.bottomview}>
-              <TouchableOpacity
-                style={[
-                  FriendDetailStyle.bottomcircleview,
-                  {
-                    backgroundColor: theme.CHAT_BTN_COLOR,
-                  },
-                ]}
-              >
-                <FastImage
-                  style={[FriendDetailStyle.bottomicon]}
-                  source={IMAGE.chatboxes_img}
-                  tintColor={Colors.white}
-                />
-              </TouchableOpacity>
-            </View>
-          ) : null}
+
+          <View style={FriendDetailStyle.bottomview}>
+            <TouchableOpacity
+              style={[
+                FriendDetailStyle.bottomcircleview,
+                {
+                  backgroundColor: theme.CHAT_BTN_COLOR,
+                },
+              ]}
+            >
+              <FastImage
+                style={[FriendDetailStyle.bottomicon]}
+                source={IMAGE.chatboxes_img}
+                tintColor={Colors.white}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </>
     );

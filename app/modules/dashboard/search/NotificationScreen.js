@@ -27,14 +27,17 @@ export class NotificationScreen extends Component {
     this.setState({ theme: this.props.theme });
   }
 
-  gotoRecentViewers =()=>{
-      NavigationService.navigate('RecentViewers')
-  }
+  gotoRecentViewers = () => {
+    NavigationService.navigate("RecentViewers");
+  };
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
     return (
-      <TouchableWithoutFeedback style={FriendListStyle.itemcell} onPress={()=> this.gotoRecentViewers()}>
+      <TouchableWithoutFeedback
+        style={FriendListStyle.itemcell}
+        onPress={() => this.gotoRecentViewers()}
+      >
         {item.Img ? (
           <View style={FriendListStyle.imageStyle}>
             <FastImage
@@ -53,7 +56,13 @@ export class NotificationScreen extends Component {
             />
           </View>
         )}
-        <Text numberOfLines={2} style={[FriendListStyle.notificationtext,{ color: this.state.theme.LITE_FONT_COLOR }]}>
+        <Text
+          numberOfLines={2}
+          style={[
+            FriendListStyle.notificationtext,
+            { color: this.state.theme.LITE_FONT_COLOR },
+          ]}
+        >
           {item.NData}
         </Text>
       </TouchableWithoutFeedback>
@@ -69,12 +78,18 @@ export class NotificationScreen extends Component {
     const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={[FriendListStyle.container, { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }]}>
+        <View
+          style={[
+            FriendListStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           <Header
             isShowBack={true}
             title={StaticTitle.notification}
             isShowSidebar={true}
-            isFrom={"Notification"}  theme={theme}
+            isFrom={"Notification"}
+            theme={theme}
           />
           <FlatList
             data={notificationListData}
@@ -100,10 +115,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NotificationScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);
