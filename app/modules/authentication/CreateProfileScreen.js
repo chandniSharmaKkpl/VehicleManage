@@ -249,6 +249,7 @@ export class CreateProfileScreen extends PureComponent {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { cityList, carModelList, carColourList } = this.state;
+    
     return (
       <>
         <View

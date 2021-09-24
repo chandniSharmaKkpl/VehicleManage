@@ -81,11 +81,11 @@ const ChatHeader = ({
           }}
         >
           <View style={ComponentStyle.circleview}>
-            {/* <FastImage
+            <FastImage
               style={[ComponentStyle.tab_Image, { alignSelf: "center" }]}
               source={IMAGE.share_arrow_img}
               resizeMode={FastImage.resizeMode.contain}
-            /> */}
+            />
           </View>
 
           <Text
