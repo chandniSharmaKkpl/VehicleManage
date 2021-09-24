@@ -55,6 +55,7 @@ class AppNavigation extends Component {
   // manage hardware backpress button in android
   onBackPress = () => {
     const { nav, dispatch } = this.props;
+    console.log("nav.index====", nav.index);
     if (nav.index === 0) {
       console.log("i amin 0 index");
       this.exitApp();

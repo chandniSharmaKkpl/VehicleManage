@@ -347,7 +347,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachphotoObj: source,
+            attachphotoObj: source ? source : "",
           });
         } else {
           this.setState({
@@ -356,7 +356,7 @@ export class RegistrationDetailsScreen extends Component {
             attachphotoName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachPaperObj: source,
+            attachPaperObj: source ? source :"",
           });
         }
       }
@@ -387,7 +387,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachPaperObj: source,
+            attachPaperObj: source ? source :"",
           });
         } else {
           this.setState({
@@ -396,7 +396,7 @@ export class RegistrationDetailsScreen extends Component {
             attachphotoName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachphotoObj: source,
+            attachphotoObj: source ? source :"",
           });
         }
       }
@@ -519,7 +519,7 @@ export class RegistrationDetailsScreen extends Component {
                       : Colors.pink,
                   }}
                   title={
-                    attachPaperName ? attachPaperName : StaticTitle.attachPaper
+                    attachPaperName ? attachPaperName : (isFrom == "Profile") ?StaticTitle.updateattachPaper :StaticTitle.attachPaper
                   }
                   onPress={() => this.displayAttchPaper()}
                 />
@@ -533,7 +533,7 @@ export class RegistrationDetailsScreen extends Component {
                       : Colors.blue,
                   }}
                   title={
-                    attachphotoName ? attachphotoName : StaticTitle.attachPhoto
+                    attachphotoName ? attachphotoName : (isFrom == "Profile") ?StaticTitle.updateattachPhoto : StaticTitle.attachPhoto
                   }
                   onPress={() => this.displayAttchPhoto()}
                 />
