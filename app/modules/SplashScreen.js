@@ -21,13 +21,7 @@ export class SplashScreen extends Component {
     setTimeout(() => {
       NavigationService.navigate("Login");
     }, 5000);
-    // const refreshToken = await AsyncStorage.getItem("refresh_token");
-    // if (refreshToken === null || refreshToken === undefined) {
-    //   console.warn("i am in splash refreshToken", refreshToken);
-    //   NavigationService.reset("Login");
-    // } else {
-    //   NavigationService.reset("Home");
-    // }
+    
   }
   
   render() {

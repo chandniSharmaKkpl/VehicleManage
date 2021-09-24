@@ -59,6 +59,8 @@ const StaticTitle = {
     enterRegisterNumber:'Enter Registration Number',
     attachPaper:'Attach Registration Paper',
     attachPhoto:'Attach Vehicle Photo',
+    updateattachPaper:'Update Registration Paper',
+    updateattachPhoto:'Update Vehicle Photo',
     saveDetails:'Save Details',
     attchDoc:'Attach Document/Photo',
     linkfb:'Link with Facebook',
