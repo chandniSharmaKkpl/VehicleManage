@@ -83,6 +83,7 @@ export class PrivacySettingsScreen extends Component {
             isShowBack={true}
             title={StaticTitle.privacysettings}
             theme={theme}
+            onPressed={()=>this.props.navigation.openDrawer()}
           />
           <View style={PrivacySettingStyle.maincontainer}>
             <Text style={PrivacySettingStyle.headingtitle}>

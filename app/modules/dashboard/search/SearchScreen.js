@@ -187,6 +187,7 @@ export class SearchScreen extends Component {
           <Header
             isShowBack={false}
             title={""}
+            onPressed={()=>this.props.navigation.openDrawer()}
             isShowRighttwo={true}
             theme={theme}
           />

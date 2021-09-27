@@ -87,6 +87,7 @@ export class NotificationScreen extends Component {
           <Header
             isShowBack={true}
             title={StaticTitle.notification}
+            onPressed={()=>this.props.navigation.openDrawer()}
             isShowSidebar={true}
             isFrom={"Notification"}
             theme={theme}

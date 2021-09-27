@@ -22,9 +22,7 @@ import { ScrollView, SafeAreaView, Text } from "react-native";
 
 const AppNavigator = createStackNavigator(
   {
-    FirstScreen: {
-      screen: FirstScreen,
-    },
+    
     Home: {
       screen: TabNavigation,
     },
@@ -60,7 +58,7 @@ const AppNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: "FirstScreen",
+    initialRouteName: "Login",
     defaultNavigationOptions: {
       gestureEnabled: true,
       headerShown: false,
@@ -68,6 +66,5 @@ const AppNavigator = createStackNavigator(
   }
 );
 
-const MyNavigator = createAppContainer(AppNavigator);
 
-export default withNavigation(MyNavigator);
+export default AppNavigator;

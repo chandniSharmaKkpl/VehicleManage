@@ -113,6 +113,7 @@ export class ChatListScreen extends Component {
         >
           <Header
             title={StaticTitle.msges}
+            onPressed={()=>this.props.navigation.openDrawer()}
             isShowSidebar={true}
             theme={theme}
           />

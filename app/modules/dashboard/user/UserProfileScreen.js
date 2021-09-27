@@ -433,6 +433,7 @@ export class UserProfileScreen extends Component {
             title={StaticTitle.userProfile}
             isShowSidebar={true}
             theme={theme}
+            onPressed={()=>this.props.navigation.openDrawer()}
           />
 
           <View>

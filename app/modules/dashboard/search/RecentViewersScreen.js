@@ -110,6 +110,7 @@ export class RecentViewersScreen extends Component {
             isShowBack={true}
             title={StaticTitle.whosearchyou}
             theme={theme}
+            onPressed={()=>this.props.navigation.openDrawer()}
           />
           <FlatList
             data={notificationListData}

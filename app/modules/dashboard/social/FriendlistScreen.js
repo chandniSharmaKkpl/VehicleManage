@@ -206,6 +206,7 @@ export class FriendlistScreen extends Component {
           <Header
             title={StaticTitle.frndList}
             isShowSidebar={true}
+            onPressed={()=>this.props.navigation.openDrawer()}
             theme={theme}
           />
           <Search

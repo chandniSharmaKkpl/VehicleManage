@@ -428,6 +428,7 @@ export class RegistrationDetailsScreen extends Component {
           )}
           <Header
             isShowBack={true}
+            onPressed={()=>this.props.navigation.openDrawer()}
             title={StaticTitle.registartionDetail}
             theme={theme}
           />

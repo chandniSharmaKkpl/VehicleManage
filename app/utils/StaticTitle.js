@@ -101,6 +101,11 @@ const StaticTitle = {
     /// PROFILE
     update:'Update',
     updatedetail:'Update Deatils',
+
+    // LOGOUT
+    logout:'Are you sure you want to logout?',
+    termandcond:'Terms & Conditions',
+    subscriptions:'Manage Subscription'
   };
   export { StaticTitle };
   

@@ -28,11 +28,9 @@ const Header = ({
   isShowRighttwo,
   isShowSidebar,
   isFrom,
+  onPressed,
   ...props
 }) => {
-  const gotoProfile = async () => {
-    NavigationService.navigate("UserProfile");
-  };
   const gotoBack = async () => {
     NavigationService.back();
   };
@@ -40,8 +38,16 @@ const Header = ({
     NavigationService.navigate("Notification");
   };
   return (
-    <SafeAreaView style={[ComponentStyle.headerContainer,{ backgroundColor: theme.ANDROID_STATUR_BAR_COLOR}]}>
-      <StatusBar barStyle="light-content" backgroundColor={theme.ANDROID_STATUR_BAR_COLOR} />
+    <SafeAreaView
+      style={[
+        ComponentStyle.headerContainer,
+        { backgroundColor: theme.ANDROID_STATUR_BAR_COLOR },
+      ]}
+    >
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={theme.ANDROID_STATUR_BAR_COLOR}
+      />
 
       <View
         style={[
@@ -114,7 +120,7 @@ const Header = ({
                 padding: 5,
                 justifyContent: "center",
               }}
-              onPress={gotoProfile}
+              onPress={onPressed}
             >
               <FastImage
                 style={{
@@ -132,7 +138,7 @@ const Header = ({
 
         {isShowSidebar == true ? (
           <TouchableOpacity
-            onPress={gotoProfile}
+            onPress={onPressed}
             style={{ width: wp(15), height: hp(5), justifyContent: "center" }}
           >
             <FastImage
