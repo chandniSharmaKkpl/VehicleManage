@@ -73,7 +73,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-       //// GET_FRIEND_LIST
+    //// GET_FRIEND_LIST
     case actionTypes.GET_FRIEND_LIST_LOADING:
       return {
         ...state,
@@ -103,7 +103,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-      //// GET_FRIEND_DETAILS
+    //// GET_FRIEND_DETAILS
     case actionTypes.GET_FRIEND_DETAILS_LOADING:
       return {
         ...state,
@@ -133,7 +133,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-       //// ADD_FRIEND
+    //// ADD_FRIEND
     case actionTypes.ADD_FRIEND_LOADING:
       return {
         ...state,
@@ -154,6 +154,36 @@ const homeReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.ADD_FRIEND_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+    //// LOGOUT
+    case actionTypes.LOGOUT_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.LOGOUT_SUCCESS:
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.LOGOUT_ERROR:
       return {
         ...state,
         home: {

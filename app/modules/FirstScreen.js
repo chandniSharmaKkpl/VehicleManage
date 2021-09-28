@@ -49,9 +49,9 @@ export class FirstScreen extends Component {
     const { initializeApp } = this.props;
     initializeApp().then((res) => {
       if (res.value.status === 200) {
-        NavigationService.reset("Home");
+        NavigationService.navigate("App");
       } else {
-        NavigationService.reset("Login");
+        NavigationService.navigate("Login");
       }
     });
   }

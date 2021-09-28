@@ -148,9 +148,9 @@ export class CreateSocialMediaProfile extends Component {
     const { initializeApp } = this.props;
     initializeApp().then((res) => {
       if (res.value.status === 200) {
-        NavigationService.reset("Home");
+        NavigationService.navigate("App");
       } else {
-        NavigationService.reset("Login");
+        NavigationService.navigate("Login");
       }
     });
   }
@@ -257,6 +257,7 @@ export class CreateSocialMediaProfile extends Component {
           )}
           <Header
             isShowBack={true}
+            onPressed={()=>this.props.navigation.openDrawer()}
             title={StaticTitle.createProfile}
             theme={theme}
           />

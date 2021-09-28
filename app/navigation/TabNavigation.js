@@ -19,6 +19,8 @@ import FriendDetailScreen from "../modules/dashboard/social/FriendDetailScreen";
 import NotificationScreen from "../modules/dashboard/search/NotificationScreen";
 import RecentViewersScreen from "../modules/dashboard/search/RecentViewersScreen";
 import ChatMessagesScreen from "../modules/dashboard/chat/ChatMessagesScreen";
+import TermsConditionScreen from "..//modules/authentication/TermsConditionScreen";
+
 const SearchStack = createStackNavigator(
   {
     Search: {

@@ -1,5 +1,12 @@
 import api from "../../../utils/Api";
-import { SEARCH_BY_VECHICLE, UPDATE_PROFILE, GET_FRIEND_LIST, GET_FRIEND_DETAILS, ADD_FRIEND } from "./ActionType";
+import {
+  SEARCH_BY_VECHICLE,
+  UPDATE_PROFILE,
+  GET_FRIEND_LIST,
+  GET_FRIEND_DETAILS,
+  ADD_FRIEND,
+  LOGOUT,
+} from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
   type: SWITCH_THEME,
@@ -65,6 +72,14 @@ export const addfriend = (params) => ({
       return err;
     }),
 });
-
-
-
+export const logout = (params) => ({
+  type: LOGOUT,
+  payload: api
+    .post("api/logout", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
