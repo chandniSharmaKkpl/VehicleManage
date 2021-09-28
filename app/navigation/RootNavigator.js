@@ -7,11 +7,30 @@ import FirstScreen from "../modules/FirstScreen";
 import TabNavigator from "./TabNavigation";
 import AppNavigator from "./AppNavigator";
 import TermsConditionScreen from "..//modules/authentication/TermsConditionScreen";
+import SubscriptionScreen from "..//modules/dashboard/sidebar/SubscriptionScreen";
+import { createStackNavigator } from "react-navigation-stack";
+
+const DrawerStack = createStackNavigator(
+  {
+    TermsCondition: {
+      screen: TermsConditionScreen,
+    },
+    Subscription: {
+      screen: SubscriptionScreen,
+    },
+  },
+  {
+    defaultNavigationOptions: {
+      gestureEnabled: true,
+      headerShown: false,
+    },
+  }
+);
 
 const Drawer = createDrawerNavigator(
   {
     Home: TabNavigator,
-    
+    Other: DrawerStack,
   },
   {
     contentComponent: sideDrawer,
@@ -19,7 +38,7 @@ const Drawer = createDrawerNavigator(
     swipeEnabled: true,
     drawerPosition: "right",
     headerMode: "none",
-    drawerBackgroundColor: "transparent", 
+    drawerBackgroundColor: "transparent",
     drawerWidth: globals.deviceWidth * 0.74,
     drawerType: "front",
     navigationOptions: {

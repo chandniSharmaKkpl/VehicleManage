@@ -19,7 +19,7 @@ import FriendDetailScreen from "../modules/dashboard/social/FriendDetailScreen";
 import NotificationScreen from "../modules/dashboard/search/NotificationScreen";
 import RecentViewersScreen from "../modules/dashboard/search/RecentViewersScreen";
 import ChatMessagesScreen from "../modules/dashboard/chat/ChatMessagesScreen";
-import TermsConditionScreen from "..//modules/authentication/TermsConditionScreen";
+import RegistrationDetailsScreen from "..//modules/authentication/RegistrationDetailsScreen";
 
 const SearchStack = createStackNavigator(
   {
@@ -94,6 +94,9 @@ const UserStack = createStackNavigator(
     },
     PrivacySettings: {
       screen: PrivacySettingsScreen,
+    },
+    RegistrationDetails: {
+      screen: RegistrationDetailsScreen,
     },
   },
   {

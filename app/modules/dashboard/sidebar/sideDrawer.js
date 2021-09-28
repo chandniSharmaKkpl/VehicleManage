@@ -19,11 +19,17 @@ import { NavigationActions, StackActions } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import NavigationService from "../../../utils/NavigationService";
+import FastImage from "react-native-fast-image";
+import { SideDrawerStyle } from "../../../assets/styles/SideDrawerStyle";
 
 class sideDrawer extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userDetails: this.props.userDetails
+        ? this.props.userDetails.user_data
+        : {},
+    };
   }
 
   async logoutFinal() {
@@ -64,53 +70,59 @@ class sideDrawer extends Component {
   }
 
   render() {
+    const { userDetails } = this.state;
+    console.log("userDetails.user_photo=====", userDetails.user_photo);
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <View style={styles.drawerSaperator} />
+      <SafeAreaView style={SideDrawerStyle.container}>
+        <View style={SideDrawerStyle.container}>
+          <View style={SideDrawerStyle.drawerSaperator} />
 
-          <View
-            style={{
-              height: globals.deviceHeight * 0.09,
-              backgroundColor: Colors.primary,
-            }}
-          >
+          <View style={SideDrawerStyle.headerSeprate}>
+            <View style={SideDrawerStyle.circleview}>
+              {userDetails.user_photo ? (
+                <FastImage
+                  resizeMethod="resize"
+                  style={SideDrawerStyle.userimgstyle}
+                  source={{
+                    uri: userDetails.user_photo,
+                  }}
+                ></FastImage>
+              ) : (
+                <FastImage
+                  resizeMethod="resize"
+                  style={SideDrawerStyle.userimgstyle}
+                  source={IMAGE.user}
+                ></FastImage>
+              )}
+            </View>
+            <Text numberOfLines={2} style={SideDrawerStyle.usernametext}>
+              {userDetails.name ? userDetails.name : "-"}
+            </Text>
             <TouchableOpacity
-              style={{
-                flexDirection: "row",
-                alignSelf: "flex-end",
-                marginRight: globals.deviceWidth * 0.08,
-                marginVertical: 18,
-                justifyContent: "center",
-              }}
+              style={SideDrawerStyle.closedrawerbutton}
               onPress={() => {
                 this.props.navigation.closeDrawer();
               }}
             >
-              <Image
+              <FastImage
                 style={{
                   height: 18,
                   width: 18,
                 }}
                 source={IMAGE.close_img}
-              ></Image>
+              ></FastImage>
             </TouchableOpacity>
           </View>
 
-          <View
-            style={{
-              backgroundColor: Colors.primary,
-              width: globals.deviceWidth * 0.74,
-              height: globals.deviceHeight * 0.0015,
-            }}
-          ></View>
+          <View style={SideDrawerStyle.beforeDrawerOption}></View>
           <TouchableOpacity
-            style={[styles.dashBoardButtonViewStyle]}
+            style={[SideDrawerStyle.dashBoardButtonViewStyle]}
             onPress={() => {
               this.props.navigation.closeDrawer();
+              Alert.alert("Coming soon .....");
             }}
           >
-            <Image
+            <FastImage
               style={{
                 width: 23,
                 height: 23,
@@ -118,15 +130,18 @@ class sideDrawer extends Component {
               }}
               source={IMAGE.subscription_img}
             />
-            <Text numberOfLines={1} style={[styles.dashBoardTextStyle]}>
+            <Text
+              numberOfLines={1}
+              style={[SideDrawerStyle.dashBoardTextStyle]}
+            >
               {StaticTitle.subscriptions}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => NavigationService.navigate("TermsCondition")}
-            style={[styles.dashBoardButtonViewStyle]}
+            style={[SideDrawerStyle.dashBoardButtonViewStyle]}
           >
-            <Image
+            <FastImage
               style={{
                 width: 20,
                 height: 20,
@@ -135,16 +150,19 @@ class sideDrawer extends Component {
               source={IMAGE.terms_conditions_img}
             />
 
-            <Text numberOfLines={1} style={[styles.dashBoardTextStyle]}>
+            <Text
+              numberOfLines={1}
+              style={[SideDrawerStyle.dashBoardTextStyle]}
+            >
               {StaticTitle.termandcond}
             </Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
           onPress={() => this.onPressLogout()}
-          style={styles.dashboardBottomView}
+          style={SideDrawerStyle.dashboardBottomView}
         >
-          <Image
+          <FastImage
             style={{
               width: 22,
               height: 20,
@@ -152,7 +170,12 @@ class sideDrawer extends Component {
             }}
             source={IMAGE.sign_out_img}
           />
-          <Text style={[styles.dashBoardTextStyle, { color: Colors.white }]}>
+          <Text
+            style={[
+              SideDrawerStyle.dashBoardTextStyle,
+              { color: Colors.white },
+            ]}
+          >
             {"Logout"}
           </Text>
         </TouchableOpacity>
@@ -160,47 +183,13 @@ class sideDrawer extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.lite_background,
-  },
-  drawerSaperator: {
-    width: "100%",
-    height: 1,
-    backgroundColor: Colors.primary,
-  },
-  dashBoardTextStyle: {
-    fontSize: globals.font_16,
-    marginLeft: 20,
-    color: Colors.black,
-    fontFamily: FontFamily.RalewayBold,
-  },
-  dashboardBottomView: {
-    height: globals.deviceHeight * 0.065,
-    paddingLeft: 10,
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: Colors.primary,
-  },
-  dashBoardButtonViewStyle: {
-    height: globals.deviceHeight * 0.055,
-    paddingLeft: 10,
-    alignItems: "center",
-    borderRadius:
-      (globals.deviceHeight * 0.055 + globals.deviceWidth * 0.61) / 2,
-    marginLeft: globals.deviceWidth * 0.02,
-    marginBottom: globals.deviceHeight * 0.02,
-    marginTop: globals.deviceHeight * 0.01,
-    flexDirection: "row",
-  },
-});
 
 const mapStateToProps = (state) => {
   return {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
+    userDetails: state.auth.user.userDetails,
   };
 };
 

@@ -1,8 +1,3 @@
-import {
-  createAppContainer,
-  withNavigation,
-  createSwitchNavigator,
-} from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import SignUpScreen from "..//modules/authentication/SignUpScreen";
 import SignInScreen from "..//modules/authentication/SignInScreen";
@@ -15,14 +10,9 @@ import RegistrationDetailsScreen from "..//modules/authentication/RegistrationDe
 import TermsConditionScreen from "..//modules/authentication/TermsConditionScreen";
 import SplashScreen from "..//modules/SplashScreen";
 import TabNavigation from "./TabNavigation";
-import { createDrawerNavigator } from "react-navigation-drawer";
-import * as globals from "../utils/Globals";
-import FirstScreen from "../modules/FirstScreen";
-import { ScrollView, SafeAreaView, Text } from "react-native";
 
 const AppNavigator = createStackNavigator(
   {
-    
     Home: {
       screen: TabNavigation,
     },
@@ -65,6 +55,5 @@ const AppNavigator = createStackNavigator(
     },
   }
 );
-
 
 export default AppNavigator;
