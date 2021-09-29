@@ -56,8 +56,8 @@ class AppNavigation extends Component {
   onBackPress = () => {
     const { nav, dispatch } = this.props;
     console.log("nav.index====", nav.index);
-    if (nav.index === 0) {
-      console.log("i amin 0 index");
+    if (nav.index === 1) {
+      console.log("i amin 1 index");
       this.exitApp();
     }
     dispatch(NavigationActions.back());

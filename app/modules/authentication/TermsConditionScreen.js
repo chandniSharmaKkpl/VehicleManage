@@ -41,7 +41,7 @@ export class TermsConditionScreen extends Component {
         >
           <Header
             isShowBack={true}
-            onPressed={()=>this.props.navigation.openDrawer()}
+            onPressed={() => this.props.navigation.openDrawer()}
             title={"Terms And Condition"}
             theme={theme}
           />
@@ -50,7 +50,7 @@ export class TermsConditionScreen extends Component {
           )}
           <WebView
             scalesPageToFit
-            style={{ flex: 1 }}
+            style={{ width: "100%", height: "100%" }}
             source={{
               uri: termsCondURL,
             }}
