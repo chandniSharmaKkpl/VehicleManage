@@ -51,7 +51,6 @@ export class FriendlistScreen extends Component {
 
   /// call everytime didmount
   onFocusFunction = async () => {
-    
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -69,11 +68,13 @@ export class FriendlistScreen extends Component {
 
   // search vechicle by name
   getfriendListAPI = () => {
-    const { user } = this.state;
+    const { user, txtSearch } = this.state;
     const { getfriendlist } = this.props;
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("user_id", user.user_id);
+    params.append("search", txtSearch);
+
     getfriendlist(params)
       .then(async (res) => {
         console.log(
@@ -117,6 +118,15 @@ export class FriendlistScreen extends Component {
     this.setState({
       txtSearch: "",
     });
+  };
+
+  // search vechicle by name
+  getSearchResult = () => {
+    if (globals.isInternetConnected == true) {
+      this.getfriendListAPI();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   // render friendlist dataItem
@@ -206,7 +216,7 @@ export class FriendlistScreen extends Component {
           <Header
             title={StaticTitle.frndList}
             isShowSidebar={true}
-            onPressed={()=>this.props.navigation.openDrawer()}
+            onPressed={() => this.props.navigation.openDrawer()}
             theme={theme}
           />
           <Search
@@ -221,6 +231,7 @@ export class FriendlistScreen extends Component {
               })
             }
             placeholderText={StaticTitle.searchbyNameNnum}
+            onPress={() => this.getSearchResult()}
           />
           {friendListData.length == 0 || friendListData == [] ? (
             <View style={FriendListStyle.emptyview}>

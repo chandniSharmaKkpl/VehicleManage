@@ -14,7 +14,6 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";

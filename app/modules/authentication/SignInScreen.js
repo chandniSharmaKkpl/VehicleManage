@@ -164,6 +164,10 @@ export class SignInScreen extends Component {
     if (globals.isInternetConnected == true) {
       login(params)
         .then(async (res) => {
+          console.log(
+            "res.value.data.data------login-------",
+            JSON.stringify(res.value)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.invalid_email) {
@@ -177,15 +181,23 @@ export class SignInScreen extends Component {
                 passwdValidMsg: res.value.invalid_password,
               });
             } else if (res.value && res.value.status === 200) {
+              if (res.value.data.data.user_data) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                await this.getUserData();
+              } else if (res.value.data.data.createprofileone == false) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                NavigationService.navigate("CreateProfile");
+              } else if (res.value.data.data.createprofiletwo == false) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                NavigationService.navigate("CreateSocialMediaProfile");
+              }
+
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
                 icon: "info",
                 duration: 4000,
               });
-
-              this.gotoSaveToken(res.value.data.data.token);
-              NavigationService.navigate("CreateProfile");
             } else {
               this.setState({
                 isPasswordError: true,
@@ -213,6 +225,18 @@ export class SignInScreen extends Component {
     }
   };
 
+  // get user information
+  getUserData() {
+    const { initializeApp } = this.props;
+    initializeApp().then((res) => {
+      if (res.value && res.value.status === 200) {
+        NavigationService.navigate("App");
+      } else {
+        NavigationService.navigate("Login");
+      }
+    });
+  }
+
   // save access token
   async gotoSaveToken(accessToken) {
     console.log(TAG, "accessToken===", accessToken);
@@ -222,7 +246,7 @@ export class SignInScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-   
+
     return (
       <>
         <View
@@ -378,6 +402,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   login: (params) => dispatch(actions.login(params)),
+  initializeApp: (params) => dispatch(actions.initializeApp(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

@@ -6,6 +6,7 @@ import {
   GET_FRIEND_DETAILS,
   ADD_FRIEND,
   LOGOUT,
+  UPDATE_SETTINGS,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -76,6 +77,17 @@ export const logout = (params) => ({
   type: LOGOUT,
   payload: api
     .post("api/logout", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+export const updateUserSettings = (params) => ({
+  type: UPDATE_SETTINGS,
+  payload: api
+    .post("api/updateUserSettings", params)
     .then((res) => {
       return res;
     })

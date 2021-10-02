@@ -71,10 +71,18 @@ class sideDrawer extends Component {
 
   render() {
     const { userDetails } = this.state;
-    console.log("userDetails.user_photo=====", userDetails.user_photo);
+    const { isLoading, loaderMessage, theme } = this.props;
+
     return (
       <SafeAreaView style={SideDrawerStyle.container}>
-        <View style={SideDrawerStyle.container}>
+        <View
+          style={[
+            SideDrawerStyle.container,
+            {
+              backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+            },
+          ]}
+        >
           <View style={SideDrawerStyle.drawerSaperator} />
 
           <View style={SideDrawerStyle.headerSeprate}>
