@@ -83,10 +83,27 @@ class FBLogin extends Component {
                     icon: "info",
                     duration: 4000,
                   });
-                  let authToken = res.value.data.data.token;
-                  await AsyncStorage.setItem("access_token", authToken);
-                  globals.access_token = authToken;
-                  NavigationService.navigate("CreateProfile");
+                  if (
+                    res.value &&
+                    res.value.status &&
+                    res.value.data.data.createprofileone == true
+                  ) {
+                    await this.gotoSaveToken(res.value.data.data.token);
+                    NavigationService.navigate("CreateProfile");
+                  } else if (
+                    res.value.data.data.createprofiletwo == true ||
+                    res.value.data.data.register_detail == true
+                  ) {
+                    await this.gotoSaveToken(res.value.data.data.token);
+                    NavigationService.navigate("CreateSocialMediaProfile");
+                  } else if (
+                    res.value.data.data.createprofileone == false &&
+                    res.value.data.data.createprofiletwo == false &&
+                    res.value.data.data.register_detail == false
+                  ) {
+                    await this.gotoSaveToken(res.value.data.data.token);
+                    await this.getUserData();
+                  }
                 }
               } else {
                 if (res.value && res.value.data.error) {
@@ -104,7 +121,8 @@ class FBLogin extends Component {
             });
         } else {
           await showMessage({
-            message: "Email is required, Please add into your facebook account or Login with Roadie App",
+            message:
+              "Email is required, Please add into your facebook account or Login with Roadie App",
             type: "danger",
             icon: "info",
             duration: 4000,
@@ -113,6 +131,25 @@ class FBLogin extends Component {
       }
     };
   };
+
+  // save access token
+  async gotoSaveToken(accessToken) {
+    console.log(TAG, "accessToken===", accessToken);
+    await AsyncStorage.setItem("access_token", accessToken);
+    globals.access_token = accessToken;
+  }
+
+  // get user information
+  getUserData() {
+    const { initializeApp } = this.props;
+    initializeApp().then((res) => {
+      if (res.value && res.value.status === 200) {
+        NavigationService.navigate("App");
+      } else {
+        NavigationService.navigate("Login");
+      }
+    });
+  }
 
   render() {
     return (
@@ -137,6 +174,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   sociallogin: (params) => dispatch(actions.sociallogin(params)),
+  initializeApp: (params) => dispatch(actions.initializeApp(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FBLogin);

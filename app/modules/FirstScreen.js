@@ -47,11 +47,39 @@ export class FirstScreen extends Component {
 
   getUserData() {
     const { initializeApp } = this.props;
-    initializeApp().then((res) => {
-      if (res.value.status === 200) {
-        NavigationService.navigate("App");
-      } else {
-        NavigationService.navigate("Login");
+    initializeApp().then(async (res) => {
+      console.log(
+        "res====FIrstscreen ------------",
+        JSON.stringify(res.value.data.data)
+      );
+      if (res.value && res.value.data.success == true) {
+        if (res.value && res.value.status == 200) {
+          let userdata = res.value.data.data;
+          if (
+            res.value &&
+            res.value.status &&
+            userdata.createprofileone == true
+          ) {
+            NavigationService.navigate("CreateProfile");
+          } else if (
+            res.value &&
+            res.value.status &&
+            (userdata.createprofiletwo == true ||
+              userdata.register_detail == true)
+          ) {
+            NavigationService.navigate("CreateSocialMediaProfile");
+          } else if (
+            res.value &&
+            res.value.status &&
+            userdata.createprofileone == false &&
+            userdata.createprofiletwo == false &&
+            userdata.register_detail == false
+          ) {
+            NavigationService.navigate("App");
+          }
+        } else {
+          NavigationService.navigate("Login");
+        }
       }
     });
   }

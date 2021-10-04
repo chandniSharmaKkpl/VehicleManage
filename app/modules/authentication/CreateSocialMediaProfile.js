@@ -121,6 +121,9 @@ export class CreateSocialMediaProfile extends Component {
                 icon: "info",
                 duration: 4000,
               });
+              let authToken = res.value.data.data.user_data.token;
+              await AsyncStorage.setItem("access_token", authToken);
+              globals.access_token = authToken;
               this.getUserData();
             } else {
             }

@@ -38,8 +38,8 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      txtEmail: "22@mailinator.com",
-      txtPassword: "Abcd1234",
+      txtEmail: "user6@mailinator.com",
+      txtPassword: "Test@123",
       // txtEmail: "",
       // txtPassword: "",
       isShowPassword: true,
@@ -181,15 +181,26 @@ export class SignInScreen extends Component {
                 passwdValidMsg: res.value.invalid_password,
               });
             } else if (res.value && res.value.status === 200) {
-              if (res.value.data.data.user_data) {
-                await this.gotoSaveToken(res.value.data.data.token);
-                await this.getUserData();
-              } else if (res.value.data.data.createprofileone == false) {
+              if (
+                res.value &&
+                res.value.status &&
+                res.value.data.data.createprofileone == true
+              ) {
                 await this.gotoSaveToken(res.value.data.data.token);
                 NavigationService.navigate("CreateProfile");
-              } else if (res.value.data.data.createprofiletwo == false) {
+              } else if (
+                res.value.data.data.createprofiletwo == true ||
+                res.value.data.data.register_detail == true
+              ) {
                 await this.gotoSaveToken(res.value.data.data.token);
                 NavigationService.navigate("CreateSocialMediaProfile");
+              } else if (
+                res.value.data.data.createprofileone == false &&
+                res.value.data.data.createprofiletwo == false &&
+                res.value.data.data.register_detail == false
+              ) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                await this.getUserData();
               }
 
               await showMessage({

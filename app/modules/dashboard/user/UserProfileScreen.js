@@ -43,6 +43,7 @@ import Colors from "../../../assets/Colors";
 import * as actions from "../redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { NavigationEvents } from "react-navigation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "UserProfileScreen ::=";
 
@@ -87,6 +88,8 @@ export class UserProfileScreen extends Component {
   }
 
   async componentDidMount() {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
     this.onFocusFunction();
     // this.focusListener = this.props.navigation.addListener("didFocus", () => {
     //   this.onFocusFunction();
@@ -349,8 +352,10 @@ export class UserProfileScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
+              let authToken = res.value.data.data.user_data.token;
+              await AsyncStorage.setItem("access_token", authToken);
+              globals.access_token = authToken;
               this.getUserData();
-              this.forceUpdate();
             } else {
             }
           } else {
@@ -375,28 +380,7 @@ export class UserProfileScreen extends Component {
   getUserData() {
     if (globals.isInternetConnected == true) {
       const { initializeApp } = this.props;
-      initializeApp().then((res) => {
-        // console.log("res=getUserData===", res);
-        if (res.value && res.value.data.success == true) {
-          if (res.value && res.value.status === 200) {
-            let userInfo = res.value.data.data;
-            console.log("userInfo====", userInfo.user_data.user_photo);
-            // this.setState({
-            //   user: userInfo.user_data,
-            //   selectedCity: userInfo.user_data.city,
-            //   selectedModel: userInfo.user_data.car_make_model,
-            //   selectedColour: userInfo.user_data.car_colour,
-            //   txtUserName: userInfo.user_data.username,
-            //   txtDescription: userInfo.user_data.car_description,
-            //   photoUrl: userInfo.user_data.user_photo,
-            //   txtSnapName: userInfo.user_data.snapchat_username,
-            //   txtInstaName: userInfo.user_data.instagram_username,
-            //   txtFbName: userInfo.user_data.fb_username,
-            // });
-          } else {
-          }
-        }
-      });
+      initializeApp().then((res) => {});
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
@@ -433,7 +417,7 @@ export class UserProfileScreen extends Component {
             title={StaticTitle.userProfile}
             isShowSidebar={true}
             theme={theme}
-            onPressed={()=>this.props.navigation.openDrawer()}
+            onPressed={() => this.props.navigation.openDrawer()}
           />
 
           <View>

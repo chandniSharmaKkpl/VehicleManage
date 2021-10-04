@@ -98,10 +98,27 @@ class GoogleLogin extends Component {
                 icon: "info",
                 duration: 4000,
               });
-              let authToken = res.value.data.data.token;
-              await AsyncStorage.setItem("access_token", authToken);
-              globals.access_token = authToken;
-              NavigationService.navigate("CreateProfile");
+              if (
+                res.value &&
+                res.value.status &&
+                res.value.data.data.createprofileone == true
+              ) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                NavigationService.navigate("CreateProfile");
+              } else if (
+                res.value.data.data.createprofiletwo == true ||
+                res.value.data.data.register_detail == true
+              ) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                NavigationService.navigate("CreateSocialMediaProfile");
+              } else if (
+                res.value.data.data.createprofileone == false &&
+                res.value.data.data.createprofiletwo == false &&
+                res.value.data.data.register_detail == false
+              ) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                await this.getUserData();
+              }
             }
           } else {
             if (res.value && res.value.data.error) {
@@ -138,6 +155,25 @@ class GoogleLogin extends Component {
     }
   };
 
+  // get user information
+  getUserData() {
+    const { initializeApp } = this.props;
+    initializeApp().then((res) => {
+      if (res.value && res.value.status === 200) {
+        NavigationService.navigate("App");
+      } else {
+        NavigationService.navigate("Login");
+      }
+    });
+  }
+
+  // save access token
+  async gotoSaveToken(accessToken) {
+    console.log(TAG, "accessToken===", accessToken);
+    await AsyncStorage.setItem("access_token", accessToken);
+    globals.access_token = accessToken;
+  }
+
   render() {
     return (
       <View style={{ marginHorizontal: 10 }}>
@@ -161,6 +197,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   sociallogin: (params) => dispatch(actions.sociallogin(params)),
+  initializeApp: (params) => dispatch(actions.initializeApp(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleLogin);
