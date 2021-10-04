@@ -33,14 +33,12 @@ export class PrivacySettingsScreen extends Component {
     await this.getUserData();
   }
 
-  // async componentDidMount() {
-  //   this.focusListener = this.props.navigation.addListener("didFocus", () => {
-  //     this.onFocusFunction();
-  //   });
-  // }
+  async componentDidMount() {
+    await this.onFocus();
+  }
 
   /// call everytime didmount
-  onFocusFunction = async () => {
+  onFocus = async () => {
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setUserInfo(this.props.userDetails);
@@ -49,13 +47,11 @@ export class PrivacySettingsScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
-    // this.focusListener.remove();
   }
 
   // set userInformation
   setUserInfo = async (user) => {
     if (this._isMounted) {
-      console.log("user.user_data=============setUserInfo====", user.user_data);
       if (user && user.user_data) {
         this.setState({
           user: user.user_data,
@@ -200,6 +196,7 @@ export class PrivacySettingsScreen extends Component {
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
+              this.getUserData();
               // await showMessage({
               //   message: res.value.data.message,
               //   type: "success",
@@ -223,11 +220,9 @@ export class PrivacySettingsScreen extends Component {
     if (globals.isInternetConnected == true) {
       const { initializeApp } = this.props;
       initializeApp().then((res) => {
-        console.log("res=getUserData===", JSON.stringify(res.value.data.data));
         if (res.value && res.value.data.success == true) {
           if (res.value && res.value.status === 200) {
-            let userInfo = res.value.data.data;
-            console.log("userInfo====", userInfo.user_data);
+            // console.log("userInfo====", userInfo.user_data);
           } else {
           }
         }
@@ -257,7 +252,7 @@ export class PrivacySettingsScreen extends Component {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-          <NavigationEvents onDidFocus={() => this.onFocusFunction()} />
+          {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           <Header
             isShowBack={true}
             title={StaticTitle.privacysettings}

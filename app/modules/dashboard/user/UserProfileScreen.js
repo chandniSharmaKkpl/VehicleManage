@@ -87,9 +87,10 @@ export class UserProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      this.onFocusFunction();
-    });
+    this.onFocusFunction();
+    // this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    //   this.onFocusFunction();
+    // });
   }
 
   /// call everytime didmount
@@ -110,7 +111,7 @@ export class UserProfileScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
-    this.focusListener.remove();
+    // this.focusListener.remove();
   }
 
   // set userInformation
