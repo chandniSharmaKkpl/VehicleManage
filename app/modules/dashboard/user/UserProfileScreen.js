@@ -14,7 +14,6 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";
@@ -88,9 +87,10 @@ export class UserProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      this.onFocusFunction();
-    });
+    this.onFocusFunction();
+    // this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    //   this.onFocusFunction();
+    // });
   }
 
   /// call everytime didmount
@@ -111,7 +111,7 @@ export class UserProfileScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
-    this.focusListener.remove();
+    // this.focusListener.remove();
   }
 
   // set userInformation

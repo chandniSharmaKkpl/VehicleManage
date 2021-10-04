@@ -8,7 +8,7 @@ import {
   Image,
   StatusBar,
   ScrollView,
-  TouchableOpacity,
+  TouchableOpacity, 
 } from "react-native";
 import { connect } from "react-redux";
 import { FriendDetailStyle } from "../../../assets/styles/FriendDetailStyle";
@@ -25,25 +25,18 @@ import * as globals from "../../../utils/Globals";
 
 const TAG = "SubscriptionScreen ::=";
 
- class SubscriptionScreen extends Component {
+class SubscriptionScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      
-    };
+    this.state = {};
   }
 
   componentDidMount() {}
 
-
   render() {
-
     return (
       <>
-        <View style={FriendDetailStyle.container}>
-         
-            
-        </View>
+        <View style={FriendDetailStyle.container}></View>
       </>
     );
   }

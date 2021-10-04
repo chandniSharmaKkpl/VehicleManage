@@ -111,7 +111,7 @@ export class FriendDetailScreen extends Component {
     if (globals.isInternetConnected == true) {
       params.append("user_id", user.user_id);
       params.append("friend_id", getfriendData.id);
-      console.log("params====", JSON.stringify(params));
+      console.log("params====AddasFriend", JSON.stringify(params));
       addfriend(params)
         .then(async (res) => {
           console.log(
@@ -171,7 +171,6 @@ export class FriendDetailScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-
     const { friendDetail } = this.state;
     return (
       <>
@@ -227,18 +226,20 @@ export class FriendDetailScreen extends Component {
               </Text>
             </View>
             <View style={FriendDetailStyle.middleview}>
-              <TouchableOpacity
-                onPress={() => this.AddasFriend()}
-                style={[
-                  FriendDetailStyle.circleview,
-                  { backgroundColor: Colors.primary },
-                ]}
-              >
-                <FastImage
-                  style={[FriendDetailStyle.socialicon]}
-                  source={IMAGE.social_group_img}
-                />
-              </TouchableOpacity>
+              {friendDetail.is_friend == false ? (
+                <TouchableOpacity
+                  onPress={() => this.AddasFriend()}
+                  style={[
+                    FriendDetailStyle.circleview,
+                    { backgroundColor: Colors.primary },
+                  ]}
+                >
+                  <FastImage
+                    style={[FriendDetailStyle.socialicon]}
+                    source={IMAGE.social_group_img}
+                  />
+                </TouchableOpacity>
+              ) : null}
 
               <TouchableOpacity
                 onPress={() =>
@@ -316,23 +317,24 @@ export class FriendDetailScreen extends Component {
               </ScrollView>
             </View>
           </View>
-
-          <View style={FriendDetailStyle.bottomview}>
-            <TouchableOpacity
-              style={[
-                FriendDetailStyle.bottomcircleview,
-                {
-                  backgroundColor: theme.CHAT_BTN_COLOR,
-                },
-              ]}
-            >
-              <FastImage
-                style={[FriendDetailStyle.bottomicon]}
-                source={IMAGE.chatboxes_img}
-                tintColor={Colors.white}
-              />
-            </TouchableOpacity>
-          </View>
+          {friendDetail.is_friend == false ? null : (
+            <View style={FriendDetailStyle.bottomview}>
+              <TouchableOpacity
+                style={[
+                  FriendDetailStyle.bottomcircleview,
+                  {
+                    backgroundColor: theme.CHAT_BTN_COLOR,
+                  },
+                ]}
+              >
+                <FastImage
+                  style={[FriendDetailStyle.bottomicon]}
+                  source={IMAGE.chatboxes_img}
+                  tintColor={Colors.white}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </>
     );

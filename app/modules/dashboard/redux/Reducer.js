@@ -193,6 +193,36 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
+       //// UPDATE_SETTINGS
+    case actionTypes.UPDATE_SETTINGS_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.UPDATE_SETTINGS_SUCCESS:
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.UPDATE_SETTINGS_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
     case actionTypes.SWITCH_THEME:
       // console.log("actionTypes.SWITCH_THEME action.baseTheme :->"+JSON.stringify(action.payload.baseTheme));
       return {

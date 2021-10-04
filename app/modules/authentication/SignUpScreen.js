@@ -124,12 +124,6 @@ export class SignUpScreen extends Component {
    * Method for term&condition open in default browser
    */
   handletermconditionClick = () => {
-    // Linking.canOpenURL(termsCondURL).then((supported) => {
-    //   if (supported) {
-    //     Linking.openURL(termsCondURL);
-    //   } else {
-    //   }
-    // });
     NavigationService.navigate("TermsCondition");
   };
 

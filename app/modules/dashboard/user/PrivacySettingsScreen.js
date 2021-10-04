@@ -1,64 +1,236 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Alert, Text, ScrollView } from "react-native";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";
 import { PrivacySettingStyle } from "../../../assets/styles/PrivacySettingStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
-
+import * as actions from "../redux/Actions";
 import { SwitchComponent, Header } from "../../../components";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import * as Authactions from "../../authentication/redux/Actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationEvents } from "react-navigation";
 
 const TAG = "PrivacySettingsScreen ::=";
 
 export class PrivacySettingsScreen extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
-      isHideCarModelisHideProfile: false,
+      isHideProfile: false,
       isHideCity: false,
       isHideCarModel: false,
       isHideRequestSocial: false,
       isHideShareSocial: false,
       isHideDisplayName: false,
       isHideSearchUser: false,
+      user: {},
     };
   }
 
-  componentDidMount() {}
+  async componentWillUnmount() {
+    await this.getUserData();
+  }
+
+  async componentDidMount() {
+    await this.onFocus();
+  }
+
+  /// call everytime didmount
+  onFocus = async () => {
+    this._isMounted = true;
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setUserInfo(this.props.userDetails);
+    }
+  };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  // set userInformation
+  setUserInfo = async (user) => {
+    if (this._isMounted) {
+      if (user && user.user_data) {
+        this.setState({
+          user: user.user_data,
+          isHideProfile: user.user_data.setting_1 == 1 ? true : false,
+          isHideCity: user.user_data.setting_2 == 1 ? true : false,
+          isHideCarModel: user.user_data.setting_3 == 1 ? true : false,
+          isHideRequestSocial: user.user_data.setting_4 == 1 ? true : false,
+          isHideShareSocial: user.user_data.setting_5 == 1 ? true : false,
+          isHideDisplayName: user.user_data.setting_6 == 1 ? true : false,
+          isHideSearchUser: user.user_data.setting_7 == 1 ? true : false,
+        });
+      }
+    }
+  };
 
   // change on-off HideProfile
   changeHideProfile = () => {
-    this.setState({ isHideProfile: !this.state.isHideProfile });
+    this.setState({ isHideProfile: !this.state.isHideProfile }, () => {
+      async () => {
+        await AsyncStorage.setItem(
+          "HideProfile",
+          this.state.isHideProfile.toString()
+        );
+      };
+      this.updateUserSettingsAPI();
+    });
   };
 
   // change on-off HideCity
   changeHideCity = () => {
-    this.setState({ isHideCity: !this.state.isHideCity });
+    this.setState({ isHideCity: !this.state.isHideCity }, () => {
+      async () => {
+        await AsyncStorage.setItem(
+          "HideCity",
+          this.state.isHideCity.toString()
+        );
+      };
+      this.updateUserSettingsAPI();
+    });
   };
 
   // change on-off HideCarModel
   changeHideCarModel = () => {
-    this.setState({ isHideCarModel: !this.state.isHideCarModel });
+    this.setState({ isHideCarModel: !this.state.isHideCarModel }, () => {
+      async () => {
+        await AsyncStorage.setItem(
+          "HideCarModel",
+          this.state.isHideCarModel.toString()
+        );
+      };
+      this.updateUserSettingsAPI();
+    });
   };
 
   // change on-off HideRequestSocial
   changeHideRequestSocial = () => {
-    this.setState({ isHideRequestSocial: !this.state.isHideRequestSocial });
+    this.setState(
+      { isHideRequestSocial: !this.state.isHideRequestSocial },
+      () => {
+        async () => {
+          await AsyncStorage.setItem(
+            "HideRequestSocial",
+            this.state.isHideRequestSocial.toString()
+          );
+        };
+        this.updateUserSettingsAPI();
+      }
+    );
   };
 
   // change on-off isHideShareSocial
   changeHideShareSocial = () => {
-    this.setState({ isHideShareSocial: !this.state.isHideShareSocial });
+    this.setState({ isHideShareSocial: !this.state.isHideShareSocial }, () => {
+      async () => {
+        await AsyncStorage.setItem(
+          "HideShareSocial",
+          this.state.isHideShareSocial.toString()
+        );
+      };
+      this.updateUserSettingsAPI();
+    });
   };
 
   // change on-off isHideDisplayName
   changeHideDisplayName = () => {
-    this.setState({ isHideDisplayName: !this.state.isHideDisplayName });
+    this.setState({ isHideDisplayName: !this.state.isHideDisplayName }, () => {
+      async () => {
+        await AsyncStorage.setItem(
+          "HideDisplayName",
+          this.state.isHideDisplayName.toString()
+        );
+      };
+      this.updateUserSettingsAPI();
+    });
   };
 
   // change on-off isHideSearchUser
   changeHideSearchUser = () => {
-    this.setState({ isHideSearchUser: !this.state.isHideSearchUser });
+    this.setState({ isHideSearchUser: !this.state.isHideSearchUser }, () => {
+      async () => {
+        await AsyncStorage.setItem(
+          "HideSearchUser",
+          this.state.isHideSearchUser.toString()
+        );
+      };
+      this.updateUserSettingsAPI();
+    });
   };
+
+  // API call of update User Settings
+  updateUserSettingsAPI = () => {
+    const {
+      isHideProfile,
+      isHideCity,
+      isHideCarModel,
+      isHideRequestSocial,
+      isHideShareSocial,
+      isHideDisplayName,
+      isHideSearchUser,
+    } = this.state;
+    var params = new FormData();
+
+    // Collect the necessary params
+    const { updateUserSettings } = this.props;
+    params.append("setting_1", isHideProfile == true ? 1 : 0);
+    params.append("setting_2", isHideCity == true ? 1 : 0);
+    params.append("setting_3", isHideCarModel == true ? 1 : 0);
+    params.append("setting_4", isHideRequestSocial == true ? 1 : 0);
+    params.append("setting_5", isHideShareSocial == true ? 1 : 0);
+    params.append("setting_6", isHideDisplayName == true ? 1 : 0);
+    params.append("setting_7", isHideSearchUser == true ? 1 : 0);
+
+    if (globals.isInternetConnected == true) {
+      console.log("params===updateUserSettings===", JSON.stringify(params));
+      updateUserSettings(params)
+        .then(async (res) => {
+          console.log(
+            TAG,
+            "updateprofile res.value.data---",
+            JSON.stringify(res.value.data)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              this.getUserData();
+              // await showMessage({
+              //   message: res.value.data.message,
+              //   type: "success",
+              //   icon: "info",
+              //   duration: 4000,
+              // });
+            } else {
+            }
+          } else {
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error updateUserSettings ", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
+
+  getUserData() {
+    if (globals.isInternetConnected == true) {
+      const { initializeApp } = this.props;
+      initializeApp().then((res) => {
+        if (res.value && res.value.data.success == true) {
+          if (res.value && res.value.status === 200) {
+            // console.log("userInfo====", userInfo.user_data);
+          } else {
+          }
+        }
+      });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
 
   render() {
     const {
@@ -70,7 +242,8 @@ export class PrivacySettingsScreen extends Component {
       isHideDisplayName,
       isHideSearchUser,
     } = this.state;
-    const { isLoading, loaderMessage, theme } = this.props;
+    const { isLoading, loaderMessage, theme, userDetails } = this.props;
+
     return (
       <>
         <View
@@ -79,11 +252,12 @@ export class PrivacySettingsScreen extends Component {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
+          {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           <Header
             isShowBack={true}
             title={StaticTitle.privacysettings}
             theme={theme}
-            onPressed={()=>this.props.navigation.openDrawer()}
+            onPressed={() => this.props.navigation.openDrawer()}
           />
           <View style={PrivacySettingStyle.maincontainer}>
             <Text style={PrivacySettingStyle.headingtitle}>
@@ -237,10 +411,14 @@ const mapStateToProps = (state) => {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
+    userDetails: state.auth.user.userDetails,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  updateUserSettings: (params) => dispatch(actions.updateUserSettings(params)),
+  initializeApp: (params) => dispatch(Authactions.initializeApp(params)),
+});
 
 export default connect(
   mapStateToProps,

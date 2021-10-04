@@ -61,7 +61,7 @@ export class SearchScreen extends Component {
           console.log(
             TAG,
             "response of search vehical",
-            JSON.stringify(res.value.data.data)
+            JSON.stringify(res.value)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
@@ -75,9 +75,9 @@ export class SearchScreen extends Component {
               this.setSearchdataList(res.value.data.data);
             }
           } else {
-            if (res.value && res.value.message) {
+            if (res.value && res.value.data.search_by_vehicle) {
               await showMessage({
-                message: res.value.message,
+                message: res.value.data.search_by_vehicle,
                 type: "danger",
                 icon: "info",
                 duration: 4000,
@@ -187,7 +187,7 @@ export class SearchScreen extends Component {
           <Header
             isShowBack={false}
             title={""}
-            onPressed={()=>this.props.navigation.openDrawer()}
+            onPressed={() => this.props.navigation.openDrawer()}
             isShowRighttwo={true}
             theme={theme}
           />

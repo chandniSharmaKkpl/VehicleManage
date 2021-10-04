@@ -162,7 +162,7 @@ export class RegistrationDetailsScreen extends Component {
     } = this.state;
     var params = new FormData();
     // Collect the necessary params
-    params.append("email", user.user_data.email);
+    params.append("id", user.user_data.user_id);
     if (attachphotoObj.uri == undefined || (attachphotoObj.uri == "") != []) {
       params.append("vehicle_photo", "");
     } else {
@@ -197,6 +197,7 @@ export class RegistrationDetailsScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
+              NavigationService.back();
             } else {
             }
           } else {
@@ -356,7 +357,7 @@ export class RegistrationDetailsScreen extends Component {
             attachphotoName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachPaperObj: source ? source :"",
+            attachPaperObj: source ? source : "",
           });
         }
       }
@@ -387,7 +388,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachPaperObj: source ? source :"",
+            attachPaperObj: source ? source : "",
           });
         } else {
           this.setState({
@@ -396,7 +397,7 @@ export class RegistrationDetailsScreen extends Component {
             attachphotoName: response.fileName
               ? response.fileName
               : "Dummy.jpg",
-            attachphotoObj: source ? source :"",
+            attachphotoObj: source ? source : "",
           });
         }
       }
@@ -415,6 +416,7 @@ export class RegistrationDetailsScreen extends Component {
       isFrom,
     } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
+
     return (
       <>
         <View
@@ -428,7 +430,7 @@ export class RegistrationDetailsScreen extends Component {
           )}
           <Header
             isShowBack={true}
-            onPressed={()=>this.props.navigation.openDrawer()}
+            onPressed={() => this.props.navigation.openDrawer()}
             title={StaticTitle.registartionDetail}
             theme={theme}
           />
@@ -520,7 +522,11 @@ export class RegistrationDetailsScreen extends Component {
                       : Colors.pink,
                   }}
                   title={
-                    attachPaperName ? attachPaperName : (isFrom == "Profile") ?StaticTitle.updateattachPaper :StaticTitle.attachPaper
+                    attachPaperName
+                      ? attachPaperName
+                      : isFrom == "Profile"
+                      ? StaticTitle.updateattachPaper
+                      : StaticTitle.attachPaper
                   }
                   onPress={() => this.displayAttchPaper()}
                 />
@@ -534,7 +540,11 @@ export class RegistrationDetailsScreen extends Component {
                       : Colors.blue,
                   }}
                   title={
-                    attachphotoName ? attachphotoName : (isFrom == "Profile") ?StaticTitle.updateattachPhoto : StaticTitle.attachPhoto
+                    attachphotoName
+                      ? attachphotoName
+                      : isFrom == "Profile"
+                      ? StaticTitle.updateattachPhoto
+                      : StaticTitle.attachPhoto
                   }
                   onPress={() => this.displayAttchPhoto()}
                 />
