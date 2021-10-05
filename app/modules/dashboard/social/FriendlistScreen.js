@@ -23,6 +23,7 @@ import * as actions from "../redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../../../utils/Globals";
+import { isEmpty } from "../../../utils/Validators";
 
 const TAG = "FriendlistScreen ::=";
 
@@ -121,7 +122,17 @@ export class FriendlistScreen extends Component {
   };
 
   // search vechicle by name
-  getSearchResult = () => {
+  getSearchResult = async () => {
+    const { txtSearch } = this.state;
+    if (isEmpty(txtSearch)) {
+      await showMessage({
+        message: StaticTitle.searchrequired,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+      return false;
+    }
     if (globals.isInternetConnected == true) {
       this.getfriendListAPI();
     } else {

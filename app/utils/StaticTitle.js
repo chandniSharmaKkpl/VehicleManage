@@ -77,6 +77,7 @@ const StaticTitle = {
     changeRegistration:'Change Registration',
     notification:'Notifications',
     whosearchyou:"Who's Searched You..",
+    searchrequired:'The search by vehicle field is required.',
 
     //// PRIVACY SETTINGS 
     privacysettings:'Privacy Settings',

@@ -21,7 +21,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import FastImage from "react-native-fast-image";
-
+import { isEmpty } from "../../../utils/Validators";
 const TAG = "SearchScreen ::=";
 
 export class SearchScreen extends Component {
@@ -48,8 +48,17 @@ export class SearchScreen extends Component {
   };
 
   // search vechicle by name
-  getSearchResult = () => {
+  getSearchResult = async () => {
     const { txtSearch } = this.state;
+    if (isEmpty(txtSearch)) {
+      await showMessage({
+        message: StaticTitle.searchrequired,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+      return false;
+    }
     const { searchvehicle } = this.props;
     let params = new URLSearchParams();
 
@@ -76,8 +85,16 @@ export class SearchScreen extends Component {
             }
           } else {
             if (res.value && res.value.data.search_by_vehicle) {
+              console.log("res.value.data.search_by_vehicle\\\\\\",res.value.data.search_by_vehicle);
               await showMessage({
                 message: res.value.data.search_by_vehicle,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }else if(res.value && res.value.message){
+              await showMessage({
+                message: res.value.message,
                 type: "danger",
                 icon: "info",
                 duration: 4000,

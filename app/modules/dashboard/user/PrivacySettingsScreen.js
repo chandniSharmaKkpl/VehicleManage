@@ -6,10 +6,8 @@ import { PrivacySettingStyle } from "../../../assets/styles/PrivacySettingStyle"
 import { StaticTitle } from "../../../utils/StaticTitle";
 import * as actions from "../redux/Actions";
 import { SwitchComponent, Header } from "../../../components";
-import { showMessage, hideMessage } from "react-native-flash-message";
 import * as Authactions from "../../authentication/redux/Actions";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationEvents } from "react-navigation";
+
 
 const TAG = "PrivacySettingsScreen ::=";
 
@@ -69,40 +67,22 @@ export class PrivacySettingsScreen extends Component {
 
   // change on-off HideProfile
   changeHideProfile = () => {
-    this.setState({ isHideProfile: !this.state.isHideProfile }, () => {
-      async () => {
-        await AsyncStorage.setItem(
-          "HideProfile",
-          this.state.isHideProfile.toString()
-        );
-      };
-      this.updateUserSettingsAPI();
+    this.setState({ isHideProfile: !this.state.isHideProfile }, async () => {
+      await this.updateUserSettingsAPI();
     });
   };
 
   // change on-off HideCity
   changeHideCity = () => {
-    this.setState({ isHideCity: !this.state.isHideCity }, () => {
-      async () => {
-        await AsyncStorage.setItem(
-          "HideCity",
-          this.state.isHideCity.toString()
-        );
-      };
-      this.updateUserSettingsAPI();
+    this.setState({ isHideCity: !this.state.isHideCity }, async () => {
+      await this.updateUserSettingsAPI();
     });
   };
 
   // change on-off HideCarModel
   changeHideCarModel = () => {
-    this.setState({ isHideCarModel: !this.state.isHideCarModel }, () => {
-      async () => {
-        await AsyncStorage.setItem(
-          "HideCarModel",
-          this.state.isHideCarModel.toString()
-        );
-      };
-      this.updateUserSettingsAPI();
+    this.setState({ isHideCarModel: !this.state.isHideCarModel }, async () => {
+      await this.updateUserSettingsAPI();
     });
   };
 
@@ -110,55 +90,40 @@ export class PrivacySettingsScreen extends Component {
   changeHideRequestSocial = () => {
     this.setState(
       { isHideRequestSocial: !this.state.isHideRequestSocial },
-      () => {
-        async () => {
-          await AsyncStorage.setItem(
-            "HideRequestSocial",
-            this.state.isHideRequestSocial.toString()
-          );
-        };
-        this.updateUserSettingsAPI();
+      async () => {
+        await this.updateUserSettingsAPI();
       }
     );
   };
 
   // change on-off isHideShareSocial
   changeHideShareSocial = () => {
-    this.setState({ isHideShareSocial: !this.state.isHideShareSocial }, () => {
+    this.setState(
+      { isHideShareSocial: !this.state.isHideShareSocial },
       async () => {
-        await AsyncStorage.setItem(
-          "HideShareSocial",
-          this.state.isHideShareSocial.toString()
-        );
-      };
-      this.updateUserSettingsAPI();
-    });
+        await this.updateUserSettingsAPI();
+      }
+    );
   };
 
   // change on-off isHideDisplayName
   changeHideDisplayName = () => {
-    this.setState({ isHideDisplayName: !this.state.isHideDisplayName }, () => {
+    this.setState(
+      { isHideDisplayName: !this.state.isHideDisplayName },
       async () => {
-        await AsyncStorage.setItem(
-          "HideDisplayName",
-          this.state.isHideDisplayName.toString()
-        );
-      };
-      this.updateUserSettingsAPI();
-    });
+        await this.updateUserSettingsAPI();
+      }
+    );
   };
 
   // change on-off isHideSearchUser
   changeHideSearchUser = () => {
-    this.setState({ isHideSearchUser: !this.state.isHideSearchUser }, () => {
+    this.setState(
+      { isHideSearchUser: !this.state.isHideSearchUser },
       async () => {
-        await AsyncStorage.setItem(
-          "HideSearchUser",
-          this.state.isHideSearchUser.toString()
-        );
-      };
-      this.updateUserSettingsAPI();
-    });
+        await this.updateUserSettingsAPI();
+      }
+    );
   };
 
   // API call of update User Settings
@@ -190,19 +155,13 @@ export class PrivacySettingsScreen extends Component {
         .then(async (res) => {
           console.log(
             TAG,
-            "updateprofile res.value.data---",
+            "updateUserSettings res.value.data---",
             JSON.stringify(res.value.data)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
               this.getUserData();
-              // await showMessage({
-              //   message: res.value.data.message,
-              //   type: "success",
-              //   icon: "info",
-              //   duration: 4000,
-              // });
             } else {
             }
           } else {
@@ -222,7 +181,6 @@ export class PrivacySettingsScreen extends Component {
       initializeApp().then((res) => {
         if (res.value && res.value.data.success == true) {
           if (res.value && res.value.status === 200) {
-            // console.log("userInfo====", userInfo.user_data);
           } else {
           }
         }
