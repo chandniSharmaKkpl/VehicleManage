@@ -121,9 +121,8 @@ export class CreateSocialMediaProfile extends Component {
                 icon: "info",
                 duration: 4000,
               });
-              let authToken = res.value.data.data.user_data.token;
-              await AsyncStorage.setItem("access_token", authToken);
-              globals.access_token = authToken;
+              let token = await AsyncStorage.getItem("access_token");
+              globals.access_token = token;
               this.getUserData();
             } else {
             }
@@ -260,7 +259,7 @@ export class CreateSocialMediaProfile extends Component {
           )}
           <Header
             isShowBack={true}
-            onPressed={()=>this.props.navigation.openDrawer()}
+            onPressed={() => this.props.navigation.openDrawer()}
             title={StaticTitle.createProfile}
             theme={theme}
           />

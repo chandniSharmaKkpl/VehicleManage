@@ -48,10 +48,7 @@ export class FirstScreen extends Component {
   getUserData() {
     const { initializeApp } = this.props;
     initializeApp().then(async (res) => {
-      console.log(
-        "res====FIrstscreen ------------",
-        JSON.stringify(res.value.data.data)
-      );
+      
       if (res.value && res.value.data.success == true) {
         if (res.value && res.value.status == 200) {
           let userdata = res.value.data.data;
