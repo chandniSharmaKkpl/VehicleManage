@@ -45,9 +45,10 @@ export class FriendlistScreen extends Component {
     });
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     this._isMounted = false;
     this.focusListener.remove();
+    await hideMessage();
   }
 
   /// call everytime didmount
@@ -86,12 +87,12 @@ export class FriendlistScreen extends Component {
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
+            // await showMessage({
+            //   message: res.value.data.message,
+            //   type: "success",
+            //   icon: "info",
+            //   duration: 4000,
+            // });
             if (this._isMounted) {
               this.setState({
                 friendListData: res.value.data.data.friend_list,
@@ -144,12 +145,12 @@ export class FriendlistScreen extends Component {
   renderFriendList = ({ item, index }) => {
     return (
       <View style={FriendListStyle.itemcell}>
-        {item.image_path ? (
+        {item.avatar ? (
           <View style={FriendListStyle.imageStyle}>
             <FastImage
               style={[FriendListStyle.imageStyle]}
               source={{
-                uri: item.image_path,
+                uri: item.avatar,
               }}
             />
           </View>

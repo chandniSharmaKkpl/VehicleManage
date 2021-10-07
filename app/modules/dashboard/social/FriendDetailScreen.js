@@ -39,10 +39,6 @@ export class FriendDetailScreen extends Component {
   }
 
   componentDidMount = async () => {
-    console.log(
-      "this.props.navigation.state.params.FriendData====",
-      this.props.navigation.state.params.FriendData
-    );
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState({ user: this.props.userDetails.user_data }, () => {
         this.getuserDetail();
@@ -55,26 +51,25 @@ export class FriendDetailScreen extends Component {
     const { getfriendData } = this.state;
     const { getfriendDetails } = this.props;
     let params = new URLSearchParams();
-    console.log("getfriendData.id====", getfriendData);
     // Collect the necessary params
     if (globals.isInternetConnected == true) {
       params.append("friend_id", getfriendData.id);
       getfriendDetails(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "response of getfriend Details",
-            JSON.stringify(res.value.data.data)
-          );
+          // console.log(
+          //   TAG,
+          //   "response of getfriend Details",
+          //   JSON.stringify(res.value.data.data)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
-              await showMessage({
-                message: res.value.data.message,
-                type: "success",
-                icon: "info",
-                duration: 4000,
-              });
+              // await showMessage({
+              //   message: res.value.data.message,
+              //   type: "success",
+              //   icon: "info",
+              //   duration: 4000,
+              // });
               this.setState({ friendDetail: res.value.data.data.user_data });
             }
           } else {
@@ -106,22 +101,22 @@ export class FriendDetailScreen extends Component {
     const { getfriendData, user } = this.state;
     const { addfriend } = this.props;
     let params = new URLSearchParams();
-    console.log("getfriendData.id====", getfriendData.id);
     // Collect the necessary params
     if (globals.isInternetConnected == true) {
       params.append("user_id", user.user_id);
       params.append("friend_id", getfriendData.id);
-      console.log("params====AddasFriend", JSON.stringify(params));
+      // console.log("params====AddasFriend", JSON.stringify(params));
       addfriend(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "response of addfriend",
-            JSON.stringify(res.value.data)
-          );
-          if (res.value && res.value.success == true) {
+          // console.log(
+          //   TAG,
+          //   "response of addfriend",
+          //   JSON.stringify(res.value.data)
+          // );
+          if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
+              await this.getuserDetail();
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
@@ -172,6 +167,7 @@ export class FriendDetailScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { friendDetail } = this.state;
+
     return (
       <>
         <View
@@ -190,11 +186,11 @@ export class FriendDetailScreen extends Component {
           />
           <View style={FriendDetailStyle.halfContainer}>
             {friendDetail.user_photo ? (
-              <FastImage
+              <Image
+                resizeMode="cover"
                 style={[FriendDetailStyle.imageStyle]}
                 source={{
                   uri: friendDetail.user_photo,
-                  priority: FastImage.priority.normal,
                 }}
               />
             ) : (

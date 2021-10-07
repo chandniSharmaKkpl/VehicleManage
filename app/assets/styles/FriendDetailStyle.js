@@ -9,9 +9,9 @@ export const FriendDetailStyle = StyleSheet.create({
     flex: 1,
   },
   imageStyle: {
-    height: "100%",
-    width: "100%",
-    resizeMode: "contain",
+    height:'100%',
+    width: globals.deviceWidth,
+    
   },
   halfContainer: {
     flex: 0.5,
@@ -83,10 +83,10 @@ export const FriendDetailStyle = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    marginTop:
-      Platform.OS == "android"
-        ? globals.deviceHeight / 2.4
-        : globals.deviceHeight / 2.5,
+    // marginTop:
+    //   Platform.OS == "android"
+    //     ? globals.deviceHeight / 2.4
+    //     : globals.deviceHeight / 2.5,
 
     flexDirection: "row",
     alignSelf: "center",

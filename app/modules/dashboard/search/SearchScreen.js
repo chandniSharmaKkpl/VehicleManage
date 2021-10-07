@@ -67,11 +67,11 @@ export class SearchScreen extends Component {
     if (globals.isInternetConnected == true) {
       searchvehicle(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "response of search vehical",
-            JSON.stringify(res.value)
-          );
+          // console.log(
+          //   TAG,
+          //   "response of search vehical",
+          //   JSON.stringify(res.value)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -85,7 +85,6 @@ export class SearchScreen extends Component {
             }
           } else {
             if (res.value && res.value.data.search_by_vehicle) {
-              console.log("res.value.data.search_by_vehicle\\\\\\",res.value.data.search_by_vehicle);
               await showMessage({
                 message: res.value.data.search_by_vehicle,
                 type: "danger",
