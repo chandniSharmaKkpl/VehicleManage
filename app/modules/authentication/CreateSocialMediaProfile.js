@@ -14,6 +14,7 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 import { ComponentStyle } from "../../assets/styles/ComponentStyle";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -40,7 +41,6 @@ import Colors from "../../assets/Colors";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 const TAG = "CreateSocialMediaProfile ::=";
-
 export class CreateSocialMediaProfile extends Component {
   constructor(props) {
     super(props);
@@ -67,12 +67,23 @@ export class CreateSocialMediaProfile extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails");
+    NavigationService.navigate("RegistrationDetails", {
+      isFrom: "SocialProfile",
+    });
   };
 
   // Navigate to Dashboard screen
-  gotoDashboard = () => {
-    this.createSocialProfileAPICall();
+  gotoDashboard = async () => {
+    if (globals.isRegistrationDeatils == false) {
+      await showMessage({
+        message: StaticTitle.registerinfoneeded,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+    } else {
+      this.createSocialProfileAPICall();
+    }
   };
 
   // API call begin
@@ -81,51 +92,70 @@ export class CreateSocialMediaProfile extends Component {
       this.state;
     var params = new FormData();
     // Collect the necessary params
-    if (photoObj.length > 0) {
-      params.append("image", photoObj);
-    } else {
+
+    if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
       params.append("image", "");
+    } else {
+      params.append("image", photoObj);
     }
     params.append("fb_username", txtFbName);
     params.append("instalgram_username", txtInstaName);
     params.append("snapchat_username", txtSnapName);
 
     const { createSocialprofile } = this.props;
-    if (globals.isInternetConnected == true){
+    if (globals.isInternetConnected == true) {
+      console.log("params======", JSON.stringify(params));
       createSocialprofile(params)
-      .then(async (res) => {
-        // console.log("res.value.data---", res);
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
-            NavigationService.navigate("Home");
+        .then(async (res) => {
+          console.log(
+            TAG,
+            "res.value.data---",
+            JSON.stringify(res.value.data.data)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              let token = await AsyncStorage.getItem("access_token");
+              globals.access_token = token;
+              this.getUserData();
+            } else {
+            }
           } else {
+            if (res.value) {
+              await showMessage({
+                message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
           }
-        } else {
-          if (res.value) {
-            await showMessage({
-              message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG, "i am in catch error create social profile", err);
-      });
-    }
-    else {
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error create social profile", err);
+        });
+    } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
   };
+
+  // get user information
+  getUserData() {
+    const { initializeApp } = this.props;
+    initializeApp().then((res) => {
+      if (res.value.status === 200) {
+        NavigationService.navigate("App");
+      } else {
+        NavigationService.navigate("Login");
+      }
+    });
+  }
 
   //display gallry picker model
   displayGalleryPicker = () => {
@@ -174,11 +204,7 @@ export class CreateSocialMediaProfile extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -204,11 +230,7 @@ export class CreateSocialMediaProfile extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -223,14 +245,24 @@ export class CreateSocialMediaProfile extends Component {
 
   render() {
     const { photoUrl, isGalleryPicker, options } = this.state;
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <Header isShowBack={true} title={StaticTitle.createProfile} />
+          <Header
+            isShowBack={true}
+            onPressed={() => this.props.navigation.openDrawer()}
+            title={StaticTitle.createProfile}
+            theme={theme}
+          />
 
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
@@ -325,7 +357,13 @@ export class CreateSocialMediaProfile extends Component {
                   </View>
 
                   <TouchableOpacity
-                    style={AuthStyle.RectangleShapeView}
+                    style={[
+                      AuthStyle.RectangleShapeView,
+                      {
+                        backgroundColor: Colors.white,
+                        borderColor: Colors.black,
+                      },
+                    ]}
                     onPress={() => this.gotoRegistrationDetailsScreen()}
                   >
                     <Text style={AuthStyle.saText}>{StaticTitle.sa}</Text>
@@ -445,11 +483,13 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
   createSocialprofile: (params) =>
     dispatch(actions.createSocialprofile(params)),
+  initializeApp: (params) => dispatch(actions.initializeApp(params)),
 });
 
 export default connect(

@@ -1,0 +1,285 @@
+import React, { Component } from "react";
+import {
+  View,
+  Keyboard,
+  FlatList,
+  TouchableWithoutFeedback,
+  Text,
+  Image,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import { connect } from "react-redux";
+import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
+import { StaticTitle } from "../../../utils/StaticTitle";
+import { Search, Header, Loader } from "../../../components";
+import NavigationService from "../../../utils/NavigationService";
+import { Messages } from "../../../utils/Messages";
+import { IMAGE } from "../../../assets/Images";
+import { NavigationEvents } from "react-navigation";
+import { DummyData } from "../../../dummyData/DummyData";
+import FastImage from "react-native-fast-image";
+import * as actions from "../redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as globals from "../../../utils/Globals";
+import { isEmpty } from "../../../utils/Validators";
+
+const TAG = "FriendlistScreen ::=";
+
+export class FriendlistScreen extends Component {
+  _isMounted = false;
+  constructor(props) {
+    super(props);
+    this.state = {
+      txtSearch: "",
+      friendListData: [],
+      user: {},
+      theme: {},
+    };
+  }
+
+  async componentDidMount() {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.onFocusFunction();
+    });
+  }
+
+  async componentWillUnmount() {
+    this._isMounted = false;
+    this.focusListener.remove();
+    await hideMessage();
+  }
+
+  /// call everytime didmount
+  onFocusFunction = async () => {
+    this._isMounted = true;
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setState(
+        { user: this.props.userDetails.user_data, theme: this.props.theme },
+        () => {
+          if (globals.isInternetConnected == true) {
+            this.getfriendListAPI();
+          } else {
+            Alert.alert(globals.warning, globals.noInternet);
+          }
+        }
+      );
+    }
+  };
+
+  // search vechicle by name
+  getfriendListAPI = () => {
+    const { user, txtSearch } = this.state;
+    const { getfriendlist } = this.props;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("user_id", user.user_id);
+    params.append("search", txtSearch);
+
+    getfriendlist(params)
+      .then(async (res) => {
+        console.log(
+          TAG,
+          "response of get friendlist",
+          JSON.stringify(res.value.data.data)
+        );
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.status === 200) {
+            // await showMessage({
+            //   message: res.value.data.message,
+            //   type: "success",
+            //   icon: "info",
+            //   duration: 4000,
+            // });
+            if (this._isMounted) {
+              this.setState({
+                friendListData: res.value.data.data.friend_list,
+                
+              });
+            }
+          }
+        } else {
+          if (res.value && res.value.data.error) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error search by vehical name", err);
+      });
+  };
+
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
+      txtSearch: "",
+    });
+  };
+
+  // search vechicle by name
+  getSearchResult = async () => {
+    const { txtSearch } = this.state;
+    if (isEmpty(txtSearch)) {
+      await showMessage({
+        message: StaticTitle.searchrequired,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+      return false;
+    }
+    if (globals.isInternetConnected == true) {
+      this.getfriendListAPI();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
+
+  // render friendlist dataItem
+  renderFriendList = ({ item, index }) => {
+    return (
+      <View style={FriendListStyle.itemcell}>
+        {item.avatar ? (
+          <View style={FriendListStyle.imageStyle}>
+            <FastImage
+              style={[FriendListStyle.imageStyle]}
+              source={{
+                uri: item.avatar,
+              }}
+            />
+          </View>
+        ) : (
+          <View style={FriendListStyle.imageStyle}>
+            <FastImage
+              resizeMethod="resize"
+              source={IMAGE.user}
+              style={FriendListStyle.imageStyle}
+            />
+          </View>
+        )}
+        <View style={FriendListStyle.userdetail}>
+          <Text style={FriendListStyle.titleBig}>
+            {item.name ? item.name : "-"}
+          </Text>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.car_make_model ? item.car_make_model : "-"}
+          </Text>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.registration_number ? item.registration_number : "-"}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => this.gotoFriendDetails(item)}
+          style={[
+            FriendListStyle.squareView,
+            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+          ]}
+        >
+          <FastImage
+            style={[FriendListStyle.navigateimgStyle]}
+            source={IMAGE.navigate_img}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  // navigate to FriendDetails screen
+  gotoFriendDetails = (item) => {
+    NavigationService.navigate("FriendDetail", { FriendData: item });
+  };
+
+  // seprate component
+  separatorComponent = () => {
+    return <View style={FriendListStyle.separatorLine} />;
+  };
+
+  render() {
+    const { friendListData,txtSearch } = this.state;
+    const { isLoading, loaderMessage, theme } = this.props;
+    return (
+      <>
+        <View
+          style={[
+            FriendListStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
+          {isLoading && (
+            <Loader isOverlay={true} loaderMessage={loaderMessage} />
+          )}
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <Header
+            title={StaticTitle.frndList}
+            isShowSidebar={true}
+            onPressed={() => this.props.navigation.openDrawer()}
+            theme={theme}
+          />
+          <Search
+            theme={theme}
+            blurOnSubmit={false}
+            value={txtSearch}
+            returnKeyType="done"
+            onSubmitEditing={Keyboard.dismiss}
+            autoCapitalize={"none"}
+            onChangeText={(text) =>
+              this.setState({
+                txtSearch: text,
+              })
+            }
+            placeholderText={StaticTitle.searchbyNameNnum}
+            onPress={() => this.getSearchResult()}
+          />
+          {friendListData.length == 0 || friendListData == [] ? (
+            <View style={FriendListStyle.emptyview}>
+              <Text numberOfLines={2} style={FriendListStyle.emptytext}>
+                {StaticTitle.noFrnds}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={friendListData}
+              style={FriendListStyle.flatliststyle}
+              renderItem={(item, index) => this.renderFriendList(item, index)}
+              keyExtractor={(item, index) => "D" + index.toString()}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={this.separatorComponent}
+            />
+          )}
+        </View>
+      </>
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
+    userDetails: state.auth.user.userDetails,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  getfriendlist: (params) => dispatch(actions.getfriendlist(params)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendlistScreen);

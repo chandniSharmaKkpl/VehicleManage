@@ -10,11 +10,12 @@ export const FriendDetailStyle = StyleSheet.create({
   },
   imageStyle: {
     height: "100%",
-    width: "100%",
-    resizeMode: "contain",
+    width:globals.deviceWidth,
+    // resizeMode: "contain",
   },
   halfContainer: {
     flex: 0.5,
+    position: "relative",
   },
   backbtnview: {
     position: "absolute",
@@ -85,11 +86,12 @@ export const FriendDetailStyle = StyleSheet.create({
     justifyContent: "center",
     marginTop:
       Platform.OS == "android"
-        ? globals.deviceHeight / 2.4
+        ? globals.deviceHeight / 2.15
         : globals.deviceHeight / 2.5,
 
     flexDirection: "row",
     alignSelf: "center",
+    zIndex: 45
   },
   circleview: {
     width: 50,
@@ -102,6 +104,7 @@ export const FriendDetailStyle = StyleSheet.create({
   },
   secondhalfview: {
     flex: 0.4,
+    position: "relative",
   },
   descriptionContainer: {
     marginTop: globals.deviceHeight * 0.065,

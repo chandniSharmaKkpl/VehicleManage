@@ -7,7 +7,7 @@ import * as globals from "../../utils/Globals";
 export const UserProfileStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lite_background,
+    backgroundColor: Colors.liteBg,
   },
   imageview: {
     marginTop: globals.deviceHeight * 0.02,
@@ -38,8 +38,8 @@ export const UserProfileStyle = StyleSheet.create({
     justifyContent: "center",
     position: "absolute",
     bottom: 0,
-    left: 69,
-    top: 70,
+    left: globals.deviceWidth * 0.18,
+    top: globals.deviceWidth * 0.185,
   },
   settingIconStyle: {
     alignSelf: "center",
@@ -55,7 +55,7 @@ export const UserProfileStyle = StyleSheet.create({
   },
   RectangleShapeView: {
     width: 70 * 2,
-    height: 50,
+    height: 60,
     backgroundColor: Colors.white,
     borderColor: Colors.black,
     borderWidth: 2,

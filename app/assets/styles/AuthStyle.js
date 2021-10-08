@@ -32,7 +32,7 @@ export const AuthStyle = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.lite_background,
+    backgroundColor: Colors.liteBg,
   },
   logincontainer: {
     flex: 1,
@@ -52,7 +52,7 @@ export const AuthStyle = StyleSheet.create({
     flexDirection: "row",
     height: 40,
     alignItems: "center",
-    backgroundColor: Colors.placeholderColor,
+    backgroundColor: Colors.primary,
     // opacity:0.5
   },
   dropdown_row_text: {
@@ -65,8 +65,11 @@ export const AuthStyle = StyleSheet.create({
   },
   dropdown: {
     width: "90%",
-    height: 300,
-    // flex:1,
+    // height: 300,
+    flex: 1,
+    borderWidth: 8,
+    borderRadius: 8,
+    borderColor: "white",
   },
   placeholder_font: {
     color: Colors.placeholderColor,
@@ -74,12 +77,11 @@ export const AuthStyle = StyleSheet.create({
     fontSize: globals.font_14,
   },
   pickerinput: {
-    height: 35,
+    height: 45,
     marginHorizontal: 20,
     borderBottomWidth: 0.8,
     marginTop: 20,
     borderBottomColor: Colors.border_color,
-    color: Colors.black,
   },
   imglogoContainer: {
     // flex: 0.1,
@@ -135,7 +137,7 @@ export const AuthStyle = StyleSheet.create({
   lineContainer: {
     height: Platform.OS == "ios" ? 0.7 : 0.9,
     width: globals.deviceWidth * 0.4,
-    backgroundColor: Colors.black,
+    // backgroundColor: Colors.black,
   },
   smallText: {
     fontFamily: FontFamily.RalewayMedium,
@@ -180,8 +182,8 @@ export const AuthStyle = StyleSheet.create({
   /////////////////////////////////////////// SIGN IN SCREEN /////////////////////////////
   bottomCurve: {
     flex: 1,
-    // flexGrow: 1,
-    height: 100,
+    flexGrow: 1,
+    // height: 100,
     width: "100%",
     marginTop: globals.deviceHeight * 0.1,
     borderColor: Colors.border_color,
@@ -323,9 +325,9 @@ export const AuthStyle = StyleSheet.create({
   },
   RectangleShapeView: {
     width: 70 * 2,
-    height: 50,
+    height: 60,
     backgroundColor: Colors.white,
-    borderColor: Colors.black,
+
     borderWidth: 2,
     borderRadius: 8,
     alignSelf: "center",

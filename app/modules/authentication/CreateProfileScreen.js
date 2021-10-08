@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   Alert,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -25,6 +26,7 @@ import { IMAGE } from "../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import Colors from "../../assets/Colors";
 
 const TAG = "CreateProfileScreen ::=";
 
@@ -43,9 +45,7 @@ export class CreateProfileScreen extends PureComponent {
       selectedColour: "",
 
       txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
+
       txtDescription: "",
 
       isUserNameError: false,
@@ -98,6 +98,7 @@ export class CreateProfileScreen extends PureComponent {
   /// get car colour data from API
   getcarColourAPI = () => {
     const { getcarcolour } = this.props;
+
     getcarcolour().then((res) => {
       if (res.value && res.value.status === 200) {
         let colourDataList = res.value.data.data;
@@ -133,12 +134,6 @@ export class CreateProfileScreen extends PureComponent {
   // clear States before leave this screen
   clearStates = () => {
     this.setState({
-      txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
-      txtDescription: "",
-
       isUserNameError: false,
       isCityError: false,
       isModalofCarError: false,
@@ -166,23 +161,28 @@ export class CreateProfileScreen extends PureComponent {
   createProfileAPICall = () => {
     const {
       txtUserName,
-      txtCity,
-      txtColorofCar,
-      txtModalofCar,
+      selectedCity,
+      selectedModel,
+      selectedColour,
       txtDescription,
     } = this.state;
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("username", txtUserName);
-    params.append("city", txtCity);
-    params.append("car_make_model", txtModalofCar);
-    params.append("car_colour", txtColorofCar);
+    params.append("city", selectedCity);
+    params.append("car_make_model", selectedModel);
+    params.append("car_colour", selectedColour);
     params.append("car_description", txtDescription);
     if (globals.isInternetConnected == true) {
       const { createprofile } = this.props;
+      console.log("params0=====", params);
       createprofile(params)
         .then(async (res) => {
-          // console.log("res---", res);
+          console.log(
+            TAG,
+            "res--createprofile-",
+            JSON.stringify(res.value.data.data)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -216,7 +216,7 @@ export class CreateProfileScreen extends PureComponent {
 
   // start of validation
   checkValidation = () => {
-    const { txtUserName, txtCity, txtColorofCar, txtModalofCar } = this.state;
+    const { txtUserName } = this.state;
     if (isEmpty(txtUserName)) {
       this.setState({
         isUserNameError: true,
@@ -231,29 +231,7 @@ export class CreateProfileScreen extends PureComponent {
       });
       return false;
     }
-    // if (!isEmpty(txtCity) && !isText(txtCity)) {
-    //   this.setState({
-    //     isCityError: true,
-    //     cityValidMsg: Messages.cityFail,
-    //   });
-    //   return false;
-    // }
 
-    // if (!isEmpty(txtModalofCar) && !isText(txtModalofCar)) {
-    //   this.setState({
-    //     isModalofCarError: true,
-    //     modalofCarValidMsg: Messages.modalFail,
-    //   });
-    //   return false;
-    // }
-
-    // if (!isEmpty(txtColorofCar) && !isText(txtColorofCar)) {
-    //   this.setState({
-    //     isColorofCarError: true,
-    //     colorofCarValidMsg: Messages.colorFail,
-    //   });
-    //   return false;
-    // }
     return true;
   };
 
@@ -273,45 +251,62 @@ export class CreateProfileScreen extends PureComponent {
   };
 
   render() {
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     const { cityList, carModelList, carColourList } = this.state;
 
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent={true}
-          />
-          <TouchableWithoutFeedback
-            accessible={false}
-            onPress={() => Keyboard.dismiss()}
+          <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            scrollIndicatorInsets={{ right: 1 }}
           >
+            <NavigationEvents onWillBlur={() => this.clearStates()} />
+            <StatusBar
+              barStyle="light-content"
+              backgroundColor="transparent"
+              translucent={true}
+            />
+
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
+                  }
+                  style={AuthStyle.imglogo}
+                />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
+                  }
+                  style={AuthStyle.imgcar}
+                />
               </View>
-              <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : null}
-                style={AuthStyle.bottomCurve}
+              <View
+                style={[
+                  AuthStyle.bottomCurve,
+                  { backgroundColor: theme.CURVE_BG_COLORS },
+                ]}
               >
                 <ScrollView
-                  nestedScrollEnabled={true}
-                  keyboardShouldPersistTaps="always"
                   ref={(node) => (this.scroll = node)}
                   automaticallyAdjustContentInsets={true}
                   enableOnAndroid={true}
                   showsVerticalScrollIndicator={false}
-                  // keyboardShouldPersistTaps="never"
+                  bounces={false}
+                  keyboardShouldPersistTaps="never"
                   style={{ marginTop: globals.deviceHeight * 0.015 }}
                 >
                   <View>
@@ -326,7 +321,10 @@ export class CreateProfileScreen extends PureComponent {
                     </View>
                     <Input
                       value={this.state.txtUserName}
-                      inputStyle={{ marginTop: 0 }}
+                      inputStyle={{
+                        marginTop: 0,
+                        color: Colors.placeholderColor,
+                      }}
                       placeholderText={StaticTitle.enterUserName}
                       onSubmitEditing={Keyboard.dismiss}
                       blurOnSubmit={false}
@@ -348,22 +346,26 @@ export class CreateProfileScreen extends PureComponent {
                     <DropDownPicker
                       options={cityList}
                       defaultValue={StaticTitle.selectCity}
-                      onSelect={(value) => this.setselectedCity(value)}
+                      renderButtonText={(value) => this.setselectedCity(value)}
                     />
 
                     <DropDownPicker
                       options={carModelList}
                       defaultValue={StaticTitle.chooseModal}
-                      onSelect={(value) => this.setselectedModel(value)}
+                      renderButtonText={(value) => this.setselectedModel(value)}
                     />
+
                     <DropDownPicker
                       options={carColourList}
                       defaultValue={StaticTitle.selectColor}
-                      onSelect={(value) => this.setselectedColour(value)}
+                      renderButtonText={(value) =>
+                        this.setselectedColour(value)
+                      }
                     />
 
                     <Input
                       value={this.state.txtDescription}
+                      inputStyle={{ color: Colors.placeholderColor }}
                       placeholderText={StaticTitle.addDescription}
                       onSubmitEditing={Keyboard.dismiss}
                       forwardRef={(ref) => {
@@ -378,7 +380,7 @@ export class CreateProfileScreen extends PureComponent {
                       autoCapitalize={"none"}
                       maxLength={280}
                       multiline={true}
-                      // numberOfLines={4}
+                      numberOfLines={4}
                       isValidationShow={this.state.isDescriptionError}
                       validateMesssage={this.state.descriptionValidMsg}
                       onChangeText={(text) =>
@@ -399,9 +401,9 @@ export class CreateProfileScreen extends PureComponent {
                     </View>
                   </View>
                 </ScrollView>
-              </KeyboardAvoidingView>
+              </View>
             </View>
-          </TouchableWithoutFeedback>
+          </KeyboardAwareScrollView>
         </View>
       </>
     );
@@ -410,9 +412,9 @@ export class CreateProfileScreen extends PureComponent {
 
 const mapStateToProps = (state) => {
   return {
-    userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 

@@ -38,8 +38,8 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      txtEmail: "udattani@mailinator.com",
-      txtPassword: "Abcd@1234",
+      txtEmail: "user6@mailinator.com",
+      txtPassword: "Test@123",
       // txtEmail: "",
       // txtPassword: "",
       isShowPassword: true,
@@ -51,9 +51,7 @@ export class SignInScreen extends Component {
     this.input = {};
   }
 
-  componentDidMount = async () => {
-    const fb_email = await AsyncStorage.getItem("FB_USEREMAIL");
-  };
+  componentDidMount = async () => {};
 
   // clear States before leave this screen
   clearStates = () => {
@@ -79,8 +77,19 @@ export class SignInScreen extends Component {
   };
 
   // user forgot their password then go to ForgotPassword screen
-  gotoForgotPasswordscreen = () => {
-    NavigationService.navigate("ForgotPassword");
+  gotoForgotPasswordscreen = async () => {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
+    if (globals.access_token) {
+      NavigationService.navigate("ForgotPassword");
+    } else {
+      showMessage({
+        message: StaticTitle.forgotpasserror,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+    }
   };
 
   // This function show/hide the password
@@ -152,71 +161,111 @@ export class SignInScreen extends Component {
     params.append("password", txtPassword);
 
     const { login } = this.props;
-    if (globals.isInternetConnected == true){
+    if (globals.isInternetConnected == true) {
       login(params)
-      .then(async (res) => {
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.invalid_email) {
-            this.setState({
-              emailValidMsg: res.value.invalid_email,
-              isEmailError: true,
-            });
-          } else if (res.value && res.value.invalid_password) {
-            this.setState({
-              isPasswordError: true,
-              passwdValidMsg: res.value.invalid_password,
-            });
-          } else if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
+        .then(async (res) => {
+          console.log(
+            "res.value.data.data------login-------",
+            JSON.stringify(res.value)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.invalid_email) {
+              this.setState({
+                emailValidMsg: res.value.invalid_email,
+                isEmailError: true,
+              });
+            } else if (res.value && res.value.invalid_password) {
+              this.setState({
+                isPasswordError: true,
+                passwdValidMsg: res.value.invalid_password,
+              });
+            } else if (res.value && res.value.status === 200) {
+              if (
+                res.value &&
+                res.value.status &&
+                res.value.data.data.createprofileone == true
+              ) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                NavigationService.navigate("CreateProfile");
+              } else if (
+                res.value.data.data.createprofiletwo == true ||
+                res.value.data.data.register_detail == true
+              ) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                NavigationService.navigate("CreateSocialMediaProfile");
+              } else if (
+                res.value.data.data.createprofileone == false &&
+                res.value.data.data.createprofiletwo == false &&
+                res.value.data.data.register_detail == false
+              ) {
+                await this.gotoSaveToken(res.value.data.data.token);
+                await this.getUserData();
+              }
 
-            this.gotoSaveToken(res.value.data.data.token);
-            NavigationService.navigate("CreateProfile");
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+            } else {
+              this.setState({
+                isPasswordError: true,
+                emailValidMsg: res.value.invalid_email,
+                isEmailError: true,
+                passwdValidMsg: res.value.invalid_password,
+              });
+            }
           } else {
-            this.setState({
-              isPasswordError: true,
-              emailValidMsg: res.value.invalid_email,
-              isEmailError: true,
-              passwdValidMsg: res.value.invalid_password,
-            });
+            if (res.value && res.value.data.error) {
+              await showMessage({
+                message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
           }
-        } else {
-          if (res.value && res.value.data.error) {
-            await showMessage({
-              message: res.value.message,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG,"i am in catch error sign in", err);
-      });
-    }
-    else {
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error sign in", err);
+        });
+    } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
   };
 
+  // get user information
+  getUserData() {
+    const { initializeApp } = this.props;
+    initializeApp().then((res) => {
+      if (res.value && res.value.status === 200) {
+        NavigationService.navigate("App");
+      } else {
+        NavigationService.navigate("Login");
+      }
+    });
+  }
+
   // save access token
   async gotoSaveToken(accessToken) {
-    console.log(TAG, "access_token=====", accessToken);
+    console.log(TAG, "accessToken===", accessToken);
     await AsyncStorage.setItem("access_token", accessToken);
     globals.access_token = accessToken;
   }
 
   render() {
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
+
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -232,15 +281,28 @@ export class SignInScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
+                  }
+                  style={AuthStyle.imglogo}
+                />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
+                <Image
+                  source={
+                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
+                  }
+                  style={AuthStyle.imgcar}
+                />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
-                style={AuthStyle.bottomCurve}
+                style={[
+                  AuthStyle.bottomCurve,
+                  { backgroundColor: theme.CURVE_BG_COLORS },
+                ]}
               >
                 <ScrollView
                   ref={(node) => (this.scroll = node)}
@@ -343,14 +405,15 @@ export class SignInScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   login: (params) => dispatch(actions.login(params)),
+  initializeApp: (params) => dispatch(actions.initializeApp(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

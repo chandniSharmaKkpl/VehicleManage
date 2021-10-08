@@ -131,10 +131,15 @@ export class ForgotPasswordScreen extends Component {
   };
 
   render() {
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage,theme } = this.props;
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
         {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -145,15 +150,22 @@ export class ForgotPasswordScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
+                <Image source={
+                    theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
+                  } style={AuthStyle.imglogo} />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
+                <Image  source={
+                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
+                  } style={AuthStyle.imgcar} />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
-                style={[AuthStyle.bottomCurve]}
+                style={[
+                  AuthStyle.bottomCurve,
+                  { backgroundColor: theme.CURVE_BG_COLORS },
+                ]}
               >
                 <ScrollView
                   ref={(node) => (this.scroll = node)}
@@ -222,9 +234,9 @@ export class ForgotPasswordScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    userDetails: state.auth.user.userDetails,
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

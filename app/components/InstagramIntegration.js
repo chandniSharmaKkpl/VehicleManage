@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, Linking, TouchableOpacity } from "react-native";
 import { StaticTitle } from "../utils/StaticTitle";
 import Colors from "../assets/Colors";
 
@@ -30,40 +30,57 @@ class InstagramIntegration extends Component {
     console.log(TAG, "setSuccessofLogin", data);
   };
 
+  // navigate Social Profiles
+  navigatetoSocialProfiles = (isFrom, name) => {
+    let SocialURL;
+
+    if (isFrom == "Instagram") {
+      SocialURL = name;
+    } else {
+      SocialURL = "https://www.google.com" + name;
+    }
+
+    Linking.canOpenURL(SocialURL).then((supported) => {
+      if (supported) {
+        Linking.openURL(SocialURL);
+      } else {
+      }
+    });
+  };
+
   render() {
     return (
       <>
-        
-          <InstagramLogin
-            ref={(ref) => (this.instagramLogin = ref)}
-            appId="381333166902003"
-            appSecret="b9af24e1e2efcc64f0dc7f28e96a1b22"
-            redirectUrl="https://staging.2excel.com.au/Roadie/privacy_policy"
-            scopes={["user_profile", "user_media"]}
-            onLoginSuccess={this.setSuccessofLogin}
-            onLoginFailure={(data) =>
-              console.log(TAG, "data=========Fail", data)
-            }
-          />
+        <InstagramLogin
+          ref={(ref) => (this.instagramLogin = ref)}
+          appId="381333166902003"
+          appSecret="b9af24e1e2efcc64f0dc7f28e96a1b22"
+          redirectUrl="https://staging.2excel.com.au/Roadie/privacy_policy"
+          scopes={["user_profile", "user_media"]}
+          onLoginSuccess={this.setSuccessofLogin}
+          onLoginFailure={(data) => console.log(TAG, "data=========Fail", data)}
+        />
 
-          <TouchableOpacity onPress={() => this.instagramLogin.show()}>
-            <LinearGradient
-              start={{ x: 0.0, y: 0.5 }}
-              end={{ x: 0.7, y: 1.0 }}
-              colors={[Colors.orange, Colors.pink, Colors.purple]}
-              style={ComponentStyle.primaryBtnContainer}
-            >
-              <FastImage
-                style={[ComponentStyle.instaiconstyle]}
-                source={IMAGE.insta_icon_img}
-                resizeMode={FastImage.resizeMode.contain}
-              />
-              <Text style={ComponentStyle.buttonText}>
-                {StaticTitle.linkinsta}
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-       
+        <TouchableOpacity
+          // onPress={() => this.instagramLogin.show()}
+          onPress={() => this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)}
+        >
+          <LinearGradient
+            start={{ x: 0.0, y: 0.5 }}
+            end={{ x: 0.7, y: 1.0 }}
+            colors={[Colors.orange, Colors.pink, Colors.purple]}
+            style={ComponentStyle.primaryBtnContainer}
+          >
+            <FastImage
+              style={[ComponentStyle.instaiconstyle]}
+              source={IMAGE.insta_icon_img}
+              resizeMode={FastImage.resizeMode.contain}
+            />
+            <Text style={ComponentStyle.buttonText}>
+              {StaticTitle.linkinsta}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </>
     );
   }

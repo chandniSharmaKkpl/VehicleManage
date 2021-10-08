@@ -19,6 +19,8 @@ import FriendDetailScreen from "../modules/dashboard/social/FriendDetailScreen";
 import NotificationScreen from "../modules/dashboard/search/NotificationScreen";
 import RecentViewersScreen from "../modules/dashboard/search/RecentViewersScreen";
 import ChatMessagesScreen from "../modules/dashboard/chat/ChatMessagesScreen";
+import RegistrationDetailsScreen from "..//modules/authentication/RegistrationDetailsScreen";
+
 const SearchStack = createStackNavigator(
   {
     Search: {
@@ -29,6 +31,9 @@ const SearchStack = createStackNavigator(
     },
     RecentViewers: {
       screen: RecentViewersScreen,
+    },
+    FriendDetail: {
+      screen: FriendDetailScreen,
     },
   },
   {
@@ -89,6 +94,9 @@ const UserStack = createStackNavigator(
     },
     PrivacySettings: {
       screen: PrivacySettingsScreen,
+    },
+    RegistrationDetails: {
+      screen: RegistrationDetailsScreen,
     },
   },
   {
@@ -166,13 +174,13 @@ const TabNavigator = createBottomTabNavigator(
           </SafeAreaView>
         );
       },
-      //In this code to, flickering screen when navigate after any home screen
+      // In this code to, flickering screen when navigate after any home screen
 
-      // tabBarOnPress: ({ navigation }) => {
-      //   const { routeName } = navigation.state;
-      //   navigation.popToTop();
-      //   navigation.navigate(routeName);
-      // },
+      tabBarOnPress: ({ navigation }) => {
+        const { routeName } = navigation.state;
+        navigation.popToTop();
+        navigation.navigate(routeName);
+      },
 
       animationEnabled: true,
       swipeEnabled: true,
@@ -196,5 +204,5 @@ ChatStack.navigationOptions = ({ navigation }) => {
   return {
     tabBarVisible,
   };
-}
+};
 export default TabNavigator;

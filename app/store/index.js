@@ -7,13 +7,13 @@ import { connect } from "react-redux";
 import thunk from "redux-thunk";
 import { createPromise } from "redux-promise-middleware";
 import { composeWithDevTools } from "remote-redux-devtools";
-import AppNavigator from "../navigation/AppNavigator";
+import RootNavigator from "../navigation/RootNavigator";
 import appReducer from "./rootReducers";
 
 // Note: createReactNavigationReduxMiddleware must be run before reduxifyNavigator
 const middleware = createReactNavigationReduxMiddleware((state) => state.nav);
 
-const App = createReduxContainer(AppNavigator);
+const App = createReduxContainer(RootNavigator);
 
 const mapStateToProps = (state) => ({
   state: state.nav,

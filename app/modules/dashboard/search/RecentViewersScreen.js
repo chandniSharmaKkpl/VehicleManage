@@ -18,10 +18,13 @@ export class RecentViewersScreen extends Component {
     super(props);
     this.state = {
       notificationListData: DummyData,
+      theme: {},
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({ theme: this.props.theme });
+  }
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
@@ -54,12 +57,31 @@ export class RecentViewersScreen extends Component {
               alignItems: "center",
             }}
           >
-            <Text style={FriendListStyle.titleSmall}>{item.Name}</Text>
+            <Text
+              style={[
+                FriendListStyle.titleSmall,
+                { color: this.state.theme.LITE_FONT_COLOR },
+              ]}
+            >
+              {item.Name}
+            </Text>
             <Text style={{ marginHorizontal: 5, marginTop: -3 }}>{"|"}</Text>
-            <Text style={FriendListStyle.titleSmall}>{item.Num}</Text>
+            <Text
+              style={[
+                FriendListStyle.titleSmall,
+                { color: this.state.theme.LITE_FONT_COLOR },
+              ]}
+            >
+              {item.Num}
+            </Text>
           </View>
         </View>
-        <TouchableOpacity style={FriendListStyle.squareView}>
+        <TouchableOpacity
+          style={[
+            FriendListStyle.squareView,
+            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+          ]}
+        >
           <FastImage
             style={[FriendListStyle.navigateimgStyle]}
             source={IMAGE.navigate_img}
@@ -75,11 +97,21 @@ export class RecentViewersScreen extends Component {
 
   render() {
     const { notificationListData } = this.state;
-
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={FriendListStyle.container}>
-          <Header isShowBack={true} title={StaticTitle.whosearchyou} />
+        <View
+          style={[
+            FriendListStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
+          <Header
+            isShowBack={true}
+            title={StaticTitle.whosearchyou}
+            theme={theme}
+            onPressed={()=>this.props.navigation.openDrawer()}
+          />
           <FlatList
             data={notificationListData}
             style={[FriendListStyle.flatliststyle, { paddingVertical: 5 }]}
@@ -96,15 +128,17 @@ export class RecentViewersScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(RecentViewersScreen);
-export default RecentViewersScreen;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RecentViewersScreen);

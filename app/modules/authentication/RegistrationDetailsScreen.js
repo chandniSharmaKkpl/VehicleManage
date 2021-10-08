@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { connect } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../../utils/Globals";
 import { StaticTitle } from "../../utils/StaticTitle";
 import NavigationService from "../../utils/NavigationService";
@@ -27,14 +28,17 @@ import {
   Loader,
   GenerateRandomFileName,
 } from "../../components";
+import { Messages } from "../../utils/Messages";
+
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { DefaultOptions } from "../../components/DefaultOptions";
 import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { isEmpty } from "../../utils/Validators";
+import { isEmpty, onlycharandnum } from "../../utils/Validators";
 const TAG = "RegistrationDetailsScreen ::=";
 
 export class RegistrationDetailsScreen extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -50,8 +54,37 @@ export class RegistrationDetailsScreen extends Component {
       isRegNumberError: false,
       regNumberValidMsg: "",
       options: DefaultOptions,
+      isFrom: this.props.navigation.state.params.isFrom,
+      user: {},
     };
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  componentDidMount = async () => {
+    this._isMounted = true;
+    if (this.state.isFrom == "Profile") {
+      this.setUserInfo();
+    }
+  };
+
+  // set userInformation
+  setUserInfo = async () => {
+    var user = this.props.navigation.state.params.user;
+    console.log(TAG, "user==setUserInfo===", user);
+    if (this._isMounted) {
+      if (user && user.user_data) {
+        this.setState({
+          user: user,
+          attachPaperUrl: user.user_data.registration_paper,
+          attachphotoUrl: user.user_data.vehicle_photo,
+          txtRegNumber: user.user_data.registration_number,
+        });
+      }
+    }
+  };
 
   //display Attch Paper picker model
   displayAttchPaper = () => {
@@ -61,7 +94,9 @@ export class RegistrationDetailsScreen extends Component {
   // close Attch Paper popup
   closeAttchPaper = () => {
     this.setState({ isattachPaper: false });
-  }; //display Attch Photo picker model
+  };
+
+  //display Attch Photo picker model
   displayAttchPhoto = () => {
     this.setState({ isattachphoto: !this.state.isattachphoto });
   };
@@ -73,7 +108,14 @@ export class RegistrationDetailsScreen extends Component {
 
   // save all register details
   saveDeatils = async () => {
-    const { txtRegNumber, attachphotoUrl, attachPaperUrl } = this.state;
+    const {
+      txtRegNumber,
+      attachphotoUrl,
+      attachPaperUrl,
+      isFrom,
+      attachPaperObj,
+      attachphotoObj,
+    } = this.state;
     if (isEmpty(txtRegNumber)) {
       await showMessage({
         message: StaticTitle.registernumberfieldrequire,
@@ -81,14 +123,35 @@ export class RegistrationDetailsScreen extends Component {
         icon: "info",
         duration: 4000,
       });
-    } else if (attachPaperUrl == "") {
+    } else if (!onlycharandnum(txtRegNumber)) {
+      await showMessage({
+        message: StaticTitle.registernumberfieldvalidation,
+        type: "danger",
+        icon: "info",
+        duration: 4000,
+      });
+      this.setState({
+        isRegNumberError: true,
+        regNumberValidMsg: Messages.registernumberfieldvalidation,
+      });
+    } else if (
+      attachPaperObj.uri == undefined ||
+      (attachPaperObj.uri == "") != [] ||
+      attachPaperUrl == "" ||
+      attachPaperUrl == "Dummy.jpg"
+    ) {
       await showMessage({
         message: StaticTitle.registrationpaper,
         type: "danger",
         icon: "info",
         duration: 4000,
       });
-    } else if (attachphotoUrl == "") {
+    } else if (
+      attachphotoObj.uri == undefined ||
+      (attachphotoObj.uri == "") != [] ||
+      attachphotoUrl == "" ||
+      attachphotoUrl == "Dummy.jpg"
+    ) {
       await showMessage({
         message: StaticTitle.vehicalphotorequired,
         type: "danger",
@@ -96,13 +159,101 @@ export class RegistrationDetailsScreen extends Component {
         duration: 4000,
       });
     } else {
-      this.registerDetailAPIcall();
+      if (isFrom == "Profile") {
+        this.updateRegisterDetailAPIcall();
+      } else {
+        this.registerDetailAPIcall();
+      }
+    }
+  };
+
+  // API CALL begin of update
+  updateRegisterDetailAPIcall = () => {
+    const {
+      txtRegNumber,
+      attachPaperObj,
+      attachphotoObj,
+      user,
+      attachPaperUrl,
+      attachphotoUrl,
+    } = this.state;
+    var params = new FormData();
+    // Collect the necessary params
+    params.append("id", user.user_data.user_id);
+    if (attachphotoObj.uri == undefined || (attachphotoObj.uri == "") != []) {
+      params.append("vehicle_photo", "");
+    } else {
+      params.append("vehicle_photo", attachphotoObj);
+    }
+    if (attachPaperObj.uri == undefined || (attachPaperObj.uri == "") != []) {
+      params.append("registration_paper", "");
+    } else {
+      params.append("registration_paper", attachPaperObj);
+    }
+    params.append("registration_number", txtRegNumber);
+
+    const { updateRegistrationDetail } = this.props;
+
+    console.log(
+      "updateRegisterDetailAPIcall params----------",
+      JSON.stringify(params)
+    );
+    if (globals.isInternetConnected == true) {
+      updateRegistrationDetail(params)
+        .then(async (res) => {
+          console.log(
+            "updateRegisterDetailAPIcall res.value.data---",
+            JSON.stringify(res.value)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              NavigationService.back();
+            } else {
+            }
+          } else {
+            if (res.value && res.value.data.registration_paper) {
+              await showMessage({
+                message: res.value.data.registration_paper,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.vehicle_photo) {
+              await showMessage({
+                message: res.value.data.vehicle_photo,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.registration_number) {
+              await showMessage({
+                message: res.value.data.registration_number,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error Register screen", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
     }
   };
 
   // API CALL begin
   registerDetailAPIcall = () => {
     const { txtRegNumber, attachPaperObj, attachphotoObj } = this.state;
+
     var params = new FormData();
     // Collect the necessary params
     params.append("vehicle_photo", attachphotoObj);
@@ -110,46 +261,53 @@ export class RegistrationDetailsScreen extends Component {
     params.append("registration_paper", attachPaperObj);
     const { registerdetail } = this.props;
 
-    // console.log("params----------", JSON.stringify(params));
-    if (globals.isInternetConnected == true){
+    console.log("params----------", JSON.stringify(params));
+    if (globals.isInternetConnected == true) {
       registerdetail(params)
-      .then(async (res) => {
-        // console.log("res.value.data---", res.value.data);
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
-            NavigationService.back();
+        .then(async (res) => {
+          console.log("res.value.data---", JSON.stringify(res.value.data.data));
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              globals.isRegistrationDeatils = true;
+              NavigationService.back();
+            } else {
+            }
           } else {
+            if (res.value && res.value.data.registration_paper) {
+              await showMessage({
+                message: res.value.data.registration_paper,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.vehicle_photo) {
+              await showMessage({
+                message: res.value.data.vehicle_photo,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.data.registration_number) {
+              await showMessage({
+                message: res.value.data.registration_number,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
           }
-        } else {
-          if (res.value && res.value.data.registration_paper) {
-            await showMessage({
-              message: res.value.data.registration_paper,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-          } else if (res.value && res.value.data.vehicle_photo) {
-            await showMessage({
-              message: res.value.data.vehicle_photo,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG, "i am in catch error Register screen", err);
-      });
-    }
-    else {
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error Register screen", err);
+        });
+    } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
   };
@@ -196,11 +354,7 @@ export class RegistrationDetailsScreen extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -208,23 +362,19 @@ export class RegistrationDetailsScreen extends Component {
           this.setState({
             isattachPaper: false,
             attachPaperUrl: response.uri,
-            attachPaperName: response.fileName ? (
-              response.fileName
-            ) : (
-              <GenerateRandomFileName />
-            ),
-            attachPaperObj: source,
+            attachPaperName: response.fileName
+              ? response.fileName
+              : "Dummy.jpg",
+            attachphotoObj: source ? source : "",
           });
         } else {
           this.setState({
             isattachphoto: false,
             attachphotoUrl: response.uri,
-            attachphotoName: response.fileName ? (
-              response.fileName
-            ) : (
-              <GenerateRandomFileName />
-            ),
-            attachPaperObj: source,
+            attachphotoName: response.fileName
+              ? response.fileName
+              : "Dummy.jpg",
+            attachPaperObj: source ? source : "",
           });
         }
       }
@@ -244,11 +394,7 @@ export class RegistrationDetailsScreen extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -256,23 +402,19 @@ export class RegistrationDetailsScreen extends Component {
           this.setState({
             isattachPaper: false,
             attachPaperUrl: response.uri,
-            attachPaperName: response.fileName ? (
-              response.fileName
-            ) : (
-              <GenerateRandomFileName />
-            ),
-            attachPaperObj: source,
+            attachPaperName: response.fileName
+              ? response.fileName
+              : "Dummy.jpg",
+            attachPaperObj: source ? source : "",
           });
         } else {
           this.setState({
             isattachphoto: false,
             attachphotoUrl: response.uri,
-            attachphotoName: response.fileName ? (
-              response.fileName
-            ) : (
-              <GenerateRandomFileName />
-            ),
-            attachphotoObj: source,
+            attachphotoName: response.fileName
+              ? response.fileName
+              : "Dummy.jpg",
+            attachphotoObj: source ? source : "",
           });
         }
       }
@@ -288,16 +430,27 @@ export class RegistrationDetailsScreen extends Component {
       isattachPaper,
       options,
       isattachphoto,
+      isFrom,
     } = this.state;
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
 
     return (
       <>
-        <View style={AuthStyle.container}>
+        <View
+          style={[
+            AuthStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <Header isShowBack={true} title={StaticTitle.registartionDetail} />
+          <Header
+            isShowBack={true}
+            onPressed={() => this.props.navigation.openDrawer()}
+            title={StaticTitle.registartionDetail}
+            theme={theme}
+          />
           <ScrollView
             ref={(node) => (this.scroll = node)}
             automaticallyAdjustContentInsets={true}
@@ -346,7 +499,14 @@ export class RegistrationDetailsScreen extends Component {
                 </Text>
               </View>
               <View style={[AuthStyle.registerContent]}>
-                <Text style={[AuthStyle.registrationContentTextStyle]}>
+                <Text
+                  style={[
+                    AuthStyle.registrationContentTextStyle,
+                    {
+                      color: theme.LITE_FONT_COLOR,
+                    },
+                  ]}
+                >
                   {StaticTitle.registerContent}
                 </Text>
               </View>
@@ -372,32 +532,51 @@ export class RegistrationDetailsScreen extends Component {
               <View style={[AuthStyle.registerContent]}>
                 <ButtonwithRightIcon
                   iconName={IMAGE.upload_doc_img}
+                  attachUrl={attachPaperUrl}
                   bigcontainerstyle={{
                     backgroundColor: attachPaperUrl
                       ? Colors.primary
                       : Colors.pink,
                   }}
                   title={
-                    attachPaperName ? attachPaperName : StaticTitle.attachPaper
+                    attachPaperName
+                      ? attachPaperName == "Dummy.jpg"
+                        ? StaticTitle.attachPaper
+                        : attachPaperName
+                      : isFrom == "Profile"
+                      ? StaticTitle.updateattachPaper
+                      : StaticTitle.attachPaper
                   }
                   onPress={() => this.displayAttchPaper()}
                 />
+
                 <ButtonwithRightIcon
                   iconName={IMAGE.upload_doc_img}
+                  attachUrl={attachphotoUrl}
                   bigcontainerstyle={{
                     backgroundColor: attachphotoUrl
                       ? Colors.primary
                       : Colors.blue,
                   }}
                   title={
-                    attachphotoName ? attachphotoName : StaticTitle.attachPhoto
+                    attachphotoName
+                      ? attachphotoName == "Dummy.jpg"
+                        ? StaticTitle.attachPhoto
+                        : attachphotoName
+                      : isFrom == "Profile"
+                      ? StaticTitle.updateattachPhoto
+                      : StaticTitle.attachPhoto
                   }
                   onPress={() => this.displayAttchPhoto()}
                 />
               </View>
               <View style={AuthStyle.signinbtnView}>
                 <PrimaryButton
-                  btnName={StaticTitle.saveDetails}
+                  btnName={
+                    isFrom == "Profile"
+                      ? StaticTitle.updatedetail
+                      : StaticTitle.saveDetails
+                  }
                   onPress={() => this.saveDeatils()}
                 />
               </View>
@@ -413,10 +592,13 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
   registerdetail: (params) => dispatch(actions.registerdetail(params)),
+  updateRegistrationDetail: (params) =>
+    dispatch(actions.updateRegistrationDetail(params)),
 });
 
 export default connect(

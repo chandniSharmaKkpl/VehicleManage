@@ -14,7 +14,6 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";
@@ -22,7 +21,6 @@ import { UserProfileStyle } from "../../../assets/styles/UserProfileStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
 import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
-import { NavigationEvents } from "react-navigation";
 import FastImage from "react-native-fast-image";
 import {
   Input,
@@ -31,6 +29,8 @@ import {
   GenerateRandomFileName,
   DropDownPicker,
   Loader,
+  PrimaryButton,
+  PrimaryTextinputwithIcon,
 } from "../../../components";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -39,6 +39,11 @@ import FacebookIntegration from "../../../components/FacebookIntegration";
 import SnapchatIntegration from "../../../components/SnapchatIntegration";
 import { DefaultOptions } from "../../../components/DefaultOptions";
 import * as Authactions from "../../authentication/redux/Actions";
+import Colors from "../../../assets/Colors";
+import * as actions from "../redux/Actions";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { NavigationEvents } from "react-navigation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "UserProfileScreen ::=";
 
@@ -50,16 +55,17 @@ export class UserProfileScreen extends Component {
       cityList: [],
       carModelList: [],
       carColourList: [],
+      user: {},
 
       selectedCity: "",
       selectedModel: "",
       selectedColour: "",
 
       txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
       txtDescription: "",
+      txtSnapName: "",
+      txtInstaName: "",
+      txtFbName: "",
 
       isUserNameError: false,
       isCityError: false,
@@ -81,10 +87,22 @@ export class UserProfileScreen extends Component {
     this.input = {};
   }
 
-  componentDidMount = async () => {
-    this._isMounted = true;
+  async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
+    this.onFocusFunction();
+    // this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    //   this.onFocusFunction();
+    // });
+  }
+
+  /// call everytime didmount
+  onFocusFunction = async () => {
+    this._isMounted = true;
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setUserInfo(this.props.userDetails);
+    }
+
     if (globals.isInternetConnected == true) {
       await this.getcarModelAPI();
       await this.getcarColourAPI();
@@ -96,7 +114,28 @@ export class UserProfileScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    // this.focusListener.remove();
   }
+
+  // set userInformation
+  setUserInfo = async (user) => {
+    if (this._isMounted) {
+      if (user && user.user_data) {
+        this.setState({
+          user: user.user_data,
+          selectedCity: user.user_data.city,
+          selectedModel: user.user_data.car_make_model,
+          selectedColour: user.user_data.car_colour,
+          txtUserName: user.user_data.username,
+          txtDescription: user.user_data.car_description,
+          photoUrl: user.user_data.user_photo,
+          txtSnapName: user.user_data.snapchat_username,
+          txtInstaName: user.user_data.instagram_username,
+          txtFbName: user.user_data.fb_username,
+        });
+      }
+    }
+  };
 
   /// get car model data from API
   getcarModelAPI = () => {
@@ -148,33 +187,6 @@ export class UserProfileScreen extends Component {
     this.input[ref].focus();
   };
 
-  // clear States before leave this screen
-  clearStates = () => {
-    this.setState({
-      isGalleryPicker: false,
-      photoUrl: "",
-      photoObj: [],
-
-      txtUserName: "",
-      txtCity: "",
-      txtModalofCar: "",
-      txtColorofCar: "",
-      txtDescription: "",
-
-      isUserNameError: false,
-      isCityError: false,
-      isModalofCarError: false,
-      isColorofCarError: false,
-      isDescriptionError: false,
-
-      userNameValidMsg: "",
-      cityValidMsg: "",
-      modalofCarValidMsg: "",
-      colorofCarValidMsg: "",
-      descriptionValidMsg: "",
-    });
-  };
-
   //display gallry picker model
   displayGalleryPicker = () => {
     this.setState({ isGalleryPicker: !this.state.isGalleryPicker });
@@ -222,11 +234,7 @@ export class UserProfileScreen extends Component {
         // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -252,11 +260,7 @@ export class UserProfileScreen extends Component {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
-          name: response.fileName ? (
-            response.fileName
-          ) : (
-            <GenerateRandomFileName />
-          ),
+          name: response.fileName ? response.fileName : "Dummy.jpg",
           size: response.fileSize,
           type: response.type,
         };
@@ -271,7 +275,10 @@ export class UserProfileScreen extends Component {
 
   // Navigate to Registration Details Screen
   gotoRegistrationDetailsScreen = () => {
-    NavigationService.navigate("RegistrationDetails");
+    NavigationService.navigate("RegistrationDetails", {
+      isFrom: "Profile",
+      user: this.props.userDetails,
+    });
   };
 
   // Navigate to Settings  Screen
@@ -294,8 +301,93 @@ export class UserProfileScreen extends Component {
     this.setState({ selectedCity: text });
   };
 
+  // Update profile API call
+  updateProfileApiCall = () => {
+    const {
+      user,
+      selectedColour,
+      selectedModel,
+      selectedCity,
+      photoObj,
+      txtSnapName,
+      txtInstaName,
+      txtFbName,
+      txtDescription,
+      txtUserName,
+    } = this.state;
+    var params = new FormData();
+
+    // Collect the necessary params
+    const { updateprofile } = this.props;
+    params.append("email", user.email);
+    params.append("username", txtUserName);
+    if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
+      params.append("image", "");
+    } else {
+      params.append("image", photoObj);
+    }
+    params.append("city", selectedCity);
+    params.append("car_make_model", selectedModel);
+    params.append("car_colour", selectedColour);
+    params.append("car_description", txtDescription);
+    params.append("fb_username", txtFbName);
+    params.append("instalgram_username", txtInstaName);
+    params.append("snapchat_username", txtSnapName);
+
+    if (globals.isInternetConnected == true) {
+      console.log("params======", JSON.stringify(params));
+      updateprofile(params)
+        .then(async (res) => {
+          console.log(
+            TAG,
+            "updateprofile res.value.data---",
+            JSON.stringify(res.value.data)
+          );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              let authToken = res.value.data.data.user_data.token;
+              await AsyncStorage.setItem("access_token", authToken);
+              globals.access_token = authToken;
+              this.getUserData();
+            } else {
+            }
+          } else {
+            if (res.value) {
+              // await showMessage({
+              //   message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
+              //   type: "danger",
+              //   icon: "info",
+              //   duration: 4000,
+              // });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error update profile", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
+
+  getUserData() {
+    if (globals.isInternetConnected == true) {
+      const { initializeApp } = this.props;
+      initializeApp().then((res) => {});
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
+
   render() {
-    const { isLoading, loaderMessage } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     const {
       photoUrl,
       options,
@@ -303,15 +395,30 @@ export class UserProfileScreen extends Component {
       cityList,
       carModelList,
       carColourList,
+      user,
+      selectedColour,
+      selectedModel,
+      selectedCity,
     } = this.state;
+
     return (
       <>
-        <View style={UserProfileStyle.container}>
+        <View
+          style={[
+            UserProfileStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
+          {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <Header title={StaticTitle.userProfile} isShowSidebar={true} />
+          <Header
+            title={StaticTitle.userProfile}
+            isShowSidebar={true}
+            theme={theme}
+            onPressed={() => this.props.navigation.openDrawer()}
+          />
 
           <View>
             <MediaModel
@@ -359,7 +466,6 @@ export class UserProfileScreen extends Component {
                     style={[UserProfileStyle.imageStyle]}
                     source={{
                       uri: photoUrl,
-                      priority: FastImage.priority.normal,
                     }}
                   />
                 </TouchableOpacity>
@@ -392,6 +498,7 @@ export class UserProfileScreen extends Component {
                 />
               </TouchableOpacity>
               <View style={UserProfileStyle.registrationView}>
+                {/* <Text style={UserProfileStyle.changeRegText}>{photoUrl}</Text> */}
                 <Text style={UserProfileStyle.changeRegText}>
                   {StaticTitle.changeRegistration}
                 </Text>
@@ -433,6 +540,7 @@ export class UserProfileScreen extends Component {
                 <Input
                   value={this.state.txtDescription}
                   placeholderText={StaticTitle.addDescription}
+                  inputStyle={{ color: Colors.placeholderColor }}
                   onSubmitEditing={() => this.focusNextTextField("txtUserName")}
                   forwardRef={(ref) => {
                     (this.input.txtDescription = ref),
@@ -459,7 +567,7 @@ export class UserProfileScreen extends Component {
                 <Input
                   value={this.state.txtUserName}
                   placeholderText={StaticTitle.userName}
-                  inputStyle={{ marginTop: 8 }}
+                  inputStyle={{ marginTop: 8, color: Colors.placeholderColor }}
                   onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}
                   forwardRef={(ref) => {
@@ -486,19 +594,25 @@ export class UserProfileScreen extends Component {
 
                 <DropDownPicker
                   options={cityList}
-                  defaultValue={StaticTitle.selectCity}
-                  onSelect={(value) => this.setselectedCity(value)}
+                  defaultValue={
+                    selectedCity ? selectedCity : StaticTitle.selectCity
+                  }
+                  renderButtonText={(value) => this.setselectedCity(value)}
                 />
 
                 <DropDownPicker
                   options={carModelList}
-                  defaultValue={StaticTitle.chooseModal}
-                  onSelect={(value) => this.setselectedModel(value)}
+                  defaultValue={
+                    selectedModel ? selectedModel : StaticTitle.chooseModal
+                  }
+                  renderButtonText={(value) => this.setselectedModel(value)}
                 />
                 <DropDownPicker
                   options={carColourList}
-                  defaultValue={StaticTitle.selectColor}
-                  onSelect={(value) => this.setselectedColour(value)}
+                  defaultValue={
+                    selectedColour ? selectedColour : StaticTitle.selectColor
+                  }
+                  renderButtonText={(value) => this.setselectedColour(value)}
                 />
 
                 <View
@@ -510,9 +624,102 @@ export class UserProfileScreen extends Component {
                     },
                   ]}
                 >
-                  <InstagramIntegration />
-                  <FacebookIntegration />
-                  <SnapchatIntegration />
+                  <InstagramIntegration
+                    isFrom="Instagram"
+                    URL={user.instagram_username}
+                  />
+                  <FacebookIntegration
+                    isFrom="Facebook"
+                    URL={user.fb_username}
+                  />
+                  <SnapchatIntegration
+                    isFrom="Snap"
+                    URL={user.snapchat_username}
+                  />
+
+                  {/* <PrimaryTextinputwithIcon
+                    isFrom="Instagram"
+                    iconName={IMAGE.insta_icon_img}
+                    buttonStyle={{ backgroundColor: Colors.snapChat }}
+                    buttonTextStyle={AuthStyle.SnapText}
+                    value={this.state.txtInstaName}
+                    placeholderText={StaticTitle.enterinstname}
+                    onSubmitEditing={() => this.focusNextTextField("txtFbName")}
+                    blurOnSubmit={false}
+                    returnKeyType="next"
+                    autoCapitalize={"none"}
+                    autoFocus={false}
+                    isValidationShow={this.state.isInstError}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtInstaName: text,
+                        isInstError: false,
+                      })
+                    }
+                  />
+                  <PrimaryTextinputwithIcon
+                    iconName={IMAGE.fb_icon_square}
+                    buttonStyle={{ backgroundColor: Colors.blue }}
+                    buttonTextStyle={AuthStyle.SnapText}
+                    value={this.state.txtFbName}
+                    placeholderText={StaticTitle.enterfbname}
+                    onSubmitEditing={() =>
+                      this.focusNextTextField("txtSnapName")
+                    }
+                    forwardRef={(ref) => {
+                      (this.input.txtFbName = ref),
+                        this.input.txtFbName &&
+                          this.input.txtFbName.setNativeProps({
+                            style: { fontFamily: "Raleway-Regular" },
+                          });
+                    }}
+                    blurOnSubmit={false}
+                    returnKeyType="next"
+                    autoCapitalize={"none"}
+                    autoFocus={false}
+                    isValidationShow={this.state.isFbError}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtFbName: text,
+                        isFbError: false,
+                      })
+                    }
+                  />
+                  <PrimaryTextinputwithIcon
+                    iconName={IMAGE.snap_img}
+                    buttonStyle={{ backgroundColor: Colors.snapChat }}
+                    isFrom="Snap"
+                    value={this.state.txtSnapName}
+                    placeholderText={StaticTitle.enterSnapName}
+                    onSubmitEditing={Keyboard.dismiss}
+                    blurOnSubmit={false}
+                    returnKeyType="done"
+                    autoCapitalize={"none"}
+                    autoFocus={false}
+                    isValidationShow={this.state.isSnapError}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtSnapName: text,
+                        isSnapError: false,
+                      })
+                    }
+                    forwardRef={(ref) => {
+                      (this.input.txtSnapName = ref),
+                        this.input.txtSnapName &&
+                          this.input.txtSnapName.setNativeProps({
+                            style: { fontFamily: "Raleway-Regular" },
+                          });
+                    }}
+                  /> */}
+
+                  <View
+                    style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
+                  >
+                    <PrimaryButton
+                      btnName={StaticTitle.update}
+                      onPress={() => this.updateProfileApiCall()}
+                    />
+                  </View>
                 </View>
               </View>
             </ScrollView>
@@ -525,16 +732,19 @@ export class UserProfileScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
     userDetails: state.auth.user.userDetails,
-    isLoading: state.auth.user.isLoading,
-    loaderMessage: state.auth.user.loaderMessage,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getcarmodel: (text) => dispatch(Authactions.getcarmodel(text)),
-  getcarcolour: (text) => dispatch(Authactions.getcarcolour(text)),
-  getcity: (text) => dispatch(Authactions.getcity(text)),
+  getcarmodel: (params) => dispatch(Authactions.getcarmodel(params)),
+  getcarcolour: (params) => dispatch(Authactions.getcarcolour(params)),
+  getcity: (params) => dispatch(Authactions.getcity(params)),
+  updateprofile: (params) => dispatch(actions.updateprofile(params)),
+  initializeApp: (params) => dispatch(Authactions.initializeApp(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileScreen);

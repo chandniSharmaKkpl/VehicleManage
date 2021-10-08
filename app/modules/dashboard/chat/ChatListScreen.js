@@ -11,33 +11,27 @@ import {
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
-import { Search, Header } from "../../../components";
+import { Search } from "../../../components";
 import NavigationService from "../../../utils/NavigationService";
-import { Messages } from "../../../utils/Messages";
 import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
+import Header from "../../../components/Header";
 import { DummyData } from "../../../dummyData/DummyData";
 import FastImage from "react-native-fast-image";
+const TAG = "ChatListScreen ::=";
 
-const TAG = "FriendlistScreen ::=";
-
-export class FriendlistScreen extends Component {
+export class ChatListScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      txtSearch: "",
-      friendListData: DummyData,
+      chatListData: DummyData,
+      theme: {},
     };
   }
 
-  componentDidMount() {}
-
-  // clear States before leave this screen
-  clearStates = () => {
-    this.setState({
-      txtSearch: "",
-    });
-  };
+  componentDidMount() {
+    this.setState({ theme: this.props.theme });
+  }
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
@@ -63,12 +57,29 @@ export class FriendlistScreen extends Component {
         )}
         <View style={FriendListStyle.userdetail}>
           <Text style={FriendListStyle.titleBig}>{item.Owner_Name}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.Name}</Text>
-          <Text style={FriendListStyle.titleSmall}>{item.Num}</Text>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.Name}
+          </Text>
+          <Text
+            style={[
+              FriendListStyle.titleSmall,
+              { color: this.state.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.Num}
+          </Text>
         </View>
         <TouchableOpacity
-          onPress={() => this.gotoFriendDetails(item)}
-          style={FriendListStyle.squareView}
+          onPress={() => this.gotoChatDetails()}
+          style={[
+            FriendListStyle.squareView,
+            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+          ]}
         >
           <FastImage
             style={[FriendListStyle.navigateimgStyle]}
@@ -79,9 +90,9 @@ export class FriendlistScreen extends Component {
     );
   };
 
-  // navigate to FriendDetails screen
-  gotoFriendDetails = (item) => {
-    NavigationService.navigate("FriendDetail", { FriendData: item });
+  // navigate to chat screen
+  gotoChatDetails = () => {
+    NavigationService.navigate("ChatMessages");
   };
 
   // seprate component
@@ -90,14 +101,24 @@ export class FriendlistScreen extends Component {
   };
 
   render() {
-    const { friendListData } = this.state;
-
+    const { chatListData } = this.state;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={FriendListStyle.container}>
-          <NavigationEvents onWillBlur={() => this.clearStates()} />
-          <Header title={StaticTitle.frndList} isShowSidebar={true} />
+        <View
+          style={[
+            FriendListStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
+          <Header
+            title={StaticTitle.msges}
+            onPressed={()=>this.props.navigation.openDrawer()}
+            isShowSidebar={true}
+            theme={theme}
+          />
           <Search
+            theme={theme}
             blurOnSubmit={false}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
@@ -110,7 +131,7 @@ export class FriendlistScreen extends Component {
             placeholderText={StaticTitle.searchbyNameNnum}
           />
           <FlatList
-            data={friendListData}
+            data={chatListData}
             style={FriendListStyle.flatliststyle}
             renderItem={(item, index) => this.renderFriendList(item, index)}
             keyExtractor={(item, index) => {
@@ -125,15 +146,15 @@ export class FriendlistScreen extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.home.home.isLoading,
+    loaderMessage: state.home.home.loaderMessage,
+    theme: state.home.home.theme,
+  };
+};
 
-// };
+const mapDispatchToProps = (dispatch) => ({});
 
-// const mapDispatchToProps = (dispatch) => ({
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(FriendlistScreen);
-export default FriendlistScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(ChatListScreen);
+// export default ChatListScreen;

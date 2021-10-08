@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ActivityIndicator, View, TextInput, Text } from "react-native";
+import { TouchableOpacity, View, TextInput, Text } from "react-native";
 import { ComponentStyle } from "../assets/styles/ComponentStyle";
 import Colors from "../assets/Colors";
 import FastImage from "react-native-fast-image";
@@ -18,9 +18,13 @@ const Search = ({
   maxLength,
   autoCapitalize,
   iconStyle,
+  onPress,
+  value,
+  theme,
 }) => (
-  <View style={ComponentStyle.searchContainer}>
+  <View style={[ComponentStyle.searchContainer,{ backgroundColor: theme.CURVE_BG_COLORS,}]}>
     <TextInput
+      value={value}
       searchMessage={searchMessage}
       returnKeyType={returnKeyType}
       ref={forwardRef}
@@ -44,15 +48,17 @@ const Search = ({
       underlineColorAndroid="transparent"
       autoFocus={false}
     />
-    <FastImage
-      style={[
-        ComponentStyle.search_icon,
-        iconStyle,
-        { tintColor: Colors.search_placeholder },
-      ]}
-      source={IMAGE.search_img}
-      resizeMode={FastImage.resizeMode.contain}
-    />
+    <TouchableOpacity onPress={onPress}>
+      <FastImage
+        style={[
+          ComponentStyle.search_icon,
+          iconStyle,
+          { tintColor: Colors.search_placeholder },
+        ]}
+        source={IMAGE.search_img}
+        resizeMode={FastImage.resizeMode.contain}
+      />
+    </TouchableOpacity>
   </View>
 );
 

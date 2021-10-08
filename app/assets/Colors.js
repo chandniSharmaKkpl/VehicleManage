@@ -24,8 +24,8 @@ const Colors = {
   search_placeholder:'#222222B3',
   switchtext:'#222222',
   switchhide:'#3e3e3e',
-  msgBG:'#F7F6F1'
-  
+  msgBG:'#F7F6F1',
+  liteBg:'#0000000D'
 };
 
 export default Colors;

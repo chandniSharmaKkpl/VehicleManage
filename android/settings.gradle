@@ -1,4 +1,6 @@
 rootProject.name = 'Roadie'
+include ':react-native-appearance'
+project(':react-native-appearance').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-appearance/android')
 include ':react-native-snapchat-login'
 project(':react-native-snapchat-login').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-snapchat-login/android')
 include ':react-native-image-picker'

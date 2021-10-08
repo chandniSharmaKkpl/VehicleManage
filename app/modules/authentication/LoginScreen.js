@@ -16,15 +16,52 @@ import GoogleLogin from "../../components/GoogleLogin";
 import NavigationService from "../../utils/NavigationService";
 import { IMAGE } from "../../assets/Images";
 import * as globals from "../../utils/Globals";
+import { darkTheme, lightTheme } from "../../assets/Theme";
+import * as actions from "./redux/Actions";
+import Colors from "../../assets/Colors";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "LoginScreen ::=";
 
 export class LoginScreen extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      theme: {},
+    };
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  UNSAFE_componentWillReceiveProps = (newProps) => {
+    const { theme } = newProps;
+    this.parseData(theme);
+  };
+
+  componentDidMount = async () => {
+    this._isMounted = true;
+    let them_mode = await AsyncStorage.getItem("them_mode");
+
+
+    console.log(TAG, "componentDidMount ======them_mode", them_mode);
+    var newTheme = lightTheme;
+    if (them_mode === globals.THEME_MODE.DARK) {
+      newTheme = darkTheme;
+    }
+    this.setState({ theme: them_mode });
+    this.props.swicthTheme(newTheme);
+  };
+
+  // parse lite and dark theme data
+  parseData = (newTheme) => {
+    this.setState({ theme: newTheme });
+  };
+
+  
 
   // Login with Email navigate to sign in screen
   performLoginwithEmail = () => {
@@ -38,9 +75,20 @@ export class LoginScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage } = this.props;
+    const { theme } = this.state;
+    
+
+    if (theme == undefined || theme.PRIMARY_BACKGROUND_COLOR === undefined) {
+      return <></>;
+    }
     return (
       <>
-        <View style={AuthStyle.onlyFlex}>
+        <View
+          style={[
+            AuthStyle.onlyFlex,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -50,11 +98,18 @@ export class LoginScreen extends Component {
             translucent={true}
           />
           <View style={AuthStyle.imglogoContainer}>
-            <Image source={IMAGE.logo_img} style={AuthStyle.imglogo} />
+            <Image
+              source={
+                theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
+              }
+              style={AuthStyle.imglogo}
+            />
           </View>
 
           <View style={AuthStyle.imgcarContainer}>
-            <Image source={IMAGE.car_img} style={AuthStyle.imgcar} />
+            <Image source={
+                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
+                  } style={AuthStyle.imgcar} />
           </View>
 
           <View style={AuthStyle.titleContainer}>
@@ -78,9 +133,26 @@ export class LoginScreen extends Component {
               <FBLogin />
               <GoogleLogin />
               <View style={AuthStyle.lineViewContainer}>
-                <View style={AuthStyle.lineContainer}></View>
-                <Text style={AuthStyle.smallText}>{StaticTitle.or}</Text>
-                <View style={AuthStyle.lineContainer}></View>
+                <View
+                  style={[
+                    AuthStyle.lineContainer,
+                    { backgroundColor: theme.PRIMARY_TEXT_COLOR },
+                  ]}
+                ></View>
+                <Text
+                  style={[
+                    AuthStyle.smallText,
+                    { color: theme.PRIMARY_TEXT_COLOR },
+                  ]}
+                >
+                  {StaticTitle.or}
+                </Text>
+                <View
+                  style={[
+                    AuthStyle.lineContainer,
+                    { backgroundColor: theme.PRIMARY_TEXT_COLOR },
+                  ]}
+                ></View>
               </View>
               <View style={[AuthStyle.signinbtnView, { paddingVertical: 0 }]}>
                 <PrimaryButton
@@ -111,9 +183,12 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.auth.user.isLoading,
     loaderMessage: state.auth.user.loaderMessage,
+    theme: state.auth.user.theme,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  swicthTheme: (params) => dispatch(actions.swicthTheme(params)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

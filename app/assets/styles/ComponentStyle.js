@@ -91,7 +91,7 @@ export const ComponentStyle = StyleSheet.create({
 
   //Custom Component name "BigIconButton" Starting....
   bigIconBtnContainer: {
-    height: 55,
+    // height: 55,
     backgroundColor: Colors.primary,
     borderRadius: 10,
     justifyContent: "space-evenly",
@@ -105,7 +105,8 @@ export const ComponentStyle = StyleSheet.create({
     color: Colors.white,
     textAlign: "left",
     justifyContent: "center",
-    width: globals.deviceWidth * 0.7,
+    marginLeft:5,
+    width: globals.deviceWidth * 0.65,
     paddingVertical: 2,
   },
   //Custom Component name "BigIconButton" Finished....
@@ -181,7 +182,7 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? globals.deviceHeight*0.02 : 0,
+    paddingTop: Platform.OS === "android" ? globals.deviceHeight*0.03 : 0,
   },
   headerContain: {
     flexDirection: "row",
@@ -286,7 +287,7 @@ export const ComponentStyle = StyleSheet.create({
   //// SEARCH COMPONENT
   searchContainer: {
     flexDirection: "row",
-    height: 45,
+    height: 49,
     paddingHorizontal: 10,
     paddingVertical: 3,
     marginVertical: 5,
