@@ -186,13 +186,14 @@ export class FriendDetailScreen extends Component {
           />
           <View style={FriendDetailStyle.halfContainer}>
             {friendDetail.user_photo ? (
-              <Image
-                resizeMode="cover"
-                style={[FriendDetailStyle.imageStyle]}
-                source={{
-                  uri: friendDetail.user_photo,
-                }}
-              />
+              <FastImage
+              style={FriendDetailStyle.imageStyle}
+              source={{
+                uri: friendDetail.user_photo,
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
             ) : (
               <Image
                 resizeMethod="resize"

@@ -96,6 +96,7 @@ export class FriendlistScreen extends Component {
             if (this._isMounted) {
               this.setState({
                 friendListData: res.value.data.data.friend_list,
+                
               });
             }
           }
@@ -211,7 +212,7 @@ export class FriendlistScreen extends Component {
   };
 
   render() {
-    const { friendListData } = this.state;
+    const { friendListData,txtSearch } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
@@ -234,6 +235,7 @@ export class FriendlistScreen extends Component {
           <Search
             theme={theme}
             blurOnSubmit={false}
+            value={txtSearch}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
             autoCapitalize={"none"}
