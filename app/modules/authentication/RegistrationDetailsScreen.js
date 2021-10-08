@@ -108,7 +108,14 @@ export class RegistrationDetailsScreen extends Component {
 
   // save all register details
   saveDeatils = async () => {
-    const { txtRegNumber, attachphotoUrl, attachPaperUrl, isFrom } = this.state;
+    const {
+      txtRegNumber,
+      attachphotoUrl,
+      attachPaperUrl,
+      isFrom,
+      attachPaperObj,
+      attachphotoObj,
+    } = this.state;
     if (isEmpty(txtRegNumber)) {
       await showMessage({
         message: StaticTitle.registernumberfieldrequire,
@@ -127,14 +134,24 @@ export class RegistrationDetailsScreen extends Component {
         isRegNumberError: true,
         regNumberValidMsg: Messages.registernumberfieldvalidation,
       });
-    } else if (attachPaperUrl == "") {
+    } else if (
+      attachPaperObj.uri == undefined ||
+      (attachPaperObj.uri == "") != [] ||
+      attachPaperUrl == "" ||
+      attachPaperUrl == "Dummy.jpg"
+    ) {
       await showMessage({
         message: StaticTitle.registrationpaper,
         type: "danger",
         icon: "info",
         duration: 4000,
       });
-    } else if (attachphotoUrl == "") {
+    } else if (
+      attachphotoObj.uri == undefined ||
+      (attachphotoObj.uri == "") != [] ||
+      attachphotoUrl == "" ||
+      attachphotoUrl == "Dummy.jpg"
+    ) {
       await showMessage({
         message: StaticTitle.vehicalphotorequired,
         type: "danger",
@@ -523,7 +540,9 @@ export class RegistrationDetailsScreen extends Component {
                   }}
                   title={
                     attachPaperName
-                      ? attachPaperName
+                      ? attachPaperName == "Dummy.jpg"
+                        ? StaticTitle.attachPaper
+                        : attachPaperName
                       : isFrom == "Profile"
                       ? StaticTitle.updateattachPaper
                       : StaticTitle.attachPaper
@@ -541,7 +560,9 @@ export class RegistrationDetailsScreen extends Component {
                   }}
                   title={
                     attachphotoName
-                      ? attachphotoName
+                      ? attachphotoName == "Dummy.jpg"
+                        ? StaticTitle.attachPhoto
+                        : attachphotoName
                       : isFrom == "Profile"
                       ? StaticTitle.updateattachPhoto
                       : StaticTitle.attachPhoto

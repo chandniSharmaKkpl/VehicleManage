@@ -88,7 +88,7 @@ class GoogleLogin extends Component {
 
       sociallogin(params)
         .then(async (res) => {
-          console.log("res----", res.value.data);
+          console.log("res---Google login-", res.value.data);
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {

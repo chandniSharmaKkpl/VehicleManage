@@ -73,7 +73,7 @@ class FBLogin extends Component {
           const { sociallogin } = props;
           sociallogin(params)
             .then(async (res) => {
-              console.log("res----", res.value.data);
+              console.log("res---sociallogin FB-", res.value.data);
               if (res.value && res.value.data.success == true) {
                 //OK 200 The request was fulfilled
                 if (res.value && res.value.status === 200) {

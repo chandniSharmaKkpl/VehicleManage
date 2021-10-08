@@ -178,7 +178,11 @@ export class CreateProfileScreen extends PureComponent {
       console.log("params0=====", params);
       createprofile(params)
         .then(async (res) => {
-          console.log("res---", JSON.stringify(res.value.data.data));
+          console.log(
+            TAG,
+            "res--createprofile-",
+            JSON.stringify(res.value.data.data)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -249,7 +253,7 @@ export class CreateProfileScreen extends PureComponent {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { cityList, carModelList, carColourList } = this.state;
-    
+
     return (
       <>
         <View

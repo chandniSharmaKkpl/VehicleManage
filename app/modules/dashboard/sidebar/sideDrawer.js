@@ -104,7 +104,7 @@ class sideDrawer extends Component {
               )}
             </View>
             <Text numberOfLines={2} style={SideDrawerStyle.usernametext}>
-              {userDetails.name ? userDetails.name : "-"}
+              {userDetails.username ? userDetails.username : "-"}
             </Text>
             <TouchableOpacity
               style={SideDrawerStyle.closedrawerbutton}

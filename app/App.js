@@ -31,10 +31,6 @@ export class App extends Component {
       await AsyncStorage.setItem("them_mode", Appearance.getColorScheme());
     });
 
-    LogBox.ignoreLogs(["Warning: ..."]);
-
-    LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
-
     // check IsInternet-Connection available or not at the time of page load / first render
     NetInfo.addEventListener((state) => {
       console.log("Is connected?", state.isConnected);
@@ -61,6 +57,8 @@ export class App extends Component {
   };
 
   render() {
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs();//Ignore all log notifications
     return (
       <AppearanceProvider>
         <Provider store={store}>
