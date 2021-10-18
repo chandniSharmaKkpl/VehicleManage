@@ -81,7 +81,8 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/friend_detail" ||
       request.url === "api/add_friend" ||
       request.url === "api/init_app" ||
-      request.url === "api/logout"
+      request.url === "api/logout" ||
+      request.url ===  "api/messages/list"
     ) {
       request.headers = makeURLencodedPostHeaders();
     } else {

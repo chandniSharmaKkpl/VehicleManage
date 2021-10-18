@@ -86,12 +86,12 @@ export const FriendDetailStyle = StyleSheet.create({
     justifyContent: "center",
     marginTop:
       Platform.OS == "android"
-        ? globals.deviceHeight / 2.15
+        ? globals.deviceHeight / 2.1
         : globals.deviceHeight / 2.5,
 
     flexDirection: "row",
     alignSelf: "center",
-    zIndex: 45
+    zIndex: 40
   },
   circleview: {
     width: 50,
