@@ -176,7 +176,8 @@ export const ComponentStyle = StyleSheet.create({
     paddingTop: 10,
     marginHorizontal: 20,
   },
-  tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
+  tab_Image: {width: 20, height: 20, tintColor: Colors.primary },
+  roundedtab_img:{width: 40, height: 40,  borderRadius: 40 / 2, tintColor: Colors.primary },
 
   //// Custom Header style
   headerContainer: {
@@ -328,6 +329,5 @@ export const ComponentStyle = StyleSheet.create({
     height: 50,
     borderRadius: 50 / 2,
     justifyContent:'center',
-    backgroundColor: "red",
   },
 });

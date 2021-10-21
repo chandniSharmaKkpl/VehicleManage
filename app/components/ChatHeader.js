@@ -29,10 +29,9 @@ const ChatHeader = ({
   isShowSidebar,
   isFrom,
   isMsgReportPicker,
+  isuserImage,
   ...props
 }) => {
-  
-  
   const gotoBack = async () => {
     NavigationService.back();
   };
@@ -40,8 +39,16 @@ const ChatHeader = ({
     NavigationService.navigate("Notification");
   };
   return (
-    <SafeAreaView style={[ComponentStyle.headerContainer,{ backgroundColor: theme.ANDROID_STATUR_BAR_COLOR}]}>
-      <StatusBar barStyle="light-content" backgroundColor={theme.ANDROID_STATUR_BAR_COLOR} />
+    <SafeAreaView
+      style={[
+        ComponentStyle.headerContainer,
+        { backgroundColor: theme.ANDROID_STATUR_BAR_COLOR },
+      ]}
+    >
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={theme.ANDROID_STATUR_BAR_COLOR}
+      />
 
       <View
         style={[
@@ -81,11 +88,17 @@ const ChatHeader = ({
           }}
         >
           <View style={ComponentStyle.circleview}>
-            <FastImage
-              style={[ComponentStyle.tab_Image, { alignSelf: "center" }]}
-              source={IMAGE.share_arrow_img}
-              resizeMode={FastImage.resizeMode.contain}
-            />
+            {isuserImage ? (
+              <FastImage
+                style={[ComponentStyle.roundedtab_img]}
+                source={{
+                  uri: isuserImage,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : (
+              <FastImage source={IMAGE.user} style={ComponentStyle.tab_Image} />
+            )}
           </View>
 
           <Text
@@ -105,7 +118,7 @@ const ChatHeader = ({
         {isShowRighttwo == true ? (
           <>
             <TouchableOpacity
-              onPress={gotoForword}
+              // onPress={gotoForword}
               style={{
                 width: wp(5),
                 marginLeft: 25,

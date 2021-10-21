@@ -87,7 +87,7 @@ const chatReducer = (state = initialState, action) => {
         "YYYY-MM-DDTHH:mm:ssZ"
       ).format("YYYY/MM/DD HH:mm:ss");
       var messgae_id = message[0].id;
-      console.log("reducer  message :->" + JSON.stringify(message));
+      // console.log("reducer  message :->" + JSON.stringify(message));
 
       let chat_messages = [];
       if (action.payload.data.message === "Messages fetched successfully.") {
@@ -99,7 +99,7 @@ const chatReducer = (state = initialState, action) => {
         from_id: from_id,
         to_id: to_id,
         text: message[0].message,
-        created_at: createdAt,
+        created_at: message[0].created_at,
         is_received: 0,
         user: {
           _id: user_data.id,
@@ -111,7 +111,7 @@ const chatReducer = (state = initialState, action) => {
         pending: false,
       };
 
-      console.log("- msgDic :->", msgDic);
+      // console.log("- msgDic :->", msgDic);
 
       return {
         chat: {

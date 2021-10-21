@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   DeviceEventEmitter,
 } from "react-native";
+import Colors from "../../../assets/Colors";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -27,6 +28,7 @@ import { CHAT_MESSAGE_TYPE } from "../../../utils/Globals";
 import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as globals from "../../../utils/Globals";
+import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 
 const TAG = "ChatListScreen ::=";
 
@@ -48,6 +50,7 @@ export class ChatListScreen extends Component {
     this.connectWebSocket = this.connectWebSocket.bind(this);
     this.callMessageListAPI = this.callMessageListAPI.bind(this);
     this.registerAndSubscribe = this.registerAndSubscribe.bind(this);
+    this.searchByName = this.searchByName.bind(this);
   }
 
   searchByName(searchText) {
@@ -65,102 +68,102 @@ export class ChatListScreen extends Component {
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
-    // console.log(
-    //   Platform.OS +
-    //     " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
-    //   newProps.isReceiveChatMessage +
-    //     ", chatMsg Length:" +
-    //     newProps.chatMessages.length
-    // );
-    // // When user is inside Inbox screen and any 1-1 or group message is received, then IF condition is true
-    // if (
-    //   this.state.dataArray.length == newProps.chatList.length &&
-    //   newProps.isReceiveChatMessage == true &&
-    //   newProps.chatMessages.length > 0
-    // ) {
-    //   console.log("in IF -------------------->");
-    //   // from_id": from_id,
-    //   // "from_type": user_details.user_role == USER_ROLE.COACH ? 1 : 0,
-    //   // "class_id
-    //   var newDataArray = this.state.dataArray;
-    //   newDataArray.forEach((data) => {
-    //     newProps.chatMessages.forEach((msg) => {
-    //       var from_id = msg.from_id;
-    //       var class_id = msg.class_id;
-    //       console.log("from_id :->", from_id);
-    //       console.log("class_id :->", class_id);
-    //       if (class_id !== "") {
-    //         // group message receivee
-    //         // console.log("in IF ---->");
-    //         if (
-    //           data.type == CHAT_MESSAGE_TYPE.CLASS &&
-    //           parseInt(data.id) == parseInt(class_id)
-    //         ) {
-    //           // console.log("in IF-IF ---->",data);
-    //           data.unread_count = parseInt(data.unread_count) + 1;
-    //         }
-    //       } else {
-    //         // console.log("in ELSE ---->");
-    //         if (
-    //           data.type == CHAT_MESSAGE_TYPE.ROADIE &&
-    //           parseInt(data.id) == parseInt(from_id)
-    //         ) {
-    //           // console.log("in ELSE-IF ---->",data);
-    //           data.unread_count = parseInt(data.unread_count) + 1;
-    //         }
-    //       }
-    //     });
-    //   });
-    // } else {
-    //   this.setState(
-    //     {
-    //       dataArray: newProps.chatList,
-    //       chatName: newProps.chatList,
-    //     },
-    //     () => {
-    //       console.log(
-    //         Platform.OS +
-    //           " - this.state.dataArray.length:->" +
-    //           this.state.dataArray.length
-    //       );
-    //       console.log(
-    //         " this.state.isUserRegister -->",
-    //         this.state.isUserRegister
-    //       );
-    //       // Register is one call at single time, after
-    //       if (
-    //         this.state.dataArray.length > 0 &&
-    //         !this.state.isUserRegister &&
-    //         this.registerDeviceTimer == null
-    //       ) {
-    //         // Start 3 seconds interval,
-    //         // This will check is internel
-    //         console.log("START INERVAL() ----------------->");
-    //         this.registerDeviceTimer = setInterval(() => {
-    //           console.log(
-    //             "inside Timer this.state.webSocketServerConnected:->",
-    //             this.state.webSocketServerConnected
-    //           );
-    //           if (this.state.webSocketServerConnected) {
-    //             console.log(
-    //               "in IF this.registerDeviceTimer :->",
-    //               this.registerDeviceTimer
-    //             );
-    //             if (
-    //               this.registerDeviceTimer != undefined ||
-    //               this.registerDeviceTimer != null
-    //             ) {
-    //               console.log("in side IF this.registerDeviceTimer CLEAR...");
-    //               clearInterval(this.registerDeviceTimer);
-    //               this.registerDeviceTimer = null;
-    //             }
-    //             this.registerAndSubscribe();
-    //           }
-    //         }, 3000);
-    //       }
-    //     }
-    //   );
-    // }
+    console.log(
+      Platform.OS +
+        " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
+      newProps.isReceiveChatMessage +
+        ", chatMsg Length:" +
+        newProps.chatMessages.length
+    );
+    // When user is inside Inbox screen and any 1-1 or group message is received, then IF condition is true
+    if (
+      this.state.dataArray.length == newProps.chatList.length &&
+      newProps.isReceiveChatMessage == true &&
+      newProps.chatMessages.length > 0
+    ) {
+      console.log("in IF -------------------->");
+      // from_id": from_id,
+      // "from_type": user_details.user_role == USER_ROLE.COACH ? 1 : 0,
+      // "class_id
+      var newDataArray = this.state.dataArray;
+      newDataArray.forEach((data) => {
+        newProps.chatMessages.forEach((msg) => {
+          var from_id = msg.from_id;
+          var class_id = msg.class_id;
+          console.log("from_id :->", from_id);
+          console.log("class_id :->", class_id);
+          if (class_id !== "") {
+            // group message receivee
+            // console.log("in IF ---->");
+            if (
+              data.type == CHAT_MESSAGE_TYPE.CLASS &&
+              parseInt(data.id) == parseInt(class_id)
+            ) {
+              // console.log("in IF-IF ---->",data);
+              data.unread_count = parseInt(data.unread_count) + 1;
+            }
+          } else {
+            // console.log("in ELSE ---->");
+            if (
+              data.type == CHAT_MESSAGE_TYPE.ROADIE &&
+              parseInt(data.id) == parseInt(from_id)
+            ) {
+              // console.log("in ELSE-IF ---->",data);
+              data.unread_count = parseInt(data.unread_count) + 1;
+            }
+          }
+        });
+      });
+    } else {
+      this.setState(
+        {
+          dataArray: newProps.chatList,
+          chatName: newProps.chatList,
+        },
+        () => {
+          console.log(
+            Platform.OS +
+              " - this.state.dataArray.length:->" +
+              this.state.dataArray.length
+          );
+          console.log(
+            " this.state.isUserRegister -->",
+            this.state.isUserRegister
+          );
+          // Register is one call at single time, after
+          if (
+            this.state.dataArray.length > 0 &&
+            !this.state.isUserRegister &&
+            this.registerDeviceTimer == null
+          ) {
+            // Start 3 seconds interval,
+            // This will check is internel
+            console.log("START INERVAL() ----------------->");
+            this.registerDeviceTimer = setInterval(() => {
+              console.log(
+                "inside Timer this.state.webSocketServerConnected:->",
+                this.state.webSocketServerConnected
+              );
+              if (this.state.webSocketServerConnected) {
+                console.log(
+                  "in IF this.registerDeviceTimer :->",
+                  this.registerDeviceTimer
+                );
+                if (
+                  this.registerDeviceTimer != undefined ||
+                  this.registerDeviceTimer != null
+                ) {
+                  console.log("in side IF this.registerDeviceTimer CLEAR...");
+                  clearInterval(this.registerDeviceTimer);
+                  this.registerDeviceTimer = null;
+                }
+                this.registerAndSubscribe();
+              }
+            }, 3000);
+          }
+        }
+      );
+    }
   };
 
   registerAndSubscribe() {
@@ -199,16 +202,20 @@ export class ChatListScreen extends Component {
     });
     this.setState({ theme: this.props.theme });
 
-    // var live_chatMessage = JSON.parse(await AsyncStorage.getItem("live_chatMessage")) || {};
-    // console.log("chatDashboad screen componentDidMount() -----> params.chatMessage :-->", live_chatMessage);
+    var live_chatMessage =
+      JSON.parse(await AsyncStorage.getItem("live_chatMessage")) || {};
+    console.log(
+      "chatDashboad screen componentDidMount() -----> params.chatMessage :-->",
+      live_chatMessage
+    );
 
-    // if (live_chatMessage != undefined && live_chatMessage.id != undefined) {
-    //   console.log("inSide IF NavigationService.navigate('ChatMessages') ...");
-    //   NavigationService.navigate("ChatMessages", {
-    //     "chatMessage": live_chatMessage
-    //   });
-    //   await AsyncStorage.removeItem("live_chatMessage");
-    // }
+    if (live_chatMessage != undefined && live_chatMessage.id != undefined) {
+      console.log("inSide IF NavigationService.navigate('ChatMessages') ...");
+      NavigationService.navigate("ChatMessages", {
+        chatMessage: live_chatMessage,
+      });
+      await AsyncStorage.removeItem("live_chatMessage");
+    }
 
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
 
@@ -262,11 +269,11 @@ export class ChatListScreen extends Component {
 
     messagesList(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get friendlist",
-        //   JSON.stringify(res.value.data.data)
-        // );
+        console.log(
+          TAG,
+          "response of get friendlist",
+          JSON.stringify(res.value.data.data)
+        );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -278,12 +285,12 @@ export class ChatListScreen extends Component {
           }
         } else {
           if (res.value && res.value.data.error) {
-            await showMessage({
-              message: res.value.message,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
+            // await showMessage({
+            //   message: res.value.message,
+            //   type: "danger",
+            //   icon: "info",
+            //   duration: 4000,
+            // });
           }
         }
       })
@@ -342,17 +349,20 @@ export class ChatListScreen extends Component {
         this.setState({
           webSocketServerConnected: true,
         });
-        alert("Something wen to wrong");
+        // alert("Something wen to wrong");
       }
     };
     global.ws.onmessage = ({ data }) => {
-      console.log(Platform.OS + " --- WS OnMessage() ---->", data);
+      console.log(
+        "============================================================================---->",
+        JSON.stringify(data)
+      );
       // console.log("data :->",message.data);
       const object = JSON.parse(data);
-      // console.log("object :->",object);
+      console.log("object :->", object);
       if (object.command != undefined) {
         if (object.command == "message") {
-          // console.log("in IF onMessage commant is 'message'");
+          console.log("in IF onMessage commant is 'message'");
           // Message received
           var from_id = Number(object.from.split("_")[1]);
 
@@ -371,10 +381,10 @@ export class ChatListScreen extends Component {
 
               if (parseInt(from_id) == userScreenLoadUserId) {
                 console.log("Inside ID both user are matched....");
-                var payload = {
-                  msg_data: object,
-                  user_data: this.searchFromUser(from_id),
-                };
+                // var payload = {
+                //   msg_data: object,
+                //   user_data: this.searchFromUser(from_id),
+                // };
                 // this.props.receivedChatMessage(payload);
               }
             }
@@ -422,12 +432,13 @@ export class ChatListScreen extends Component {
     };
   }
 
-  
-
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
     return (
-      <TouchableOpacity style={FriendListStyle.itemcell} onPress={()=> this.gotoChatDetails(item.id)}>
+      <TouchableOpacity
+        style={FriendListStyle.itemcell}
+        onPress={() => this.gotoChatDetails(item)}
+      >
         {item.avatar ? (
           <View style={FriendListStyle.imageStyle}>
             <FastImage
@@ -456,26 +467,39 @@ export class ChatListScreen extends Component {
               { color: this.state.theme.LITE_FONT_COLOR },
             ]}
           >
-            {item.last_message ? item.last_message : ""}
+            {item.last_message ? item.last_message : "-"}
           </Text>
         </View>
         <View>
           <Text
+            numberOfLines={2}
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              {
+                color: this.state.theme.LITE_FONT_COLOR,
+                width: globals.deviceWidth * 0.15,
+              },
             ]}
           >
-            {item.last_message_datetime ? item.last_message_datetime : ""}
+            {item.last_message_datetime
+              ? item.last_message_datetime
+              : "Just now"}
           </Text>
+          {item.unread_count == 0 ? null : (
+            <View style={FriendListStyle.circleview}>
+              <Text style={[FriendListStyle.readcount]}>
+                {item.unread_count}
+              </Text>
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );
   };
 
   // navigate to chat screen
-  gotoChatDetails = (to_id) => {
-    NavigationService.navigate("ChatMessages",{to_id: to_id});
+  gotoChatDetails = (user_info) => {
+    NavigationService.navigate("ChatMessages", { user_info: user_info });
   };
 
   // seprate component
@@ -487,7 +511,6 @@ export class ChatListScreen extends Component {
     const { dataArray } = this.state;
     const { isLoading, loaderMessage, theme, chatList } = this.props;
 
-   
     return (
       <>
         <View
@@ -516,11 +539,11 @@ export class ChatListScreen extends Component {
                 searchTxt: text,
               })
             }
-            onPress={() => this.getSearchResult()}
+            onPress={() => this.searchByName()}
             placeholderText={StaticTitle.searchbyNameNnum}
           />
           <FlatList
-            data={chatList}
+            data={dataArray}
             style={FriendListStyle.flatliststyle}
             renderItem={(item, index) => this.renderFriendList(item, index)}
             keyExtractor={(item, index) => "D" + index.toString()}
