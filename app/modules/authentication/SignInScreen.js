@@ -30,6 +30,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import DeviceInfo from "react-native-device-info";
+import messaging, { firebase } from '@react-native-firebase/messaging';
 
 const TAG = "SignInScreen ::=";
 
@@ -38,8 +40,8 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      txtEmail: "user6@mailinator.com",
-      txtPassword: "Test@123",
+      txtEmail: "1044@mailinator.com",
+      txtPassword: "Abcd1234",
       // txtEmail: "",
       // txtPassword: "",
       isShowPassword: true,
@@ -155,19 +157,33 @@ export class SignInScreen extends Component {
   //Call API
   signinAPICall = async () => {
     const { txtEmail, txtPassword } = this.state;
+    var deviceUUID = DeviceInfo.getUniqueId();
+    var deviceName = DeviceInfo.getDeviceNameSync();
+    // var deviceToken = DeviceInfo.getDeviceToken();
+
+    var deviceToken = (await AsyncStorage.getItem('fcmToken')) || '';
+    if (deviceToken === '') {
+      deviceToken = await firebase.messaging().getToken();
+      AsyncStorage.setItem('fcmToken', deviceToken);
+    }
+
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("email", txtEmail);
     params.append("password", txtPassword);
+    params.append("device_token", deviceToken);
+    params.append("device_uuid", deviceUUID);
+    params.append("device_type", "1");
+    params.append("device_name", deviceName);
 
     const { login } = this.props;
     if (globals.isInternetConnected == true) {
       login(params)
         .then(async (res) => {
-          console.log(
-            "res.value.data.data------login-------",
-            JSON.stringify(res.value)
-          );
+          // console.log(
+          //   "res.value.data.data------login-------",
+          //   JSON.stringify(res.value)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.invalid_email) {

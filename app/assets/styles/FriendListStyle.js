@@ -29,6 +29,12 @@ export const FriendListStyle = StyleSheet.create({
     color: Colors.lite_black,
     marginBottom: globals.deviceHeight * 0.003,
   },
+  readcount: {
+    fontSize: globals.font_14,
+    color: Colors.white,
+    textAlign: "center",
+    fontFamily: FontFamily.RalewaRegular,
+  },
   separatorLine: {
     height: 1,
     backgroundColor: Colors.lite_black,
@@ -98,5 +104,16 @@ export const FriendListStyle = StyleSheet.create({
     color: Colors.black,
     marginHorizontal: globals.deviceWidth * 0.04,
     width: globals.deviceWidth * 0.65,
+  },
+
+  circleview: {
+    width: 25,
+    height: 25,
+    borderRadius: 25 / 2,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.primary,
+    alignSelf: "flex-end",
+    marginRight: 5,
   },
 });

@@ -79,11 +79,11 @@ export class FriendlistScreen extends Component {
 
     getfriendlist(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of get friendlist",
-          JSON.stringify(res.value.data.data)
-        );
+        // console.log(
+        //   TAG,
+        //   "response of get friendlist",
+        //   JSON.stringify(res.value.data.data)
+        // );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {

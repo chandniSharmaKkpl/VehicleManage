@@ -12,6 +12,7 @@ import {
   AppearanceProvider,
   useColorScheme,
 } from "react-native-appearance";
+import messaging, { firebase } from '@react-native-firebase/messaging';
 
 let subscription;
 export class App extends Component {
@@ -25,6 +26,7 @@ export class App extends Component {
   }
 
   async componentDidMount() {
+    this.checkPermission();
     this.setDefaultSettings();
     subscription = Appearance.addChangeListener(async ({ colorScheme }) => {
       console.log("colorScheme=====", colorScheme);
@@ -36,6 +38,58 @@ export class App extends Component {
       console.log("Is connected?", state.isConnected);
       globals.isInternetConnected = state.isConnected;
     });
+  }
+
+  async checkPermission() {
+    const authStatus = await messaging().hasPermission();
+    const enabled =
+      authStatus === firebase.messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Notification have permission");
+      this.getToken();
+    } else {
+      this.requestPermission();
+    }
+  }
+
+
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem("fcmToken");
+    if (!fcmToken) {
+      fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        // Alert.alert("Device Token", fcmToken);
+        console.log("Device TOKEN ======>" + fcmToken);
+        // user has a device token
+        await AsyncStorage.setItem("fcmToken", fcmToken);
+      } else {
+        // await AsyncStorage.setItem("dt_logs", "in else not getToken");
+      }
+    } else {
+      console.log("Already Saved Device TOKEN ======>" + fcmToken);
+      // await AsyncStorage.setItem("dt_logs", "found dt:" + fcmToken);
+    }
+  }
+  
+  async requestPermission() {
+    try {
+      const authStatus = await messaging().requestPermission(() => { });
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        // User has authorised
+        this.getToken();
+      } else {
+        console.log("permission rejected.....");
+      }
+    } catch (error) {
+      // User has rejected permissions
+      console.log("permission rejected");
+    }
   }
 
   componentWillUnmount() {

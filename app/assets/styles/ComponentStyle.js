@@ -105,7 +105,7 @@ export const ComponentStyle = StyleSheet.create({
     color: Colors.white,
     textAlign: "left",
     justifyContent: "center",
-    marginLeft:5,
+    marginLeft: 5,
     width: globals.deviceWidth * 0.65,
     paddingVertical: 2,
   },
@@ -177,12 +177,18 @@ export const ComponentStyle = StyleSheet.create({
     marginHorizontal: 20,
   },
   tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
+  roundedtab_img: {
+    width: 45,
+    height: 45,
+    borderRadius: 45 / 2,
+    tintColor: Colors.primary,
+  },
 
   //// Custom Header style
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? globals.deviceHeight*0.03 : 0,
+    paddingTop: Platform.OS === "android" ? globals.deviceHeight * 0.03 : 0,
   },
   headerContain: {
     flexDirection: "row",
@@ -327,7 +333,6 @@ export const ComponentStyle = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50 / 2,
-    justifyContent:'center',
-    backgroundColor: "red",
+    justifyContent: "center",
   },
 });

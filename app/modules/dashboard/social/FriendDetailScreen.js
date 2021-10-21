@@ -143,6 +143,12 @@ export class FriendDetailScreen extends Component {
     }
   };
 
+  // navigate to gotochatdetailscreen
+  gotochatdetailscreen = () => {
+    const { friendDetail } = this.state;
+    NavigationService.navigate("ChatMessages", { user_info: friendDetail });
+  };
+
   // navigate Social Profiles
   navigatetoSocialProfiles = (isFrom, name) => {
     let SocialURL;
@@ -167,7 +173,7 @@ export class FriendDetailScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { friendDetail } = this.state;
-
+    console.log("friendDetail=======", friendDetail);
     return (
       <>
         <View
@@ -187,13 +193,13 @@ export class FriendDetailScreen extends Component {
           <View style={FriendDetailStyle.halfContainer}>
             {friendDetail.user_photo ? (
               <FastImage
-              style={FriendDetailStyle.imageStyle}
-              source={{
-                uri: friendDetail.user_photo,
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
+                style={FriendDetailStyle.imageStyle}
+                source={{
+                  uri: friendDetail.user_photo,
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
             ) : (
               <Image
                 resizeMethod="resize"
@@ -317,6 +323,7 @@ export class FriendDetailScreen extends Component {
           {friendDetail.is_friend == false ? null : (
             <View style={FriendDetailStyle.bottomview}>
               <TouchableOpacity
+                onPress={() => this.gotochatdetailscreen()}
                 style={[
                   FriendDetailStyle.bottomcircleview,
                   {

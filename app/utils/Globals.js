@@ -22,6 +22,12 @@ export const THEME_MODE = {
   LIGHT: "light",
 };
 
+// CHAT_MESSAGE_TYPE
+export const CHAT_MESSAGE_TYPE = {
+  CLASS: "class",
+  ROADIE: "roadie"
+}
+
 // Check the return custom condition
 export function renderIf(condition, component) {
   if (condition) {
