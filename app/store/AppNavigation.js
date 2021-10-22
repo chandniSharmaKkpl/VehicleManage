@@ -7,12 +7,16 @@ import Loader from "../components/Loader";
 import { AppWithNavigationState } from "./index";
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
+import FireBase from "../utils/firebase";
+
 import SplashScreen from "react-native-splash-screen";
 
 class AppNavigation extends Component {
   constructor(props) {
     super(props);
     this.exitCount = 0;
+    this.FCM = new FireBase();
+
   }
 
   componentDidMount() {
@@ -20,6 +24,7 @@ class AppNavigation extends Component {
     setTimeout(() => {
       SplashScreen.hide();
     }, 5000);
+    this.setAppNotification();
 
     // manage hardware backpress button in android
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
@@ -28,6 +33,8 @@ class AppNavigation extends Component {
   componentWillUnmount() {
     // manage hardware backpress button in android
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+    this.FCM.clearListers();
+
   }
 
   // setTimeOut while app will close
@@ -56,13 +63,28 @@ class AppNavigation extends Component {
   onBackPress = () => {
     const { nav, dispatch } = this.props;
     console.log("nav.index====", nav.index);
-    if (nav.index === 1) {
+    if (nav.index === 0) {
       console.log("i amin 1 index");
       this.exitApp();
     }
     dispatch(NavigationActions.back());
     return true;
   };
+
+  setAppNotification = async () => {
+		// console.log("in setAppNotification() .....");
+		let havePermission = await this.FCM.setFCMPermission();
+		console.log("havePermission:" + havePermission);
+		let push_notification_token = await this.FCM.setFCMToken();
+		console.log("push_notification_token------------------------->" + push_notification_token);
+
+		this.FCM.createNotificationListeners(this.callAPI);
+	};
+
+  async callAPI(newDeviceToken) {
+		// Call api to update on server
+		await AsyncStorage.setItem('fcmToken', newDeviceToken);
+	}
 
   render() {
     const { nav, dispatch, isLoading, loaderMessage } = this.props;

@@ -6,12 +6,14 @@ import NavigationService from "../utils/NavigationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../utils/Globals";
 import { darkTheme, lightTheme } from "../assets/Theme";
+import messaging, { firebase } from '@react-native-firebase/messaging';
 
 export class FirstScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       // theme: {},
+      deviceToken: "",
     };
   }
 
@@ -30,13 +32,60 @@ export class FirstScreen extends Component {
     // }
     // this.setState({ theme: them_mode });
     // this.props.swicthTheme(newTheme);
-
+    this.checkPermission();
     const accessToken = await AsyncStorage.getItem("access_token");
     globals.access_token = accessToken;
     if (accessToken === null || accessToken === undefined) {
       NavigationService.reset("Login");
     } else {
       this.getUserData();
+    }
+  }
+
+  async checkPermission() {
+    const authStatus = await messaging().hasPermission();
+    const enabled =
+      authStatus === firebase.messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Notification have permission");
+      this.getToken();
+    } else {
+      this.requestUserPermission();
+    }
+  }
+
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem("fcmToken");
+    if (!fcmToken) {
+      fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        // Alert.alert("Device Token", fcmToken);
+        console.log("Device TOKEN ======>" + fcmToken);
+        this.setState({ deviceToken: fcmToken });
+
+        // user has a device token
+        await AsyncStorage.setItem("fcmToken", fcmToken);
+      } else {
+        // await AsyncStorage.setItem("dt_logs", "in else not getToken");
+      }
+    } else {
+      console.log("Already Saved Device TOKEN ======>" + fcmToken);
+      this.setState({ deviceToken: fcmToken });
+      // await AsyncStorage.setItem("dt_logs", "found dt:" + fcmToken);
+    }
+  }
+
+  async requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      this.getToken();
+      console.log('Authorization status:', authStatus);
     }
   }
 

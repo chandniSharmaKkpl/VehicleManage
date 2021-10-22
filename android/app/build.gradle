@@ -189,6 +189,9 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.android.support:multidex:1.0.3'
     implementation "com.facebook.react:react-native:+"  // From node_modules
+     implementation platform('com.google.firebase:firebase-bom:28.4.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    
     implementation(project(":react-native-google-signin"))
     implementation project(':react-native-appearance')
     implementation project(':react-native-snapchat-login')
