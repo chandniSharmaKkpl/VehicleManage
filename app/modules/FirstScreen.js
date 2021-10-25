@@ -32,7 +32,7 @@ export class FirstScreen extends Component {
     // }
     // this.setState({ theme: them_mode });
     // this.props.swicthTheme(newTheme);
-    this.checkPermission();
+    // this.checkPermission();
     const accessToken = await AsyncStorage.getItem("access_token");
     globals.access_token = accessToken;
     if (accessToken === null || accessToken === undefined) {

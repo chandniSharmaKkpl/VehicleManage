@@ -7,6 +7,8 @@ import {
   ADD_FRIEND,
   LOGOUT,
   UPDATE_SETTINGS,
+  NOTIFICATION_COUNT,
+  SEARCH_FRIEND,WHO_SEARCH_YOU
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -88,6 +90,40 @@ export const updateUserSettings = (params) => ({
   type: UPDATE_SETTINGS,
   payload: api
     .post("api/updateUserSettings", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
+export const notificationCount = () => ({
+  type: NOTIFICATION_COUNT,
+  payload: api
+    .get("api/notifications")
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+export const friendsearch = (params) => ({
+  type: SEARCH_FRIEND,
+  payload: api
+    .post("api/friend_search",params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+export const whosearchedyou = () => ({
+  type: WHO_SEARCH_YOU,
+  payload: api
+    .get("api/notifications/who_searched_you")
     .then((res) => {
       return res;
     })

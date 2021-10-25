@@ -131,7 +131,7 @@ export default class FireBase {
       .onNotificationOpenedApp(async (remoteMessage) => {
         // alert("Background Push Notification opened");
         console.log(
-          "CochPad ::::::::: onNotificationOpenedApp()----->",
+          "Roadie ::::::::: onNotificationOpenedApp()----->",
           remoteMessage
         );
         const { title, body, detail } = remoteMessage.data;
@@ -155,7 +155,7 @@ export default class FireBase {
         if (remoteMessage) {
           // alert("App Closed Push Notification opened");
           console.log(
-            "CochPad ::::::::: getInitialNotification()----->",
+            "Roadie ::::::::: getInitialNotification()----->",
             remoteMessage
           );
           const { title, body, detail } = remoteMessage.data;
@@ -215,7 +215,7 @@ export default class FireBase {
       .messaging()
       .onTokenRefresh((newDeviceToken) => {
         console.log(
-          "CochPad ::::::::: <=============: New Device Token :=============>",
+          "Roadie ::::::::: <=============: New Device Token :=============>",
           newDeviceToken
         );
 

@@ -70,6 +70,7 @@ export class FriendDetailScreen extends Component {
               //   icon: "info",
               //   duration: 4000,
               // });
+              await this.friendsearchApi(res.value.data.data.user_data);
               this.setState({ friendDetail: res.value.data.data.user_data });
             }
           } else {
@@ -85,6 +86,35 @@ export class FriendDetailScreen extends Component {
         })
         .catch((err) => {
           console.log(TAG, "i am in catch error getfriendDetails", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  };
+
+  friendsearchApi = (frndsearchData) => {
+    console.log("frndsearchData=============", frndsearchData);
+    const { friendsearch } = this.props;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    if (globals.isInternetConnected == true) {
+      params.append("searched_id", frndsearchData.id);
+      friendsearch(params)
+        .then(async (res) => {
+          // console.log(
+          //   TAG,
+          //   "response of friendsearch",
+          //   JSON.stringify(res.value)
+          // );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+            }
+          } else {
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error friendsearch", err);
         });
     } else {
       Alert.alert(globals.warning, globals.noInternet);
@@ -357,6 +387,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getfriendDetails: (params) => dispatch(actions.getfriendDetails(params)),
   addfriend: (params) => dispatch(actions.addfriend(params)),
+  friendsearch: (params) => dispatch(actions.friendsearch(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendDetailScreen);
