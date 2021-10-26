@@ -6,6 +6,7 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  DeviceEventEmitter,
 } from "react-native";
 import { connect } from "react-redux";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
@@ -31,14 +32,67 @@ export class SearchScreen extends Component {
       txtSearch: "Gj",
       searchListdata: [],
       theme: {},
+      searched_count: "",
+      countDeatils: {},
     };
   }
 
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-    this.setState({ theme: this.props.theme });
+
+    DeviceEventEmitter.addListener("NotificationCountRemove", () => {
+      Alert.alert("called")
+      this.setNotificationCountsafterreview();
+    });
+    this.setState({ theme: this.props.theme }, () => {
+      if (globals.isInternetConnected == true) {
+        this.getnotificationCount();
+      } else {
+        Alert.alert(globals.warning, globals.noInternet);
+      }
+    });
   }
+
+  componentWillUnmount = () => {
+    DeviceEventEmitter.removeAllListeners("NotificationCountRemove");
+  };
+
+  setNotificationCountsafterreview = () => {
+    this.setState({
+      searched_count: 0,
+    });
+    console.log("After -----------------", this.state.searched_count);
+  };
+
+  getnotificationCount = async () => {
+    const { notificationCount } = this.props;
+    notificationCount().then((res) => {
+      // console.log("res----------notificationCount-", JSON.stringify(res));
+      if (res.value && res.value.data.success == true) {
+        if (res.value && res.value.status === 200) {
+          this.setNotificationCounts(res.value.data.data);
+        }
+      } else {
+        console.log(TAG, "notification count can't fetched", err);
+      }
+    });
+  };
+
+  setNotificationCounts = async (countDeatils) => {
+    let getsearchedCount = await JSON.parse(
+      await AsyncStorage.getItem("searched_count")
+    );
+    console.log("getsearchedCount--setNotificationCounts------", getsearchedCount);
+    this.setState({
+      searched_count: getsearchedCount == "0" ? getsearchedCount : countDeatils.searched_count,
+      countDeatils: countDeatils,
+    });
+    await AsyncStorage.setItem(
+      "searched_count",
+      JSON.stringify(parseInt(this.state.searched_count))
+    );
+  };
 
   // clear States before leave this screen
   clearStates = () => {
@@ -91,7 +145,7 @@ export class SearchScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
-            }else if(res.value && res.value.message){
+            } else if (res.value && res.value.message) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
@@ -186,7 +240,8 @@ export class SearchScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-    const { txtSearch, searchListdata } = this.state;
+    const { txtSearch, searchListdata, searched_count, countDeatils } =
+      this.state;
 
     return (
       <>
@@ -206,6 +261,8 @@ export class SearchScreen extends Component {
             onPressed={() => this.props.navigation.openDrawer()}
             isShowRighttwo={true}
             theme={theme}
+            searchcount={searched_count}
+            countDeatils={countDeatils}
           />
           <Search
             theme={theme}
@@ -253,6 +310,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   searchvehicle: (params) => dispatch(actions.searchvehicle(params)),
+  notificationCount: (params) => dispatch(actions.notificationCount(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);

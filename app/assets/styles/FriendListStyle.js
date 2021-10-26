@@ -23,6 +23,12 @@ export const FriendListStyle = StyleSheet.create({
     color: Colors.black,
     marginBottom: globals.deviceHeight * 0.003,
   },
+  detailsview: {
+    flexDirection: "row",
+    marginVertical: 3,
+    alignItems: "center",
+    width: globals.deviceWidth * 0.55,
+  },
   titleSmall: {
     fontFamily: FontFamily.RalewaRegular,
     fontSize: globals.font_12,
@@ -47,6 +53,20 @@ export const FriendListStyle = StyleSheet.create({
     width: globals.deviceWidth * 0.15,
     borderRadius: (globals.deviceWidth * 0.15) / 2,
     alignItems: "center",
+  },
+  multiimageStyle:{
+    height: globals.deviceWidth * 0.05,
+    width: globals.deviceWidth * 0.05,
+    borderRadius: (globals.deviceWidth * 0.05) / 2,
+    alignItems: "center",
+    position:'relative',
+   
+  },
+  chatImgstyle: {
+    height: globals.deviceWidth * 0.08,
+    width: globals.deviceWidth * 0.08,
+    alignItems: "center",
+    alignSelf:'center'
   },
   navigateimgStyle: {
     height: 15,
@@ -77,7 +97,6 @@ export const FriendListStyle = StyleSheet.create({
     width: "60%",
   },
   flatliststyle: {
-    flex: 1,
     marginVertical: 5,
   },
   emptyview: {

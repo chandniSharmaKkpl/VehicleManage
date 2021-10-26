@@ -8,6 +8,7 @@ import { AppWithNavigationState } from "./index";
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
 import FireBase from "../utils/firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SplashScreen from "react-native-splash-screen";
 

@@ -43,7 +43,7 @@ class GoogleLogin extends Component {
           ? "Please sign in :)"
           : error.message;
 
-      console.log("error", new Error(errorMessage));
+      // console.log("error", new Error(errorMessage));
     }
   }
 
@@ -63,7 +63,7 @@ class GoogleLogin extends Component {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
     } catch (error) {
-      console.log("Error", error);
+      // console.log("Error", error);
     }
   };
 

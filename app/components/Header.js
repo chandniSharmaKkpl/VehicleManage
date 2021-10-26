@@ -29,14 +29,20 @@ const Header = ({
   isShowSidebar,
   isFrom,
   onPressed,
+  searchcount,
+  countDeatils,
   ...props
 }) => {
   const gotoBack = async () => {
     NavigationService.back();
   };
   const gotoNotification = async () => {
-    NavigationService.navigate("Notification");
+    NavigationService.navigate("Notification", {
+      countDeatils:
+        countDeatils != undefined || countDeatils != {} ? countDeatils : {},
+    });
   };
+
   return (
     <SafeAreaView
       style={[
@@ -109,7 +115,14 @@ const Header = ({
                 }}
                 source={IMAGE.notification_img}
                 resizeMode={FastImage.resizeMode.contain}
-              />
+              ></FastImage>
+              {searchcount == 0 ? (
+                null
+              ) : <View style={ComponentStyle.countcircleview}>
+              <Text style={ComponentStyle.messagescountstyle}>
+                {searchcount}
+              </Text>
+            </View>}
             </TouchableOpacity>
             <TouchableOpacity
               style={{

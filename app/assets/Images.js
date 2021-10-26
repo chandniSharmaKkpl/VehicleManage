@@ -34,6 +34,7 @@ const IMAGE = {
   dark_Logo_img: require("../assets/images/dark_Logo.png"),
   dark_Car_img: require("../assets/images/dark_Car.png"),
   close_img: require("../assets/images/close.png"),
+  chatboxe_img: require("../assets/images/chatboxe.png"),
 };
 
 export { IMAGE };

@@ -202,7 +202,36 @@ export const ComponentStyle = StyleSheet.create({
     // backgroundColor:'red',
     // width:globals.deviceWidth * 0.42
   },
-
+  messagescountstyle: {
+    fontSize: RFPercentage(2.2),
+    fontFamily: FontFamily.RalewaRegular,
+    color: Colors.white,
+    textAlign: "center",
+    bottom: 5,
+  },
+  countcircleview: {
+    width: globals.deviceWidth * 0.045,
+    height: globals.deviceWidth * 0.045,
+    borderRadius: (globals.deviceWidth * 0.045) / 2,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: globals.deviceWidth * 0.04,
+    left: globals.deviceWidth * 0.04,
+    backgroundColor: Colors.red,
+  },
+  msgcountcircleview: {
+    width: globals.deviceWidth * 0.045,
+    height: globals.deviceWidth * 0.045,
+    borderRadius: (globals.deviceWidth * 0.045) / 2,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    position: "absolute",
+    bottom: globals.deviceWidth * 0.09,
+    left: globals.deviceWidth * 0.09,
+    backgroundColor:Colors.red,
+  },
   /////// Social media textinput for snapchat
 
   snap_inputText: {

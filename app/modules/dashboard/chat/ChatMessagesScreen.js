@@ -88,6 +88,7 @@ export class ChatMessagesScreen extends Component {
   };
 
   async componentDidMount() {
+    this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
         {

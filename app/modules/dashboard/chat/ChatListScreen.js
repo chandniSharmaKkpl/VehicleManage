@@ -192,6 +192,7 @@ export class ChatListScreen extends Component {
   }
 
   async componentDidMount() {
+    this._isMounted = true;
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
       if (globals.isInternetConnected == true) {
         this.callMessageListAPI();
