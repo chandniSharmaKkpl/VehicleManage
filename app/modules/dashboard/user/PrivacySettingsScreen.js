@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Alert, Text, ScrollView } from "react-native";
+import { View,DeviceEventEmitter, Alert, Text, ScrollView } from "react-native";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";
 import { PrivacySettingStyle } from "../../../assets/styles/PrivacySettingStyle";
@@ -45,6 +45,9 @@ export class PrivacySettingsScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    this.getUserData();
+    DeviceEventEmitter.emit("initializeApp");
+
   }
 
   // set userInformation
@@ -150,14 +153,14 @@ export class PrivacySettingsScreen extends Component {
     params.append("setting_7", isHideSearchUser == true ? 1 : 0);
 
     if (globals.isInternetConnected == true) {
-      console.log("params===updateUserSettings===", JSON.stringify(params));
+      // console.log("params===updateUserSettings===", JSON.stringify(params));
       updateUserSettings(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "updateUserSettings res.value.data---",
-            JSON.stringify(res.value.data)
-          );
+          // console.log(
+          //   TAG,
+          //   "updateUserSettings res.value.data---",
+          //   JSON.stringify(res.value.data)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {

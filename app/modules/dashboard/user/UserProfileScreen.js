@@ -13,6 +13,7 @@ import {
   FlatList,
   StatusBar,
   Alert,
+  DeviceEventEmitter,
 } from "react-native";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
 import * as globals from "../../../utils/Globals";
@@ -91,6 +92,10 @@ export class UserProfileScreen extends Component {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
     this.onFocusFunction();
+    DeviceEventEmitter.addListener("initializeApp", () => {
+      this.getUserData();
+      this.setUserInfo(this.props.userDetails);
+    });
     // this.focusListener = this.props.navigation.addListener("didFocus", () => {
     //   this.onFocusFunction();
     // });
@@ -400,7 +405,6 @@ export class UserProfileScreen extends Component {
       selectedModel,
       selectedCity,
     } = this.state;
-
     return (
       <>
         <View
@@ -564,56 +568,71 @@ export class UserProfileScreen extends Component {
                     })
                   }
                 />
-                <Input
-                  value={this.state.txtUserName}
-                  placeholderText={StaticTitle.userName}
-                  inputStyle={{ marginTop: 8, color: Colors.placeholderColor }}
-                  onSubmitEditing={Keyboard.dismiss}
-                  blurOnSubmit={false}
-                  forwardRef={(ref) => {
-                    (this.input.txtUserName = ref),
-                      this.input.txtUserName &&
-                        this.input.txtUserName.setNativeProps({
-                          style: { fontFamily: "Raleway-Regular" },
-                        });
-                  }}
-                  autoFocus={true}
-                  returnKeyType="done"
-                  autoCapitalize={"none"}
-                  maxLength={26}
-                  minLength={3}
-                  isValidationShow={this.state.isUserNameError}
-                  validateMesssage={this.state.userNameValidMsg}
-                  onChangeText={(text) =>
-                    this.setState({
-                      txtUserName: text,
-                      isUserNameError: false,
-                    })
-                  }
-                />
+                {user.setting_6 == 1 ? null : (
+                  <Input
+                    value={this.state.txtUserName}
+                    placeholderText={StaticTitle.userName}
+                    inputStyle={{
+                      marginTop: 8,
+                      color: Colors.placeholderColor,
+                    }}
+                    onSubmitEditing={Keyboard.dismiss}
+                    blurOnSubmit={false}
+                    forwardRef={(ref) => {
+                      (this.input.txtUserName = ref),
+                        this.input.txtUserName &&
+                          this.input.txtUserName.setNativeProps({
+                            style: { fontFamily: "Raleway-Regular" },
+                          });
+                    }}
+                    autoFocus={true}
+                    returnKeyType="done"
+                    autoCapitalize={"none"}
+                    maxLength={26}
+                    minLength={3}
+                    isValidationShow={this.state.isUserNameError}
+                    validateMesssage={this.state.userNameValidMsg}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtUserName: text,
+                        isUserNameError: false,
+                      })
+                    }
+                  />
+                )}
 
-                <DropDownPicker
-                  options={cityList}
-                  defaultValue={
-                    selectedCity ? selectedCity : StaticTitle.selectCity
-                  }
-                  renderButtonText={(value) => this.setselectedCity(value)}
-                />
+                {user.setting_2 == 1 ? null : (
+                  <DropDownPicker
+                    options={cityList}
+                    defaultValue={
+                      selectedCity ? selectedCity : StaticTitle.selectCity
+                    }
+                    renderButtonText={(value) => this.setselectedCity(value)}
+                  />
+                )}
 
-                <DropDownPicker
-                  options={carModelList}
-                  defaultValue={
-                    selectedModel ? selectedModel : StaticTitle.chooseModal
-                  }
-                  renderButtonText={(value) => this.setselectedModel(value)}
-                />
-                <DropDownPicker
-                  options={carColourList}
-                  defaultValue={
-                    selectedColour ? selectedColour : StaticTitle.selectColor
-                  }
-                  renderButtonText={(value) => this.setselectedColour(value)}
-                />
+                {user.setting_3 == 1 ? null : (
+                  <>
+                    <DropDownPicker
+                      options={carModelList}
+                      defaultValue={
+                        selectedModel ? selectedModel : StaticTitle.chooseModal
+                      }
+                      renderButtonText={(value) => this.setselectedModel(value)}
+                    />
+                    <DropDownPicker
+                      options={carColourList}
+                      defaultValue={
+                        selectedColour
+                          ? selectedColour
+                          : StaticTitle.selectColor
+                      }
+                      renderButtonText={(value) =>
+                        this.setselectedColour(value)
+                      }
+                    />
+                  </>
+                )}
 
                 <View
                   style={[
@@ -624,18 +643,22 @@ export class UserProfileScreen extends Component {
                     },
                   ]}
                 >
-                  <InstagramIntegration
-                    isFrom="Instagram"
-                    URL={user.instagram_username}
-                  />
-                  <FacebookIntegration
-                    isFrom="Facebook"
-                    URL={user.fb_username}
-                  />
-                  <SnapchatIntegration
-                    isFrom="Snap"
-                    URL={user.snapchat_username}
-                  />
+                  {user.setting_5 == 1 ? null : (
+                    <>
+                      <InstagramIntegration
+                        isFrom="Instagram"
+                        URL={user.instagram_username}
+                      />
+                      <FacebookIntegration
+                        isFrom="Facebook"
+                        URL={user.fb_username}
+                      />
+                      <SnapchatIntegration
+                        isFrom="Snap"
+                        URL={user.snapchat_username}
+                      />
+                    </>
+                  )}
 
                   {/* <PrimaryTextinputwithIcon
                     isFrom="Instagram"

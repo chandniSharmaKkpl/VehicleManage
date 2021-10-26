@@ -42,7 +42,6 @@ export class SearchScreen extends Component {
     globals.access_token = token;
 
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
-      Alert.alert("called")
       this.setNotificationCountsafterreview();
     });
     this.setState({ theme: this.props.theme }, () => {
@@ -83,9 +82,15 @@ export class SearchScreen extends Component {
     let getsearchedCount = await JSON.parse(
       await AsyncStorage.getItem("searched_count")
     );
-    console.log("getsearchedCount--setNotificationCounts------", getsearchedCount);
+    console.log(
+      "getsearchedCount--setNotificationCounts------",
+      getsearchedCount
+    );
     this.setState({
-      searched_count: getsearchedCount == "0" ? getsearchedCount : countDeatils.searched_count,
+      searched_count:
+        getsearchedCount == "0" || getsearchedCount != null
+          ? getsearchedCount
+          : countDeatils.searched_count,
       countDeatils: countDeatils,
     });
     await AsyncStorage.setItem(

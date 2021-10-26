@@ -54,8 +54,8 @@ export class ChatListScreen extends Component {
   }
 
   searchByName(searchText) {
-    // console.log("Value of item is :->", searchText);
-    // console.log("this.state.chatName :-->", this.state);
+    console.log("Value of item is :->", searchText);
+    console.log("this.state.chatName :-->", this.state);
     const newData = Object.values(this.state.chatName).filter((item) => {
       const itemData = item.name.toUpperCase();
       const textData = searchText.toUpperCase();
@@ -433,6 +433,21 @@ export class ChatListScreen extends Component {
     };
   }
 
+  searchFromUser(from_id) {
+    // console.log("searchFromUser() from_id :-->", from_id);
+
+    var user = {};
+    this.state.dataArray.forEach((msg) => {
+      if (Number(msg.id) == Number(from_id)) {
+        user = msg;
+      }
+    });
+
+    console.log("from User :->", user);
+
+    return user;
+  }
+
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
     return (
@@ -509,7 +524,7 @@ export class ChatListScreen extends Component {
   };
 
   render() {
-    const { dataArray } = this.state;
+    const { dataArray, searchTxt } = this.state;
     const { isLoading, loaderMessage, theme, chatList } = this.props;
 
     return (
@@ -532,6 +547,7 @@ export class ChatListScreen extends Component {
           <Search
             theme={theme}
             blurOnSubmit={false}
+            value={searchTxt}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
             autoCapitalize={"none"}
@@ -540,7 +556,7 @@ export class ChatListScreen extends Component {
                 searchTxt: text,
               })
             }
-            onPress={() => this.searchByName()}
+            onPress={() => this.searchByName(searchTxt)}
             placeholderText={StaticTitle.searchbyNameNnum}
           />
           <FlatList
