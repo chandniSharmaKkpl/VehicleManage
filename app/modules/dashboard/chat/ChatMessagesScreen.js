@@ -88,6 +88,7 @@ export class ChatMessagesScreen extends Component {
   };
 
   async componentDidMount() {
+    console.log(" this.state.user_info.id==============",  this.state.user_info.id);
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -179,6 +180,7 @@ export class ChatMessagesScreen extends Component {
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("to_id", to_id);
+    console.log("to_id========params========", JSON.stringify(params));
     messagesDetails(params)
       .then(async (res) => {
         // console.log(
@@ -327,7 +329,7 @@ export class ChatMessagesScreen extends Component {
     params.append("to_id", this.state.to_id);
     params.append("message", allTextMsg.join("\n"));
 
-    // console.log("param insertMessage :->", params);
+    console.log("param insertMessage :->", params);
 
     insertMessage(params)
       .then(async (res) => {
@@ -487,9 +489,11 @@ export class ChatMessagesScreen extends Component {
       txtmessage,
       messages,
       userDetails,
-      user_info,
+      user_info,from_id
     } = this.state;
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
+    var user_id = from_id;
+
     return (
       <>
         <View style={ChatStyle.container}>
@@ -541,7 +545,7 @@ export class ChatMessagesScreen extends Component {
             messages={messages}
             onSend={this.onSend}
             user={{
-              _id: 1,
+              _id: Number(user_id),
             }}
             minInputToolbarHeight={60}
             alwaysShowSend

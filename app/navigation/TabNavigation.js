@@ -35,6 +35,12 @@ const SearchStack = createStackNavigator(
     FriendDetail: {
       screen: FriendDetailScreen,
     },
+    ChatList: {
+      screen: ChatListScreen,
+    },
+    ChatMessages: {
+      screen: ChatMessagesScreen,
+    },
   },
   {
     headerMode: "none",
@@ -54,6 +60,12 @@ const SocialStack = createStackNavigator(
     },
     FriendDetail: {
       screen: FriendDetailScreen,
+    },
+    ChatList: {
+      screen: ChatListScreen,
+    },
+    ChatMessages: {
+      screen: ChatMessagesScreen,
     },
   },
   {
