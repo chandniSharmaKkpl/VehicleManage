@@ -88,7 +88,10 @@ export class ChatMessagesScreen extends Component {
   };
 
   async componentDidMount() {
-    console.log(" this.state.user_info.id==============",  this.state.user_info.id);
+    console.log(
+      " this.state.user_info.id==============",
+      this.state.user_info.id
+    );
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -489,7 +492,8 @@ export class ChatMessagesScreen extends Component {
       txtmessage,
       messages,
       userDetails,
-      user_info,from_id
+      user_info,
+      from_id,
     } = this.state;
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
     var user_id = from_id;

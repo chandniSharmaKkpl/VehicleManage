@@ -34,6 +34,7 @@ export class FriendlistScreen extends Component {
     this.state = {
       txtSearch: "",
       friendListData: [],
+      filterdfriendListData: [],
       user: {},
       theme: {},
     };
@@ -96,7 +97,7 @@ export class FriendlistScreen extends Component {
             if (this._isMounted) {
               this.setState({
                 friendListData: res.value.data.data.friend_list,
-                
+                filterdfriendListData: res.value.data.data.friend_list,
               });
             }
           }
@@ -123,6 +124,22 @@ export class FriendlistScreen extends Component {
     });
   };
 
+  getSearchResults = (searchText) => {
+    // console.log("Value of item is :->", searchText);
+    // console.log("this.state.filterdfriendListData :-->", this.state);
+    const newData = Object.values(this.state.filterdfriendListData).filter(
+      (item) => {
+        const itemData = item.name.toUpperCase();
+        const textData = searchText.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      }
+    );
+    this.setState({
+      friendListData: newData,
+      txtSearch: searchText,
+    });
+  };
+
   // search vechicle by name
   getSearchResult = async () => {
     const { txtSearch } = this.state;
@@ -144,6 +161,7 @@ export class FriendlistScreen extends Component {
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
+   
     return (
       <View style={FriendListStyle.itemcell}>
         {item.avatar ? (
@@ -166,7 +184,7 @@ export class FriendlistScreen extends Component {
         )}
         <View style={FriendListStyle.userdetail}>
           <Text style={FriendListStyle.titleBig}>
-            {item.name ? item.name : "-"}
+          {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text
             style={[
@@ -212,7 +230,7 @@ export class FriendlistScreen extends Component {
   };
 
   render() {
-    const { friendListData,txtSearch } = this.state;
+    const { friendListData, txtSearch } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
@@ -237,7 +255,7 @@ export class FriendlistScreen extends Component {
             blurOnSubmit={false}
             value={txtSearch}
             returnKeyType="done"
-            onSubmitEditing={Keyboard.dismiss}
+            onSubmitEditing={() => this.getSearchResults(txtSearch)}
             autoCapitalize={"none"}
             onChangeText={(text) =>
               this.setState({
@@ -245,7 +263,7 @@ export class FriendlistScreen extends Component {
               })
             }
             placeholderText={StaticTitle.searchbyNameNnum}
-            onPress={() => this.getSearchResult()}
+            onPress={() => this.getSearchResults(txtSearch)}
           />
           {friendListData.length == 0 || friendListData == [] ? (
             <View style={FriendListStyle.emptyview}>

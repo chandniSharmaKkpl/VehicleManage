@@ -70,14 +70,17 @@ const chatReducer = (state = initialState, action) => {
     case actionTypes.MESSAGES_DETAILS_SUCCESS:
       var chat_message = action.payload.data.data.to_detail;
       var user_data = action.payload.data.data.from_detail;
-      console.log("action.payload.data=======MESSAGES_DETAILS_SUCCESS=======", action.payload.data.data);
-      console.log(
-        "reducer RECEIVED_CHAT_MESSAGE chat_message :->" +
-          JSON.stringify(chat_message)
-      );
-      console.log(
-        "reducer user_data chat_message :->" + JSON.stringify(user_data)
-      );
+      // console.log(
+      //   "action.payload.data=======MESSAGES_DETAILS_SUCCESS=======",
+      //   action.payload.data.data
+      // );
+      // console.log(
+      //   "reducer RECEIVED_CHAT_MESSAGE chat_message :->" +
+      //     JSON.stringify(chat_message)
+      // );
+      // console.log(
+      //   "reducer user_data chat_message :->" + JSON.stringify(user_data)
+      // );
 
       var message = action.payload.data.data.messages;
       var from_id = Number(user_data.id);
@@ -129,6 +132,62 @@ const chatReducer = (state = initialState, action) => {
         ...state,
         chat: {
           ...state.chat,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+    // IN-APP MESSAGE RECEIVED ----------------->
+    case actionTypes.RECEIVED_CHAT_MESSAGE:
+      var chat_message = action.payload.data.data.to_detail;
+      var user_data = action.payload.data.data.from_detail;
+      // console.log(
+      //   "RECEIVED_CHAT_MESSAGE action.payload.data=======MESSAGES_DETAILS_SUCCESS=======",
+      //   action.payload.data.data
+      // );
+      // console.log(
+      //   "RECEIVED_CHAT_MESSAGE reducer RECEIVED_CHAT_MESSAGE chat_message :->" +
+      //     JSON.stringify(chat_message)
+      // );
+      // console.log(
+      //   " RECEIVED_CHAT_MESSAGE reducer user_data chat_message :->" +
+      //     JSON.stringify(user_data)
+      // );
+      var message = action.payload.data.data.messages;
+      var from_id = Number(user_data.id);
+      var to_id = Number(chat_message.id);
+      var createdAt = moment(
+        chat_message.created_at,
+        "YYYY-MM-DDTHH:mm:ssZ"
+      ).format("YYYY/MM/DD HH:mm:ss");
+      var messgae_id = chat_message.id;
+
+      var msgDic = {
+        _id: messgae_id,
+        from_id: from_id,
+        to_id: to_id,
+        text: message[0].message,
+        created_at: createdAt,
+        is_received: 0,
+        user: {
+          _id: user_data.id,
+          name: user_data.name,
+          avatar: user_data.avatar,
+        },
+        sent: true,
+        received: true,
+        pending: false,
+      };
+
+      console.log(Platform.OS + "- msgDic :->", msgDic);
+
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          chatMessages: [msgDic],
+          ...action.payload, // @PENDDING updates When user already on same screen, If is not in same screen then increas unRead count in chatList data
+          isReceiveChatMessage: true,
           isLoading: false,
           loaderMessage: "Loading...",
         },

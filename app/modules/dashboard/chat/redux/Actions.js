@@ -1,5 +1,12 @@
 import api from "../../../../utils/Api";
-import { MESSAGES_LIST, MESSAGES_DETAILS, INSERT_MESSAGES, READ_MESSAGES, BLOCK_USER, REPORT_USER } from "./ActionType";
+import {
+  MESSAGES_LIST,
+  MESSAGES_DETAILS,
+  INSERT_MESSAGES,
+  READ_MESSAGES,
+  BLOCK_USER,
+  REPORT_USER,
+} from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
   type: SWITCH_THEME,
@@ -79,3 +86,10 @@ export const reportUser = (params) => ({
       return err;
     }),
 });
+export const receivedChatMessage = (payload) => {
+  console.log("in receivedChatMessage() payload :->", payload);
+  return {
+    type: RECEIVED_CHAT_MESSAGE,
+    payload: payload,
+  };
+};
