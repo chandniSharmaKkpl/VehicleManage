@@ -1,3 +1,6 @@
+
+export const RECEIVED_CHAT_MESSAGE = "RECEIVED_CHAT_MESSAGE";
+
 //msg listing
 export const MESSAGES_LIST = "MESSAGES_LIST";
 export const MESSAGES_LIST_LOADING = "MESSAGES_LIST_LOADING";

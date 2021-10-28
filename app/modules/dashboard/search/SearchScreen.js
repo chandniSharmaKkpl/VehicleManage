@@ -198,7 +198,7 @@ export class SearchScreen extends Component {
         )}
         <View style={FriendListStyle.userdetail}>
           <Text style={FriendListStyle.titleBig}>
-            {item.name + item.surname}
+            {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text
             style={[

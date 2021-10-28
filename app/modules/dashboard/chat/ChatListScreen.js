@@ -219,9 +219,16 @@ export class ChatListScreen extends Component {
     }
 
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
+    DeviceEventEmitter.addListener("fetch_message_list", this.callAPI());
 
     console.log("addEventListener ---> AppState");
     AppState.addEventListener("change", this._handleAppStateChange);
+  }
+
+  callAPI() {
+    setTimeout(() => {
+      this.callMessageListAPI();
+    }, 1000);
   }
 
   _handleAppStateChange = (nextAppState) => {
@@ -360,7 +367,7 @@ export class ChatListScreen extends Component {
       );
       // console.log("data :->",message.data);
       const object = JSON.parse(data);
-      console.log("object :->", object);
+      console.log("object onmessage:->", object.command );
       if (object.command != undefined) {
         if (object.command == "message") {
           console.log("in IF onMessage commant is 'message'");
@@ -371,7 +378,7 @@ export class ChatListScreen extends Component {
 
           const { nav } = this.props;
           const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-          if (currentScreen == "ChatMessages") {
+          if (currentScreen == "App") {
             const currentScreenParams =
               nav.routes[nav.routes.length - 1].params;
             console.log("currentScreenParams :->", currentScreenParams);
@@ -382,11 +389,11 @@ export class ChatListScreen extends Component {
 
               if (parseInt(from_id) == userScreenLoadUserId) {
                 console.log("Inside ID both user are matched....");
-                // var payload = {
-                //   msg_data: object,
-                //   user_data: this.searchFromUser(from_id),
-                // };
-                // this.props.receivedChatMessage(payload);
+                var payload = {
+                  msg_data: object,
+                  user_data: this.searchFromUser(from_id),
+                };
+                this.props.receivedChatMessage(payload);
               }
             }
           }
@@ -394,14 +401,19 @@ export class ChatListScreen extends Component {
           object.command == "register" ||
           object.command == "unregister"
         ) {
+          console.log(" --- WS register() ---->");
+
           const { userDetails } = this.props;
-          if (parseInt(object.offline_user_id) != parseInt(userDetails.id)) {
+          console.log("userDetails==========", userDetails);
+          console.log("object.offline_user_id=============", object.offline_user_id);
+          let userdata= userDetails.user_data;
+          if (parseInt(object.offline_user_id) != parseInt(userdata.user_id)) {
             var onlineUsers = object.online;
             console.log("command register --- onlineUsers :-->", onlineUsers);
             const { nav } = this.props;
             const currentScreen = nav.routes[nav.routes.length - 1].routeName;
             console.log("online command currentScreen :->", currentScreen);
-            if (currentScreen == "ChatDetails") {
+            if (currentScreen == "App") {
               const currentScreenParams =
                 nav.routes[nav.routes.length - 1].params;
               console.log("currentScreenParams :->", currentScreenParams);
@@ -434,7 +446,7 @@ export class ChatListScreen extends Component {
   }
 
   searchFromUser(from_id) {
-    // console.log("searchFromUser() from_id :-->", from_id);
+    console.log("searchFromUser() from_id :-->", from_id);
 
     var user = {};
     this.state.dataArray.forEach((msg) => {
@@ -484,6 +496,7 @@ export class ChatListScreen extends Component {
             ]}
           >
             {item.last_message ? item.last_message : "-"}
+            {item.registration_number ? item.registration_number : "-"}
           </Text>
         </View>
         <View>
@@ -549,7 +562,7 @@ export class ChatListScreen extends Component {
             blurOnSubmit={false}
             value={searchTxt}
             returnKeyType="done"
-            onSubmitEditing={Keyboard.dismiss}
+            onSubmitEditing={() => this.searchByName(searchTxt)}
             autoCapitalize={"none"}
             onChangeText={(text) =>
               this.setState({
@@ -587,6 +600,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  receivedChatMessage: (params) =>
+    dispatch(actions.receivedChatMessage(params)),
   messagesList: (params) => dispatch(actions.messagesList(params)),
 });
 
