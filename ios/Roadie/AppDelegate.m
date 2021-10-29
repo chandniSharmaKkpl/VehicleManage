@@ -6,6 +6,9 @@
 #import <React/RCTLinkingManager.h>
 #import <SCSDKLoginKit/SCSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+
+#import <Firebase.h>
+
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -60,6 +63,10 @@ return handled;
 // #ifdef FB_SONARKIT_ENABLED
 //   InitializeFlipper(application);
 // #endif
+  
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge

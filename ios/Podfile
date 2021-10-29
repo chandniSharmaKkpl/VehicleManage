@@ -11,6 +11,10 @@ target 'Roadie' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
+
+  $FirebaseSDKVersion = '8.5.0'
+  $RNFirebaseAsStaticFramework = true
+  
   pod 'GoogleSignIn', '~> 5.0.2'
 
   pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
