@@ -39,7 +39,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import * as actions from "./redux/Actions";
 
 import ChatMessages from "../../../dummyData/ChatMessages";
-const avatar = require("../../../assets/images/user.png");
+const avatar = require("../../../assets/images/user.jpeg");
 
 const TAG = "ChatMessagesScreen ::=";
 
@@ -61,8 +61,11 @@ export class ChatMessagesScreen extends Component {
       from_id: "",
       user_info: this.props.navigation.state.params.user_info,
       to_id: "",
+      isMessageSend: false,
     };
     this.onSend = this.onSend.bind(this);
+    this.callFetchAPI = this.callFetchAPI.bind(this);
+    this.callSendAPI = this.callSendAPI.bind(this);
     this.formatMessageAndStore = this.formatMessageAndStore.bind(this);
     this.readMessagesAPI = this.readMessagesAPI.bind(this);
   }
@@ -120,6 +123,7 @@ export class ChatMessagesScreen extends Component {
   };
 
   formatMessageAndStore(response) {
+    console.log("response==================", response);
     var msgArr = [];
 
     this.readMessagesAPI(response);
@@ -336,11 +340,11 @@ export class ChatMessagesScreen extends Component {
 
     insertMessage(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of insertMessage",
-        //   JSON.stringify(res.value.data)
-        // );
+        console.log(
+          TAG,
+          "response of insertMessage",
+          JSON.stringify(res.value.data)
+        );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {

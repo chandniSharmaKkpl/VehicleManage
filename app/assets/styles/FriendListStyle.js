@@ -22,6 +22,7 @@ export const FriendListStyle = StyleSheet.create({
     fontSize: globals.font_14,
     color: Colors.black,
     marginBottom: globals.deviceHeight * 0.003,
+   
   },
   detailsview: {
     flexDirection: "row",
@@ -34,11 +35,13 @@ export const FriendListStyle = StyleSheet.create({
     fontSize: globals.font_12,
     color: Colors.lite_black,
     marginBottom: globals.deviceHeight * 0.003,
+    
   },
   readcount: {
-    fontSize: globals.font_14,
+    fontSize: globals.font_15,
     color: Colors.white,
     textAlign: "center",
+    alignSelf:'center',
     fontFamily: FontFamily.RalewaRegular,
   },
   separatorLine: {
@@ -54,19 +57,18 @@ export const FriendListStyle = StyleSheet.create({
     borderRadius: (globals.deviceWidth * 0.15) / 2,
     alignItems: "center",
   },
-  multiimageStyle:{
+  multiimageStyle: {
     height: globals.deviceWidth * 0.05,
     width: globals.deviceWidth * 0.05,
     borderRadius: (globals.deviceWidth * 0.05) / 2,
     alignItems: "center",
-    position:'relative',
-   
+    position: "relative",
   },
   chatImgstyle: {
     height: globals.deviceWidth * 0.08,
     width: globals.deviceWidth * 0.08,
     alignItems: "center",
-    alignSelf:'center'
+    alignSelf: "center",
   },
   navigateimgStyle: {
     height: 15,
@@ -94,7 +96,7 @@ export const FriendListStyle = StyleSheet.create({
   },
   userdetail: {
     marginHorizontal: 15,
-    width: "60%",
+    width: "55%",
   },
   flatliststyle: {
     marginVertical: 5,
@@ -133,6 +135,17 @@ export const FriendListStyle = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.primary,
     alignSelf: "flex-end",
+    marginRight: 9,
+  },
+  redcircleview: {
+    width: 15,
+    height: 15,
+    borderRadius: 15 / 2,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.red,
+    alignSelf: "flex-end",
     marginRight: 5,
+    position: "absolute",
   },
 });
