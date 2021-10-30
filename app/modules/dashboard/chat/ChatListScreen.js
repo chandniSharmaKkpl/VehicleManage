@@ -73,7 +73,7 @@ export class ChatListScreen extends Component {
         " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
       newProps.isReceiveChatMessage +
         ", chatMsg Length:" +
-        newProps.chatMessages.length
+        JSON.stringify(newProps.chatMessages)
     );
     // When user is inside Inbox screen and any 1-1 or group message is received, then IF condition is true
     if (
@@ -88,6 +88,10 @@ export class ChatListScreen extends Component {
       var newDataArray = this.state.dataArray;
       newDataArray.forEach((data) => {
         newProps.chatMessages.forEach((msg) => {
+          console.log(
+            "msg=====================================================",
+            msg
+          );
           var from_id = msg.from_id;
           var class_id = msg.class_id;
           console.log("from_id :->", from_id);
@@ -168,7 +172,8 @@ export class ChatListScreen extends Component {
 
   registerAndSubscribe() {
     const { userDetails, chatList } = this.props;
-    const chat_user_id = chatList + "_" + userDetails.id;
+    let usersdata = userDetails.user_data;
+    const chat_user_id = chatList + "_" + usersdata.user_id;
 
     console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
     global.ws.send(
@@ -367,7 +372,7 @@ export class ChatListScreen extends Component {
       );
       // console.log("data :->",message.data);
       const object = JSON.parse(data);
-      console.log("object onmessage:->", object.command );
+      console.log("object onmessage:->", object.command);
       if (object.command != undefined) {
         if (object.command == "message") {
           console.log("in IF onMessage commant is 'message'");
@@ -377,6 +382,7 @@ export class ChatListScreen extends Component {
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
           const { nav } = this.props;
+          console.log("nav.routes===========", JSON.stringify(nav.routes));
           const currentScreen = nav.routes[nav.routes.length - 1].routeName;
           if (currentScreen == "App") {
             const currentScreenParams =
@@ -405,8 +411,11 @@ export class ChatListScreen extends Component {
 
           const { userDetails } = this.props;
           console.log("userDetails==========", userDetails);
-          console.log("object.offline_user_id=============", object.offline_user_id);
-          let userdata= userDetails.user_data;
+          console.log(
+            "object.offline_user_id=============",
+            JSON.stringify(object)
+          );
+          let userdata = userDetails.user_data;
           if (parseInt(object.offline_user_id) != parseInt(userdata.user_id)) {
             var onlineUsers = object.online;
             console.log("command register --- onlineUsers :-->", onlineUsers);
@@ -475,6 +484,9 @@ export class ChatListScreen extends Component {
                 uri: item.avatar,
               }}
             />
+            {item.unread_count == 0 ? null : (
+              <View style={FriendListStyle.redcircleview}></View>
+            )}
           </View>
         ) : (
           <View style={FriendListStyle.imageStyle}>
@@ -486,33 +498,38 @@ export class ChatListScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>
-            {item.name ? item.name + " " + item.surname : "-"}
+          <Text
+            style={[
+              FriendListStyle.titleBig,
+              { fontWeight: item.unread_count == 0 ? null : "bold" },
+            ]}
+          >
+            {item.name ? item.name + " " + item.surname : ""}
           </Text>
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              {
+                fontWeight: item.unread_count == 0 ? null : "bold",
+                color: this.state.theme.LITE_FONT_COLOR,
+              },
             ]}
           >
-            {item.last_message ? item.last_message : "-"}
-            {item.registration_number ? item.registration_number : "-"}
+            {item.last_message ? item.last_message : ""}
           </Text>
         </View>
         <View>
           <Text
-            numberOfLines={2}
+            numberOfLines={1}
             style={[
               FriendListStyle.titleSmall,
               {
                 color: this.state.theme.LITE_FONT_COLOR,
-                width: globals.deviceWidth * 0.15,
+                width: globals.deviceWidth * 0.2,
               },
             ]}
           >
-            {item.last_message_datetime
-              ? item.last_message_datetime
-              : "Just now"}
+            {item.last_message_datetime ? item.last_message_datetime : ""}
           </Text>
           {item.unread_count == 0 ? null : (
             <View style={FriendListStyle.circleview}>

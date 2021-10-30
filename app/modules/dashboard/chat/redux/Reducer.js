@@ -100,6 +100,7 @@ const chatReducer = (state = initialState, action) => {
       var msgDic = {
         _id: messgae_id,
         from_id: from_id,
+        class_id: "",
         to_id: to_id,
         text: message[0].message,
         created_at: createdAt,
@@ -165,6 +166,7 @@ const chatReducer = (state = initialState, action) => {
       var msgDic = {
         _id: messgae_id,
         from_id: from_id,
+        class_id: "",
         to_id: to_id,
         text: message[0].message,
         created_at: createdAt,
