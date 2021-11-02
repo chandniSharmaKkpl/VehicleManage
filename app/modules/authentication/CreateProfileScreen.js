@@ -91,6 +91,12 @@ export class CreateProfileScreen extends PureComponent {
             carModelList: modelDataList,
           });
         }
+      } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
       }
     });
   };
@@ -107,6 +113,12 @@ export class CreateProfileScreen extends PureComponent {
             carColourList: colourDataList,
           });
         }
+      } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
       }
     });
   };
@@ -121,6 +133,12 @@ export class CreateProfileScreen extends PureComponent {
           this.setState({
             cityList: cityDataList,
           });
+        }
+      } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
         }
       }
     });
@@ -196,13 +214,18 @@ export class CreateProfileScreen extends PureComponent {
             } else {
             }
           } else {
-            if (res.value && res.value.data.error) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.error) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
                 icon: "info",
                 duration: 4000,
               });
+              
             }
           }
         })

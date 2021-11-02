@@ -127,7 +127,11 @@ export class CreateSocialMediaProfile extends Component {
             } else {
             }
           } else {
-            if (res.value) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value) {
               await showMessage({
                 message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
                 type: "danger",
@@ -152,7 +156,13 @@ export class CreateSocialMediaProfile extends Component {
       if (res.value.status === 200) {
         NavigationService.navigate("App");
       } else {
-        NavigationService.navigate("Login");
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        } else {
+          NavigationService.navigate("Login");
+        }
       }
     });
   }

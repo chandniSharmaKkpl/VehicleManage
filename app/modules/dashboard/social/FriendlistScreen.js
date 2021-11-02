@@ -102,7 +102,12 @@ export class FriendlistScreen extends Component {
             }
           }
         } else {
-          if (res.value && res.value.data.error) {
+          if (res.value && res.value.data.error == "Unauthenticated.") {
+            {
+              NavigationService.navigate("Login");
+            }
+          }
+          else if (res.value && res.value.data.error) {
             await showMessage({
               message: res.value.message,
               type: "danger",
@@ -161,7 +166,6 @@ export class FriendlistScreen extends Component {
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
-   
     return (
       <View style={FriendListStyle.itemcell}>
         {item.avatar ? (

@@ -285,7 +285,7 @@ export class ChatMessagesScreen extends Component {
   onSend(messages = []) {
     const { userDetails } = this.state;
 
-    console.log("onSend() messages :->", userDetails);
+    console.log("onSend() messages :->", messages);
     var newMsgs = [];
 
     messages.forEach((msg) => {
@@ -293,7 +293,16 @@ export class ChatMessagesScreen extends Component {
       msg.user.name = userDetails.user_data.username;
       newMsgs.push(msg);
     });
-    console.log("onSend() :->", global.ws);
+    console.log(
+      "onSend() :->",
+      JSON.stringify({
+        command: "message",
+        from: this.state.from_id,
+        to: this.state.to_id,
+        message: this.state.messages,
+        from_user: userDetails,
+      })
+    );
 
     try {
       global.ws.send(
@@ -301,7 +310,7 @@ export class ChatMessagesScreen extends Component {
           command: "message",
           from: this.state.from_id,
           to: this.state.to_id,
-          message: messages,
+          message: this.state.messages,
           from_user: userDetails,
         })
       );
@@ -316,7 +325,7 @@ export class ChatMessagesScreen extends Component {
           };
         },
         () => {
-          console.log("onSend() messages->", this.state.messages);
+          // console.log("onSend() messages->", this.state.messages);
         }
       );
     } catch (err) {

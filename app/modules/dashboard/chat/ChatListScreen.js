@@ -44,6 +44,7 @@ export class ChatListScreen extends Component {
       theme: {},
       isUserRegister: false,
       loader: false,
+      is_chat_user_id: "",
     };
     global.ws = null;
     this.registerDeviceTimer = null;
@@ -173,26 +174,15 @@ export class ChatListScreen extends Component {
   registerAndSubscribe() {
     const { userDetails, chatList } = this.props;
     let usersdata = userDetails.user_data;
-    const chat_user_id = chatList + "_" + usersdata.user_id;
 
-    console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
-    global.ws.send(
-      JSON.stringify({ command: "register", userId: chat_user_id })
-    );
+    this.setState({ is_chat_user_id: usersdata.user_id }, () => {
+      global.ws.send(
+        JSON.stringify({ command: "register", userId: usersdata.user_id })
+      );
 
-    this.setState({
-      isUserRegister: true,
-    });
-
-    this.state.dataArray.forEach((chatMsg) => {
-      if (chatMsg.type == CHAT_MESSAGE_TYPE.CLASS) {
-        global.ws.send(
-          JSON.stringify({
-            command: "subscribe",
-            channel: "class_" + chatMsg.id,
-          })
-        );
-      }
+      this.setState({
+        isUserRegister: true,
+      });
     });
   }
 
@@ -322,16 +312,13 @@ export class ChatListScreen extends Component {
 
     if (global.ws !== null) {
       const { userDetails, userRole } = this.props;
-
-      const chat_user_id = userRole + "_" + userDetails.id;
-
-      console.log("unregister chat_user_id :->", chat_user_id);
+      let usersunregisterdata = userDetails.user_data;
 
       global.ws.send(
         JSON.stringify({
           command: "unregister",
-          userId: chat_user_id,
-          offline_user_id: userDetails.id,
+          userId: usersunregisterdata.user_id,
+          offline_user_id: usersunregisterdata.user_id,
         })
       );
 
@@ -370,14 +357,14 @@ export class ChatListScreen extends Component {
         "============================================================================---->",
         JSON.stringify(data)
       );
-      // console.log("data :->",message.data);
+      console.log("data :->",data);
       const object = JSON.parse(data);
       console.log("object onmessage:->", object.command);
       if (object.command != undefined) {
         if (object.command == "message") {
           console.log("in IF onMessage commant is 'message'");
           // Message received
-          var from_id = Number(object.from.split("_")[1]);
+          var from_id = Number(object.from);
 
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
@@ -450,7 +437,7 @@ export class ChatListScreen extends Component {
     };
 
     global.ws.onclose = ({ event }) => {
-      console.log(Platform.OS + " --- WS onClose() ---->", event);
+      console.log(" --- WS onClose() ---->", event);
     };
   }
 
@@ -516,6 +503,7 @@ export class ChatListScreen extends Component {
             ]}
           >
             {item.last_message ? item.last_message : ""}
+            {item.registration_number ? item.registration_number : ""}
           </Text>
         </View>
         <View>
@@ -545,7 +533,14 @@ export class ChatListScreen extends Component {
 
   // navigate to chat screen
   gotoChatDetails = (user_info) => {
-    NavigationService.navigate("ChatMessages", { user_info: user_info });
+    console.log(
+      "user_info=============navigate-----------------------------------",
+      user_info
+    );
+    NavigationService.navigate("ChatMessages", {
+      user_info: user_info,
+      is_chat_user_id: this.state.is_chat_user_id,
+    });
   };
 
   // seprate component
@@ -556,7 +551,6 @@ export class ChatListScreen extends Component {
   render() {
     const { dataArray, searchTxt } = this.state;
     const { isLoading, loaderMessage, theme, chatList } = this.props;
-
     return (
       <>
         <View

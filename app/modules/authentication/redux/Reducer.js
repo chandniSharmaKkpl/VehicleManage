@@ -25,6 +25,21 @@ const authReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.INIT_APP_SUCCESS:
+      const errdata = action.payload.data.error;
+      // console.log("errdata=====INIT_APP_SUCCESS", errdata);
+
+      if (errdata == "Unauthenticated.") {
+        return {
+          user: {
+            ...state.user,
+            isLoading: false,
+            isLoggedIn: true,
+            userDetails: [],
+            ...action.payload,
+            loaderMessage: "Loading...",
+          },
+        };
+      }
       const data = action.payload.data.data;
       console.log("data=====INIT_APP_SUCCESS", data);
       let apiData = [];

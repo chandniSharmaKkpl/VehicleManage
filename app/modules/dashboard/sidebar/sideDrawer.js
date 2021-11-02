@@ -49,7 +49,12 @@ class sideDrawer extends Component {
             });
             NavigationService.navigate("Login");
             return;
-          } else {
+          }
+        } else {
+          if (res.value && res.value.data.error == "Unauthenticated.") {
+            {
+              NavigationService.navigate("Login");
+            }
           }
         }
       });

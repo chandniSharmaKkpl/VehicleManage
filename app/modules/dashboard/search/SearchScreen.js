@@ -73,6 +73,11 @@ export class SearchScreen extends Component {
           this.setNotificationCounts(res.value.data.data);
         }
       } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
         console.log(TAG, "notification count can't fetched", err);
       }
     });
@@ -82,10 +87,10 @@ export class SearchScreen extends Component {
     let getsearchedCount = await JSON.parse(
       await AsyncStorage.getItem("searched_count")
     );
-    console.log(
-      "getsearchedCount--setNotificationCounts------",
-      getsearchedCount
-    );
+    // console.log(
+    //   "getsearchedCount--setNotificationCounts------",
+    //   getsearchedCount
+    // );
     this.setState({
       searched_count:
         getsearchedCount == "0" || getsearchedCount != null
@@ -143,7 +148,12 @@ export class SearchScreen extends Component {
               this.setSearchdataList(res.value.data.data);
             }
           } else {
-            if (res.value && res.value.data.search_by_vehicle) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
+           else if (res.value && res.value.data.search_by_vehicle) {
               await showMessage({
                 message: res.value.data.search_by_vehicle,
                 type: "danger",

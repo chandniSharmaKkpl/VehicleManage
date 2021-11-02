@@ -211,7 +211,12 @@ export class SignUpScreen extends Component {
               });
             }
           } else {
-            if (res.value && res.value.data.email) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
+            else if (res.value && res.value.data.email) {
               await showMessage({
                 message: res.value.data.email,
                 type: "danger",
@@ -275,7 +280,7 @@ export class SignUpScreen extends Component {
     if (isEmpty(txtLastName)) {
       this.setState({
         isLastNameError: true,
-        lastNameValidMsg: Messages.name,
+        lastNameValidMsg: Messages.lname,
       });
       return false;
     }

@@ -110,36 +110,37 @@ axiosApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    return Promise.reject(error.response.data);
+    // console.log("API error=====", error);
+    // return Promise.reject(error.response.data);
 
-    // if (error.response.status === 401) {
-    //   return Promise.reject(error.response);
-    // } else if (error.response.status === 402) {
-    //   showMessage({
-    //     message: error.response.data.error,
-    //     type: "danger",
-    //     icon: "danger",
-    //     duration: 4000,
-    //   });
-    //   AsyncStorage.clear();
-    //   NavigationService.reset("Login");
-    // }
-    // else {
-    //   // showMessage({
-    //   //   message: "Device offline",
-    //   //   type: "danger",
-    //   //   icon: "danger",
-    //   //   duration: 10000,
-    //   // });
-    // }
-    // console.log("i am in axios get error", error);
-    // console.log("error.response.data", error.response.data);
-    // console.log("error.response.headers", error.response.headers);
-    // console.log("error.response.status", error.response.status);
-    // console.log("error.request", error.request);
-    // console.log("ErrorErrormsg", error.message);
-    // console.log("error.config", error.config);
-    // return Promise.reject(error.response);
+    if (error.response.status === 401) {
+      return Promise.reject(error.response);
+    } else if (error.response.status === 402) {
+      showMessage({
+        message: error.response.data.error,
+        type: "danger",
+        icon: "danger",
+        duration: 4000,
+      });
+      AsyncStorage.clear();
+      NavigationService.reset("Login");
+    }
+    else {
+      // showMessage({
+      //   message: "Device offline",
+      //   type: "danger",
+      //   icon: "danger",
+      //   duration: 10000,
+      // });
+    }
+    console.log("i am in axios get error", error);
+    console.log("error.response.data", error.response.data);
+    console.log("error.response.headers", error.response.headers);
+    console.log("error.response.status", error.response.status);
+    console.log("error.request", error.request);
+    console.log("ErrorErrormsg", error.message);
+    console.log("error.config", error.config);
+    return Promise.reject(error.response);
   }
 );
 

@@ -83,13 +83,13 @@ const chatReducer = (state = initialState, action) => {
       // );
 
       var message = action.payload.data.data.messages;
-      var from_id = Number(user_data.id);
-      var to_id = Number(chat_message.id);
+      var from_id = Number(message[0].from_id);
+      var to_id = Number(message[0].to_id);
       var createdAt = moment(
-        chat_message.created_at,
+        message[0].created_at,
         "YYYY-MM-DDTHH:mm:ssZ"
       ).format("YYYY/MM/DD HH:mm:ss");
-      var messgae_id = chat_message.id;
+      var messgae_id = message[0].id;
       // console.log("reducer  message :->" + JSON.stringify(message));
 
       let chat_messages = [];
@@ -155,10 +155,10 @@ const chatReducer = (state = initialState, action) => {
       //     JSON.stringify(user_data)
       // );
       var message = action.payload.data.data.messages;
-      var from_id = Number(user_data.id);
-      var to_id = Number(chat_message.id);
+      var from_id = Number(message[0].from_id);
+      var to_id = Number(message[0].to_id);
       var createdAt = moment(
-        chat_message.created_at,
+        message[0].created_at,
         "YYYY-MM-DDTHH:mm:ssZ"
       ).format("YYYY/MM/DD HH:mm:ss");
       var messgae_id = chat_message.id;

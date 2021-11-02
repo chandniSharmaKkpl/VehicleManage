@@ -17,7 +17,7 @@ const StaticTitle = {
     enterLastName:'Enter Last Name',
     confirmPassword:'Confirm Password',
     enterDOB:'Enter Date of Birth',
-    termAndConditionText:'By clicking Sign Up, you agree to our,',
+    termAndConditionText:'By clicking Sign Up, you agree to our',
     termAndCondition:'Terms and conditions',
     termAndConditionLast:'a confirmation email will be sent to the above email to activate your account.',
     alreadyHaveAccount:'Already have an account?',

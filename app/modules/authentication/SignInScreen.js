@@ -31,7 +31,7 @@ import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import DeviceInfo from "react-native-device-info";
-import messaging, { firebase } from '@react-native-firebase/messaging';
+import messaging, { firebase } from "@react-native-firebase/messaging";
 
 const TAG = "SignInScreen ::=";
 
@@ -161,10 +161,10 @@ export class SignInScreen extends Component {
     var deviceName = DeviceInfo.getDeviceNameSync();
     // var deviceToken = DeviceInfo.getDeviceToken();
 
-    var deviceToken = (await AsyncStorage.getItem('fcmToken')) || '';
-    if (deviceToken === '') {
+    var deviceToken = (await AsyncStorage.getItem("fcmToken")) || "";
+    if (deviceToken === "") {
       deviceToken = await firebase.messaging().getToken();
-      AsyncStorage.setItem('fcmToken', deviceToken);
+      AsyncStorage.setItem("fcmToken", deviceToken);
     }
 
     let params = new URLSearchParams();
@@ -234,7 +234,11 @@ export class SignInScreen extends Component {
               });
             }
           } else {
-            if (res.value && res.value.data.error) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.error) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
@@ -259,6 +263,11 @@ export class SignInScreen extends Component {
       if (res.value && res.value.status === 200) {
         NavigationService.navigate("App");
       } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
         NavigationService.navigate("Login");
       }
     });

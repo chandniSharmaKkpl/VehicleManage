@@ -40,10 +40,7 @@ export class RecentViewersScreen extends Component {
       await AsyncStorage.getItem("searched_count")
     );
     if (getsearchedCount != "0") {
-      await AsyncStorage.setItem(
-        "searched_count",
-        JSON.stringify(parseInt(0))
-      );
+      await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
       DeviceEventEmitter.emit("NotificationCountRemove");
     }
     this.setState({ theme: this.props.theme }, () => {
@@ -96,6 +93,11 @@ export class RecentViewersScreen extends Component {
         if (res.value && res.value.status === 200) {
         }
       } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
         console.log(TAG, "notification count can't fetched", err);
       }
     });

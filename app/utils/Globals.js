@@ -15,6 +15,7 @@ export const isRegistrationDeatils=false;
 export let isTablat = iPad.indexOf("iPad") != -1 || DeviceInfo.isTablet();
 export const warning = "Warning!";
 export const noInternet ="This Application Require Network Connection!";
+export const onlyoneDevice ="This Application works on one device only please try again with login"
 
 // ADD theme modes
 export const THEME_MODE = {
