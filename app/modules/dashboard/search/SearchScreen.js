@@ -44,6 +44,7 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });
+
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
         this.getnotificationCount();
@@ -61,7 +62,6 @@ export class SearchScreen extends Component {
     this.setState({
       searched_count: 0,
     });
-    console.log("After -----------------", this.state.searched_count);
   };
 
   getnotificationCount = async () => {
@@ -89,7 +89,7 @@ export class SearchScreen extends Component {
     );
     // console.log(
     //   "getsearchedCount--setNotificationCounts------",
-    //   getsearchedCount
+    //   countDeatils.searched_count
     // );
     this.setState({
       searched_count:
@@ -152,8 +152,7 @@ export class SearchScreen extends Component {
               {
                 NavigationService.navigate("Login");
               }
-            }
-           else if (res.value && res.value.data.search_by_vehicle) {
+            } else if (res.value && res.value.data.search_by_vehicle) {
               await showMessage({
                 message: res.value.data.search_by_vehicle,
                 type: "danger",

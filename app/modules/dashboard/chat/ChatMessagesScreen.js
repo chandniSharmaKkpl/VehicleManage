@@ -123,7 +123,7 @@ export class ChatMessagesScreen extends Component {
   };
 
   formatMessageAndStore(response) {
-    console.log("response==================", response);
+    // console.log("response==================", response);
     var msgArr = [];
 
     this.readMessagesAPI(response);
@@ -293,7 +293,6 @@ export class ChatMessagesScreen extends Component {
       msg.user.name = userDetails.user_data.username;
       newMsgs.push(msg);
     });
-  
 
     try {
       global.ws.send(
@@ -301,7 +300,7 @@ export class ChatMessagesScreen extends Component {
           command: "message",
           from: this.state.from_id,
           to: this.state.to_id,
-          message:messages,
+          message: messages,
           from_user: userDetails,
         })
       );
@@ -350,7 +349,14 @@ export class ChatMessagesScreen extends Component {
           if (res.value && res.value.status === 200) {
           }
         } else {
-          if (res.value && res.value.data.error) {
+          if (res.value && res.value.data.success == false) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          } else if (res.value && res.value.data.error) {
             // await showMessage({
             //   message: res.value.message,
             //   type: "danger",

@@ -187,6 +187,15 @@ export class ChatListScreen extends Component {
   }
 
   async componentDidMount() {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
+    let getsearchedCount = await JSON.parse(
+      await AsyncStorage.getItem("searched_count")
+    );
+    if (getsearchedCount != "0") {
+      await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("NotificationCountRemove");
+    }
     this._isMounted = true;
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
       if (globals.isInternetConnected == true) {

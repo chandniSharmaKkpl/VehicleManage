@@ -190,7 +190,7 @@ export class FriendDetailScreen extends Component {
   // navigate to gotochatdetailscreen
   gotochatdetailscreen = () => {
     const { friendDetail } = this.state;
-    NavigationService.navigate("ChatMessages", { user_info: friendDetail });
+    NavigationService.navigate("ChatList", { user_info: friendDetail });
   };
 
   // navigate Social Profiles
@@ -217,7 +217,6 @@ export class FriendDetailScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { friendDetail } = this.state;
-    console.log("friendDetail=======", friendDetail);
     return (
       <>
         <View
