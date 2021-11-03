@@ -311,7 +311,7 @@ export class ChatListScreen extends Component {
     }
 
     if (global.ws !== null) {
-      const { userDetails, userRole } = this.props;
+      const { userDetails } = this.props;
       let usersunregisterdata = userDetails.user_data;
 
       global.ws.send(
@@ -353,11 +353,11 @@ export class ChatListScreen extends Component {
       }
     };
     global.ws.onmessage = ({ data }) => {
-      console.log(
-        "============================================================================---->",
-        JSON.stringify(data)
-      );
-      console.log("data :->",data);
+      // console.log(
+      //   "============================================================================---->",
+      //   data
+      // );
+      // console.log("data :->", data);
       const object = JSON.parse(data);
       console.log("object onmessage:->", object.command);
       if (object.command != undefined) {
@@ -369,27 +369,35 @@ export class ChatListScreen extends Component {
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
           const { nav } = this.props;
-          console.log("nav.routes===========", JSON.stringify(nav.routes));
-          const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-          if (currentScreen == "App") {
-            const currentScreenParams =
-              nav.routes[nav.routes.length - 1].params;
-            console.log("currentScreenParams :->", currentScreenParams);
-            if (currentScreenParams !== undefined) {
-              var userScreenLoadUserId = currentScreenParams.chatMessage.id;
-              console.log("userScreenLoadUserId :->", userScreenLoadUserId);
-              console.log("from_id :->", from_id);
+          // console.log("nav.routes===========", JSON.stringify(nav.routes));
+         
+          const currentScreen = nav.routes[nav.routes.length - 2].routeName;
+          // console.log("currentScreen===========", currentScreen);
+          var payload = {
+            msg_data: object,
+            user_data: this.searchFromUser(from_id),
+          };
+          this.props.receivedChatMessage(payload);
+          // if (currentScreen == "Chat") {
+          //   const currentScreenParams =
+          //     nav.routes[nav.routes.length - 2].params;
+          //   console.log("currentScreenParams :->", currentScreenParams);
+          //   if (currentScreenParams !== undefined) {
+          //     var userScreenLoadUserId = currentScreenParams.chatMessage.id;
+          //     console.log("userScreenLoadUserId :->", userScreenLoadUserId);
+          //     console.log("from_id :->", from_id);
 
-              if (parseInt(from_id) == userScreenLoadUserId) {
-                console.log("Inside ID both user are matched....");
-                var payload = {
-                  msg_data: object,
-                  user_data: this.searchFromUser(from_id),
-                };
-                this.props.receivedChatMessage(payload);
-              }
-            }
-          }
+          //     if (parseInt(from_id) == userScreenLoadUserId) {
+          //       console.log("Inside ID both user are matched....");
+          //       var payload = {
+          //         msg_data: object,
+          //         user_data: this.
+          //         searchFromUser(from_id),
+          //       };
+          //       this.props.receivedChatMessage(payload);
+          //     }
+          //   }
+          // }
         } else if (
           object.command == "register" ||
           object.command == "unregister"
@@ -416,7 +424,7 @@ export class ChatListScreen extends Component {
               if (currentScreenParams !== undefined) {
                 var userScreenLoadUserId = currentScreenParams.chatMessage.id;
                 onlineUsers.forEach((user) => {
-                  var online_user_id = user.split("_")[1];
+                  var online_user_id = user;
                   if (online_user_id == userScreenLoadUserId) {
                     DeviceEventEmitter.emit("update_header_online_stattus", {
                       status: true,

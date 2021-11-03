@@ -74,20 +74,20 @@ export class ChatMessagesScreen extends Component {
     // console.log(
     //   Platform.OS + " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->"
     // );
-    // this.setState(
-    //   (previousState) => {
-    //     return {
-    //       messages: GiftedChat.append(
-    //         previousState.messages,
-    //         ...[newProps.chatMessages]
-    //       ),
-    //       isMessageSend: true,
-    //     };
-    //   },
-    //   () => {
-    //     // this.callFetchAPI();
-    //   }
-    // );
+    this.setState(
+      (previousState) => {
+        return {
+          messages: GiftedChat.append(
+            previousState.messages,
+            ...[newProps.chatMessages]
+          ),
+          isMessageSend: true,
+        };
+      },
+      () => {
+        // this.callFetchAPI();
+      }
+    );
   };
 
   async componentDidMount() {
@@ -203,9 +203,9 @@ export class ChatMessagesScreen extends Component {
           //   res.value.data.success
           // );
 
-          // this.setState({
-          //   messages: res.value.data.data,
-          // });
+          this.setState({
+            messages: res.value.data.data,
+          });
 
           if (this.state.messages.length > 0) {
             // if local state variable already have messages and anyone receive new message then no need to update local state
@@ -293,16 +293,7 @@ export class ChatMessagesScreen extends Component {
       msg.user.name = userDetails.user_data.username;
       newMsgs.push(msg);
     });
-    console.log(
-      "onSend() :->",
-      JSON.stringify({
-        command: "message",
-        from: this.state.from_id,
-        to: this.state.to_id,
-        message: this.state.messages,
-        from_user: userDetails,
-      })
-    );
+  
 
     try {
       global.ws.send(
@@ -310,7 +301,7 @@ export class ChatMessagesScreen extends Component {
           command: "message",
           from: this.state.from_id,
           to: this.state.to_id,
-          message: this.state.messages,
+          message:messages,
           from_user: userDetails,
         })
       );
