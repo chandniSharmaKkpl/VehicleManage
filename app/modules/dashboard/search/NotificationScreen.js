@@ -40,6 +40,14 @@ export class NotificationScreen extends Component {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
 
+    let getsearchedCount = await JSON.parse(
+      await AsyncStorage.getItem("searched_count")
+    );
+    if (getsearchedCount != "0") {
+      await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("NotificationCountRemove");
+    }
+
     DeviceEventEmitter.addListener("ChatCountRemove", () => {
       this.setChatCountsafterreview();
     });
@@ -68,8 +76,12 @@ export class NotificationScreen extends Component {
 
   // render friendlist dataItem
   retunNotificationList = () => {
+    console.log(
+      "this.state.searched_avatars========",
+      this.state.searched_avatars
+    );
     for (let i = 0; i <= this.state.searched_avatars.length; i++) {
-      if (this.state.searched_avatars.length >= 3) {
+      if (this.state.searched_avatars.length > 3) {
         console.log("NOOO valid");
       } else {
         return (
