@@ -88,7 +88,7 @@ export class SearchScreen extends Component {
     );
     this.setState({
       searched_count:
-        getsearchedCount == "0" || getsearchedCount != null
+        getsearchedCount == "0" 
           ? getsearchedCount
           : countDeatils.searched_count,
       countDeatils: countDeatils,

@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Keyboard, FlatList, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  DeviceEventEmitter,
+  Keyboard,
+  FlatList,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -12,6 +19,8 @@ import FastImage from "react-native-fast-image";
 import { DummyData } from "../../../dummyData/DummyData";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as globals from "../../../utils/Globals";
 
 const TAG = "NotificationScreen ::=";
 
@@ -28,11 +37,25 @@ export class NotificationScreen extends Component {
   }
 
   componentDidMount = async () => {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
+
+    DeviceEventEmitter.addListener("ChatCountRemove", () => {
+      this.setChatCountsafterreview();
+    });
+
     this.setState({
       theme: this.props.theme,
       searched_avatars: this.state.countDeatils.searched_avatars,
       messages_count: this.state.countDeatils.messages_count,
     });
+  };
+
+  setChatCountsafterreview = () => {
+    this.setState({
+      messages_count: 0,
+    });
+    console.log("After -----------------", this.state.messages_count);
   };
 
   gotoRecentViewers = () => {

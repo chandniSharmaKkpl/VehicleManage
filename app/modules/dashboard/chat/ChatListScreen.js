@@ -166,6 +166,7 @@ export class ChatListScreen extends Component {
     }
   };
 
+
   registerAndSubscribe() {
     const { userDetails, chatList } = this.props;
     const chat_user_id = chatList + "_" + userDetails.id;
@@ -192,6 +193,15 @@ export class ChatListScreen extends Component {
   }
 
   async componentDidMount() {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
+    let getchatCount = await JSON.parse(
+      await AsyncStorage.getItem("chat_count")
+    );
+    if (getchatCount != "0") {
+      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("ChatCountRemove");
+    }
     this._isMounted = true;
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
       if (globals.isInternetConnected == true) {
@@ -256,6 +266,7 @@ export class ChatListScreen extends Component {
 
     AppState.removeAllListeners("change", this._handleAppStateChange);
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
+    DeviceEventEmitter.removeAllListeners("ChatCountRemove");
 
     this.closeOrInActiveScreen();
   }
@@ -367,7 +378,7 @@ export class ChatListScreen extends Component {
       );
       // console.log("data :->",message.data);
       const object = JSON.parse(data);
-      console.log("object onmessage:->", object.command );
+      console.log("object onmessage:->", object.command);
       if (object.command != undefined) {
         if (object.command == "message") {
           console.log("in IF onMessage commant is 'message'");
@@ -405,8 +416,11 @@ export class ChatListScreen extends Component {
 
           const { userDetails } = this.props;
           console.log("userDetails==========", userDetails);
-          console.log("object.offline_user_id=============", object.offline_user_id);
-          let userdata= userDetails.user_data;
+          console.log(
+            "object.offline_user_id=============",
+            object.offline_user_id
+          );
+          let userdata = userDetails.user_data;
           if (parseInt(object.offline_user_id) != parseInt(userdata.user_id)) {
             var onlineUsers = object.online;
             console.log("command register --- onlineUsers :-->", onlineUsers);

@@ -6,7 +6,7 @@ import * as globals from "../../utils/Globals";
 export const SideDrawerStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lite_background,
+    backgroundColor: Colors.primary,
   },
   closedrawerbutton: {
     flexDirection: "row",
@@ -47,7 +47,7 @@ export const SideDrawerStyle = StyleSheet.create({
   },
   drawerSaperator: {
     width: "100%",
-    height: 1,
+    height: globals.deviceHeight*0.000,
     backgroundColor: Colors.primary,
   },
   dashBoardTextStyle: {

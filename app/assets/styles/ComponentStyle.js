@@ -178,9 +178,9 @@ export const ComponentStyle = StyleSheet.create({
   },
   tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
   roundedtab_img: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
     tintColor: Colors.primary,
   },
 
@@ -230,7 +230,7 @@ export const ComponentStyle = StyleSheet.create({
     position: "absolute",
     bottom: globals.deviceWidth * 0.09,
     left: globals.deviceWidth * 0.09,
-    backgroundColor:Colors.red,
+    backgroundColor: Colors.red,
   },
   /////// Social media textinput for snapchat
 
@@ -362,6 +362,6 @@ export const ComponentStyle = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50 / 2,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
 });

@@ -94,7 +94,7 @@ const ChatHeader = ({
                 source={{
                   uri: isuserImage,
                 }}
-                resizeMode={FastImage.resizeMode.contain}
+              
               />
             ) : (
               <FastImage source={IMAGE.user} style={ComponentStyle.tab_Image} />
