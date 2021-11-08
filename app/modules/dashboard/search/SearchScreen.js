@@ -44,6 +44,7 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });
+
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
         this.getnotificationCount();
@@ -61,7 +62,6 @@ export class SearchScreen extends Component {
     this.setState({
       searched_count: 0,
     });
-    console.log("After -----------------", this.state.searched_count);
   };
 
   getnotificationCount = async () => {
@@ -73,6 +73,11 @@ export class SearchScreen extends Component {
           this.setNotificationCounts(res.value.data.data);
         }
       } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
         console.log(TAG, "notification count can't fetched", err);
       }
     });
@@ -82,10 +87,10 @@ export class SearchScreen extends Component {
     let getsearchedCount = await JSON.parse(
       await AsyncStorage.getItem("searched_count")
     );
-    console.log(
-      "getsearchedCount--setNotificationCounts------",
-      getsearchedCount
-    );
+    // console.log(
+    //   "getsearchedCount--setNotificationCounts------",
+    //   countDeatils.searched_count
+    // );
     this.setState({
       searched_count:
         getsearchedCount == "0" 
@@ -143,7 +148,11 @@ export class SearchScreen extends Component {
               this.setSearchdataList(res.value.data.data);
             }
           } else {
-            if (res.value && res.value.data.search_by_vehicle) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.search_by_vehicle) {
               await showMessage({
                 message: res.value.data.search_by_vehicle,
                 type: "danger",

@@ -74,7 +74,11 @@ export class FriendDetailScreen extends Component {
               this.setState({ friendDetail: res.value.data.data.user_data });
             }
           } else {
-            if (res.value && res.value.data.error) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.error) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
@@ -93,7 +97,7 @@ export class FriendDetailScreen extends Component {
   };
 
   friendsearchApi = (frndsearchData) => {
-    console.log("frndsearchData=============", frndsearchData);
+    // console.log("frndsearchData=============", frndsearchData);
     const { friendsearch } = this.props;
     let params = new URLSearchParams();
     // Collect the necessary params
@@ -111,6 +115,11 @@ export class FriendDetailScreen extends Component {
             if (res.value && res.value.status === 200) {
             }
           } else {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
           }
         })
         .catch((err) => {
@@ -155,7 +164,12 @@ export class FriendDetailScreen extends Component {
               });
             }
           } else {
-            if (res.value && res.value.data.error) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
+           else if (res.value && res.value.data.error) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
@@ -176,7 +190,7 @@ export class FriendDetailScreen extends Component {
   // navigate to gotochatdetailscreen
   gotochatdetailscreen = () => {
     const { friendDetail } = this.state;
-    NavigationService.navigate("ChatMessages", { user_info: friendDetail });
+    NavigationService.navigate("ChatList", { user_info: friendDetail });
   };
 
   // navigate Social Profiles
@@ -203,7 +217,6 @@ export class FriendDetailScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { friendDetail } = this.state;
-    console.log("friendDetail=======", friendDetail);
     return (
       <>
         <View

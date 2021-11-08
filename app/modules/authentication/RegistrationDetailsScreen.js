@@ -218,7 +218,11 @@ export class RegistrationDetailsScreen extends Component {
             } else {
             }
           } else {
-            if (res.value && res.value.data.registration_paper) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.registration_paper) {
               await showMessage({
                 message: res.value.data.registration_paper,
                 type: "danger",
@@ -280,6 +284,11 @@ export class RegistrationDetailsScreen extends Component {
             } else {
             }
           } else {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
             if (res.value && res.value.data.registration_paper) {
               await showMessage({
                 message: res.value.data.registration_paper,

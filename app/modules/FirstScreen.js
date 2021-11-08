@@ -1,38 +1,22 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 import * as actions from "../modules/authentication/redux/Actions";
 import NavigationService from "../utils/NavigationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../utils/Globals";
 import { darkTheme, lightTheme } from "../assets/Theme";
-import messaging, { firebase } from '@react-native-firebase/messaging';
+import messaging, { firebase } from "@react-native-firebase/messaging";
 
 export class FirstScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // theme: {},
       deviceToken: "",
     };
   }
 
-  // UNSAFE_componentWillReceiveProps = (newProps) => {
-  //   const { theme } = newProps;
-  //   this.parseData(theme);
-  // };
-
   async componentDidMount() {
-    // let them_mode = await AsyncStorage.getItem("them_mode");
-
-    // console.log("FirstScreen componentDidMount ======them_mode", them_mode);
-    // var newTheme = lightTheme;
-    // if (them_mode === globals.THEME_MODE.DARK) {
-    //   newTheme = darkTheme;
-    // }
-    // this.setState({ theme: them_mode });
-    // this.props.swicthTheme(newTheme);
-    // this.checkPermission();
     const accessToken = await AsyncStorage.getItem("access_token");
     globals.access_token = accessToken;
     if (accessToken === null || accessToken === undefined) {
@@ -61,7 +45,6 @@ export class FirstScreen extends Component {
     if (!fcmToken) {
       fcmToken = await messaging().getToken();
       if (fcmToken) {
-        // Alert.alert("Device Token", fcmToken);
         console.log("Device TOKEN ======>" + fcmToken);
         this.setState({ deviceToken: fcmToken });
 
@@ -85,19 +68,13 @@ export class FirstScreen extends Component {
 
     if (enabled) {
       this.getToken();
-      console.log('Authorization status:', authStatus);
+      console.log("Authorization status:", authStatus);
     }
   }
-
-  // parse lite and dark theme data
-  // parseData = (newTheme) => {
-  //   this.setState({ theme: newTheme });
-  // };
 
   getUserData() {
     const { initializeApp } = this.props;
     initializeApp().then(async (res) => {
-      
       if (res.value && res.value.data.success == true) {
         if (res.value && res.value.status == 200) {
           let userdata = res.value.data.data;
@@ -126,14 +103,16 @@ export class FirstScreen extends Component {
         } else {
           NavigationService.navigate("Login");
         }
+      } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
       }
     });
   }
   render() {
-    // const { theme } = this.state;
-    // if (theme == undefined || theme.PRIMARY_BACKGROUND_COLOR === undefined) {
-    //   return <></>;
-    // }
     return <View style={{ height: "100%" }}></View>;
   }
 }
@@ -147,7 +126,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  // swicthTheme: (params) => dispatch(actions.swicthTheme(params)),
   initializeApp: (params) => dispatch(actions.initializeApp(params)),
 });
 

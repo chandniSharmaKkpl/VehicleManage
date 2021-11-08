@@ -153,6 +153,12 @@ export class UserProfileScreen extends Component {
             carModelList: modelDataList,
           });
         }
+      }else{
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
       }
     });
   };
@@ -169,6 +175,13 @@ export class UserProfileScreen extends Component {
           });
         }
       }
+      else{
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
+      }
     });
   };
 
@@ -182,6 +195,13 @@ export class UserProfileScreen extends Component {
           this.setState({
             cityList: cityDataList,
           });
+        }
+      }
+      else{
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
         }
       }
     });
@@ -364,7 +384,12 @@ export class UserProfileScreen extends Component {
             } else {
             }
           } else {
-            if (res.value) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
+           else if (res.value) {
               // await showMessage({
               //   message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
               //   type: "danger",

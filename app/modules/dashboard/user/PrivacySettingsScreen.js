@@ -168,6 +168,11 @@ export class PrivacySettingsScreen extends Component {
             } else {
             }
           } else {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
           }
         })
         .catch((err) => {
@@ -185,6 +190,12 @@ export class PrivacySettingsScreen extends Component {
         if (res.value && res.value.data.success == true) {
           if (res.value && res.value.status === 200) {
           } else {
+          }
+        }else{
+          if (res.value && res.value.data.error == "Unauthenticated.") {
+            {
+              NavigationService.navigate("Login");
+            }
           }
         }
       });

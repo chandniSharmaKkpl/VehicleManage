@@ -39,7 +39,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import * as actions from "./redux/Actions";
 
 import ChatMessages from "../../../dummyData/ChatMessages";
-const avatar = require("../../../assets/images/user.png");
+const avatar = require("../../../assets/images/user.jpeg");
 
 const TAG = "ChatMessagesScreen ::=";
 
@@ -61,8 +61,11 @@ export class ChatMessagesScreen extends Component {
       from_id: "",
       user_info: this.props.navigation.state.params.user_info,
       to_id: "",
+      isMessageSend: false,
     };
     this.onSend = this.onSend.bind(this);
+    this.callFetchAPI = this.callFetchAPI.bind(this);
+    this.callSendAPI = this.callSendAPI.bind(this);
     this.formatMessageAndStore = this.formatMessageAndStore.bind(this);
     this.readMessagesAPI = this.readMessagesAPI.bind(this);
   }
@@ -71,20 +74,20 @@ export class ChatMessagesScreen extends Component {
     // console.log(
     //   Platform.OS + " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->"
     // );
-    // this.setState(
-    //   (previousState) => {
-    //     return {
-    //       messages: GiftedChat.append(
-    //         previousState.messages,
-    //         ...[newProps.chatMessages]
-    //       ),
-    //       isMessageSend: true,
-    //     };
-    //   },
-    //   () => {
-    //     // this.callFetchAPI();
-    //   }
-    // );
+    this.setState(
+      (previousState) => {
+        return {
+          messages: GiftedChat.append(
+            previousState.messages,
+            ...[newProps.chatMessages]
+          ),
+          isMessageSend: true,
+        };
+      },
+      () => {
+        // this.callFetchAPI();
+      }
+    );
   };
 
   async componentDidMount() {
@@ -120,6 +123,7 @@ export class ChatMessagesScreen extends Component {
   };
 
   formatMessageAndStore(response) {
+    // console.log("response==================", response);
     var msgArr = [];
 
     this.readMessagesAPI(response);
@@ -199,9 +203,9 @@ export class ChatMessagesScreen extends Component {
           //   res.value.data.success
           // );
 
-          // this.setState({
-          //   messages: res.value.data.data,
-          // });
+          this.setState({
+            messages: res.value.data.data,
+          });
 
           if (this.state.messages.length > 0) {
             // if local state variable already have messages and anyone receive new message then no need to update local state
@@ -281,7 +285,7 @@ export class ChatMessagesScreen extends Component {
   onSend(messages = []) {
     const { userDetails } = this.state;
 
-    console.log("onSend() messages :->", userDetails);
+    console.log("onSend() messages :->", messages);
     var newMsgs = [];
 
     messages.forEach((msg) => {
@@ -289,7 +293,6 @@ export class ChatMessagesScreen extends Component {
       msg.user.name = userDetails.user_data.username;
       newMsgs.push(msg);
     });
-    console.log("onSend() :->", global.ws);
 
     try {
       global.ws.send(
@@ -312,7 +315,7 @@ export class ChatMessagesScreen extends Component {
           };
         },
         () => {
-          console.log("onSend() messages->", this.state.messages);
+          // console.log("onSend() messages->", this.state.messages);
         }
       );
     } catch (err) {
@@ -336,17 +339,24 @@ export class ChatMessagesScreen extends Component {
 
     insertMessage(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of insertMessage",
-        //   JSON.stringify(res.value.data)
-        // );
+        console.log(
+          TAG,
+          "response of insertMessage",
+          JSON.stringify(res.value.data)
+        );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
           }
         } else {
-          if (res.value && res.value.data.error) {
+          if (res.value && res.value.data.success == false) {
+            await showMessage({
+              message: res.value.message,
+              type: "danger",
+              icon: "info",
+              duration: 4000,
+            });
+          } else if (res.value && res.value.data.error) {
             // await showMessage({
             //   message: res.value.message,
             //   type: "danger",

@@ -83,13 +83,13 @@ const chatReducer = (state = initialState, action) => {
       // );
 
       var message = action.payload.data.data.messages;
-      var from_id = Number(user_data.id);
-      var to_id = Number(chat_message.id);
+      var from_id = Number(message[0].from_id);
+      var to_id = Number(message[0].to_id);
       var createdAt = moment(
-        chat_message.created_at,
+        message[0].created_at,
         "YYYY-MM-DDTHH:mm:ssZ"
       ).format("YYYY/MM/DD HH:mm:ss");
-      var messgae_id = chat_message.id;
+      var messgae_id = message[0].id;
       // console.log("reducer  message :->" + JSON.stringify(message));
 
       let chat_messages = [];
@@ -100,6 +100,7 @@ const chatReducer = (state = initialState, action) => {
       var msgDic = {
         _id: messgae_id,
         from_id: from_id,
+        class_id: "",
         to_id: to_id,
         text: message[0].message,
         created_at: createdAt,
@@ -139,34 +140,23 @@ const chatReducer = (state = initialState, action) => {
 
     // IN-APP MESSAGE RECEIVED ----------------->
     case actionTypes.RECEIVED_CHAT_MESSAGE:
-      var chat_message = action.payload.data.data.to_detail;
-      var user_data = action.payload.data.data.from_detail;
-      // console.log(
-      //   "RECEIVED_CHAT_MESSAGE action.payload.data=======MESSAGES_DETAILS_SUCCESS=======",
-      //   action.payload.data.data
-      // );
-      // console.log(
-      //   "RECEIVED_CHAT_MESSAGE reducer RECEIVED_CHAT_MESSAGE chat_message :->" +
-      //     JSON.stringify(chat_message)
-      // );
-      // console.log(
-      //   " RECEIVED_CHAT_MESSAGE reducer user_data chat_message :->" +
-      //     JSON.stringify(user_data)
-      // );
-      var message = action.payload.data.data.messages;
-      var from_id = Number(user_data.id);
-      var to_id = Number(chat_message.id);
-      var createdAt = moment(
-        chat_message.created_at,
-        "YYYY-MM-DDTHH:mm:ssZ"
-      ).format("YYYY/MM/DD HH:mm:ss");
-      var messgae_id = chat_message.id;
+      var chat_message = action.payload.msg_data;
+      var user_data = action.payload.user_data;
+      console.log("reducer RECEIVED_CHAT_MESSAGE chat_message :->" + JSON.stringify(chat_message));
+
+        var message = chat_message.message;
+      var from_id = Number(chat_message.from);
+      var to_id = Number(chat_message.to);
+      var createdAt = moment(message[0].createdAt, "YYYY-MM-DDTHH:mm:ssZ").format("YYYY/MM/DD HH:mm:ss");
+      var messgae_id = message[0]._id;
+
 
       var msgDic = {
         _id: messgae_id,
         from_id: from_id,
+        class_id: "",
         to_id: to_id,
-        text: message[0].message,
+        text: message[0].text,
         created_at: createdAt,
         is_received: 0,
         user: {

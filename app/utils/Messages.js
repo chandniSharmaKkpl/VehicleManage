@@ -2,7 +2,8 @@ const Messages = {
   //Authentication validation messages
   email: "Please enter your email address",
   emailValid: "Please enter valid email address",
-  name: "Please enter your name",
+  name: "Please enter your first name",
+  lname: "Please enter your last name",
   password: "Please enter your password",
   confirmPassword: "Please enter your confirm password",
   newPassword:'Please enter your new password',
