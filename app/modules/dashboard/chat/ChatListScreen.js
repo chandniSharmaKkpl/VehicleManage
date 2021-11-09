@@ -48,24 +48,15 @@ export class ChatListScreen extends Component {
     };
     global.ws = null;
     this.registerDeviceTimer = null;
+    this.callAPI = this.callAPI.bind(this);
+    this.searchFromUser = this.searchFromUser.bind(this);
+    this.getchatListAPI = this.getchatListAPI.bind(this);
     this.connectWebSocket = this.connectWebSocket.bind(this);
     this.callMessageListAPI = this.callMessageListAPI.bind(this);
     this.registerAndSubscribe = this.registerAndSubscribe.bind(this);
     this.searchByName = this.searchByName.bind(this);
-  }
-
-  searchByName(searchText) {
-    console.log("Value of item is :->", searchText);
-    console.log("this.state.chatName :-->", this.state);
-    const newData = Object.values(this.state.chatName).filter((item) => {
-      const itemData = item.name.toUpperCase();
-      const textData = searchText.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    this.setState({
-      dataArray: newData,
-      searchTxt: searchText,
-    });
+    this.updateUnreadCount = this.updateUnreadCount.bind(this);
+    this.closeOrInActiveScreen = this.closeOrInActiveScreen.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
@@ -74,7 +65,7 @@ export class ChatListScreen extends Component {
         " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
       newProps.isReceiveChatMessage +
         ", chatMsg Length:" +
-        JSON.stringify(newProps.chatMessages)
+        newProps.chatMessages.length
     );
     // When user is inside Inbox screen and any 1-1 or group message is received, then IF condition is true
     if (
@@ -82,40 +73,23 @@ export class ChatListScreen extends Component {
       newProps.isReceiveChatMessage == true &&
       newProps.chatMessages.length > 0
     ) {
-      console.log("in IF -------------------->");
-      // from_id": from_id,
-      // "from_type": user_details.user_role == USER_ROLE.COACH ? 1 : 0,
-      // "class_id
+      // console.log("in IF -------------------->");
+
       var newDataArray = this.state.dataArray;
+
       newDataArray.forEach((data) => {
         newProps.chatMessages.forEach((msg) => {
-          console.log(
-            "msg=====================================================",
-            msg
-          );
           var from_id = msg.from_id;
-          var class_id = msg.class_id;
+
           console.log("from_id :->", from_id);
-          console.log("class_id :->", class_id);
-          if (class_id !== "") {
-            // group message receivee
-            // console.log("in IF ---->");
-            if (
-              data.type == CHAT_MESSAGE_TYPE.CLASS &&
-              parseInt(data.id) == parseInt(class_id)
-            ) {
-              // console.log("in IF-IF ---->",data);
-              data.unread_count = parseInt(data.unread_count) + 1;
-            }
-          } else {
-            // console.log("in ELSE ---->");
-            if (
-              data.type == CHAT_MESSAGE_TYPE.ROADIE &&
-              parseInt(data.id) == parseInt(from_id)
-            ) {
-              // console.log("in ELSE-IF ---->",data);
-              data.unread_count = parseInt(data.unread_count) + 1;
-            }
+
+          // console.log("in ELSE ---->");
+          if (
+            data.type == CHAT_MESSAGE_TYPE.ROADIE &&
+            parseInt(data.id) == parseInt(from_id)
+          ) {
+            console.log("in ELSE-IF ---->", data);
+            data.unread_count = parseInt(data.unread_count) + 1;
           }
         });
       });
@@ -154,6 +128,7 @@ export class ChatListScreen extends Component {
                   "in IF this.registerDeviceTimer :->",
                   this.registerDeviceTimer
                 );
+
                 if (
                   this.registerDeviceTimer != undefined ||
                   this.registerDeviceTimer != null
@@ -162,6 +137,7 @@ export class ChatListScreen extends Component {
                   clearInterval(this.registerDeviceTimer);
                   this.registerDeviceTimer = null;
                 }
+
                 this.registerAndSubscribe();
               }
             }, 3000);
@@ -171,23 +147,8 @@ export class ChatListScreen extends Component {
     }
   };
 
-
-  registerAndSubscribe() {
-    const { userDetails, chatList } = this.props;
-    let usersdata = userDetails.user_data;
-
-    this.setState({ is_chat_user_id: usersdata.user_id }, () => {
-      global.ws.send(
-        JSON.stringify({ command: "register", userId: usersdata.user_id })
-      );
-
-      this.setState({
-        isUserRegister: true,
-      });
-    });
-  }
-
   async componentDidMount() {
+    console.log("=====",JSON.stringify( this.props.navigation.state))
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
     let getchatCount = await JSON.parse(
@@ -198,42 +159,117 @@ export class ChatListScreen extends Component {
       DeviceEventEmitter.emit("ChatCountRemove");
     }
     this._isMounted = true;
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      if (globals.isInternetConnected == true) {
-        this.callMessageListAPI();
-        this.connectWebSocket();
-      } else {
-        Alert.alert(globals.warning, globals.noInternet);
-      }
-    });
-    this.setState({ theme: this.props.theme });
-
-    var live_chatMessage =
-      JSON.parse(await AsyncStorage.getItem("live_chatMessage")) || {};
-    console.log(
-      "chatDashboad screen componentDidMount() -----> params.chatMessage :-->",
-      live_chatMessage
-    );
-
-    if (live_chatMessage != undefined && live_chatMessage.id != undefined) {
-      console.log("inSide IF NavigationService.navigate('ChatMessages') ...");
-      NavigationService.navigate("ChatMessages", {
-        chatMessage: live_chatMessage,
-      });
-      await AsyncStorage.removeItem("live_chatMessage");
+    if (globals.isInternetConnected == true) {
+      this.callMessageListAPI();
+      this.connectWebSocket();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
     }
 
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
-    DeviceEventEmitter.addListener("fetch_message_list", this.callAPI());
+    DeviceEventEmitter.addListener("fetch_message_list", this.callAPI.bind());
 
     console.log("addEventListener ---> AppState");
     AppState.addEventListener("change", this._handleAppStateChange);
   }
 
-  callAPI() {
-    setTimeout(() => {
-      this.callMessageListAPI();
-    }, 1000);
+  componentWillUnmount() {
+    console.log(
+      Platform.OS + " --- componentWillUnmount() this.registerDeviceTimer:->",
+      this.registerDeviceTimer
+    );
+
+    AppState.removeAllListeners("change", this._handleAppStateChange);
+    DeviceEventEmitter.removeAllListeners("fetch_message_list");
+
+    this.closeOrInActiveScreen();
+  }
+
+  connectWebSocket() {
+    
+
+    global.ws = new WebSocket("ws://20.37.36.107:56113");
+
+    // console.log(Platform.OS+" --- :::::::::::::::::::::::");
+    global.ws.onopen = (data) => {
+      console.log(
+        Platform.OS + " --- Connected-------------------------",
+        data
+      );
+
+      const { nav } = this.props;
+          const currentScreen = this.props.navigation.state.routeName;
+          console.log("currentScreen--------------------",JSON.stringify(nav) );
+
+      // Alert.alert("Websocket connected...");
+      console.warn(" --- WS Connected() ---->");
+      if (data.isTrusted === false) {
+        this.setState({
+          loader: false,
+          webSocketServerConnected: true,
+        });
+      } else {
+        this.setState({
+          webSocketServerConnected: true,
+        });
+        alert("Something wen to wrong");
+      }
+    };
+    global.ws.onmessage = ({ data }) => {
+      console.log(Platform.OS + " --- WS OnMessage() ---->", data);
+
+      const object = JSON.parse(data);
+      // console.log("object :->",object);
+      if (object.command != undefined) {
+        if (object.command == "message") {
+          // console.log("in IF onMessage commant is 'message'");
+          // Message received
+          var from_id = Number(object.from);
+          console.log("===connectWebSocket==",JSON.stringify( this.props))
+          // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
+
+          const { nav } = this.props;
+          const currentScreen = this.props.navigation.state.routeName;
+          console.log("----this.props.navigation", this.props.navigation);
+          Alert.alert("currentScreen--------------------", currentScreen);
+          var payload = {
+                  msg_data: object,
+                  user_data: this.searchFromUser(from_id),
+                };
+                this.props.receivedChatMessage(payload);
+              // }
+          // if (currentScreen == "ChatList") {
+          //   const currentScreenParams =
+          //     nav.routes[nav.routes.length - 1].params;
+          //   console.log("currentScreenParams :->", currentScreenParams);
+          //   // if (currentScreenParams !== undefined) {
+          //   //   var userScreenLoadUserId = currentScreenParams.chatMessage.id;
+          //   //   console.log("userScreenLoadUserId :->", userScreenLoadUserId);
+          //   //   console.log("from_id :->", from_id);
+
+          //   //   if (parseInt(from_id) == userScreenLoadUserId) {
+          //   //     console.log("Inside ID both user are matched....");
+          //       // var payload = {
+          //       //   msg_data: object,
+          //       //   user_data: this.searchFromUser(from_id),
+          //       // };
+          //       // this.props.receivedChatMessage(payload);
+          //   //   }
+          //   // }
+          // }
+        }
+      }
+    };
+    global.ws.onerror = ({ error }) => {
+      console.log(Platform.OS + " --- WS OnError() ---->", error);
+      // Alert.alert("Websocket Error", error);
+      global.ws = null;
+    };
+
+    global.ws.onclose = ({ event }) => {
+      console.log(Platform.OS + " --- WS onClose() ---->", event);
+      // console.warn(" --- WS onClose() ---->");
+    };
   }
 
   _handleAppStateChange = (nextAppState) => {
@@ -250,69 +286,6 @@ export class ChatListScreen extends Component {
     }
   };
 
-  async componentWillUnmount() {
-    this._isMounted = false;
-    this.focusListener.remove();
-    console.log(
-      Platform.OS + " --- componentWillUnmount() this.registerDeviceTimer:->",
-      this.registerDeviceTimer
-    );
-    await hideMessage();
-
-    AppState.removeAllListeners("change", this._handleAppStateChange);
-    DeviceEventEmitter.removeAllListeners("fetch_message_list");
-    DeviceEventEmitter.removeAllListeners("ChatCountRemove");
-
-    this.closeOrInActiveScreen();
-  }
-
-  callMessageListAPI() {
-    if (globals.isInternetConnected == true) {
-      this.getchatListAPI();
-    } else {
-      Alert.alert(globals.warning, globals.noInternet);
-    }
-  }
-
-  getchatListAPI = async () => {
-    const { user, txtSearch } = this.state;
-    const { messagesList } = this.props;
-    let params = new URLSearchParams();
-    // Collect the necessary params
-    params.append("search", txtSearch);
-
-    messagesList(params)
-      .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get messagesList",
-        //   JSON.stringify(res.value.data.data)
-        // );
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.status === 200) {
-            if (this._isMounted) {
-              this.setState({
-                dataArray: this.props.chatList,
-              });
-            }
-          }
-        } else {
-          if (res.value && res.value.data.error) {
-            // await showMessage({
-            //   message: res.value.message,
-            //   type: "danger",
-            //   icon: "info",
-            //   duration: 4000,
-            // });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG, "i am in catch error search by vehical name", err);
-      });
-  };
-
   closeOrInActiveScreen() {
     console.log("closeOrInActiveScreen :--->");
     if (this.registerDeviceTimer !== null) {
@@ -323,13 +296,16 @@ export class ChatListScreen extends Component {
 
     if (global.ws !== null) {
       const { userDetails } = this.props;
-      let usersunregisterdata = userDetails.user_data;
+      let usersdata = userDetails.user_data;
+      const chat_user_id = usersdata.user_id;
+
+      console.log("unregister chat_user_id :->", chat_user_id);
 
       global.ws.send(
         JSON.stringify({
           command: "unregister",
-          userId: usersunregisterdata.user_id,
-          offline_user_id: usersunregisterdata.user_id,
+          userId: chat_user_id,
+          offline_user_id: userDetails.id,
         })
       );
 
@@ -343,125 +319,29 @@ export class ChatListScreen extends Component {
     }
   }
 
-  connectWebSocket() {
-    global.ws = new WebSocket("ws://20.37.36.107:56113");
-    global.ws.onopen = (data) => {
-      console.log(
-        Platform.OS + " --- Connected-------------------------",
-        data
-      );
+  registerAndSubscribe() {
+    const { userDetails } = this.props;
+    let usersdata = userDetails.user_data;
+    const chat_user_id = usersdata.user_id;
 
-      if (data.isTrusted === false) {
-        this.setState({
-          loader: false,
-          webSocketServerConnected: true,
-        });
-      } else {
-        this.setState({
-          webSocketServerConnected: true,
-        });
-        // alert("Something wen to wrong");
-      }
-    };
-    global.ws.onmessage = ({ data }) => {
-      // console.log(
-      //   "============================================================================---->",
-      //   data
-      // );
-      // console.log("data :->", data);
-      const object = JSON.parse(data);
-      console.log("object onmessage:->", object.command);
-      if (object.command != undefined) {
-        if (object.command == "message") {
-          console.log("in IF onMessage commant is 'message'");
-          // Message received
-          var from_id = Number(object.from);
+    console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
+    global.ws.send(
+      JSON.stringify({ command: "register", userId: chat_user_id })
+    );
 
-          // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
+    this.setState({
+      isUserRegister: true,
+    });
+  }
 
-          const { nav } = this.props;
-          // console.log("nav.routes===========", JSON.stringify(nav.routes));
-         
-          const currentScreen = nav.routes[nav.routes.length - 2].routeName;
-          // console.log("currentScreen===========", currentScreen);
-          var payload = {
-            msg_data: object,
-            user_data: this.searchFromUser(from_id),
-          };
-          this.props.receivedChatMessage(payload);
-          // if (currentScreen == "Chat") {
-          //   const currentScreenParams =
-          //     nav.routes[nav.routes.length - 2].params;
-          //   console.log("currentScreenParams :->", currentScreenParams);
-          //   if (currentScreenParams !== undefined) {
-          //     var userScreenLoadUserId = currentScreenParams.chatMessage.id;
-          //     console.log("userScreenLoadUserId :->", userScreenLoadUserId);
-          //     console.log("from_id :->", from_id);
-
-          //     if (parseInt(from_id) == userScreenLoadUserId) {
-          //       console.log("Inside ID both user are matched....");
-          //       var payload = {
-          //         msg_data: object,
-          //         user_data: this.
-          //         searchFromUser(from_id),
-          //       };
-          //       this.props.receivedChatMessage(payload);
-          //     }
-          //   }
-          // }
-        } else if (
-          object.command == "register" ||
-          object.command == "unregister"
-        ) {
-          console.log(" --- WS register() ---->");
-
-          const { userDetails } = this.props;
-          console.log("userDetails==========", userDetails);
-          console.log(
-            "object.offline_user_id=============",
-            object.offline_user_id
-          );
-          let userdata = userDetails.user_data;
-          if (parseInt(object.offline_user_id) != parseInt(userdata.user_id)) {
-            var onlineUsers = object.online;
-            console.log("command register --- onlineUsers :-->", onlineUsers);
-            const { nav } = this.props;
-            const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-            console.log("online command currentScreen :->", currentScreen);
-            if (currentScreen == "App") {
-              const currentScreenParams =
-                nav.routes[nav.routes.length - 1].params;
-              console.log("currentScreenParams :->", currentScreenParams);
-              if (currentScreenParams !== undefined) {
-                var userScreenLoadUserId = currentScreenParams.chatMessage.id;
-                onlineUsers.forEach((user) => {
-                  var online_user_id = user;
-                  if (online_user_id == userScreenLoadUserId) {
-                    DeviceEventEmitter.emit("update_header_online_stattus", {
-                      status: true,
-                    });
-                  }
-                });
-                onlineUsers.forEach;
-              }
-            }
-            // alwayse update online/offline statime, weather user on chat-details or chat-listing screen
-          }
-        }
-      }
-    };
-    global.ws.onerror = ({ error }) => {
-      console.log(Platform.OS + " --- WS OnError() ---->", error);
-      global.ws = null;
-    };
-
-    global.ws.onclose = ({ event }) => {
-      console.log(" --- WS onClose() ---->", event);
-    };
+  callAPI() {
+    setTimeout(() => {
+      this.callMessageListAPI();
+    }, 1000);
   }
 
   searchFromUser(from_id) {
-    console.log("searchFromUser() from_id :-->", from_id);
+    // console.log("searchFromUser() from_id :-->", from_id);
 
     var user = {};
     this.state.dataArray.forEach((msg) => {
@@ -473,6 +353,104 @@ export class ChatListScreen extends Component {
     console.log("from User :->", user);
 
     return user;
+  }
+
+  callMessageListAPI() {
+    if (globals.isInternetConnected == true) {
+      this.getchatListAPI();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
+
+  getchatListAPI = async () => {
+    const { user, searchTxt } = this.state;
+    const { messagesList } = this.props;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("search", searchTxt);
+
+    messagesList(params)
+      .then(async (res) => {
+        // console.log(
+        //   TAG,
+        //   "response of get messagesList",
+        //   JSON.stringify(res.value.data.data)
+        // );
+        // console.log("this.props.chatList--------", this.props.chatList);
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.status === 200) {
+            if (this._isMounted) {
+              this.setState({
+                dataArray: this.props.chatList,
+              });
+            }
+          }
+        } else {
+          if (res.value && res.value.data.error) {
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error search by vehical name", err);
+      });
+  };
+
+  // clear States before leave this screen
+  clearStates = () => {
+    this.setState({
+      searchTxt: "",
+    });
+  };
+
+  searchByName(searchText) {
+    console.log("Value of item is :->", searchText);
+    console.log("this.state.chatName :-->", this.state);
+    const newData = Object.values(this.state.chatName).filter((item) => {
+      const itemData = item.name.toUpperCase();
+      const textData = searchText.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    this.setState({
+      dataArray: newData,
+      searchTxt: searchText,
+    });
+  }
+
+  // navigate to chat screen
+  gotoChatDetails = (user_info) => {
+    console.log(
+      "user_info=============navigate-----------------------------------",
+      user_info
+    );
+    this.updateUnreadCount(user_info);
+    NavigationService.navigate("ChatMessages", {
+      user_info: user_info,
+      is_chat_user_id: this.state.is_chat_user_id,
+    });
+  };
+
+  updateUnreadCount(chatMessage) {
+    // console.log("updateUnreadCount() chatMessage:->",chatMessage);
+    var newDataArray = this.state.dataArray;
+
+    newDataArray.forEach((data) => {
+      if (
+        data.type == CHAT_MESSAGE_TYPE.ROADIE &&
+        chatMessage.from_id == data.from_id &&
+        chatMessage.to_id == data.to_id
+      ) {
+        // console.log("updateUnreadCount () in IF");
+        // record is matched
+        data.unread_count = parseInt(0);
+      }
+    });
+
+    this.setState({
+      dataArray: newDataArray,
+      chatList: newDataArray,
+    });
   }
 
   // render friendlist dataItem
@@ -522,6 +500,7 @@ export class ChatListScreen extends Component {
             ]}
           >
             {item.last_message ? item.last_message : ""}
+            {"       "}
             {item.registration_number ? item.registration_number : ""}
           </Text>
         </View>
@@ -550,23 +529,6 @@ export class ChatListScreen extends Component {
     );
   };
 
-  // navigate to chat screen
-  gotoChatDetails = (user_info) => {
-    console.log(
-      "user_info=============navigate-----------------------------------",
-      user_info
-    );
-    NavigationService.navigate("ChatMessages", {
-      user_info: user_info,
-      is_chat_user_id: this.state.is_chat_user_id,
-    });
-  };
-
-  // seprate component
-  separatorComponent = () => {
-    return <View style={FriendListStyle.separatorLine} />;
-  };
-
   render() {
     const { dataArray, searchTxt } = this.state;
     const { isLoading, loaderMessage, theme, chatList } = this.props;
@@ -581,6 +543,7 @@ export class ChatListScreen extends Component {
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
           <Header
             title={StaticTitle.msges}
             onPressed={() => this.props.navigation.openDrawer()}
@@ -636,4 +599,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatListScreen);
-// export default ChatListScreen;

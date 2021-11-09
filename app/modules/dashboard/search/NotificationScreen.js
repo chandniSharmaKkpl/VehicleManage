@@ -43,6 +43,9 @@ export class NotificationScreen extends Component {
     let getsearchedCount = await JSON.parse(
       await AsyncStorage.getItem("searched_count")
     );
+    let getchatCount = await JSON.parse(
+      await AsyncStorage.getItem("chat_count")
+    );
     if (getsearchedCount != "0") {
       await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
       DeviceEventEmitter.emit("NotificationCountRemove");
@@ -55,7 +58,10 @@ export class NotificationScreen extends Component {
     this.setState({
       theme: this.props.theme,
       searched_avatars: this.state.countDeatils.searched_avatars,
-      messages_count: this.state.countDeatils.messages_count,
+      messages_count:
+        getchatCount == "0"
+          ? getchatCount
+          : this.state.countDeatils.messages_count,
     });
   };
 

@@ -8,6 +8,8 @@ import {
   View,
   DeviceEventEmitter,
 } from "react-native";
+import moment from "moment";
+import { CHAT_MESSAGE_TYPE } from "../../../utils/Globals";
 import { connect } from "react-redux";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import FastImage from "react-native-fast-image";
@@ -37,8 +39,6 @@ import {
 } from "../../../components/InputToolbar";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as actions from "./redux/Actions";
-
-import ChatMessages from "../../../dummyData/ChatMessages";
 const avatar = require("../../../assets/images/user.jpeg");
 
 const TAG = "ChatMessagesScreen ::=";
@@ -64,37 +64,36 @@ export class ChatMessagesScreen extends Component {
       isMessageSend: false,
     };
     this.onSend = this.onSend.bind(this);
-    this.callFetchAPI = this.callFetchAPI.bind(this);
     this.callSendAPI = this.callSendAPI.bind(this);
-    this.formatMessageAndStore = this.formatMessageAndStore.bind(this);
     this.readMessagesAPI = this.readMessagesAPI.bind(this);
+    this.callFetchAPI = this.callFetchAPI.bind(this);
+    this.formatMessageAndStore = this.formatMessageAndStore.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
     // console.log(
     //   Platform.OS + " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->"
     // );
-    this.setState(
-      (previousState) => {
-        return {
-          messages: GiftedChat.append(
-            previousState.messages,
-            ...[newProps.chatMessages]
-          ),
-          isMessageSend: true,
-        };
-      },
-      () => {
-        // this.callFetchAPI();
-      }
-    );
+    // this.setState(
+    //   (previousState) => {
+    //     return {
+    //       messages: GiftedChat.append(
+    //         previousState.messages,
+    //         ...[newProps.chatMessages]
+    //       ),
+    //       isMessageSend: true,
+    //     };
+    //   },
+    //   () => {
+    //     // this.callFetchAPI();
+    //   }
+    // );
   };
 
-  async componentDidMount() {
-    console.log(
-      " this.state.user_info.id==============",
-      this.state.user_info.id
-    );
+  componentDidMount() {
+    console.log("===DEatils==",JSON.stringify( this.props.navigation.state))
+
+    console.log("this.state.user_info DIDMOUNT---", this.state.user_info);
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -118,67 +117,15 @@ export class ChatMessagesScreen extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.state.isMessageSend) {
+      DeviceEventEmitter.emit("fetch_message_list");
+    }
+  }
+
   callFetchAPI = () => {
     this.callMessageDetailsAPI();
   };
-
-  formatMessageAndStore(response) {
-    // console.log("response==================", response);
-    var msgArr = [];
-
-    this.readMessagesAPI(response);
-
-    var messages = response.messages;
-    var fromUser = response.from_detail;
-    var toUser = response.to_detail;
-
-    messages.forEach((msg) => {
-      // console.log("3 msg :->", msg);
-
-      // console.log("fromUser :->", fromUser);
-      var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
-      // console.log("fromUserDtl :->", fromUserDtl);
-
-      var avatar_img = avatar;
-      if (fromUserDtl.avatar != null && fromUserDtl.avatar != "null") {
-        avatar_img = fromUserDtl.avatar;
-      }
-
-      // console.log("avatar_img :->", avatar_img);
-
-      var msgDic = {
-        _id: msg.id,
-        from_id: msg.from_id,
-        from_type: msg.from_type,
-        to_id: msg.to_id != undefined ? msg.to_id : "",
-
-        text: msg.message,
-        created_at: msg.created_at,
-        is_received: msg.is_received,
-        user: {
-          _id: fromUserDtl.id,
-          name: fromUserDtl.full_name,
-          avatar: avatar_img,
-        },
-        image: fromUserDtl.image_url,
-        sent: this.state.from_id == fromUserDtl.id ? true : false,
-        received: parseInt(this.state.is_received) == 1 ? true : false,
-        pending: false,
-      };
-
-      // console.log("msgDic :->", msgDic);
-
-      msgArr.push(msgDic);
-    });
-
-    // console.log("Before msgArr :-->", msgArr);
-    msgArr = msgArr.sort((a, b) => parseInt(a._id) < parseInt(b._id));
-    // console.log("After msgArr :-->", msgArr);
-
-    this.setState({
-      messages: msgArr,
-    });
-  }
 
   // Message Details API
   callMessageDetailsAPI = async () => {
@@ -203,9 +150,9 @@ export class ChatMessagesScreen extends Component {
           //   res.value.data.success
           // );
 
-          this.setState({
-            messages: res.value.data.data,
-          });
+          // this.setState({
+          //   messages: res.value.data.data,
+          // });
 
           if (this.state.messages.length > 0) {
             // if local state variable already have messages and anyone receive new message then no need to update local state
@@ -216,12 +163,6 @@ export class ChatMessagesScreen extends Component {
           }
         } else {
           if (res.value && res.value.data.error) {
-            // await showMessage({
-            //   message: res.value.message,
-            //   type: "danger",
-            //   icon: "info",
-            //   duration: 4000,
-            // });
           }
         }
       })
@@ -230,15 +171,130 @@ export class ChatMessagesScreen extends Component {
       });
   };
 
+  formatMessageAndStore(response) {
+    console.log("response=============formatMessageAndStore=====", response);
+    var msgArr = [];
+
+    this.readMessagesAPI(response);
+
+    // if (params.chatMessage.type == CHAT_MESSAGE_TYPE.ROADIE) {
+    var messages = response.messages;
+    var fromUser = response.from_detail;
+    var toUser = response.to_detail;
+
+    messages.forEach((msg) => {
+      // console.log("3 msg :->", msg);
+
+      console.log("fromUser :->", fromUser);
+      var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
+      console.log("fromUserDtl :->", fromUserDtl);
+
+      var avatar_img = avatar;
+      if (fromUserDtl.avatar != null && fromUserDtl.avatar != "null") {
+        avatar_img = fromUserDtl.avatar;
+      }
+      var from_id = Number(this.state.from_id);
+
+      // convert DB's UTC-time into moment object,
+      // Gifted-chat module will convert to local time and display on screen
+      let currentDate = moment.utc(msg.created_at);
+
+      var msgDic = {
+        _id: msg.id,
+        from_id: msg.from_id,
+        from_type: msg.from_type,
+        to_id: msg.to_id != undefined ? msg.to_id : "",
+        text: msg.message,
+        createdAt: currentDate,
+        is_received: msg.is_received,
+        user: {
+          _id: fromUserDtl.id,
+          name: fromUserDtl.full_name,
+          avatar: avatar_img,
+        },
+        sent: from_id == fromUserDtl.id ? true : false,
+        received: parseInt(msg.is_received) == 1 ? true : false,
+        pending: false,
+      };
+
+      // console.log("msgDic :->", msgDic);
+
+      msgArr.push(msgDic);
+    });
+    // }
+    // else {
+    //   var messages = response.messages;
+
+    //   var members = response.members;
+
+    // messages.forEach(msg => {
+    //   // console.log("1 msg :->", msg);
+
+    //   var fromUserDtl = undefined;
+    //   if (parseInt(msg.from_type) == 0) {
+    //     // from user is student
+    //     fromUserDtl = members.students.find((user) => parseInt(user.id) == parseInt(msg.from_id))
+
+    //   } else {
+    //     // from user is coach
+    //     fromUserDtl = members.coach.find((user) => parseInt(user.id) == parseInt(msg.from_id))
+    //   }
+
+    //   // console.log("FIND fromUserDtl :->", fromUserDtl);
+
+    //   var avatar_img = avatar;
+    //   if (fromUserDtl.image_url != null && fromUserDtl.image_url != "null") {
+    //     avatar_img = fromUserDtl.image_url;
+    //   }
+
+    //   // convert DB's UTC-time into moment object,
+    //   // Gifted-chat module will convert to local time and display on screen
+    //   let utcDateTime = moment.utc(msg.created_at);
+
+    //   var msgDic = {
+    //     _id: msg.created_at, // @PENDDING need to add id in API
+    //     "from_id": msg.from_id,
+    //     "from_type": msg.from_type,
+    //     // "to_id": this.state.from_id,
+    //     // "to_type": userRole == USER_ROLE.STUDENT ? 0 : 1,
+    //     "class_id": msg.class_id,
+    //     "text": msg.message,
+    //     "createdAt": utcDateTime,
+    //     "is_received": msg.is_received,
+    //     user: {
+    //       _id: fromUserDtl.id,
+    //       name: fromUserDtl.name,
+    //       avatar: avatar_img
+    //     },
+    //     // image: fromUserDtl.image_url,
+    //     sent: this.state.from_id == fromUserDtl.id ? true : false,
+    //     received: parseInt(this.state.is_received) == 1 ? true : false,
+    //     pending: false
+    //   };
+
+    //   // console.log("msgDic :->", msgDic);
+
+    //   msgArr.push(msgDic);
+    // });
+    // }
+
+    // console.log("Before msgArr :-->", msgArr);
+    msgArr = msgArr.sort((a, b) => parseInt(a._id) < parseInt(b._id));
+    console.log("After msgArr :-->", msgArr);
+
+    this.setState({
+      messages: msgArr,
+    });
+  }
+
   readMessagesAPI = (response) => {
-    const { userDetails } = this.state;
     const messages = response.messages;
-    // console.log("in messages() :->", messages);
+    console.log("in messages() :->", messages);
 
     var message_ids = "[";
     messages.forEach((msg) => {
       if (parseInt(msg.is_received) == 0 && parseInt(msg.id) > 0) {
-        // console.log("message_ids.length :-->", String(message_ids).length);
+        console.log("message_ids.length :-->", String(message_ids).length);
         if (String(message_ids).length == 1) {
           message_ids = message_ids + msg.id;
         } else {
@@ -274,53 +330,46 @@ export class ChatMessagesScreen extends Component {
       });
   };
 
-  async componentWillUnmount() {
-    this._isMounted = false;
-    await hideMessage();
-    if (this.state.isMessageSend) {
-      DeviceEventEmitter.emit("fetch_message_list");
-    }
-  }
-
   onSend(messages = []) {
-    const { userDetails } = this.state;
+    const { userDetails } = this.props;
+    console.log("onSend() messages  :->", this.props.userDetails);
 
-    console.log("onSend() messages :->", messages);
     var newMsgs = [];
-
     messages.forEach((msg) => {
       msg.user.avatar = userDetails.user_data.user_photo;
       msg.user.name = userDetails.user_data.username;
+      msg.sent = true;
+      msg.received = false;
       newMsgs.push(msg);
     });
 
-    try {
-      global.ws.send(
-        JSON.stringify({
-          command: "message",
-          from: this.state.from_id,
-          to: this.state.to_id,
-          message: messages,
-          from_user: userDetails,
-        })
-      );
+    console.log("onSend() :->", global.ws);
+    console.log("onSend() newMsgs:->", newMsgs);
+    {
+      // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
+      try {
+        global.ws.send(
+          JSON.stringify({
+            command: "message",
+            from: this.state.from_id,
+            to: this.state.to_id,
+            message: messages,
+            from_user: userDetails,
+          })
+        );
 
-      this.callSendAPI(newMsgs);
+        this.callSendAPI(newMsgs);
 
-      this.setState(
-        (previousState) => {
+        this.setState((previousState) => {
           return {
             messages: GiftedChat.append(previousState.messages, newMsgs),
             isMessageSend: true,
           };
-        },
-        () => {
-          // console.log("onSend() messages->", this.state.messages);
-        }
-      );
-    } catch (err) {
-      console.log("2nd Error while send socket message. Error:->", err);
-      console.log("to_detail :->" + err);
+        });
+      } catch (err) {
+        console.log("2nd Error while send socket message. Error:->", err);
+        // console.log("to_detail :->"+err);
+      }
     }
   }
 
@@ -328,7 +377,7 @@ export class ChatMessagesScreen extends Component {
     var allTextMsg = messages.map((item) => {
       return item.text;
     });
-    // console.log("in callSendAPI allTextMsg:->", allTextMsg);
+    console.log("in callSendAPI allTextMsg:->", allTextMsg);
     const { insertMessage } = this.props;
     let params = new URLSearchParams();
     // user click on student type chat message
@@ -339,11 +388,11 @@ export class ChatMessagesScreen extends Component {
 
     insertMessage(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of insertMessage",
-          JSON.stringify(res.value.data)
-        );
+        // console.log(
+        //   TAG,
+        //   "response of insertMessage",
+        //   JSON.stringify(res.value.data)
+        // );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -357,12 +406,6 @@ export class ChatMessagesScreen extends Component {
               duration: 4000,
             });
           } else if (res.value && res.value.data.error) {
-            // await showMessage({
-            //   message: res.value.message,
-            //   type: "danger",
-            //   icon: "info",
-            //   duration: 4000,
-            // });
           }
         }
       })
@@ -370,6 +413,26 @@ export class ChatMessagesScreen extends Component {
         console.log(TAG, "i am in catch error insertMessages", err);
       });
   }
+
+  // Render modal faltlist view to choose camera or gallery
+  renderOptionsview = (item, index) => {
+    return (
+      <>
+        <TouchableOpacity onPress={() => this.reportorblockuser(item)}>
+          <View style={ComponentStyle.viewPopupStyle}>
+            <FastImage
+              resizeMethod="resize"
+              style={ComponentStyle.imagePopupStyle}
+              source={item.image}
+            ></FastImage>
+
+            <Text style={ComponentStyle.textStylePopup}>{item.title}</Text>
+          </View>
+        </TouchableOpacity>
+        {index < 1 ? <View style={ComponentStyle.lineStyle1}></View> : null}
+      </>
+    );
+  };
 
   // report User API
   reportUserAPI = () => {
@@ -464,33 +527,13 @@ export class ChatMessagesScreen extends Component {
     }
   };
 
-  // Render modal faltlist view to choose camera or gallery
-  renderOptionsview = (item, index) => {
-    return (
-      <>
-        <TouchableOpacity onPress={() => this.reportorblockuser(item)}>
-          <View style={ComponentStyle.viewPopupStyle}>
-            <FastImage
-              resizeMethod="resize"
-              style={ComponentStyle.imagePopupStyle}
-              source={item.image}
-            ></FastImage>
-
-            <Text style={ComponentStyle.textStylePopup}>{item.title}</Text>
-          </View>
-        </TouchableOpacity>
-        {index < 1 ? <View style={ComponentStyle.lineStyle1}></View> : null}
-      </>
-    );
+  setsendText = (text) => {
+    this.setState({ txtmessage: text });
   };
 
   //display gallry picker model
   displayMsgReportPicker = () => {
     this.setState({ isMsgReportPicker: !this.state.isMsgReportPicker });
-  };
-
-  setsendText = (text) => {
-    this.setState({ txtmessage: text });
   };
 
   render() {
@@ -554,7 +597,7 @@ export class ChatMessagesScreen extends Component {
             </MediaModel>
           </View>
           <GiftedChat
-            text={txtmessage}
+         
             onInputTextChanged={(text) => this.setsendText(text)}
             messages={messages}
             onSend={this.onSend}

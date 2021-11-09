@@ -127,7 +127,7 @@ class sideDrawer extends Component {
             </TouchableOpacity>
           </View>
 
-          <View style={SideDrawerStyle.beforeDrawerOption}></View>
+          {/* <View style={SideDrawerStyle.beforeDrawerOption}></View>
           <TouchableOpacity
             style={[SideDrawerStyle.dashBoardButtonViewStyle]}
             onPress={() => {
@@ -149,7 +149,7 @@ class sideDrawer extends Component {
             >
               {StaticTitle.subscriptions}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => NavigationService.navigate("TermsCondition")}
             style={[SideDrawerStyle.dashBoardButtonViewStyle]}

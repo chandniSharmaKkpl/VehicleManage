@@ -100,7 +100,7 @@ const chatReducer = (state = initialState, action) => {
       var msgDic = {
         _id: messgae_id,
         from_id: from_id,
-        class_id: "",
+
         to_id: to_id,
         text: message[0].message,
         created_at: createdAt,
@@ -142,19 +142,24 @@ const chatReducer = (state = initialState, action) => {
     case actionTypes.RECEIVED_CHAT_MESSAGE:
       var chat_message = action.payload.msg_data;
       var user_data = action.payload.user_data;
-      console.log("reducer RECEIVED_CHAT_MESSAGE chat_message :->" + JSON.stringify(chat_message));
+      console.log(
+        "reducer RECEIVED_CHAT_MESSAGE chat_message :->" +
+          JSON.stringify(chat_message)
+      );
 
-        var message = chat_message.message;
+      var message = chat_message.message;
       var from_id = Number(chat_message.from);
       var to_id = Number(chat_message.to);
-      var createdAt = moment(message[0].createdAt, "YYYY-MM-DDTHH:mm:ssZ").format("YYYY/MM/DD HH:mm:ss");
+      var createdAt = moment(
+        message[0].createdAt,
+        "YYYY-MM-DDTHH:mm:ssZ"
+      ).format("YYYY/MM/DD HH:mm:ss");
       var messgae_id = message[0]._id;
-
 
       var msgDic = {
         _id: messgae_id,
         from_id: from_id,
-        class_id: "",
+
         to_id: to_id,
         text: message[0].text,
         created_at: createdAt,
