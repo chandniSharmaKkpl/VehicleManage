@@ -60,35 +60,27 @@ export class ChatListScreen extends Component {
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
-    console.log(
-      Platform.OS +
-        " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
-      newProps.isReceiveChatMessage +
-        ", chatMsg Length:" +
-        newProps.chatMessages.length
-    );
+    // console.log(
+    //   Platform.OS +
+    //     " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
+    //   newProps.isReceiveChatMessage +
+    //     ", chatMsg Length:" +
+    //     newProps.chatMessages.length
+    // );
     // When user is inside Inbox screen and any 1-1 or group message is received, then IF condition is true
     if (
       this.state.dataArray.length == newProps.chatList.length &&
       newProps.isReceiveChatMessage == true &&
       newProps.chatMessages.length > 0
     ) {
-      // console.log("in IF -------------------->");
-
       var newDataArray = this.state.dataArray;
-
       newDataArray.forEach((data) => {
         newProps.chatMessages.forEach((msg) => {
           var from_id = msg.from_id;
-
-          console.log("from_id :->", from_id);
-
-          // console.log("in ELSE ---->");
           if (
             data.type == CHAT_MESSAGE_TYPE.ROADIE &&
             parseInt(data.id) == parseInt(from_id)
           ) {
-            console.log("in ELSE-IF ---->", data);
             data.unread_count = parseInt(data.unread_count) + 1;
           }
         });
@@ -100,15 +92,6 @@ export class ChatListScreen extends Component {
           chatName: newProps.chatList,
         },
         () => {
-          console.log(
-            Platform.OS +
-              " - this.state.dataArray.length:->" +
-              this.state.dataArray.length
-          );
-          console.log(
-            " this.state.isUserRegister -->",
-            this.state.isUserRegister
-          );
           // Register is one call at single time, after
           if (
             this.state.dataArray.length > 0 &&
@@ -117,23 +100,13 @@ export class ChatListScreen extends Component {
           ) {
             // Start 3 seconds interval,
             // This will check is internel
-            console.log("START INERVAL() ----------------->");
-            this.registerDeviceTimer = setInterval(() => {
-              console.log(
-                "inside Timer this.state.webSocketServerConnected:->",
-                this.state.webSocketServerConnected
-              );
-              if (this.state.webSocketServerConnected) {
-                console.log(
-                  "in IF this.registerDeviceTimer :->",
-                  this.registerDeviceTimer
-                );
 
+            this.registerDeviceTimer = setInterval(() => {
+              if (this.state.webSocketServerConnected) {
                 if (
                   this.registerDeviceTimer != undefined ||
                   this.registerDeviceTimer != null
                 ) {
-                  console.log("in side IF this.registerDeviceTimer CLEAR...");
                   clearInterval(this.registerDeviceTimer);
                   this.registerDeviceTimer = null;
                 }
@@ -171,19 +144,13 @@ export class ChatListScreen extends Component {
       Alert.alert(globals.warning, globals.noInternet);
     }
 
-    DeviceEventEmitter.removeAllListeners("fetch_message_list");
+    // DeviceEventEmitter.removeAllListeners("fetch_message_list");
     DeviceEventEmitter.addListener("fetch_message_list", this.callAPI.bind());
 
-    console.log("addEventListener ---> AppState");
     AppState.addEventListener("change", this._handleAppStateChange);
   };
 
   componentWillUnmount() {
-    console.log(
-      Platform.OS + " --- componentWillUnmount() this.registerDeviceTimer:->",
-      this.registerDeviceTimer
-    );
-
     AppState.removeAllListeners("change", this._handleAppStateChange);
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
 
@@ -196,16 +163,16 @@ export class ChatListScreen extends Component {
 
     // console.log(Platform.OS+" --- :::::::::::::::::::::::");
     global.ws.onopen = (data) => {
-      console.log(
-        Platform.OS + " --- Connected-------------------------",
-        data
-      );
+      // console.log(
+      //   Platform.OS + " --- Connected-------------------------",
+      //   data
+      // );
 
       // let Root = nav.routes[2].routes[0].routes[nav.routes.length - 1];
       // console.log("navigate--------------nav------", Root);
 
       // Alert.alert("Websocket connected...");
-      console.warn(" --- WS Connected() ---->");
+
       if (data.isTrusted === false) {
         this.setState({
           loader: false,
@@ -222,17 +189,15 @@ export class ChatListScreen extends Component {
       // console.log(Platform.OS + " --- WS OnMessage() ---->", data);
 
       const object = JSON.parse(data);
-      // console.log("object -------------------------------------------------------------------------------------------------------------------:->",object);
       if (object.command != undefined) {
         if (object.command == "message") {
-          // console.log("in IF onMessage commant is 'message'");
           // Message received
           var from_id = Number(object.from);
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
-          const { nav } = this.props;
-          const currentScreen = this.props.navigation.state.routeName;
-          // console.log("currentScreen--------------------", currentScreen);
+          // const { nav } = this.props;
+          // const currentScreen = this.props.navigation.state.routeName;
+
           var payload = {
             msg_data: object,
             user_data: this.searchFromUser(from_id),
@@ -274,23 +239,17 @@ export class ChatListScreen extends Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    console.log("_handleAppStateChange() nextAppState :-->", nextAppState);
+    // console.log("_handleAppStateChange() nextAppState :-->", nextAppState);
     if (nextAppState.match(/inactive|background/)) {
-      console.log("in IF inactive or background");
-
       this.closeOrInActiveScreen();
     } else if (nextAppState.match(/active/)) {
-      console.log("in IF active");
-
       this.callMessageListAPI();
       this.connectWebSocket();
     }
   };
 
   closeOrInActiveScreen() {
-    console.log("closeOrInActiveScreen :--->");
     if (this.registerDeviceTimer !== null) {
-      console.log("closeOrInActiveScreen :---> IN IF");
       clearInterval(this.registerDeviceTimer);
       this.registerDeviceTimer = null;
     }
@@ -300,7 +259,7 @@ export class ChatListScreen extends Component {
       let usersdata = userDetails.user_data;
       const chat_user_id = usersdata.user_id;
 
-      console.log("unregister chat_user_id :->", chat_user_id);
+      // console.log("unregister chat_user_id :->", chat_user_id);
 
       global.ws.send(
         JSON.stringify({
@@ -314,7 +273,7 @@ export class ChatListScreen extends Component {
       try {
         global.ws.close();
       } catch (err) {
-        console.log("Error while connection close :->", err);
+        // console.log("Error while connection close :->", err);
       }
       // }, 3000)
     }
@@ -325,7 +284,7 @@ export class ChatListScreen extends Component {
     let usersdata = userDetails.user_data;
     const chat_user_id = usersdata.user_id;
 
-    console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
+    // console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
     global.ws.send(
       JSON.stringify({ command: "register", userId: chat_user_id })
     );
@@ -350,8 +309,6 @@ export class ChatListScreen extends Component {
         user = msg;
       }
     });
-
-    console.log("from User :->", user);
 
     return user;
   }
@@ -394,20 +351,13 @@ export class ChatListScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log(TAG, "i am in catch error search by vehical name", err);
+        console.log(TAG, "i am in catch error get messagesList", err);
       });
   };
 
-  // clear States before leave this screen
-  clearStates = () => {
-    this.setState({
-      searchTxt: "",
-    });
-  };
-
   searchByName(searchText) {
-    console.log("Value of item is :->", searchText);
-    console.log("this.state.chatName :-->", this.state);
+    // console.log("Value of item is :->", searchText);
+    // console.log("this.state.chatName :-->", this.state);
     const newData = Object.values(this.state.chatName).filter((item) => {
       const itemData = item.name.toUpperCase();
       const textData = searchText.toUpperCase();
@@ -421,10 +371,6 @@ export class ChatListScreen extends Component {
 
   // navigate to chat screen
   gotoChatDetails = (user_info) => {
-    console.log(
-      "user_info=============navigate-----------------------------------",
-      user_info
-    );
     this.updateUnreadCount(user_info);
     NavigationService.navigate("ChatMessages", {
       user_info: user_info,

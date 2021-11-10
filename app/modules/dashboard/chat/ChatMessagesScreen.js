@@ -244,7 +244,7 @@ export class ChatMessagesScreen extends Component {
     var message_ids = "[";
     messages.forEach((msg) => {
       if (parseInt(msg.is_received) == 0 && parseInt(msg.id) > 0) {
-        console.log("message_ids.length :-->", String(message_ids).length);
+        // console.log("message_ids.length :-->", String(message_ids).length);
         if (String(message_ids).length == 1) {
           message_ids = message_ids + msg.id;
         } else {
@@ -282,7 +282,7 @@ export class ChatMessagesScreen extends Component {
 
   onSend(messages = []) {
     const { userDetails } = this.props;
-    console.log("onSend() messages  :->", this.props.userDetails);
+    // console.log("onSend() messages  :->", this.props.userDetails);
 
     var newMsgs = [];
     messages.forEach((msg) => {
@@ -293,8 +293,8 @@ export class ChatMessagesScreen extends Component {
       newMsgs.push(msg);
     });
 
-    console.log("onSend() :->", global.ws);
-    console.log("onSend() newMsgs:->", newMsgs);
+    // console.log("onSend() :->", global.ws);
+    // console.log("onSend() newMsgs:->", newMsgs);
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
@@ -317,7 +317,7 @@ export class ChatMessagesScreen extends Component {
           };
         });
       } catch (err) {
-        console.log("2nd Error while send socket message. Error:->", err);
+        // console.log("2nd Error while send socket message. Error:->", err);
         // console.log("to_detail :->"+err);
       }
     }
@@ -327,7 +327,7 @@ export class ChatMessagesScreen extends Component {
     var allTextMsg = messages.map((item) => {
       return item.text;
     });
-    console.log("in callSendAPI allTextMsg:->", allTextMsg);
+    // console.log("in callSendAPI allTextMsg:->", allTextMsg);
     const { insertMessage } = this.props;
     let params = new URLSearchParams();
     // user click on student type chat message
@@ -338,11 +338,11 @@ export class ChatMessagesScreen extends Component {
 
     insertMessage(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of insertMessage",
-          JSON.stringify(res.value.data)
-        );
+        // console.log(
+        //   TAG,
+        //   "response of insertMessage",
+        //   JSON.stringify(res.value.data)
+        // );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -381,7 +381,6 @@ export class ChatMessagesScreen extends Component {
   // report User API
   reportUserAPI = () => {
     const { user_info } = this.state;
-    console.log("user_info=====", user_info);
     const { reportUser } = this.props;
     let params = new URLSearchParams();
 
@@ -419,7 +418,6 @@ export class ChatMessagesScreen extends Component {
   //block User API
   blockUserAPI = async () => {
     const { user_info } = this.state;
-    console.log("user_info=====", user_info);
     const { blockUser } = this.props;
     let params = new URLSearchParams();
 
