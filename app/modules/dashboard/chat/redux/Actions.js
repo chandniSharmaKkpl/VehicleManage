@@ -44,9 +44,11 @@ export const insertMessage = (params) => ({
   payload: api
     .post("api/messages/insert", params)
     .then((res) => {
+      // console.log("res==========insertMessage==", res);
       return res;
     })
     .catch((err) => {
+      // console.log("err==========insertMessage==", err);
       return err;
     }),
 });

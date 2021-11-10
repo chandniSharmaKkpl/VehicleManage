@@ -148,9 +148,14 @@ export class ChatListScreen extends Component {
   };
 
   async componentDidMount() {
-    console.log("=====",JSON.stringify( this.props.navigation.state))
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
+    // this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    //   this.onFocusFunction();
+    // });
+  }
+
+  onFocusFunction = async () => {
     let getchatCount = await JSON.parse(
       await AsyncStorage.getItem("chat_count")
     );
@@ -171,7 +176,7 @@ export class ChatListScreen extends Component {
 
     console.log("addEventListener ---> AppState");
     AppState.addEventListener("change", this._handleAppStateChange);
-  }
+  };
 
   componentWillUnmount() {
     console.log(
@@ -183,11 +188,10 @@ export class ChatListScreen extends Component {
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
 
     this.closeOrInActiveScreen();
+    // this.focusListener.remove();
   }
 
   connectWebSocket() {
-    
-
     global.ws = new WebSocket("ws://20.37.36.107:56113");
 
     // console.log(Platform.OS+" --- :::::::::::::::::::::::");
@@ -197,9 +201,8 @@ export class ChatListScreen extends Component {
         data
       );
 
-      const { nav } = this.props;
-          const currentScreen = this.props.navigation.state.routeName;
-          console.log("currentScreen--------------------",JSON.stringify(nav) );
+      // let Root = nav.routes[2].routes[0].routes[nav.routes.length - 1];
+      // console.log("navigate--------------nav------", Root);
 
       // Alert.alert("Websocket connected...");
       console.warn(" --- WS Connected() ---->");
@@ -216,28 +219,26 @@ export class ChatListScreen extends Component {
       }
     };
     global.ws.onmessage = ({ data }) => {
-      console.log(Platform.OS + " --- WS OnMessage() ---->", data);
+      // console.log(Platform.OS + " --- WS OnMessage() ---->", data);
 
       const object = JSON.parse(data);
-      // console.log("object :->",object);
+      // console.log("object -------------------------------------------------------------------------------------------------------------------:->",object);
       if (object.command != undefined) {
         if (object.command == "message") {
           // console.log("in IF onMessage commant is 'message'");
           // Message received
           var from_id = Number(object.from);
-          console.log("===connectWebSocket==",JSON.stringify( this.props))
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
           const { nav } = this.props;
           const currentScreen = this.props.navigation.state.routeName;
-          console.log("----this.props.navigation", this.props.navigation);
-          Alert.alert("currentScreen--------------------", currentScreen);
+          // console.log("currentScreen--------------------", currentScreen);
           var payload = {
-                  msg_data: object,
-                  user_data: this.searchFromUser(from_id),
-                };
-                this.props.receivedChatMessage(payload);
-              // }
+            msg_data: object,
+            user_data: this.searchFromUser(from_id),
+          };
+          this.props.receivedChatMessage(payload);
+          // }
           // if (currentScreen == "ChatList") {
           //   const currentScreenParams =
           //     nav.routes[nav.routes.length - 1].params;
@@ -543,7 +544,8 @@ export class ChatListScreen extends Component {
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
-          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <NavigationEvents onDidFocus={() => this.onFocusFunction()} />
+
           <Header
             title={StaticTitle.msges}
             onPressed={() => this.props.navigation.openDrawer()}

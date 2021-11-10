@@ -72,28 +72,37 @@ export class ChatMessagesScreen extends Component {
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
     // console.log(
-    //   Platform.OS + " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->"
+    //   Platform.OS + " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->",
+    //   JSON.stringify(newProps.chatMessages)
     // );
-    // this.setState(
-    //   (previousState) => {
-    //     return {
-    //       messages: GiftedChat.append(
-    //         previousState.messages,
-    //         ...[newProps.chatMessages]
-    //       ),
-    //       isMessageSend: true,
-    //     };
-    //   },
-    //   () => {
-    //     // this.callFetchAPI();
-    //   }
-    // );
+    // console.log("From_ID ", this.props.userDetails.user_data.user_id);
+    var Msgto_id = newProps.chatMessages.map((item) => {
+      return item.to_id;
+    });
+    // console.log("Msgto_id ", parseInt(Msgto_id));
+    if (newProps.isReceiveChatMessage == true) {
+      if (parseInt(this.state.from_id) == parseInt(Msgto_id)) {
+        this.setState(
+          (previousState) => {
+            return {
+              messages: GiftedChat.append(
+                previousState.messages,
+                ...[newProps.chatMessages]
+              ),
+              isMessageSend: true,
+            };
+          },
+          () => {
+            // this.callFetchAPI();
+          }
+        );
+      } else {
+      }
+    } else {
+    }
   };
 
   componentDidMount() {
-    console.log("===DEatils==",JSON.stringify( this.props.navigation.state))
-
-    console.log("this.state.user_info DIDMOUNT---", this.state.user_info);
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -134,7 +143,6 @@ export class ChatMessagesScreen extends Component {
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("to_id", to_id);
-    console.log("to_id========params========", JSON.stringify(params));
     messagesDetails(params)
       .then(async (res) => {
         // console.log(
@@ -172,12 +180,11 @@ export class ChatMessagesScreen extends Component {
   };
 
   formatMessageAndStore(response) {
-    console.log("response=============formatMessageAndStore=====", response);
+    // console.log("response=============formatMessageAndStore=====", response);
     var msgArr = [];
 
     this.readMessagesAPI(response);
 
-    // if (params.chatMessage.type == CHAT_MESSAGE_TYPE.ROADIE) {
     var messages = response.messages;
     var fromUser = response.from_detail;
     var toUser = response.to_detail;
@@ -185,9 +192,9 @@ export class ChatMessagesScreen extends Component {
     messages.forEach((msg) => {
       // console.log("3 msg :->", msg);
 
-      console.log("fromUser :->", fromUser);
+      // console.log("fromUser :->", fromUser);
       var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
-      console.log("fromUserDtl :->", fromUserDtl);
+      // console.log("fromUserDtl :->", fromUserDtl);
 
       var avatar_img = avatar;
       if (fromUserDtl.avatar != null && fromUserDtl.avatar != "null") {
@@ -202,7 +209,6 @@ export class ChatMessagesScreen extends Component {
       var msgDic = {
         _id: msg.id,
         from_id: msg.from_id,
-        from_type: msg.from_type,
         to_id: msg.to_id != undefined ? msg.to_id : "",
         text: msg.message,
         createdAt: currentDate,
@@ -221,66 +227,10 @@ export class ChatMessagesScreen extends Component {
 
       msgArr.push(msgDic);
     });
-    // }
-    // else {
-    //   var messages = response.messages;
-
-    //   var members = response.members;
-
-    // messages.forEach(msg => {
-    //   // console.log("1 msg :->", msg);
-
-    //   var fromUserDtl = undefined;
-    //   if (parseInt(msg.from_type) == 0) {
-    //     // from user is student
-    //     fromUserDtl = members.students.find((user) => parseInt(user.id) == parseInt(msg.from_id))
-
-    //   } else {
-    //     // from user is coach
-    //     fromUserDtl = members.coach.find((user) => parseInt(user.id) == parseInt(msg.from_id))
-    //   }
-
-    //   // console.log("FIND fromUserDtl :->", fromUserDtl);
-
-    //   var avatar_img = avatar;
-    //   if (fromUserDtl.image_url != null && fromUserDtl.image_url != "null") {
-    //     avatar_img = fromUserDtl.image_url;
-    //   }
-
-    //   // convert DB's UTC-time into moment object,
-    //   // Gifted-chat module will convert to local time and display on screen
-    //   let utcDateTime = moment.utc(msg.created_at);
-
-    //   var msgDic = {
-    //     _id: msg.created_at, // @PENDDING need to add id in API
-    //     "from_id": msg.from_id,
-    //     "from_type": msg.from_type,
-    //     // "to_id": this.state.from_id,
-    //     // "to_type": userRole == USER_ROLE.STUDENT ? 0 : 1,
-    //     "class_id": msg.class_id,
-    //     "text": msg.message,
-    //     "createdAt": utcDateTime,
-    //     "is_received": msg.is_received,
-    //     user: {
-    //       _id: fromUserDtl.id,
-    //       name: fromUserDtl.name,
-    //       avatar: avatar_img
-    //     },
-    //     // image: fromUserDtl.image_url,
-    //     sent: this.state.from_id == fromUserDtl.id ? true : false,
-    //     received: parseInt(this.state.is_received) == 1 ? true : false,
-    //     pending: false
-    //   };
-
-    //   // console.log("msgDic :->", msgDic);
-
-    //   msgArr.push(msgDic);
-    // });
-    // }
 
     // console.log("Before msgArr :-->", msgArr);
     msgArr = msgArr.sort((a, b) => parseInt(a._id) < parseInt(b._id));
-    console.log("After msgArr :-->", msgArr);
+    // console.log("After msgArr :-->", msgArr);
 
     this.setState({
       messages: msgArr,
@@ -289,7 +239,7 @@ export class ChatMessagesScreen extends Component {
 
   readMessagesAPI = (response) => {
     const messages = response.messages;
-    console.log("in messages() :->", messages);
+    // console.log("in messages() :->", messages);
 
     var message_ids = "[";
     messages.forEach((msg) => {
@@ -388,23 +338,17 @@ export class ChatMessagesScreen extends Component {
 
     insertMessage(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of insertMessage",
-        //   JSON.stringify(res.value.data)
-        // );
+        console.log(
+          TAG,
+          "response of insertMessage",
+          JSON.stringify(res.value.data)
+        );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
           }
         } else {
           if (res.value && res.value.data.success == false) {
-            await showMessage({
-              message: res.value.message,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
           } else if (res.value && res.value.data.error) {
           }
         }
@@ -587,7 +531,6 @@ export class ChatMessagesScreen extends Component {
                         }
                         bounces={false}
                         showsVerticalScrollIndicator={false}
-                        listKey={(item, index) => "D" + index.toString()}
                         keyExtractor={(item, index) => "D" + index.toString()}
                       />
                     </View>
@@ -597,7 +540,6 @@ export class ChatMessagesScreen extends Component {
             </MediaModel>
           </View>
           <GiftedChat
-         
             onInputTextChanged={(text) => this.setsendText(text)}
             messages={messages}
             onSend={this.onSend}
