@@ -22,7 +22,12 @@ const Search = ({
   value,
   theme,
 }) => (
-  <View style={[ComponentStyle.searchContainer,{ backgroundColor: theme.CURVE_BG_COLORS,}]}>
+  <View
+    style={[
+      ComponentStyle.searchContainer,
+      { backgroundColor: theme.CURVE_BG_COLORS },
+    ]}
+  >
     <TextInput
       value={value}
       searchMessage={searchMessage}
@@ -37,7 +42,7 @@ const Search = ({
         },
       ]}
       placeholder={placeholderText}
-      placeholderTextColor={Colors.search_placeholder}
+      placeholderTextColor={theme.LITE_FONT_COLOR}
       blurOnSubmit={blurOnSubmit}
       onChangeText={onChangeText}
       maxLength={26}
@@ -53,7 +58,7 @@ const Search = ({
         style={[
           ComponentStyle.search_icon,
           iconStyle,
-          { tintColor: Colors.search_placeholder },
+          { tintColor: theme.LITE_FONT_COLOR },
         ]}
         source={IMAGE.search_img}
         resizeMode={FastImage.resizeMode.contain}

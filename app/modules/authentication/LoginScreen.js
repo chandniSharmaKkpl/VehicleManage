@@ -36,7 +36,7 @@ export class LoginScreen extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
-
+ 
   UNSAFE_componentWillReceiveProps = (newProps) => {
     const { theme } = newProps;
     this.parseData(theme);
@@ -45,7 +45,6 @@ export class LoginScreen extends Component {
   componentDidMount = async () => {
     this._isMounted = true;
     let them_mode = await AsyncStorage.getItem("them_mode");
-
 
     console.log(TAG, "componentDidMount ======them_mode", them_mode);
     var newTheme = lightTheme;
@@ -61,8 +60,6 @@ export class LoginScreen extends Component {
     this.setState({ theme: newTheme });
   };
 
-  
-
   // Login with Email navigate to sign in screen
   performLoginwithEmail = () => {
     NavigationService.navigate("SignIn");
@@ -76,7 +73,6 @@ export class LoginScreen extends Component {
   render() {
     const { isLoading, loaderMessage } = this.props;
     const { theme } = this.state;
-    
 
     if (theme == undefined || theme.PRIMARY_BACKGROUND_COLOR === undefined) {
       return <></>;
@@ -107,9 +103,10 @@ export class LoginScreen extends Component {
           </View>
 
           <View style={AuthStyle.imgcarContainer}>
-            <Image source={
-                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
-                  } style={AuthStyle.imgcar} />
+            <Image
+              source={theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img}
+              style={AuthStyle.imgcar}
+            />
           </View>
 
           <View style={AuthStyle.titleContainer}>

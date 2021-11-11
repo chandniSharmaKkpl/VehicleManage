@@ -26,7 +26,7 @@ const authReducer = (state = initialState, action) => {
       };
     case actionTypes.INIT_APP_SUCCESS:
       const errdata = action.payload.data.error;
-      // console.log("errdata=====INIT_APP_SUCCESS", errdata);
+      console.log("errdata=====INIT_APP_SUCCESS", errdata);
 
       if (errdata == "Unauthenticated.") {
         return {

@@ -134,14 +134,14 @@ export class RecentViewersScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>
+          <Text style={[FriendListStyle.titleBig, { color: this.props.theme.LITE_FONT_COLOR }]}>
             {item.name ? item.name + " " + item.surname : ""}
           </Text>
           <View style={FriendListStyle.detailsview}>
             <Text
               style={[
                 FriendListStyle.titleSmall,
-                { color: this.state.theme.LITE_FONT_COLOR },
+                { color: this.props.theme.LITE_FONT_COLOR },
               ]}
             >
               {id ? onlytime : ""}
@@ -150,7 +150,7 @@ export class RecentViewersScreen extends Component {
             <Text
               style={[
                 FriendListStyle.titleSmall,
-                { color: this.state.theme.LITE_FONT_COLOR },
+                { color: this.props.theme.LITE_FONT_COLOR },
               ]}
             >
               {id ? id[0] : ""}
@@ -161,7 +161,7 @@ export class RecentViewersScreen extends Component {
           onPress={() => this.gotoFriendDetails(item)}
           style={[
             FriendListStyle.squareView,
-            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+            { backgroundColor: this.props.theme.NAVIGATION_ARROW_COLOR },
           ]}
         >
           <FastImage

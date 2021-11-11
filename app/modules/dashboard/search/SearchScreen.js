@@ -23,6 +23,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import FastImage from "react-native-fast-image";
 import { isEmpty } from "../../../utils/Validators";
+import { darkTheme, lightTheme } from "../../../assets/Theme";
+
 const TAG = "SearchScreen ::=";
 
 export class SearchScreen extends Component {
@@ -44,8 +46,16 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });
+    let them_mode = await AsyncStorage.getItem("them_mode");
 
+
+    console.log(TAG, "componentDidMount ======them_mode", them_mode);
+    var newTheme = lightTheme;
+    if (them_mode === globals.THEME_MODE.DARK) {
+      newTheme = darkTheme;
+    }
     this.setState({ theme: this.props.theme }, () => {
+      this.props.swicthTheme(newTheme);
       if (globals.isInternetConnected == true) {
         this.getnotificationCount();
       } else {
@@ -93,7 +103,7 @@ export class SearchScreen extends Component {
     // );
     this.setState({
       searched_count:
-        getsearchedCount == "0" 
+        getsearchedCount == "0"
           ? getsearchedCount
           : countDeatils.searched_count,
       countDeatils: countDeatils,
@@ -206,13 +216,13 @@ export class SearchScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>
+          <Text style={[FriendListStyle.titleBig,{ color: this.props.theme.LITE_FONT_COLOR }]}>
             {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
             {item.car_make_model ? item.car_make_model : "-"}
@@ -220,7 +230,7 @@ export class SearchScreen extends Component {
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
             {item.registration_number ? item.registration_number : "-"}
@@ -229,7 +239,7 @@ export class SearchScreen extends Component {
         <TouchableOpacity
           style={[
             FriendListStyle.squareView,
-            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+            { backgroundColor: this.props.theme.NAVIGATION_ARROW_COLOR },
           ]}
           onPress={() => this.navigateToDetailScreen(item, index)}
         >
@@ -325,6 +335,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   searchvehicle: (params) => dispatch(actions.searchvehicle(params)),
   notificationCount: (params) => dispatch(actions.notificationCount(params)),
+  swicthTheme: (params) => dispatch(actions.swicthTheme(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);

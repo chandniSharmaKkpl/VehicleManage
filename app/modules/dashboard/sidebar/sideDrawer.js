@@ -158,14 +158,17 @@ class sideDrawer extends Component {
               style={{
                 width: 20,
                 height: 20,
-                tintColor: Colors.black,
+                tintColor: this.props.theme.LITE_FONT_COLOR,
               }}
               source={IMAGE.terms_conditions_img}
             />
 
             <Text
               numberOfLines={1}
-              style={[SideDrawerStyle.dashBoardTextStyle]}
+              style={[
+                SideDrawerStyle.dashBoardTextStyle,
+                { color: this.props.theme.LITE_FONT_COLOR },
+              ]}
             >
               {StaticTitle.termandcond}
             </Text>

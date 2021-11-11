@@ -36,7 +36,8 @@ const ChatHeader = ({
     NavigationService.back();
   };
   const gotoForword = async () => {
-    NavigationService.navigate("Notification");
+    // NavigationService.navigate("Notification");
+    alert("Coming soon..!!");
   };
   return (
     <SafeAreaView
@@ -118,7 +119,7 @@ const ChatHeader = ({
         {isShowRighttwo == true ? (
           <>
             <TouchableOpacity
-              // onPress={gotoForword}
+              onPress={gotoForword}
               style={{
                 width: wp(5),
                 marginLeft: 25,

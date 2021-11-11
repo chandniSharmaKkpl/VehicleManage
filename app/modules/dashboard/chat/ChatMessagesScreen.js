@@ -8,6 +8,17 @@ import {
   View,
   DeviceEventEmitter,
 } from "react-native";
+import {
+  Avatar,
+  Bubble,
+  GiftedAvatar,
+  GiftedChat,
+  Message,
+  MessageImage,
+  MessageText,
+  Send,
+  Time,
+} from "react-native-gifted-chat";
 import moment from "moment";
 import { CHAT_MESSAGE_TYPE } from "../../../utils/Globals";
 import { connect } from "react-redux";
@@ -21,7 +32,6 @@ import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import * as globals from "../../../utils/Globals";
 import { DefaultChatOptions } from "../../../components/DefaultChatOptions";
-import { GiftedChat } from "react-native-gifted-chat";
 import {
   renderAvatar,
   renderBubble,
@@ -72,14 +82,14 @@ export class ChatMessagesScreen extends Component {
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
     // console.log(
-    //   Platform.OS + " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->",
+    //   " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->",
     //   JSON.stringify(newProps.chatMessages)
     // );
-    // console.log("From_ID ", this.props.userDetails.user_data.user_id);
+    // console.log("From_ID ", this.state.from_id);
     var Msgto_id = newProps.chatMessages.map((item) => {
       return item.to_id;
     });
-    // console.log("Msgto_id ", parseInt(Msgto_id));
+
     if (newProps.isReceiveChatMessage == true) {
       if (parseInt(this.state.from_id) == parseInt(Msgto_id)) {
         this.setState(
@@ -93,7 +103,7 @@ export class ChatMessagesScreen extends Component {
             };
           },
           () => {
-            // this.callFetchAPI();
+            this.callFetchAPI();
           }
         );
       } else {
@@ -127,6 +137,7 @@ export class ChatMessagesScreen extends Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     if (this.state.isMessageSend) {
       DeviceEventEmitter.emit("fetch_message_list");
     }
@@ -190,7 +201,10 @@ export class ChatMessagesScreen extends Component {
     var toUser = response.to_detail;
 
     messages.forEach((msg) => {
-      // console.log("3 msg :->", msg);
+      // console.log(
+      //   "3 msg *->",
+      //   msg.id
+      // );
 
       // console.log("fromUser :->", fromUser);
       var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
@@ -257,7 +271,7 @@ export class ChatMessagesScreen extends Component {
 
     message_ids = message_ids + "]";
 
-    // console.log("message_ids :-->", message_ids);
+    console.log("message_ids :-->", message_ids);
     if (message_ids == "[]") {
       console.log("Not any message in unread....");
       return;
@@ -269,11 +283,11 @@ export class ChatMessagesScreen extends Component {
     params.append("ids", message_ids);
     readMessage(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get readMessage",
-        //   JSON.stringify(res.value)
-        // );
+        console.log(
+          TAG,
+          "response of get readMessage",
+          JSON.stringify(res.value.data)
+        );
       })
       .catch((err) => {
         console.log(TAG, "i am in catch error readMessage", err);
@@ -346,6 +360,8 @@ export class ChatMessagesScreen extends Component {
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
+            // this.callMessageDetailsAPI();
+            // DeviceEventEmitter.emit("fetch_message_list");
           }
         } else {
           if (res.value && res.value.data.success == false) {
@@ -404,6 +420,8 @@ export class ChatMessagesScreen extends Component {
               duration: 4000,
             });
             this.displayMsgReportPicker();
+            NavigationService.back();
+            DeviceEventEmitter.emit("fetch_message_list");
           }
         } else {
           if (res.value && res.value.data.error) {
@@ -441,6 +459,8 @@ export class ChatMessagesScreen extends Component {
               duration: 4000,
             });
             this.displayMsgReportPicker();
+            NavigationService.back();
+            DeviceEventEmitter.emit("fetch_message_list");
           }
         } else {
           if (res.value && res.value.data.error) {
@@ -476,6 +496,25 @@ export class ChatMessagesScreen extends Component {
   //display gallry picker model
   displayMsgReportPicker = () => {
     this.setState({ isMsgReportPicker: !this.state.isMsgReportPicker });
+  };
+
+  renderTicks = (message, user_id) => {
+    if (message && user_id && parseInt(message.user._id) != parseInt(user_id)) {
+      return null;
+    }
+    if (message && (message.sent || message.received || message.pending)) {
+      return (
+        <View style={{ flexDirection: "row", padding: 5 }}>
+          {!!message.received && (
+            <Text style={{ color: Colors.black, fontSize: 10 }}>✓</Text>
+          )}
+          {!!message.pending && (
+            <Text style={{ color: "#c0c0c0", fontSize: 10 }}>🕓</Text>
+          )}
+        </View>
+      );
+    }
+    return null;
   };
 
   render() {
@@ -541,11 +580,26 @@ export class ChatMessagesScreen extends Component {
             onInputTextChanged={(text) => this.setsendText(text)}
             messages={messages}
             onSend={this.onSend}
+            showUserAvatar={false}
+            shouldRenderUsername={true}
+            messagesContainerStyle={{
+              paddingBottom: 40,
+              backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+            }}
             user={{
               _id: Number(user_id),
             }}
+            maxInputLength={1000}
+            showAvatarForEveryMessage={false}
+            renderMessageImage={(props) => {
+              <View>
+                <MessageImage {...props} />
+              </View>;
+            }}
+            renderTicks={(message) => this.renderTicks(message, user_id)}
             minInputToolbarHeight={60}
-            alwaysShowSend
+            alwaysShowSend={true}
+            timeFormat={"HH:mm"}
             scrollToBottom
             renderUsernameOnMessage
             bottomOffset={26}
@@ -554,7 +608,7 @@ export class ChatMessagesScreen extends Component {
             alwaysShowSends
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
-            renderActions={renderActions}
+            // renderActions={renderActions}
             renderComposer={renderComposer}
             renderSend={renderSend}
             renderAvatar={renderAvatar}
@@ -562,9 +616,6 @@ export class ChatMessagesScreen extends Component {
             renderMessage={renderMessage}
             renderMessageText={renderMessageText}
             isCustomViewBottom
-            messagesContainerStyle={{
-              backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-            }}
             parsePatterns={(linkStyle) => [
               {
                 pattern: /#(\w+)/,

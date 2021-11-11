@@ -36,7 +36,7 @@ export class FriendlistScreen extends Component {
       friendListData: [],
       filterdfriendListData: [],
       user: {},
-      theme: {},
+     
     };
   }
 
@@ -57,7 +57,7 @@ export class FriendlistScreen extends Component {
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
-        { user: this.props.userDetails.user_data, theme: this.props.theme },
+        { user: this.props.userDetails.user_data,  },
         () => {
           if (globals.isInternetConnected == true) {
             this.getfriendListAPI();
@@ -187,13 +187,13 @@ export class FriendlistScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>
+          <Text style={[FriendListStyle.titleBig, { color: this.props.theme.LITE_FONT_COLOR },]}>
           {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
             {item.car_make_model ? item.car_make_model : "-"}
@@ -201,7 +201,7 @@ export class FriendlistScreen extends Component {
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
             {item.registration_number ? item.registration_number : "-"}
@@ -211,7 +211,7 @@ export class FriendlistScreen extends Component {
           onPress={() => this.gotoFriendDetails(item)}
           style={[
             FriendListStyle.squareView,
-            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+            { backgroundColor: this.props.theme.NAVIGATION_ARROW_COLOR },
           ]}
         >
           <FastImage

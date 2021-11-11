@@ -52,14 +52,14 @@ export const renderActions = (props) => (
         resizeMode={FastImage.resizeMode.contain}
       />
     )}
-    // options={{
-    //   "Choose From Library": () => {
-    //     console.log("Choose From Library");
-    //   },
-    //   Cancel: () => {
-    //     console.log("Cancel");
-    //   },
-    // }}
+    options={{
+      "Choose From Library": () => {
+        console.log("Choose From Library");
+      },
+      Cancel: () => {
+        console.log("Cancel");
+      },
+    }}
     optionTintColor={Colors.black}
   />
 );

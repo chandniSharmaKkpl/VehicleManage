@@ -77,15 +77,16 @@ export class NotificationScreen extends Component {
   };
 
   gotoChatdetails = () => {
-    NavigationService.navigate("ChatList");
+    Alert.alert("coming soon...");
+    // NavigationService.navigate("ChatList");
   };
 
   // render friendlist dataItem
   retunNotificationList = () => {
-    console.log(
-      "this.state.searched_avatars========",
-      this.state.searched_avatars
-    );
+    // console.log(
+    //   "this.state.searched_avatars========",
+    //   this.state.searched_avatars
+    // );
     for (let i = 0; i <= this.state.searched_avatars.length; i++) {
       if (this.state.searched_avatars.length > 3) {
         console.log("NOOO valid");
@@ -96,27 +97,63 @@ export class NotificationScreen extends Component {
             onPress={() => this.gotoRecentViewers()}
           >
             <View style={FriendListStyle.imageStyle}>
-              <FastImage
-                resizeMethod="resize"
-                source={IMAGE.user}
-                style={FriendListStyle.multiimageStyle}
-              />
-              <FastImage
-                resizeMethod="resize"
-                source={IMAGE.user}
-                style={[FriendListStyle.multiimageStyle, { left: 15 }]}
-              />
-              <FastImage
-                resizeMethod="resize"
-                source={IMAGE.user}
-                style={[
-                  FriendListStyle.multiimageStyle,
-                  {
-                    right: 10,
-                    bottom: 20,
-                  },
-                ]}
-              />
+              {this.state.searched_avatars[0] ? (
+                <FastImage
+                  resizeMethod="resize"
+                  source={{
+                    uri: this.state.searched_avatars[0],
+                  }}
+                  style={FriendListStyle.multiimageStyle}
+                />
+              ) : (
+                <FastImage
+                  resizeMethod="resize"
+                  source={IMAGE.user}
+                  style={FriendListStyle.multiimageStyle}
+                />
+              )}
+              {this.state.searched_avatars[1] ? (
+                <FastImage
+                  resizeMethod="resize"
+                  source={{
+                    uri: this.state.searched_avatars[1],
+                  }}
+                  style={[FriendListStyle.multiimageStyle, { left: 15 }]}
+                />
+              ) : (
+                <FastImage
+                  resizeMethod="resize"
+                  source={IMAGE.user}
+                  style={[FriendListStyle.multiimageStyle, { left: 15 }]}
+                />
+              )}
+              {this.state.searched_avatars[2] ? (
+                <FastImage
+                  resizeMethod="resize"
+                  source={{
+                    uri: this.state.searched_avatars[2],
+                  }}
+                  style={[
+                    FriendListStyle.multiimageStyle,
+                    {
+                      right: 10,
+                      bottom: 20,
+                    },
+                  ]}
+                />
+              ) : (
+                <FastImage
+                  resizeMethod="resize"
+                  source={IMAGE.user}
+                  style={[
+                    FriendListStyle.multiimageStyle,
+                    {
+                      right: 10,
+                      bottom: 20,
+                    },
+                  ]}
+                />
+              )}
             </View>
 
             <Text
@@ -178,7 +215,7 @@ export class NotificationScreen extends Component {
     const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={[{ backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }]}>
+        <View style={[{ backgroundColor: theme.PRIMARY_BACKGROUND_COLOR , flex:1}]}>
           <Header
             isShowBack={true}
             title={StaticTitle.notification}

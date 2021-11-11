@@ -5,7 +5,7 @@ import {
   INSERT_MESSAGES,
   READ_MESSAGES,
   BLOCK_USER,
-  REPORT_USER,RECEIVED_CHAT_MESSAGE
+  REPORT_USER,RECEIVED_CHAT_MESSAGE, SWITCH_THEME
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({

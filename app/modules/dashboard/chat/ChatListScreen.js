@@ -41,7 +41,7 @@ export class ChatListScreen extends Component {
       searchTxt: "",
       dataArray: [],
       chatName: [],
-      theme: {},
+      
       isUserRegister: false,
       loader: false,
       is_chat_user_id: "",
@@ -186,7 +186,7 @@ export class ChatListScreen extends Component {
       }
     };
     global.ws.onmessage = ({ data }) => {
-      // console.log(Platform.OS + " --- WS OnMessage() ---->", data);
+      console.log(Platform.OS + " --- WS OnMessage() ---->", data);
 
       const object = JSON.parse(data);
       if (object.command != undefined) {
@@ -330,11 +330,11 @@ export class ChatListScreen extends Component {
 
     messagesList(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get messagesList",
-        //   JSON.stringify(res.value.data.data)
-        // );
+        console.log(
+          TAG,
+          "response of get messagesList",
+          JSON.stringify(res.value.data.data)
+        );
         // console.log("this.props.chatList--------", this.props.chatList);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
@@ -432,7 +432,7 @@ export class ChatListScreen extends Component {
           <Text
             style={[
               FriendListStyle.titleBig,
-              { fontWeight: item.unread_count == 0 ? null : "bold" },
+              { fontWeight: item.unread_count == 0 ? null : "bold" ,color: this.props.theme.LITE_FONT_COLOR,},
             ]}
           >
             {item.name ? item.name + " " + item.surname : ""}
@@ -442,13 +442,11 @@ export class ChatListScreen extends Component {
               FriendListStyle.titleSmall,
               {
                 fontWeight: item.unread_count == 0 ? null : "bold",
-                color: this.state.theme.LITE_FONT_COLOR,
+                color: this.props.theme.LITE_FONT_COLOR,
               },
             ]}
           >
             {item.last_message ? item.last_message : ""}
-            {"       "}
-            {item.registration_number ? item.registration_number : ""}
           </Text>
         </View>
         <View>
@@ -457,7 +455,7 @@ export class ChatListScreen extends Component {
             style={[
               FriendListStyle.titleSmall,
               {
-                color: this.state.theme.LITE_FONT_COLOR,
+                color: this.props.theme.LITE_FONT_COLOR,
                 width: globals.deviceWidth * 0.2,
               },
             ]}
