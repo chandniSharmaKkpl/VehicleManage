@@ -161,16 +161,7 @@ export class ChatListScreen extends Component {
   connectWebSocket() {
     global.ws = new WebSocket("ws://20.37.36.107:56113");
 
-    // console.log(Platform.OS+" --- :::::::::::::::::::::::");
     global.ws.onopen = (data) => {
-      // console.log(
-      //   Platform.OS + " --- Connected-------------------------",
-      //   data
-      // );
-
-      // let Root = nav.routes[2].routes[0].routes[nav.routes.length - 1];
-      // console.log("navigate--------------nav------", Root);
-
       // Alert.alert("Websocket connected...");
 
       if (data.isTrusted === false) {
@@ -186,7 +177,7 @@ export class ChatListScreen extends Component {
       }
     };
     global.ws.onmessage = ({ data }) => {
-      console.log(Platform.OS + " --- WS OnMessage() ---->", data);
+      // console.log(Platform.OS + " --- WS OnMessage() ---->", data);
 
       const object = JSON.parse(data);
       if (object.command != undefined) {
@@ -195,34 +186,39 @@ export class ChatListScreen extends Component {
           var from_id = Number(object.from);
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
-          // const { nav } = this.props;
-          // const currentScreen = this.props.navigation.state.routeName;
+          const { nav } = this.props;
+          let currentScreen =
+            nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
+          // console.log(
+          //   "navigate--------------nav------",
+          //   JSON.stringify(currentScreen)
+          // );
 
-          var payload = {
-            msg_data: object,
-            user_data: this.searchFromUser(from_id),
-          };
-          this.props.receivedChatMessage(payload);
+          // var payload = {
+          //   msg_data: object,
+          //   user_data: this.searchFromUser(from_id),
+          // };
+          // this.props.receivedChatMessage(payload);
           // }
-          // if (currentScreen == "ChatList") {
-          //   const currentScreenParams =
-          //     nav.routes[nav.routes.length - 1].params;
-          //   console.log("currentScreenParams :->", currentScreenParams);
-          //   // if (currentScreenParams !== undefined) {
-          //   //   var userScreenLoadUserId = currentScreenParams.chatMessage.id;
-          //   //   console.log("userScreenLoadUserId :->", userScreenLoadUserId);
-          //   //   console.log("from_id :->", from_id);
+          if (currentScreen[1].routeName == "ChatMessages") {
+            const currentScreenParams = currentScreen[1].params;
+            console.log("currentScreenParams :->", currentScreenParams);
+            console.log("parseInt(from_id)===", parseInt(from_id));
+            if (currentScreenParams !== undefined) {
+              var userScreenLoadUserId = currentScreenParams.user_info.id;
+              console.log("userScreenLoadUserId :->", userScreenLoadUserId);
+              console.log("from_id :->", from_id);
 
-          //   //   if (parseInt(from_id) == userScreenLoadUserId) {
-          //   //     console.log("Inside ID both user are matched....");
-          //       // var payload = {
-          //       //   msg_data: object,
-          //       //   user_data: this.searchFromUser(from_id),
-          //       // };
-          //       // this.props.receivedChatMessage(payload);
-          //   //   }
-          //   // }
-          // }
+              if (parseInt(from_id) == userScreenLoadUserId) {
+                console.log("Inside ID both user are matched....");
+                var payload = {
+                  msg_data: object,
+                  user_data: this.searchFromUser(from_id),
+                };
+                this.props.receivedChatMessage(payload);
+              }
+            }
+          }
         }
       }
     };

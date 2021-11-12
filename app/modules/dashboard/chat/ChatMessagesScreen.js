@@ -81,35 +81,20 @@ export class ChatMessagesScreen extends Component {
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
-    // console.log(
-    //   " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->",
-    //   JSON.stringify(newProps.chatMessages)
-    // );
-    // console.log("From_ID ", this.state.from_id);
-    var Msgto_id = newProps.chatMessages.map((item) => {
-      return item.to_id;
-    });
-
-    if (newProps.isReceiveChatMessage == true) {
-      if (parseInt(this.state.from_id) == parseInt(Msgto_id)) {
-        this.setState(
-          (previousState) => {
-            return {
-              messages: GiftedChat.append(
-                previousState.messages,
-                ...[newProps.chatMessages]
-              ),
-              isMessageSend: true,
-            };
-          },
-          () => {
-            this.callFetchAPI();
-          }
-        );
-      } else {
+    this.setState(
+      (previousState) => {
+        return {
+          messages: GiftedChat.append(
+            previousState.messages,
+            ...[newProps.chatMessages]
+          ),
+          isMessageSend: true,
+        };
+      },
+      () => {
+        this.callFetchAPI();
       }
-    } else {
-    }
+    );
   };
 
   componentDidMount() {
