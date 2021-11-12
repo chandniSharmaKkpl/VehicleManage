@@ -36,7 +36,6 @@ export class FriendlistScreen extends Component {
       friendListData: [],
       filterdfriendListData: [],
       user: {},
-     
     };
   }
 
@@ -56,16 +55,13 @@ export class FriendlistScreen extends Component {
   onFocusFunction = async () => {
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
-      this.setState(
-        { user: this.props.userDetails.user_data,  },
-        () => {
-          if (globals.isInternetConnected == true) {
-            this.getfriendListAPI();
-          } else {
-            Alert.alert(globals.warning, globals.noInternet);
-          }
+      this.setState({ user: this.props.userDetails.user_data }, () => {
+        if (globals.isInternetConnected == true) {
+          this.getfriendListAPI();
+        } else {
+          Alert.alert(globals.warning, globals.noInternet);
         }
-      );
+      });
     }
   };
 
@@ -106,8 +102,7 @@ export class FriendlistScreen extends Component {
             {
               NavigationService.navigate("Login");
             }
-          }
-          else if (res.value && res.value.data.error) {
+          } else if (res.value && res.value.data.error) {
             await showMessage({
               message: res.value.message,
               type: "danger",
@@ -134,9 +129,13 @@ export class FriendlistScreen extends Component {
     // console.log("this.state.filterdfriendListData :-->", this.state);
     const newData = Object.values(this.state.filterdfriendListData).filter(
       (item) => {
+        const itemnumData = item.registration_number.toUpperCase();
         const itemData = item.name.toUpperCase();
         const textData = searchText.toUpperCase();
-        return itemData.indexOf(textData) > -1;
+
+        return (
+          itemData.indexOf(textData) > -1 || itemnumData.indexOf(textData) > -1
+        );
       }
     );
     this.setState({
@@ -187,8 +186,13 @@ export class FriendlistScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={[FriendListStyle.titleBig, { color: this.props.theme.LITE_FONT_COLOR },]}>
-          {item.name ? item.name + " " + item.surname : "-"}
+          <Text
+            style={[
+              FriendListStyle.titleBig,
+              { color: this.props.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text
             style={[

@@ -160,7 +160,7 @@ export class NotificationScreen extends Component {
               numberOfLines={2}
               style={[
                 FriendListStyle.notificationtext,
-                { color: this.state.theme.LITE_FONT_COLOR },
+                { color: this.props.theme.LITE_FONT_COLOR },
               ]}
             >
               {"Someone have searched you up!"}
@@ -200,7 +200,7 @@ export class NotificationScreen extends Component {
           numberOfLines={1}
           style={[
             FriendListStyle.notificationtext,
-            { color: this.state.theme.LITE_FONT_COLOR },
+            { color: this.props.theme.LITE_FONT_COLOR },
           ]}
         >
           {"You have new messages"}

@@ -133,7 +133,7 @@ export class UserProfileScreen extends Component {
           selectedColour: user.user_data.car_colour,
           txtUserName: user.user_data.username,
           txtDescription: user.user_data.car_description,
-          photoUrl: user.user_data.user_photo,
+          photoUrl: user.user_data.avatar,
           txtSnapName: user.user_data.snapchat_username,
           txtInstaName: user.user_data.instagram_username,
           txtFbName: user.user_data.fb_username,
@@ -153,7 +153,7 @@ export class UserProfileScreen extends Component {
             carModelList: modelDataList,
           });
         }
-      }else{
+      } else {
         if (res.value && res.value.data.error == "Unauthenticated.") {
           {
             NavigationService.navigate("Login");
@@ -174,8 +174,7 @@ export class UserProfileScreen extends Component {
             carColourList: colourDataList,
           });
         }
-      }
-      else{
+      } else {
         if (res.value && res.value.data.error == "Unauthenticated.") {
           {
             NavigationService.navigate("Login");
@@ -196,8 +195,7 @@ export class UserProfileScreen extends Component {
             cityList: cityDataList,
           });
         }
-      }
-      else{
+      } else {
         if (res.value && res.value.data.error == "Unauthenticated.") {
           {
             NavigationService.navigate("Login");
@@ -388,8 +386,7 @@ export class UserProfileScreen extends Component {
               {
                 NavigationService.navigate("Login");
               }
-            }
-           else if (res.value) {
+            } else if (res.value) {
               // await showMessage({
               //   message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
               //   type: "danger",
@@ -430,6 +427,7 @@ export class UserProfileScreen extends Component {
       selectedModel,
       selectedCity,
     } = this.state;
+
     return (
       <>
         <View

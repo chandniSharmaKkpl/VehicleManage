@@ -41,8 +41,9 @@ export class TermsConditionScreen extends Component {
         >
           <Header
             isShowBack={true}
-            onPressed={() => this.props.navigation.openDrawer()}
             title={"Terms And Condition"}
+            onPressed={() => this.props.navigation.openDrawer()}
+            isShowRighttwo={false}
             theme={theme}
           />
           {isLoading && (

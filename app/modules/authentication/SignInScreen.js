@@ -80,17 +80,23 @@ export class SignInScreen extends Component {
 
   // user forgot their password then go to ForgotPassword screen
   gotoForgotPasswordscreen = async () => {
+    const { txtEmail, txtPassword } = this.state;
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-    if (globals.access_token) {
-      NavigationService.navigate("ForgotPassword");
-    } else {
-      showMessage({
-        message: StaticTitle.forgotpasserror,
-        type: "danger",
-        icon: "info",
-        duration: 4000,
+    if (isEmpty(txtEmail)) {
+      this.setState({
+        isEmailError: true,
+        emailValidMsg: Messages.email,
       });
+      return false;
+    } else if (!isEmail(txtEmail)) {
+      this.setState({
+        isEmailError: true,
+        emailValidMsg: Messages.emailValid,
+      });
+      return false;
+    } else {
+      NavigationService.navigate("ForgotPassword");
     }
   };
 

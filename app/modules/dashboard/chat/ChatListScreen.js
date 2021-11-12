@@ -41,7 +41,7 @@ export class ChatListScreen extends Component {
       searchTxt: "",
       dataArray: [],
       chatName: [],
-      
+
       isUserRegister: false,
       loader: false,
       is_chat_user_id: "",
@@ -330,11 +330,11 @@ export class ChatListScreen extends Component {
 
     messagesList(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of get messagesList",
-          JSON.stringify(res.value.data.data)
-        );
+        // console.log(
+        //   TAG,
+        //   "response of get messagesList",
+        //   JSON.stringify(res.value.data.data)
+        // );
         // console.log("this.props.chatList--------", this.props.chatList);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
@@ -359,9 +359,12 @@ export class ChatListScreen extends Component {
     // console.log("Value of item is :->", searchText);
     // console.log("this.state.chatName :-->", this.state);
     const newData = Object.values(this.state.chatName).filter((item) => {
+      const itemnumData = item.registration_number.toUpperCase();
       const itemData = item.name.toUpperCase();
       const textData = searchText.toUpperCase();
-      return itemData.indexOf(textData) > -1;
+      return (
+        itemData.indexOf(textData) > -1 || itemnumData.indexOf(textData) > -1
+      );
     });
     this.setState({
       dataArray: newData,
@@ -379,7 +382,6 @@ export class ChatListScreen extends Component {
   };
 
   updateUnreadCount(chatMessage) {
-    // console.log("updateUnreadCount() chatMessage:->",chatMessage);
     var newDataArray = this.state.dataArray;
 
     newDataArray.forEach((data) => {
@@ -388,7 +390,6 @@ export class ChatListScreen extends Component {
         chatMessage.from_id == data.from_id &&
         chatMessage.to_id == data.to_id
       ) {
-        // console.log("updateUnreadCount () in IF");
         // record is matched
         data.unread_count = parseInt(0);
       }
@@ -432,11 +433,15 @@ export class ChatListScreen extends Component {
           <Text
             style={[
               FriendListStyle.titleBig,
-              { fontWeight: item.unread_count == 0 ? null : "bold" ,color: this.props.theme.LITE_FONT_COLOR,},
+              {
+                fontWeight: item.unread_count == 0 ? null : "bold",
+                color: this.props.theme.LITE_FONT_COLOR,
+              },
             ]}
           >
             {item.name ? item.name + " " + item.surname : ""}
           </Text>
+
           <Text
             style={[
               FriendListStyle.titleSmall,

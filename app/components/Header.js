@@ -66,7 +66,7 @@ const Header = ({
         {isShowBack == true ? (
           <TouchableOpacity
             onPress={gotoBack}
-            style={{ width: wp(15), height: hp(5), justifyContent: "center" }}
+            style={{ width: wp(15), justifyContent: "center" , }}
           >
             <View style={{ paddingLeft: 20, padding: 5 }}>
               <FastImage
@@ -90,7 +90,7 @@ const Header = ({
         <View
           style={{
             width: isShowRighttwo == true ? wp(55) : wp(70),
-            alignItems: "center",
+            alignItems: "center", 
           }}
         >
           <Text style={ComponentStyle.titleText}>{title}</Text>
