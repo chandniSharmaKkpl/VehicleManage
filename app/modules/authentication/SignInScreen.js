@@ -372,6 +372,7 @@ export class SignInScreen extends Component {
                       }
                     />
                     <PasswordInput
+                      theme={theme}
                       value={this.state.txtPassword}
                       placeholderText={StaticTitle.enterPassword}
                       autoCapitalize={"none"}

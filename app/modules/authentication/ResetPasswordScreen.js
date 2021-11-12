@@ -17,15 +17,10 @@ import { StaticTitle } from "../../utils/StaticTitle";
 import { PasswordInput, Input, PrimaryButton } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
-import {
-  isEmpty,
-  isPassword,
-  isPasswordLength,
-} from "../../utils/Validators";
+import { isEmpty, isPassword, isPasswordLength } from "../../utils/Validators";
 import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 import { NavigationEvents } from "react-navigation";
-
 
 const TAG = "ResetPasswordScreen ::=";
 
@@ -46,10 +41,8 @@ export class ResetPasswordScreen extends Component {
 
   componentDidMount() {}
 
-  
-
   // clear States before leave this screen
-  clearStates =()=>{
+  clearStates = () => {
     this.setState({
       txtConfirmCode: "",
       txtConfirmPassword: "",
@@ -58,8 +51,8 @@ export class ResetPasswordScreen extends Component {
       isConfirmPasswordError: false,
       ConfirmCodeValidMsg: "",
       confirmPasswordValidMsg: "",
-    })
-  }
+    });
+  };
 
   // Focus on next input
   focusNextTextField = (ref) => {
@@ -121,10 +114,8 @@ export class ResetPasswordScreen extends Component {
     return (
       <>
         <View style={AuthStyle.container}>
-        <NavigationEvents
-            onWillBlur={() => this.clearStates()}
-          />
-        <StatusBar
+          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
             translucent={true}
@@ -143,10 +134,7 @@ export class ResetPasswordScreen extends Component {
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
-                style={[
-                  AuthStyle.bottomCurve,
-                  {  },
-                ]}
+                style={[AuthStyle.bottomCurve, {}]}
               >
                 <ScrollView
                   ref={(node) => (this.scroll = node)}
@@ -193,6 +181,7 @@ export class ResetPasswordScreen extends Component {
                       }
                     />
                     <PasswordInput
+                      theme={theme}
                       value={this.state.txtConfirmPassword}
                       placeholderText={StaticTitle.enternewpassword}
                       autoCapitalize={"none"}

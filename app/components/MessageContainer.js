@@ -25,6 +25,38 @@ export const renderBubble = (props) => (
     // renderTime={() => <Text>Time</Text>}
     // renderTicks={() => <Text>Ticks</Text>}
 
+    containerStyle={{
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+    }}
+    wrapperStyle={{
+      left: {
+        color: Colors.black,
+        backgroundColor: Colors.placeholderColor,
+        marginBottom: 10,
+       opacity:0.7,
+        paddingVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
+      },
+      right: {
+        color: Colors.black,
+        backgroundColor: Colors.placeholderColor,
+        marginBottom: 10,
+        opacity:0.7,
+        paddingVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
+      },
+    }}
     timeTextStyle={{
       right: {
         color: Colors.black,
@@ -40,36 +72,43 @@ export const renderBubble = (props) => (
       left: { color: Colors.black,fontSize: globals.normalize(12),
         fontFamily: FontFamily.RalewaRegular, },
     }}
-    wrapperStyle={{
+    bottomContainerStyle={{
       left: {
-        backgroundColor: Colors.msgBG,
-        marginBottom: 10,
-        backgroundColor: "transrent",
-        paddingVertical: 5,
-        justifyContent: "center",
-        alignItems: "center",
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
       },
       right: {
-        backgroundColor: Colors.msgBG,
-        marginBottom: 10,
-        backgroundColor: "transrent",
-        paddingVertical: 5,
-        justifyContent: "center",
-        alignItems: "center",
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
       },
     }}
-    // containerToPreviousStyle={{
-    //   right: { borderTopRightRadius: 10 },
-    //   left: { borderTopLeftRadius: 10 },
-    // }}
-    // containerToNextStyle={{
-    //   right: { borderTopRightRadius: 10 },
-    //   left: { borderTopLeftRadius: 10 },
-    // }}
-    // containerStyle={{
-    //   right: { borderTopRightRadius: 10 },
-    //   left: { borderTopLeftRadius: 10 },
-    // }}
+    tickStyle={{}}
+    containerToNextStyle={{
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+    }}
+    containerToPreviousStyle={{
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+    }}
   />
 );
 

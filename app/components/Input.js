@@ -42,7 +42,7 @@ const Input = ({
           },
         ]}
         placeholder={placeholderText}
-        placeholderTextColor={theme.LITE_FONT_COLOR}
+        placeholderTextColor={theme.BASIC_FONT_COLOR}
         blurOnSubmit={blurOnSubmit}
         onChangeText={onChangeText}
         keyboardType={keyboardType}

@@ -238,7 +238,7 @@ export class ChatMessagesScreen extends Component {
       }
     });
 
-    // console.log("newArray==================", newArray);
+    console.log("newArray==================", newArray);
 
     this.setState({
       messages: newArray,
@@ -606,14 +606,14 @@ export class ChatMessagesScreen extends Component {
             renderBubble={renderBubble}
             // renderMessage={renderMessage}
             // renderMessageText={renderMessageText}
-            // isCustomViewBottom
-            // parsePatterns={(linkStyle) => [
-            //   {
-            //     pattern: /#(\w+)/,
-            //     style: linkStyle,
-            //     onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
-            //   },
-            // ]}
+            isCustomViewBottom
+            parsePatterns={(linkStyle) => [
+              {
+                pattern: /#(\w+)/,
+                style: linkStyle,
+                onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
+              },
+            ]}
           />
         </View>
       </>

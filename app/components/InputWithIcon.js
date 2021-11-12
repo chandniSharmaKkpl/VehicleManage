@@ -32,6 +32,7 @@ const InputWithIcon = ({
   inputStyle,
   returnKeyType,
   onPressIcon,
+  theme,
   ...props
 }) => {
   return (
@@ -50,7 +51,7 @@ const InputWithIcon = ({
             },
           ]}
           placeholder={placeholderText}
-          placeholderTextColor={Colors.placeholderColor}
+          placeholderTextColor={theme.BASIC_FONT_COLOR}
           blurOnSubmit={blurOnSubmit}
           onChangeText={onChangeText}
           keyboardType={keyboardType}

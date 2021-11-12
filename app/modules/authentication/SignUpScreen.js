@@ -569,6 +569,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <PasswordInput
+                      theme={theme}
                       value={this.state.txtPassword}
                       placeholderText={StaticTitle.enterPassword}
                       autoCapitalize={"none"}
@@ -597,6 +598,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <PasswordInput
+                      theme={theme}
                       value={this.state.txtConfirmPassword}
                       placeholderText={StaticTitle.confirmPassword}
                       autoCapitalize={"none"}
@@ -623,6 +625,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <InputWithIcon
+                    theme={theme}
                       onPressIcon={() => this.showDatePicker()}
                       value={this.state.txtDob}
                       placeholderText={StaticTitle.enterDOB}
