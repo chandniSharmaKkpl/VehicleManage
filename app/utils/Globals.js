@@ -1,4 +1,4 @@
-import { Dimensions, StatusBar, Platform } from "react-native";
+import { Dimensions,PixelRatio, StatusBar, Platform } from "react-native";
 import DeviceInfo from "react-native-device-info";
 
 // Find the deviceWidth & deviceHeight
@@ -16,6 +16,17 @@ export let isTablat = iPad.indexOf("iPad") != -1 || DeviceInfo.isTablet();
 export const warning = "Warning!";
 export const noInternet ="This Application Require Network Connection!";
 export const onlyoneDevice ="This Application works on one device only please try again with login"
+
+
+const scale = deviceWidth / 320;
+export function normalize(size) {
+  const newSize = size * scale
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+  }
+}
 
 // ADD theme modes
 export const THEME_MODE = {

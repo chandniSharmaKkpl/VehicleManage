@@ -207,6 +207,7 @@ export class ChatListScreen extends Component {
             if (currentScreenParams !== undefined) {
               var userScreenLoadUserId = currentScreenParams.user_info.id;
               console.log("userScreenLoadUserId :->", userScreenLoadUserId);
+             
               console.log("from_id :->", from_id);
 
               if (parseInt(from_id) == userScreenLoadUserId) {

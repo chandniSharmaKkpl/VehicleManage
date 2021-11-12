@@ -26,12 +26,19 @@ export const renderBubble = (props) => (
     // renderTicks={() => <Text>Ticks</Text>}
 
     timeTextStyle={{
-      right: { color: Colors.black },
-      left: { color: Colors.black },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      left: { color: Colors.black,fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular, },
     }}
     textStyle={{
-      right: { color: Colors.black },
-      left: { color: Colors.black },
+      right: { color: Colors.black,fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular, },
+      left: { color: Colors.black,fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular, },
     }}
     wrapperStyle={{
       left: {

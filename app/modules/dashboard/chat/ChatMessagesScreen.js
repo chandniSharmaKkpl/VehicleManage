@@ -293,7 +293,7 @@ export class ChatMessagesScreen extends Component {
     });
 
     // console.log("onSend() :->", global.ws);
-    // console.log("onSend() newMsgs:->", newMsgs);
+    console.log("onSend() newMsgs:->", newMsgs);
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
@@ -345,8 +345,6 @@ export class ChatMessagesScreen extends Component {
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
-            // this.callMessageDetailsAPI();
-            // DeviceEventEmitter.emit("fetch_message_list");
           }
         } else {
           if (res.value && res.value.data.success == false) {
@@ -562,7 +560,6 @@ export class ChatMessagesScreen extends Component {
             </MediaModel>
           </View>
           <GiftedChat
-            onInputTextChanged={(text) => this.setsendText(text)}
             messages={messages}
             onSend={this.onSend}
             showUserAvatar={false}
@@ -589,25 +586,24 @@ export class ChatMessagesScreen extends Component {
             renderUsernameOnMessage
             bottomOffset={26}
             onPressAvatar={console.log("onPressAvatar")}
-            isTyping={true}
             alwaysShowSends
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
             // renderActions={renderActions}
-            renderComposer={renderComposer}
+            // renderComposer={renderComposer}
             renderSend={renderSend}
-            renderAvatar={renderAvatar}
+            // renderAvatar={renderAvatar}
             renderBubble={renderBubble}
-            renderMessage={renderMessage}
-            renderMessageText={renderMessageText}
-            isCustomViewBottom
-            parsePatterns={(linkStyle) => [
-              {
-                pattern: /#(\w+)/,
-                style: linkStyle,
-                onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
-              },
-            ]}
+            // renderMessage={renderMessage}
+            // renderMessageText={renderMessageText}
+            // isCustomViewBottom
+            // parsePatterns={(linkStyle) => [
+            //   {
+            //     pattern: /#(\w+)/,
+            //     style: linkStyle,
+            //     onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
+            //   },
+            // ]}
           />
         </View>
       </>
