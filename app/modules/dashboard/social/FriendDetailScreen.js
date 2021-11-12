@@ -342,7 +342,13 @@ export class FriendDetailScreen extends Component {
             ]}
           >
             <View style={FriendDetailStyle.descriptionContainer}>
-              <Text numberOfLines={1} style={FriendDetailStyle.dectext}>
+              <Text
+                numberOfLines={1}
+                style={[
+                  FriendDetailStyle.dectext,
+                  { color: theme.LITE_FONT_COLOR },
+                ]}
+              >
                 {"About" + " " + friendDetail.username}
               </Text>
               <ScrollView

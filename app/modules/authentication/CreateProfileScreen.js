@@ -225,7 +225,6 @@ export class CreateProfileScreen extends PureComponent {
                 icon: "info",
                 duration: 4000,
               });
-              
             }
           }
         })
@@ -343,6 +342,7 @@ export class CreateProfileScreen extends PureComponent {
                       </Text>
                     </View>
                     <Input
+                      theme={theme}
                       value={this.state.txtUserName}
                       inputStyle={{
                         marginTop: 0,
@@ -387,6 +387,7 @@ export class CreateProfileScreen extends PureComponent {
                     />
 
                     <Input
+                      theme={theme}
                       value={this.state.txtDescription}
                       inputStyle={{ color: Colors.placeholderColor }}
                       placeholderText={StaticTitle.addDescription}

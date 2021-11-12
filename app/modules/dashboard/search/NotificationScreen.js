@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   Text,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
@@ -215,7 +216,9 @@ export class NotificationScreen extends Component {
     const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-        <View style={[{ backgroundColor: theme.PRIMARY_BACKGROUND_COLOR , flex:1}]}>
+        <View
+          style={[{ backgroundColor: theme.PRIMARY_BACKGROUND_COLOR, flex: 1 }]}
+        >
           <Header
             isShowBack={true}
             title={StaticTitle.notification}

@@ -503,7 +503,12 @@ export class RegistrationDetailsScreen extends Component {
             </MediaModel>
             <View style={AuthStyle.onlyFlex}>
               <View style={[AuthStyle.titleviewStyle]}>
-                <Text style={[AuthStyle.registrationStyle]}>
+                <Text
+                  style={[
+                    AuthStyle.registrationStyle,
+                    { color: theme.LITE_FONT_COLOR },
+                  ]}
+                >
                   {StaticTitle.registartionDetail}
                 </Text>
               </View>
@@ -521,6 +526,7 @@ export class RegistrationDetailsScreen extends Component {
               </View>
               <View style={AuthStyle.registernumView}>
                 <Input
+                  theme={theme}
                   value={this.state.txtRegNumber}
                   inputStyle={{ marginTop: 0, borderColor: Colors.black }}
                   placeholderText={StaticTitle.enterRegisterNumber}

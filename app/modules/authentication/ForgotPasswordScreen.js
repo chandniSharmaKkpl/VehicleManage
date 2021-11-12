@@ -196,6 +196,7 @@ export class ForgotPasswordScreen extends Component {
                       </Text>
                     </View>
                     <Input
+                      theme={theme}
                       value={this.state.txtEmail}
                       placeholderText={StaticTitle.enterUsaerName}
                       onSubmitEditing={Keyboard.dismiss}

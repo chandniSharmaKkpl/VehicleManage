@@ -526,7 +526,12 @@ export class UserProfileScreen extends Component {
               </TouchableOpacity>
               <View style={UserProfileStyle.registrationView}>
                 {/* <Text style={UserProfileStyle.changeRegText}>{photoUrl}</Text> */}
-                <Text style={UserProfileStyle.changeRegText}>
+                <Text
+                  style={[
+                    UserProfileStyle.changeRegText,
+                    { color: theme.LITE_FONT_COLOR },
+                  ]}
+                >
                   {StaticTitle.changeRegistration}
                 </Text>
                 <TouchableOpacity
@@ -565,6 +570,7 @@ export class UserProfileScreen extends Component {
             >
               <View>
                 <Input
+                  theme={theme}
                   value={this.state.txtDescription}
                   placeholderText={StaticTitle.addDescription}
                   inputStyle={{ color: Colors.placeholderColor }}
@@ -593,6 +599,7 @@ export class UserProfileScreen extends Component {
                 />
                 {user.setting_6 == 1 ? null : (
                   <Input
+                    theme={theme}
                     value={this.state.txtUserName}
                     placeholderText={StaticTitle.userName}
                     inputStyle={{

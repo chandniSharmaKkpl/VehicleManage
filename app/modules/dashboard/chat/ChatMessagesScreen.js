@@ -526,7 +526,12 @@ export class ChatMessagesScreen extends Component {
 
     return (
       <>
-        <View style={ChatStyle.container}>
+        <View
+          style={[
+            ChatStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           <ChatHeader
             theme={theme}
             isShowBack={true}
@@ -588,14 +593,10 @@ export class ChatMessagesScreen extends Component {
               </View>;
             }}
             renderTicks={(message) => this.renderTicks(message, user_id)}
-            minInputToolbarHeight={60}
             alwaysShowSend={true}
             timeFormat={"HH:mm"}
-            scrollToBottom
-            renderUsernameOnMessage
-            bottomOffset={26}
             onPressAvatar={console.log("onPressAvatar")}
-            alwaysShowSends
+            alwaysShowSend={true}
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
             // renderActions={renderActions}

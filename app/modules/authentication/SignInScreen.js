@@ -81,8 +81,7 @@ export class SignInScreen extends Component {
   // user forgot their password then go to ForgotPassword screen
   gotoForgotPasswordscreen = async () => {
     const { txtEmail, txtPassword } = this.state;
-    let token = await AsyncStorage.getItem("access_token");
-    globals.access_token = token;
+
     if (isEmpty(txtEmail)) {
       this.setState({
         isEmailError: true,
@@ -352,6 +351,7 @@ export class SignInScreen extends Component {
                       </Text>
                     </View>
                     <Input
+                      theme={theme}
                       value={this.state.txtEmail}
                       placeholderText={StaticTitle.enterUsaerName}
                       onSubmitEditing={() =>

@@ -215,8 +215,7 @@ export class SignUpScreen extends Component {
               {
                 NavigationService.navigate("Login");
               }
-            }
-            else if (res.value && res.value.data.email) {
+            } else if (res.value && res.value.data.email) {
               await showMessage({
                 message: res.value.data.email,
                 type: "danger",
@@ -428,7 +427,7 @@ export class SignUpScreen extends Component {
     const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-       <View
+        <View
           style={[
             AuthStyle.container,
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
@@ -449,7 +448,7 @@ export class SignUpScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-              <Image
+                <Image
                   source={
                     theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
                   }
@@ -458,9 +457,12 @@ export class SignUpScreen extends Component {
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={
+                <Image
+                  source={
                     theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
-                  } style={AuthStyle.imgcar} />
+                  }
+                  style={AuthStyle.imgcar}
+                />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
@@ -488,6 +490,7 @@ export class SignUpScreen extends Component {
                       </Text>
                     </View>
                     <Input
+                      theme={theme}
                       value={this.state.txtFirstName}
                       inputStyle={{ marginTop: 0 }}
                       placeholderText={StaticTitle.enterFirstName}
@@ -511,6 +514,7 @@ export class SignUpScreen extends Component {
                     />
 
                     <Input
+                      theme={theme}
                       value={this.state.txtLastName}
                       placeholderText={StaticTitle.enterLastName}
                       onSubmitEditing={() =>
@@ -538,6 +542,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <Input
+                      theme={theme}
                       value={this.state.txtEmail}
                       placeholderText={StaticTitle.enterUsaerName}
                       onSubmitEditing={() =>
