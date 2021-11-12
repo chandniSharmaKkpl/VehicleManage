@@ -231,8 +231,17 @@ export class ChatMessagesScreen extends Component {
     msgArr = msgArr.sort((a, b) => parseInt(a._id) < parseInt(b._id));
     // console.log("After msgArr :-->", msgArr);
 
+    const newArray = [];
+    msgArr.forEach((obj) => {
+      if (!newArray.some((o) => o._id === obj._id)) {
+        newArray.push({ ...obj });
+      }
+    });
+
+    // console.log("newArray==================", newArray);
+
     this.setState({
-      messages: msgArr,
+      messages: newArray,
     });
   }
 
