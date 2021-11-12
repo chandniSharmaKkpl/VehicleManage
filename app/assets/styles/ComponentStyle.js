@@ -203,7 +203,7 @@ export const ComponentStyle = StyleSheet.create({
     // width:globals.deviceWidth * 0.42
   },
   messagescountstyle: {
-    fontSize: RFPercentage(2.2),
+    fontSize: RFPercentage(2),
     fontFamily: FontFamily.RalewaRegular,
     color: Colors.white,
     textAlign: "center",
