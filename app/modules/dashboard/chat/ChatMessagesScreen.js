@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  KeyboardAvoidingView,
   DeviceEventEmitter,
 } from "react-native";
 import {
@@ -573,48 +574,55 @@ export class ChatMessagesScreen extends Component {
               </View>
             </MediaModel>
           </View>
-          <GiftedChat
-            messages={messages}
-            onSend={this.onSend}
-            showUserAvatar={false}
-            shouldRenderUsername={true}
-            messagesContainerStyle={{
-              paddingBottom: 40,
-              backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-            }}
-            user={{
-              _id: Number(user_id),
-            }}
-            maxInputLength={1000}
-            showAvatarForEveryMessage={false}
-            renderMessageImage={(props) => {
-              <View>
-                <MessageImage {...props} />
-              </View>;
-            }}
-            renderTicks={(message) => this.renderTicks(message, user_id)}
-            alwaysShowSend={true}
-            timeFormat={"HH:mm"}
-            onPressAvatar={console.log("onPressAvatar")}
-            alwaysShowSend={true}
-            placeholder={StaticTitle.chatinput}
-            renderInputToolbar={renderInputToolbar}
-            // renderActions={renderActions}
-            // renderComposer={renderComposer}
-            renderSend={renderSend}
-            // renderAvatar={renderAvatar}
-            renderBubble={renderBubble}
-            // renderMessage={renderMessage}
-            // renderMessageText={renderMessageText}
-            isCustomViewBottom
-            parsePatterns={(linkStyle) => [
-              {
-                pattern: /#(\w+)/,
-                style: linkStyle,
-                onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
-              },
-            ]}
-          />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : null}
+            style={{ flex: 1 }}
+            keyboardVerticalOffset={90}
+            enabled
+          >
+            <GiftedChat
+              messages={messages}
+              onSend={this.onSend}
+              showUserAvatar={false}
+              shouldRenderUsername={true}
+              messagesContainerStyle={{
+                paddingBottom: 40,
+                backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+              }}
+              user={{
+                _id: Number(user_id),
+              }}
+              maxInputLength={1000}
+              showAvatarForEveryMessage={false}
+              renderMessageImage={(props) => {
+                <View>
+                  <MessageImage {...props} />
+                </View>;
+              }}
+              renderTicks={(message) => this.renderTicks(message, user_id)}
+              alwaysShowSend={true}
+              timeFormat={"HH:mm"}
+              onPressAvatar={console.log("onPressAvatar")}
+              alwaysShowSend={true}
+              placeholder={StaticTitle.chatinput}
+              renderInputToolbar={renderInputToolbar}
+              // renderActions={renderActions}
+              // renderComposer={renderComposer}
+              renderSend={renderSend}
+              // renderAvatar={renderAvatar}
+              renderBubble={renderBubble}
+              // renderMessage={renderMessage}
+              // renderMessageText={renderMessageText}
+              isCustomViewBottom
+              parsePatterns={(linkStyle) => [
+                {
+                  pattern: /#(\w+)/,
+                  style: linkStyle,
+                  onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
+                },
+              ]}
+            />
+          </KeyboardAvoidingView>
         </View>
       </>
     );

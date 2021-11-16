@@ -116,6 +116,9 @@ export class RegistrationDetailsScreen extends Component {
       attachPaperObj,
       attachphotoObj,
     } = this.state;
+    console.log("attachPaperUrl====", attachPaperUrl);
+    console.log("attachphotoUrl====", attachphotoUrl);
+
     if (isEmpty(txtRegNumber)) {
       await showMessage({
         message: StaticTitle.registernumberfieldrequire,
@@ -180,12 +183,20 @@ export class RegistrationDetailsScreen extends Component {
     var params = new FormData();
     // Collect the necessary params
     params.append("id", user.user_data.user_id);
-    if (attachphotoObj.uri == undefined || (attachphotoObj.uri == "") != []) {
+    if (
+      attachphotoUrl == "" ||
+      attachphotoObj.uri == undefined ||
+      (attachphotoObj.uri == "") != []
+    ) {
       params.append("vehicle_photo", "");
     } else {
       params.append("vehicle_photo", attachphotoObj);
     }
-    if (attachPaperObj.uri == undefined || (attachPaperObj.uri == "") != []) {
+    if (
+      attachPaperUrl == "" ||
+      attachPaperObj.uri == undefined ||
+      (attachPaperObj.uri == "") != []
+    ) {
       params.append("registration_paper", "");
     } else {
       params.append("registration_paper", attachPaperObj);

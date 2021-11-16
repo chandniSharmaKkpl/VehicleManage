@@ -11,7 +11,7 @@ export const FriendDetailStyle = StyleSheet.create({
   imageStyle: {
     height: "100%",
     width:globals.deviceWidth,
-    // resizeMode: "contain",
+    
   },
   halfContainer: {
     flex: 0.5,

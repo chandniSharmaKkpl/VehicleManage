@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  DeviceEventEmitter,
 } from "react-native";
 import Colors from "../../../assets/Colors";
 import * as globals from "../../../utils/Globals";
@@ -22,14 +23,24 @@ import NavigationService from "../../../utils/NavigationService";
 import FastImage from "react-native-fast-image";
 import { SideDrawerStyle } from "../../../assets/styles/SideDrawerStyle";
 
+let _this = null;
 class sideDrawer extends Component {
   constructor(props) {
     super(props);
+    _this = this;
     this.state = {
-      userDetails: this.props.userDetails
-        ? this.props.userDetails.user_data
-        : {},
+      userDetails: {},
     };
+  }
+
+  static updateUserInfo(userData) {
+    _this.setState({ userDetails: userData.userData });
+  }
+
+  componentDidMount() {
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setState({ userDetails: this.props.userDetails.user_data });
+    }
   }
 
   async logoutFinal() {
@@ -77,7 +88,6 @@ class sideDrawer extends Component {
   render() {
     const { userDetails } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
-
     return (
       <SafeAreaView style={SideDrawerStyle.container}>
         <View
@@ -92,12 +102,12 @@ class sideDrawer extends Component {
 
           <View style={SideDrawerStyle.headerSeprate}>
             <View style={SideDrawerStyle.circleview}>
-              {userDetails.user_photo ? (
+              {userDetails.avatar ? (
                 <FastImage
                   resizeMethod="resize"
                   style={SideDrawerStyle.userimgstyle}
                   source={{
-                    uri: userDetails.user_photo,
+                    uri: userDetails.avatar,
                   }}
                 ></FastImage>
               ) : (

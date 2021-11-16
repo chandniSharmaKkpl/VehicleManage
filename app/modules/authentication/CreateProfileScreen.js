@@ -21,7 +21,7 @@ import { Input, PrimaryButton, Loader, DropDownPicker } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
-import { Messages } from "../../utils/Messages";
+import { Messages  } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";

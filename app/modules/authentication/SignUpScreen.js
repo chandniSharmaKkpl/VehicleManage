@@ -53,11 +53,11 @@ export class SignUpScreen extends Component {
     this.state = {
       //initialize variable
 
-      // txtEmail: "1044@mailinator.com",
-      // txtFirstName: "ssCss",
-      // txtLastName: "ssDss",
-      // txtPassword: "Abcd1234",
-      // txtConfirmPassword: "Abcd1234",
+      // txtEmail: "newone@mailinator.com",
+      // txtFirstName: "new",
+      // txtLastName: "one",
+      // txtPassword: "Abcd@1234",
+      // txtConfirmPassword: "Abcd@1234",
       // txtDob: "",
 
       txtEmail: "",
@@ -352,20 +352,20 @@ export class SignUpScreen extends Component {
       });
       return false;
     }
-    if (!onlycharandnum(txtPassword)) {
-      this.setState({
-        isPasswordError: true,
-        passwdValidMsg: Messages.passwordValid,
-      });
-      return false;
-    }
-    if (!onlycharandnum(txtConfirmPassword)) {
-      this.setState({
-        isConfirmPasswordError: true,
-        confirmPasswordValidMsg: Messages.passwordValid,
-      });
-      return false;
-    }
+    // if (!onlycharandnum(txtPassword)) {
+    //   this.setState({
+    //     isPasswordError: true,
+    //     passwdValidMsg: Messages.passwordValid,
+    //   });
+    //   return false;
+    // }
+    // if (!onlycharandnum(txtConfirmPassword)) {
+    //   this.setState({
+    //     isConfirmPasswordError: true,
+    //     confirmPasswordValidMsg: Messages.passwordValid,
+    //   });
+    //   return false;
+    // }
     if (!isPassword(txtPassword)) {
       this.setState({
         isPasswordError: true,

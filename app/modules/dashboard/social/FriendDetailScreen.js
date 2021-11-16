@@ -234,14 +234,12 @@ export class FriendDetailScreen extends Component {
             translucent={true}
           />
           <View style={FriendDetailStyle.halfContainer}>
-            {friendDetail.user_photo ? (
-              <FastImage
+            {friendDetail.avatar ? (
+              <Image
                 style={FriendDetailStyle.imageStyle}
                 source={{
-                  uri: friendDetail.user_photo,
-                  priority: FastImage.priority.normal,
+                  uri: friendDetail.avatar,
                 }}
-                resizeMode={FastImage.resizeMode.cover}
               />
             ) : (
               <Image

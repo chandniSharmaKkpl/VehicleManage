@@ -15,6 +15,9 @@ import {
   Alert,
   DeviceEventEmitter,
 } from "react-native";
+import sideDrawer from "../sidebar/sideDrawer";
+import { isEmpty, isText } from "../../../utils/Validators";
+import { Messages } from "../../../utils/Messages";
 import { AuthStyle } from "../../../assets/styles/AuthStyle";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";
@@ -324,6 +327,27 @@ export class UserProfileScreen extends Component {
     this.setState({ selectedCity: text });
   };
 
+  // start of validation
+  checkValidation = () => {
+    const { txtUserName } = this.state;
+    if (isEmpty(txtUserName)) {
+      this.setState({
+        isUserNameError: true,
+        userNameValidMsg: Messages.enterUsername,
+      });
+      return false;
+    }
+    if (!isText(txtUserName)) {
+      this.setState({
+        isUserNameError: true,
+        userNameValidMsg: Messages.userNameFail,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   // Update profile API call
   updateProfileApiCall = () => {
     const {
@@ -338,6 +362,11 @@ export class UserProfileScreen extends Component {
       txtDescription,
       txtUserName,
     } = this.state;
+
+    if (!this.checkValidation()) {
+      return;
+    }
+    Keyboard.dismiss();
     var params = new FormData();
 
     // Collect the necessary params
@@ -361,11 +390,11 @@ export class UserProfileScreen extends Component {
       console.log("params======", JSON.stringify(params));
       updateprofile(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "updateprofile res.value.data---",
-            JSON.stringify(res.value.data)
-          );
+          // console.log(
+          //   TAG,
+          //   "updateprofile res.value.data---",
+          //   JSON.stringify(res.value.data)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -375,9 +404,9 @@ export class UserProfileScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
-              let authToken = res.value.data.data.user_data.token;
-              await AsyncStorage.setItem("access_token", authToken);
-              globals.access_token = authToken;
+              sideDrawer.updateUserInfo({
+                userData: res.value.data.data.user_data,
+              });
               this.getUserData();
             } else {
             }
@@ -427,7 +456,6 @@ export class UserProfileScreen extends Component {
       selectedModel,
       selectedCity,
     } = this.state;
-
     return (
       <>
         <View
@@ -677,15 +705,27 @@ export class UserProfileScreen extends Component {
                     <>
                       <InstagramIntegration
                         isFrom="Instagram"
-                        URL={user.instagram_username}
+                        URL={
+                          user.instagram_username
+                            ? user.instagram_username
+                            : "https://www.google.com"
+                        }
                       />
                       <FacebookIntegration
                         isFrom="Facebook"
-                        URL={user.fb_username}
+                        URL={
+                          user.fb_username
+                            ? user.fb_username
+                            : "https://www.google.com"
+                        }
                       />
                       <SnapchatIntegration
                         isFrom="Snap"
-                        URL={user.snapchat_username}
+                        URL={
+                          user.snapchat_username
+                            ? user.snapchat_username
+                            : "https://www.google.com"
+                        }
                       />
                     </>
                   )}

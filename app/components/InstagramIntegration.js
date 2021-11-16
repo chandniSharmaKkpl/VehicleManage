@@ -32,6 +32,9 @@ class InstagramIntegration extends Component {
 
   // navigate Social Profiles
   navigatetoSocialProfiles = (isFrom, name) => {
+    console.log("name---Instagram--", name);
+    console.log("SocialURL-----", SocialURL);
+
     let SocialURL;
 
     if (isFrom == "Instagram") {
