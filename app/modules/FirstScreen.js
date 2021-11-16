@@ -17,6 +17,7 @@ export class FirstScreen extends Component {
   }
 
   async componentDidMount() {
+    this.checkPermission();
     const accessToken = await AsyncStorage.getItem("access_token");
     globals.access_token = accessToken;
     if (accessToken === null || accessToken === undefined) {

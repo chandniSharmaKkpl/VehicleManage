@@ -164,13 +164,13 @@ export class SignInScreen extends Component {
     const { txtEmail, txtPassword } = this.state;
     var deviceUUID = DeviceInfo.getUniqueId();
     var deviceName = DeviceInfo.getDeviceNameSync();
-    // var deviceToken = DeviceInfo.getDeviceToken();
+    var deviceToken = DeviceInfo.getDeviceToken();
 
-    var deviceToken = (await AsyncStorage.getItem("fcmToken")) || "";
-    if (deviceToken === "") {
-      deviceToken = await firebase.messaging().getToken();
-      AsyncStorage.setItem("fcmToken", deviceToken);
-    }
+    // var deviceToken = (await AsyncStorage.getItem("fcmToken")) || "";
+    // if (deviceToken === "") {
+    //   deviceToken = await firebase.messaging().getToken();
+    //   AsyncStorage.setItem("fcmToken", deviceToken);
+    // }
 
     let params = new URLSearchParams();
     // Collect the necessary params
@@ -186,10 +186,10 @@ export class SignInScreen extends Component {
     if (globals.isInternetConnected == true) {
       login(params)
         .then(async (res) => {
-          // console.log(
-          //   "res.value.data.data------login-------",
-          //   JSON.stringify(res.value)
-          // );
+          console.log(
+            "res.value.data.data------login-------",
+            JSON.stringify(res.value)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.invalid_email) {
