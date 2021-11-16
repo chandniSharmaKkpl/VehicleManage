@@ -68,14 +68,10 @@ export class ForgotPasswordScreen extends Component {
     if (globals.isInternetConnected == true) {
       forgotpassword(params)
         .then(async (res) => {
+          // console.log("res=====forgotpassword", JSON.stringify(res.value.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
-            if (res.value && res.value.invalid_email) {
-              this.setState({
-                emailValidMsg: res.value.invalid_email,
-                isEmailError: true,
-              });
-            } else if (res.value && res.value.status === 200) {
+            if (res.value && res.value.status === 200) {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
@@ -85,7 +81,7 @@ export class ForgotPasswordScreen extends Component {
               NavigationService.navigate("SignIn");
             } else {
               this.setState({
-                emailValidMsg: res.value.invalid_email,
+                emailValidMsg: res.value.data.email,
                 isEmailError: true,
               });
             }
@@ -94,9 +90,9 @@ export class ForgotPasswordScreen extends Component {
               {
                 NavigationService.navigate("Login");
               }
-            } else if (res.value && res.value.data.error) {
+            } else if (res.value && res.value.data.email) {
               await showMessage({
-                message: res.value.message,
+                message: res.value.data.email,
                 type: "danger",
                 icon: "info",
                 duration: 4000,

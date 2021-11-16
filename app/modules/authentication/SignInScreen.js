@@ -82,21 +82,21 @@ export class SignInScreen extends Component {
   gotoForgotPasswordscreen = async () => {
     const { txtEmail, txtPassword } = this.state;
 
-    if (isEmpty(txtEmail)) {
-      this.setState({
-        isEmailError: true,
-        emailValidMsg: Messages.email,
-      });
-      return false;
-    } else if (!isEmail(txtEmail)) {
-      this.setState({
-        isEmailError: true,
-        emailValidMsg: Messages.emailValid,
-      });
-      return false;
-    } else {
+    // if (isEmpty(txtEmail)) {
+    //   this.setState({
+    //     isEmailError: true,
+    //     emailValidMsg: Messages.email,
+    //   });
+    //   return false;
+    // } else if (!isEmail(txtEmail)) {
+    //   this.setState({
+    //     isEmailError: true,
+    //     emailValidMsg: Messages.emailValid,
+    //   });
+    //   return false;
+    // } else {
       NavigationService.navigate("ForgotPassword");
-    }
+    // }
   };
 
   // This function show/hide the password
