@@ -10,8 +10,7 @@ export const FriendDetailStyle = StyleSheet.create({
   },
   imageStyle: {
     height: "100%",
-    width:globals.deviceWidth,
-    
+    width: globals.deviceWidth,
   },
   halfContainer: {
     flex: 0.5,
@@ -71,6 +70,7 @@ export const FriendDetailStyle = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 5,
     paddingHorizontal: 10,
+    backgroundColor: Colors.placeholderColor,
   },
   titletext: {
     fontFamily: FontFamily.RalewaRegular,
@@ -79,6 +79,8 @@ export const FriendDetailStyle = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 5,
     paddingHorizontal: 10,
+    marginTop:globals.deviceHeight *0.01,
+    backgroundColor:Colors.primary
   },
   middleview: {
     position: "absolute",
@@ -87,11 +89,11 @@ export const FriendDetailStyle = StyleSheet.create({
     marginTop:
       Platform.OS == "android"
         ? globals.deviceHeight / 2.1
-        : globals.deviceHeight / 2.5,
+        : globals.deviceHeight / 2.4,
 
     flexDirection: "row",
     alignSelf: "center",
-    zIndex: 40
+    zIndex: 40,
   },
   circleview: {
     width: 50,
@@ -127,8 +129,7 @@ export const FriendDetailStyle = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    marginBottom: 10, 
-   
+    marginBottom: 10,
   },
   bottomview: {
     flex: 0.1,

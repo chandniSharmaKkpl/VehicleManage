@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
   KeyboardAvoidingView,
   DeviceEventEmitter,
 } from "react-native";
@@ -238,8 +239,6 @@ export class ChatMessagesScreen extends Component {
         newArray.push({ ...obj });
       }
     });
-
-    console.log("newArray==================", newArray);
 
     this.setState({
       messages: newArray,
@@ -524,7 +523,13 @@ export class ChatMessagesScreen extends Component {
     } = this.state;
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
     var user_id = from_id;
-
+    let platformConf =
+      Platform.OS === "ios"
+        ? {
+            minInputToolbarHeight: 70,
+            bottomOffset: 0,
+          }
+        : {};
     return (
       <>
         <View
@@ -574,55 +579,53 @@ export class ChatMessagesScreen extends Component {
               </View>
             </MediaModel>
           </View>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : null}
+
+          <GiftedChat
+            messages={messages}
+            onSend={this.onSend}
+            showUserAvatar={false}
+            shouldRenderUsername={true}
+            messagesContainerStyle={{
+              paddingBottom: 30,
+              backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+            }}
+            user={{
+              _id: Number(user_id),
+            }}
+            maxInputLength={1000}
+            showAvatarForEveryMessage={false}
+            renderMessageImage={(props) => {
+              <View>
+                <MessageImage {...props} />
+              </View>;
+            }}
+            textInputProps={{}}
+            keyboardShouldPersistTaps="never"
+            renderTicks={(message) => this.renderTicks(message, user_id)}
+            alwaysShowSend={true}
+            timeFormat={"HH:mm"}
+            onPressAvatar={console.log("onPressAvatar")}
+            alwaysShowSend={true}
             style={{ flex: 1 }}
-            keyboardVerticalOffset={90}
-            enabled
-          >
-            <GiftedChat
-              messages={messages}
-              onSend={this.onSend}
-              showUserAvatar={false}
-              shouldRenderUsername={true}
-              messagesContainerStyle={{
-                paddingBottom: 40,
-                backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-              }}
-              user={{
-                _id: Number(user_id),
-              }}
-              maxInputLength={1000}
-              showAvatarForEveryMessage={false}
-              renderMessageImage={(props) => {
-                <View>
-                  <MessageImage {...props} />
-                </View>;
-              }}
-              renderTicks={(message) => this.renderTicks(message, user_id)}
-              alwaysShowSend={true}
-              timeFormat={"HH:mm"}
-              onPressAvatar={console.log("onPressAvatar")}
-              alwaysShowSend={true}
-              placeholder={StaticTitle.chatinput}
-              renderInputToolbar={renderInputToolbar}
-              // renderActions={renderActions}
-              // renderComposer={renderComposer}
-              renderSend={renderSend}
-              // renderAvatar={renderAvatar}
-              renderBubble={renderBubble}
-              // renderMessage={renderMessage}
-              // renderMessageText={renderMessageText}
-              isCustomViewBottom
-              parsePatterns={(linkStyle) => [
-                {
-                  pattern: /#(\w+)/,
-                  style: linkStyle,
-                  onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
-                },
-              ]}
-            />
-          </KeyboardAvoidingView>
+            placeholder={StaticTitle.chatinput}
+            renderInputToolbar={renderInputToolbar}
+            // renderActions={renderActions}
+            // renderComposer={renderComposer}
+            renderSend={renderSend}
+            // renderAvatar={renderAvatar}
+            renderBubble={renderBubble}
+            // renderMessage={renderMessage}
+            // renderMessageText={renderMessageText}
+            isCustomViewBottom
+            parsePatterns={(linkStyle) => [
+              {
+                pattern: /#(\w+)/,
+                style: linkStyle,
+                onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
+              },
+            ]}
+            {...platformConf}
+          />
         </View>
       </>
     );
