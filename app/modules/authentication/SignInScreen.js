@@ -40,8 +40,8 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      // txtEmail: "1044@mailinator.com",
-      // txtPassword: "Abcd1234",
+      // txtEmail: "we@mailinator.com",
+      // txtPassword: "Abcd@1234",
       txtEmail: "",
       txtPassword: "",
       isShowPassword: true,
@@ -181,7 +181,7 @@ export class SignInScreen extends Component {
     params.append("device_type", Platform.OS == "android" ? "1" : "0");
     params.append("device_name", deviceName);
 
-    // console.log("params---LOGIN-", JSON.stringify(params));
+    console.log("params---LOGIN-", JSON.stringify(params));
     const { login } = this.props;
     if (globals.isInternetConnected == true) {
       login(params)

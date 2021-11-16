@@ -73,7 +73,6 @@ export class RegistrationDetailsScreen extends Component {
   // set userInformation
   setUserInfo = async () => {
     var user = this.props.navigation.state.params.user;
-    console.log(TAG, "user==setUserInfo===", user);
     if (this._isMounted) {
       if (user && user.user_data) {
         this.setState({
@@ -118,6 +117,7 @@ export class RegistrationDetailsScreen extends Component {
     } = this.state;
     console.log("attachPaperUrl====", attachPaperUrl);
     console.log("attachphotoUrl====", attachphotoUrl);
+    console.log("===attachPaperObj.uri", attachPaperObj.uri);
 
     if (isEmpty(txtRegNumber)) {
       await showMessage({
@@ -137,35 +137,49 @@ export class RegistrationDetailsScreen extends Component {
         isRegNumberError: true,
         regNumberValidMsg: Messages.registernumberfieldvalidation,
       });
-    } else if (
-      attachPaperObj.uri == undefined ||
-      (attachPaperObj.uri == "") != [] ||
-      attachPaperUrl == "" ||
-      attachPaperUrl == "Dummy.jpg"
-    ) {
-      await showMessage({
-        message: StaticTitle.registrationpaper,
-        type: "danger",
-        icon: "info",
-        duration: 4000,
-      });
-    } else if (
-      attachphotoObj.uri == undefined ||
-      (attachphotoObj.uri == "") != [] ||
-      attachphotoUrl == "" ||
-      attachphotoUrl == "Dummy.jpg"
-    ) {
-      await showMessage({
-        message: StaticTitle.vehicalphotorequired,
-        type: "danger",
-        icon: "info",
-        duration: 4000,
-      });
     } else {
       if (isFrom == "Profile") {
-        this.updateRegisterDetailAPIcall();
+        if (attachphotoUrl == "" || attachphotoUrl == "Dummy.jpg") {
+          await showMessage({
+            message: StaticTitle.registrationpaper,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else if (attachPaperUrl == "" || attachPaperUrl == "Dummy.jpg") {
+          await showMessage({
+            message: StaticTitle.registrationpaper,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else {
+          this.updateRegisterDetailAPIcall();
+        }
       } else {
-        this.registerDetailAPIcall();
+        if (
+          attachPaperObj.uri == undefined ||
+          (attachPaperObj.uri == "") != []
+        ) {
+          await showMessage({
+            message: StaticTitle.registrationpaper,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else if (
+          attachphotoObj.uri == undefined ||
+          (attachphotoObj.uri == "") != []
+        ) {
+          await showMessage({
+            message: StaticTitle.vehicalphotorequired,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else {
+          this.registerDetailAPIcall();
+        }
       }
     }
   };

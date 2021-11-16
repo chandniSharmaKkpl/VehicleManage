@@ -53,7 +53,7 @@ export class SignUpScreen extends Component {
     this.state = {
       //initialize variable
 
-      // txtEmail: "newone@mailinator.com",
+      // txtEmail: "we@mailinator.com",
       // txtFirstName: "new",
       // txtLastName: "one",
       // txtPassword: "Abcd@1234",
