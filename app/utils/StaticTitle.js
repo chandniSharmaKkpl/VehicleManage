@@ -10,7 +10,7 @@ const StaticTitle = {
   newApp: "New to this app?",
   signup: "Sign Up",
   signin: "Sign In",
-  forgotPasswordSignin: "Forgot password",
+  forgotPasswordSignin: "Forgot password ?",
   enterPassword: "Enter Password",
   enterUsaerName: "Enter Email Address",
   backTo: "Back to",
