@@ -115,9 +115,6 @@ export class RegistrationDetailsScreen extends Component {
       attachPaperObj,
       attachphotoObj,
     } = this.state;
-    console.log("attachPaperUrl====", attachPaperUrl);
-    console.log("attachphotoUrl====", attachphotoUrl);
-    console.log("===attachPaperObj.uri", attachPaperObj.uri);
 
     if (isEmpty(txtRegNumber)) {
       await showMessage({
@@ -219,17 +216,17 @@ export class RegistrationDetailsScreen extends Component {
 
     const { updateRegistrationDetail } = this.props;
 
-    console.log(
-      "updateRegisterDetailAPIcall params----------",
-      JSON.stringify(params)
-    );
+    // console.log(
+    //   "updateRegisterDetailAPIcall params----------",
+    //   JSON.stringify(params)
+    // );
     if (globals.isInternetConnected == true) {
       updateRegistrationDetail(params)
         .then(async (res) => {
-          console.log(
-            "updateRegisterDetailAPIcall res.value.data---",
-            JSON.stringify(res.value)
-          );
+          // console.log(
+          //   "updateRegisterDetailAPIcall res.value.data---",
+          //   JSON.stringify(res.value)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -290,11 +287,11 @@ export class RegistrationDetailsScreen extends Component {
     params.append("registration_paper", attachPaperObj);
     const { registerdetail } = this.props;
 
-    console.log("params----------", JSON.stringify(params));
+    // console.log("params----------", JSON.stringify(params));
     if (globals.isInternetConnected == true) {
       registerdetail(params)
         .then(async (res) => {
-          console.log("res.value.data---", JSON.stringify(res.value.data.data));
+          // console.log("res.value.data---", JSON.stringify(res.value.data.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -416,7 +413,7 @@ export class RegistrationDetailsScreen extends Component {
   };
 
   // choose profile photo from gallery
-  chooseMedia = () => {
+  chooseMedia = async () => {
     launchImageLibrary(
       {
         mediaType: "photo",
@@ -424,7 +421,7 @@ export class RegistrationDetailsScreen extends Component {
         maxHeight: 200,
         maxWidth: 200,
       },
-      (response) => {
+      async (response) => {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
@@ -433,6 +430,7 @@ export class RegistrationDetailsScreen extends Component {
           type: response.type,
         };
         if (this.state.isattachPaper) {
+          await this.closeAttchPaper();
           this.setState({
             isattachPaper: false,
             attachPaperUrl: response.uri,
@@ -442,6 +440,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperObj: source ? source : "",
           });
         } else {
+          await this.closeAttchPhoto();
           this.setState({
             isattachphoto: false,
             attachphotoUrl: response.uri,

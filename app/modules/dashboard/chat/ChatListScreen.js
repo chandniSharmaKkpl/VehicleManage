@@ -160,10 +160,7 @@ export class ChatListScreen extends Component {
 
   connectWebSocket() {
     global.ws = new WebSocket("ws://20.37.36.107:56113");
-
     global.ws.onopen = (data) => {
-      // Alert.alert("Websocket connected...");
-
       if (data.isTrusted === false) {
         this.setState({
           loader: false,
@@ -207,7 +204,7 @@ export class ChatListScreen extends Component {
             if (currentScreenParams !== undefined) {
               var userScreenLoadUserId = currentScreenParams.user_info.id;
               console.log("userScreenLoadUserId :->", userScreenLoadUserId);
-             
+
               console.log("from_id :->", from_id);
 
               if (parseInt(from_id) == userScreenLoadUserId) {
@@ -262,7 +259,7 @@ export class ChatListScreen extends Component {
         JSON.stringify({
           command: "unregister",
           userId: chat_user_id,
-          offline_user_id: userDetails.id,
+          offline_user_id: userDetails.user_data.user_id,
         })
       );
 

@@ -498,10 +498,10 @@ export class ChatMessagesScreen extends Component {
       return (
         <View style={{ flexDirection: "row", padding: 5 }}>
           {!!message.received && (
-            <Text style={{ color: Colors.black, fontSize: 10 }}>✓</Text>
+            <Text style={{ color: Colors.white, fontSize: 10 }}>✓</Text>
           )}
           {!!message.pending && (
-            <Text style={{ color: "#c0c0c0", fontSize: 10 }}>🕓</Text>
+            <Text style={{ color: Colors.white, fontSize: 10 }}>🕓</Text>
           )}
         </View>
       );
@@ -524,7 +524,7 @@ export class ChatMessagesScreen extends Component {
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
     var user_id = from_id;
     let platformConf =
-      Platform.OS === "ios"
+    Platform.OS === "ios"
         ? {
             minInputToolbarHeight: 70,
             bottomOffset: 0,
@@ -583,10 +583,11 @@ export class ChatMessagesScreen extends Component {
           <GiftedChat
             messages={messages}
             onSend={this.onSend}
+           
             showUserAvatar={false}
             shouldRenderUsername={true}
             messagesContainerStyle={{
-              paddingBottom: 30,
+              paddingBottom: 40,
               backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
             }}
             user={{

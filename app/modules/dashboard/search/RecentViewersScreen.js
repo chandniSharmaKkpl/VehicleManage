@@ -8,6 +8,7 @@ import {
   Text,
   DeviceEventEmitter,
 } from "react-native";
+import moment from "moment";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -110,6 +111,10 @@ export class RecentViewersScreen extends Component {
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
+    // console.log("item.updated_at======", item.updated_at);
+    // let converttoUtc = moment.utc(item.updated_at);
+    // console.log("ss ", converttoUtc);
+
     let id = item.updated_at.split("T");
     let onlytime = id[1].substring(0, 5);
 
@@ -134,7 +139,12 @@ export class RecentViewersScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={[FriendListStyle.titleBig, { color: this.props.theme.LITE_FONT_COLOR }]}>
+          <Text
+            style={[
+              FriendListStyle.titleBig,
+              { color: this.props.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.name ? item.name + " " + item.surname : ""}
           </Text>
           <View style={FriendListStyle.detailsview}>

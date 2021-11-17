@@ -84,10 +84,10 @@ export class NotificationScreen extends Component {
 
   // render friendlist dataItem
   retunNotificationList = () => {
-    // console.log(
-    //   "this.state.searched_avatars========",
-    //   this.state.searched_avatars
-    // );
+    console.log(
+      "this.state.searched_avatars========",
+      this.state.searched_avatars
+    );
     for (let i = 0; i <= this.state.searched_avatars.length; i++) {
       if (this.state.searched_avatars.length > 3) {
         console.log("NOOO valid");
@@ -98,11 +98,11 @@ export class NotificationScreen extends Component {
             onPress={() => this.gotoRecentViewers()}
           >
             <View style={FriendListStyle.imageStyle}>
-              {this.state.searched_avatars[0] ? (
+              {this.state.searched_avatars[i] ? (
                 <FastImage
                   resizeMethod="resize"
                   source={{
-                    uri: this.state.searched_avatars[0],
+                    uri: this.state.searched_avatars[i],
                   }}
                   style={FriendListStyle.multiimageStyle}
                 />
@@ -113,11 +113,11 @@ export class NotificationScreen extends Component {
                   style={FriendListStyle.multiimageStyle}
                 />
               )}
-              {this.state.searched_avatars[1] ? (
+              {this.state.searched_avatars[i] ? (
                 <FastImage
                   resizeMethod="resize"
                   source={{
-                    uri: this.state.searched_avatars[1],
+                    uri: this.state.searched_avatars[i],
                   }}
                   style={[FriendListStyle.multiimageStyle, { left: 15 }]}
                 />
@@ -128,11 +128,11 @@ export class NotificationScreen extends Component {
                   style={[FriendListStyle.multiimageStyle, { left: 15 }]}
                 />
               )}
-              {this.state.searched_avatars[2] ? (
+              {this.state.searched_avatars[i] ? (
                 <FastImage
                   resizeMethod="resize"
                   source={{
-                    uri: this.state.searched_avatars[2],
+                    uri: this.state.searched_avatars[i],
                   }}
                   style={[
                     FriendListStyle.multiimageStyle,
@@ -227,7 +227,7 @@ export class NotificationScreen extends Component {
             isFrom={"Notification"}
             theme={theme}
           />
-          {searched_avatars != []
+          {searched_avatars == []
             ? // <FlatList
               //   data={searched_avatars}
               //   style={[FriendListStyle.flatliststyle, { paddingVertical: 5 }]}
@@ -236,8 +236,8 @@ export class NotificationScreen extends Component {
               //   showsVerticalScrollIndicator={false}
               //   ItemSeparatorComponent={this.separatorComponent}
               // />
-              this.retunNotificationList()
-            : null}
+              null
+            : this.retunNotificationList()}
 
           {messages_count != "0" ? this.retunChatMsgList() : null}
         </View>

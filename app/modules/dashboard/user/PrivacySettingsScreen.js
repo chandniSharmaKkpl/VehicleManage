@@ -32,9 +32,7 @@ export class PrivacySettingsScreen extends Component {
     };
   }
 
-  async componentWillUnmount() {
-    await this.getUserData();
-  }
+ 
 
   async componentDidMount() {
     await this.onFocus();

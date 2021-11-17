@@ -262,12 +262,16 @@ export class FriendDetailScreen extends Component {
               </TouchableOpacity>
             </View>
             <View style={FriendDetailStyle.userdetailview}>
-              <Text numberOfLines={2} style={FriendDetailStyle.headingtitle}>
-                {friendDetail.username}
-              </Text>
-              <Text numberOfLines={1} style={FriendDetailStyle.titletext}>
-                {friendDetail.city}
-              </Text>
+              {friendDetail.username ? (
+                <Text numberOfLines={2} style={FriendDetailStyle.headingtitle}>
+                  {friendDetail.username}
+                </Text>
+              ) : null}
+              {friendDetail.city ? (
+                <Text numberOfLines={1} style={FriendDetailStyle.titletext}>
+                  {friendDetail.city}
+                </Text>
+              ) : null}
             </View>
           </View>
           <View style={FriendDetailStyle.middleview}>
