@@ -265,7 +265,7 @@ export class ChatMessagesScreen extends Component {
 
     message_ids = message_ids + "]";
 
-    console.log("message_ids :-->", message_ids);
+    // console.log("message_ids :-->", message_ids);
     if (message_ids == "[]") {
       console.log("Not any message in unread....");
       return;
@@ -277,11 +277,11 @@ export class ChatMessagesScreen extends Component {
     params.append("ids", message_ids);
     readMessage(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of get readMessage",
-          JSON.stringify(res.value.data)
-        );
+        // console.log(
+        //   TAG,
+        //   "response of get readMessage",
+        //   JSON.stringify(res.value.data)
+        // );
       })
       .catch((err) => {
         console.log(TAG, "i am in catch error readMessage", err);
@@ -490,6 +490,13 @@ export class ChatMessagesScreen extends Component {
     this.setState({ isMsgReportPicker: !this.state.isMsgReportPicker });
   };
 
+  // navigate to shareSocials
+  shareSocials = () => {
+    NavigationService.navigate("ShareSocials", {
+      from_id: this.state.to_id,
+    });
+  };
+
   renderTicks = (message, user_id) => {
     if (message && user_id && parseInt(message.user._id) != parseInt(user_id)) {
       return null;
@@ -524,7 +531,7 @@ export class ChatMessagesScreen extends Component {
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
     var user_id = from_id;
     let platformConf =
-    Platform.OS === "ios"
+      Platform.OS === "ios"
         ? {
             minInputToolbarHeight: 70,
             bottomOffset: 0,
@@ -545,6 +552,7 @@ export class ChatMessagesScreen extends Component {
             isShowRighttwo={true}
             isuserImage={user_photo}
             isMsgReportPicker={() => this.displayMsgReportPicker()}
+            isShareSocials={() => this.shareSocials()}
           />
           <View>
             <MediaModel
@@ -583,7 +591,6 @@ export class ChatMessagesScreen extends Component {
           <GiftedChat
             messages={messages}
             onSend={this.onSend}
-           
             showUserAvatar={false}
             shouldRenderUsername={true}
             messagesContainerStyle={{

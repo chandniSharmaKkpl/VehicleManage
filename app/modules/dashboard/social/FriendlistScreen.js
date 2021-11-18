@@ -208,7 +208,7 @@ export class FriendlistScreen extends Component {
               { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
-            {item.registration_number ? item.registration_number : "-"}
+            {item.registration_number ? item.registration_number : ""}
           </Text>
         </View>
         <TouchableOpacity

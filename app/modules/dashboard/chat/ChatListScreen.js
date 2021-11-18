@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   DeviceEventEmitter,
 } from "react-native";
-import Colors from "../../../assets/Colors";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -151,6 +150,7 @@ export class ChatListScreen extends Component {
   };
 
   componentWillUnmount() {
+    this._isMounted = false;
     AppState.removeAllListeners("change", this._handleAppStateChange);
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
 

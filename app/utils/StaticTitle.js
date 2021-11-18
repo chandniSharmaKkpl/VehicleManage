@@ -82,6 +82,7 @@ const StaticTitle = {
   notification: "Notifications",
   whosearchyou: "Who's Searched You..",
   searchrequired: "The search by vehicle field is required.",
+  shareprofiles:"Share Socials",
 
   //// PRIVACY SETTINGS
   privacysettings: "Privacy Settings",

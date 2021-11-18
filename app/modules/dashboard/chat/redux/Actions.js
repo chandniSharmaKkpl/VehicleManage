@@ -5,7 +5,10 @@ import {
   INSERT_MESSAGES,
   READ_MESSAGES,
   BLOCK_USER,
-  REPORT_USER,RECEIVED_CHAT_MESSAGE, SWITCH_THEME
+  SOCIAL_SHARE_FRIEND,
+  REPORT_USER,
+  RECEIVED_CHAT_MESSAGE,
+  SWITCH_THEME,SHARE_SOCIAL_PROFILES,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -95,3 +98,25 @@ export const receivedChatMessage = (payload) => {
     payload: payload,
   };
 };
+export const socialsharefriends = (params) => ({
+  type: SOCIAL_SHARE_FRIEND,
+  payload: api
+    .post("api/messages/social_share_friends", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+export const sharesocialprofiles = (params) => ({
+  type: SHARE_SOCIAL_PROFILES,
+  payload: api
+    .post("api/messages/social_share_send", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});

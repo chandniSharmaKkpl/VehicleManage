@@ -20,7 +20,7 @@ import NotificationScreen from "../modules/dashboard/search/NotificationScreen";
 import RecentViewersScreen from "../modules/dashboard/search/RecentViewersScreen";
 import ChatMessagesScreen from "../modules/dashboard/chat/ChatMessagesScreen";
 import RegistrationDetailsScreen from "..//modules/authentication/RegistrationDetailsScreen";
-
+import ShareSocialsScreen from "..//modules/dashboard/chat/ShareSocialsScreen";
 const SearchStack = createStackNavigator(
   {
     Search: {
@@ -41,6 +41,9 @@ const SearchStack = createStackNavigator(
     ChatMessages: {
       screen: ChatMessagesScreen,
     },
+    ShareSocials:{
+      screen:ShareSocialsScreen
+    }
   },
   {
     headerMode: "none",
@@ -67,6 +70,9 @@ const SocialStack = createStackNavigator(
     ChatMessages: {
       screen: ChatMessagesScreen,
     },
+    ShareSocials:{
+      screen:ShareSocialsScreen
+    }
   },
   {
     headerMode: "none",
@@ -87,6 +93,9 @@ const ChatStack = createStackNavigator(
     ChatMessages: {
       screen: ChatMessagesScreen,
     },
+    ShareSocials:{
+      screen:ShareSocialsScreen
+    }
   },
   {
     headerMode: "none",

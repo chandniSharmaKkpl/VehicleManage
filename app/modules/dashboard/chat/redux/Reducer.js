@@ -188,6 +188,65 @@ const chatReducer = (state = initialState, action) => {
         },
       };
 
+    //// SOCIAL_SHARE_FRIEND
+    case actionTypes.SOCIAL_SHARE_FRIEND_LOADING:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.SOCIAL_SHARE_FRIEND_SUCCESS:
+      return {
+        chat: {
+          ...state.chat,
+          isLoading: false,
+          isLoggedIn: true,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SOCIAL_SHARE_FRIEND_ERROR:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+      //// SHARE_SOCIAL_PROFILES
+    case actionTypes.SHARE_SOCIAL_PROFILES_LOADING:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.SHARE_SOCIAL_PROFILES_SUCCESS:
+      return {
+        chat: {
+          ...state.chat,
+          isLoading: false,
+          isLoggedIn: true,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SHARE_SOCIAL_PROFILES_ERROR:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+
     case actionTypes.SWITCH_THEME:
       // console.log("actionTypes.SWITCH_THEME action.baseTheme :->"+JSON.stringify(action.payload.baseTheme));
       return {

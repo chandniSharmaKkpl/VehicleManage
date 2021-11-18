@@ -88,7 +88,9 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/messages/read" ||
       request.url === "api/block" ||
       request.url === "api/report" ||
-      request.url === "api/friend_search"
+      request.url === "api/friend_search" ||
+      request.url === "api/messages/social_share_friends" ||
+      request.url === "api/messages/social_share_send"
     ) {
       request.headers = makeURLencodedPostHeaders();
     } else {
