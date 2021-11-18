@@ -175,7 +175,7 @@ export class ChatListScreen extends Component {
     };
     global.ws.onmessage = ({ data }) => {
       // console.log(Platform.OS + " --- WS OnMessage() ---->", data);
-
+      // alert(" --- Connected-------------------------", data)
       const object = JSON.parse(data);
       if (object.command != undefined) {
         if (object.command == "message") {

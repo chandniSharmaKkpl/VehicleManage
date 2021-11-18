@@ -288,6 +288,8 @@ export class ChatMessagesScreen extends Component {
       });
   };
 
+ 
+
   onSend(messages = []) {
     const { userDetails } = this.props;
     // console.log("onSend() messages  :->", this.props.userDetails);
@@ -505,6 +507,9 @@ export class ChatMessagesScreen extends Component {
       return (
         <View style={{ flexDirection: "row", padding: 5 }}>
           {!!message.received && (
+            <Text style={{ color: Colors.white, fontSize: 10 }}>✓✓</Text>
+          )}
+          {!!message.sent && (
             <Text style={{ color: Colors.white, fontSize: 10 }}>✓</Text>
           )}
           {!!message.pending && (
@@ -634,6 +639,12 @@ export class ChatMessagesScreen extends Component {
             ]}
             {...platformConf}
           />
+          {Platform.OS === "android" ? (
+            <KeyboardAvoidingView
+              behavior="height"
+              style={{ paddingBottom: 30 }}
+            />
+          ) : null}
         </View>
       </>
     );

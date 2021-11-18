@@ -5,6 +5,7 @@ import {
   StatusBar,
   ScrollView,
   Image,
+  AppState,
   TouchableOpacity,
 } from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -30,29 +31,46 @@ export class LoginScreen extends Component {
     super(props);
     this.state = {
       theme: {},
+      appState: AppState.currentState,
     };
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    AppState.removeAllListeners("change", this._handleAppStateThemeChange);
   }
- 
+
   UNSAFE_componentWillReceiveProps = (newProps) => {
     const { theme } = newProps;
     this.parseData(theme);
   };
 
-  componentDidMount = async () => {
-    this._isMounted = true;
+  _handleAppStateThemeChange = async (nextAppState) => {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
+      this.setThemeModes();
+    }
+    this.setState({ appState: nextAppState });
+    this.setThemeModes();
+  };
+
+  setThemeModes = async () => {
     let them_mode = await AsyncStorage.getItem("them_mode");
 
-    console.log(TAG, "componentDidMount ======them_mode", them_mode);
     var newTheme = lightTheme;
     if (them_mode === globals.THEME_MODE.DARK) {
       newTheme = darkTheme;
     }
     this.setState({ theme: them_mode });
     this.props.swicthTheme(newTheme);
+  };
+
+  componentDidMount = async () => {
+    this._isMounted = true;
+    await this.setThemeModes();
+    AppState.addEventListener("change", this._handleAppStateThemeChange);
   };
 
   // parse lite and dark theme data
@@ -71,7 +89,7 @@ export class LoginScreen extends Component {
   };
 
   render() {
-    const { isLoading, loaderMessage, theme} = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     // const { theme } = this.state;
 
     if (theme == undefined || theme.PRIMARY_BACKGROUND_COLOR === undefined) {

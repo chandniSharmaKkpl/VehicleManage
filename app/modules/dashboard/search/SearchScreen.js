@@ -6,6 +6,7 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  AppState,
   DeviceEventEmitter,
 } from "react-native";
 import { connect } from "react-redux";
@@ -36,6 +37,7 @@ export class SearchScreen extends Component {
       theme: {},
       searched_count: "",
       countDeatils: {},
+      appState: AppState.currentState,
     };
   }
 
@@ -46,26 +48,42 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });
-    let them_mode = await AsyncStorage.getItem("them_mode");
-
-
-    console.log(TAG, "componentDidMount ======them_mode", them_mode);
-    var newTheme = lightTheme;
-    if (them_mode === globals.THEME_MODE.DARK) {
-      newTheme = darkTheme;
-    }
+    await this.setThemeModes();
     this.setState({ theme: this.props.theme }, () => {
-      this.props.swicthTheme(newTheme);
       if (globals.isInternetConnected == true) {
         this.getnotificationCount();
       } else {
         Alert.alert(globals.warning, globals.noInternet);
       }
     });
+    AppState.addEventListener("change", this._handleAppStateThemeChange);
   }
 
   componentWillUnmount = () => {
     DeviceEventEmitter.removeAllListeners("NotificationCountRemove");
+    AppState.removeAllListeners("change", this._handleAppStateThemeChange);
+  };
+
+  _handleAppStateThemeChange = async (nextAppState) => {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
+      this.setThemeModes();
+    }
+    this.setState({ appState: nextAppState });
+    this.setThemeModes();
+  };
+
+  setThemeModes = async () => {
+    let them_mode = await AsyncStorage.getItem("them_mode");
+
+    var newTheme = lightTheme;
+    if (them_mode === globals.THEME_MODE.DARK) {
+      newTheme = darkTheme;
+    }
+    this.setState({ theme: them_mode });
+    this.props.swicthTheme(newTheme);
   };
 
   setNotificationCountsafterreview = () => {
@@ -216,7 +234,12 @@ export class SearchScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={[FriendListStyle.titleBig,{ color: this.props.theme.LITE_FONT_COLOR }]}>
+          <Text
+            style={[
+              FriendListStyle.titleBig,
+              { color: this.props.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text

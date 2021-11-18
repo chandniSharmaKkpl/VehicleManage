@@ -84,10 +84,10 @@ export class NotificationScreen extends Component {
 
   // render friendlist dataItem
   retunNotificationList = () => {
-    console.log(
-      "this.state.searched_avatars========",
-      this.state.searched_avatars
-    );
+    // console.log(
+    //   "this.state.searched_avatars========",
+    //   this.state.searched_avatars
+    // );
     for (let i = 0; i <= this.state.searched_avatars.length; i++) {
       if (this.state.searched_avatars.length > 3) {
         console.log("NOOO valid");
