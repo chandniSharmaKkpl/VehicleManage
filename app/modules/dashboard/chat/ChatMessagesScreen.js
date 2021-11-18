@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   DeviceEventEmitter,
 } from "react-native";
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {
   Avatar,
   Bubble,
@@ -640,11 +641,9 @@ export class ChatMessagesScreen extends Component {
             {...platformConf}
           />
           {Platform.OS === "android" ? (
-            <KeyboardAvoidingView
-              behavior="height"
-              style={{ paddingBottom: 30 }}
-            />
+             <KeyboardSpacer topSpacing={-160}/>
           ) : null}
+          
         </View>
       </>
     );

@@ -24,6 +24,7 @@ export const renderInputToolbar = (props) => (
         width: 2,
         height: 12,
       },
+     
       shadowOpacity: 0.58,
       shadowRadius: 16,
       elevation: 24,

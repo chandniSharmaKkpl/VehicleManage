@@ -436,7 +436,7 @@ export class ChatListScreen extends Component {
             {item.name ? item.name + " " + item.surname : ""}
           </Text>
 
-          <Text
+          <Text numberOfLines={2}
             style={[
               FriendListStyle.titleSmall,
               {
