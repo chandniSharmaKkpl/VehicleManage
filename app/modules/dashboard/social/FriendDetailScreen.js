@@ -5,6 +5,7 @@ import {
   FlatList,
   Alert,
   Text,
+  AppState,
   Image,
   StatusBar,
   ScrollView,
@@ -23,6 +24,7 @@ import Colors from "../../../assets/Colors";
 import LinearGradient from "react-native-linear-gradient";
 import * as globals from "../../../utils/Globals";
 import * as actions from "../redux/Actions";
+import * as chatactions from "../chat/redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -35,16 +37,198 @@ export class FriendDetailScreen extends Component {
       getfriendData: this.props.navigation.state.params.FriendData,
       friendDetail: [],
       user: {},
+      loader: false,
+      webSocketServerConnected: false,
+      isUserRegister: false,
     };
+    global.ws = null;
+    this.registerDeviceTimer = null;
+    this.closeOrInActiveScreen = this.closeOrInActiveScreen.bind(this);
+    this.connectWebSocket = this.connectWebSocket.bind(this);
+    this.registerAndSubscribe = this.registerAndSubscribe.bind(this);
+    this.searchFromUser = this.searchFromUser.bind(this);
+  }
+
+  UNSAFE_componentWillReceiveProps = (newProps) => {
+    // Register is one call at single time, after
+    if (!this.state.isUserRegister && this.registerDeviceTimer == null) {
+      // Start 3 seconds interval,
+      // This will check is internel
+
+      this.registerDeviceTimer = setInterval(() => {
+        if (this.state.webSocketServerConnected) {
+          if (
+            this.registerDeviceTimer != undefined ||
+            this.registerDeviceTimer != null
+          ) {
+            clearInterval(this.registerDeviceTimer);
+            this.registerDeviceTimer = null;
+          }
+
+          this.registerAndSubscribe();
+        }
+      }, 3000);
+    }
+  };
+
+  registerAndSubscribe() {
+    const { userDetails } = this.props;
+    let usersdata = userDetails.user_data;
+    const chat_user_id = usersdata.user_id;
+
+    // console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
+    global.ws.send(
+      JSON.stringify({ command: "register", userId: chat_user_id })
+    );
+
+    this.setState({
+      isUserRegister: true,
+    });
   }
 
   componentDidMount = async () => {
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState({ user: this.props.userDetails.user_data }, () => {
         this.getuserDetail();
+        this.connectWebSocket();
       });
     }
+    AppState.addEventListener("change", this._handleAppStateChange);
   };
+
+  componentWillUnmount() {
+    AppState.removeAllListeners("change", this._handleAppStateChange);
+    this.closeOrInActiveScreen();
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    // console.log("_handleAppStateChange() nextAppState :-->", nextAppState);
+    if (nextAppState.match(/inactive|background/)) {
+      this.closeOrInActiveScreen();
+    } else if (nextAppState.match(/active/)) {
+      this.connectWebSocket();
+    }
+  };
+
+  closeOrInActiveScreen() {
+    if (this.registerDeviceTimer !== null) {
+      clearInterval(this.registerDeviceTimer);
+      this.registerDeviceTimer = null;
+    }
+
+    if (global.ws !== null) {
+      const { userDetails } = this.props;
+      let usersdata = userDetails.user_data;
+      const chat_user_id = usersdata.user_id;
+
+      // console.log("unregister chat_user_id :->", chat_user_id);
+
+      global.ws.send(
+        JSON.stringify({
+          command: "unregister",
+          userId: chat_user_id,
+          offline_user_id: userDetails.user_data.user_id,
+        })
+      );
+
+      // setTimeout(() => {
+      try {
+        global.ws.close();
+      } catch (err) {
+        // console.log("Error while connection close :->", err);
+      }
+      // }, 3000)
+    }
+  }
+
+  connectWebSocket() {
+    global.ws = new WebSocket("ws://20.37.36.107:56113");
+    global.ws.onopen = (data) => {
+      if (data.isTrusted === false) {
+        this.setState({
+          loader: false,
+          webSocketServerConnected: true,
+        });
+      } else {
+        this.setState({
+          webSocketServerConnected: true,
+        });
+        alert("Something wen to wrong");
+      }
+    };
+    alert(" --- Connected-------------------------");
+
+    global.ws.onmessage = ({ data }) => {
+      console.log(Platform.OS + " --- WS OnMessage() ---->", data);
+
+      const object = JSON.parse(data);
+      if (object.command != undefined) {
+        if (object.command == "message") {
+          console.log("object.command===", object.command);
+          // Message received
+          var from_id = Number(object.from);
+          // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
+
+          const { nav } = this.props;
+          let currentScreen =
+            nav.routes[2].routes[0].routes[1].routes[nav.routes.length - 1]
+              .routeName;
+          console.log("currentScreen ", currentScreen);
+
+          // var payload = {
+          //   msg_data: object,
+          //   user_data: this.searchFromUser(from_id),
+          // };
+          // this.props.receivedChatMessage(payload);
+          // }
+          if (currentScreen == "ChatMessages") {
+            const currentScreenParams =
+              nav.routes[2].routes[0].routes[1].routes[nav.routes.length - 1]
+                .params;
+            console.log("currentScreenParams :->", currentScreenParams);
+            console.log("parseInt(from_id)===", parseInt(from_id));
+            if (currentScreenParams !== undefined) {
+              var userScreenLoadUserId = currentScreenParams.user_info.id;
+              console.log("userScreenLoadUserId :->", userScreenLoadUserId);
+
+              console.log("from_id :->", from_id);
+
+              if (parseInt(from_id) == userScreenLoadUserId) {
+                console.log("Inside ID both user are matched....");
+                var payload = {
+                  msg_data: object,
+                  user_data: this.searchFromUser(from_id),
+                };
+                this.props.receivedChatMessage(payload);
+              }
+            }
+          }
+        }
+      }
+    };
+    global.ws.onerror = ({ error }) => {
+      console.log(Platform.OS + " --- WS OnError() ---->", error);
+      // Alert.alert("Websocket Error", error);
+      global.ws = null;
+    };
+
+    global.ws.onclose = ({ event }) => {
+      console.log(Platform.OS + " --- WS onClose() ---->", event);
+      // console.warn(" --- WS onClose() ---->");
+    };
+  }
+
+  searchFromUser(from_id) {
+    console.log("searchFromUser() from_id :-->", this.state.getfriendData);
+
+    var user = {};
+
+    if (Number(this.state.getfriendData.id) == Number(from_id)) {
+      user = this.state.getfriendData;
+    }
+
+    return user;
+  }
 
   // API call of get user details
   getuserDetail = async () => {
@@ -189,8 +373,8 @@ export class FriendDetailScreen extends Component {
   // navigate to gotochatdetailscreen
   gotochatdetailscreen = () => {
     const { friendDetail } = this.state;
-    Alert.alert("coming soon...");
-    // NavigationService.navigate("ChatList", { user_info: friendDetail });
+    // Alert.alert("coming soon...");
+    NavigationService.navigate("ChatMessages", { user_info: friendDetail });
   };
 
   // navigate Social Profiles
@@ -399,6 +583,7 @@ export class FriendDetailScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    nav: state.nav,
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
@@ -407,6 +592,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  receivedChatMessage: (params) =>
+    dispatch(chatactions.receivedChatMessage(params)),
   getfriendDetails: (params) => dispatch(actions.getfriendDetails(params)),
   addfriend: (params) => dispatch(actions.addfriend(params)),
   friendsearch: (params) => dispatch(actions.friendsearch(params)),

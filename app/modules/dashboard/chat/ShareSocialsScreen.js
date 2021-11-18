@@ -8,11 +8,9 @@ import {
   Text,
   DeviceEventEmitter,
 } from "react-native";
-import moment from "moment";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
-import { Search } from "../../../components";
 import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
@@ -66,30 +64,22 @@ export class ShareSocialsScreen extends Component {
       } else {
         too_ids = too_ids + "," + msg.id;
       }
-
-      console.log("in loop too_ids :-->", too_ids);
     });
 
     too_ids = too_ids + "]";
 
     console.log("too_ids :-->", too_ids);
     if (too_ids == "[]") {
-      console.log("Not any message in unread....");
       return;
     }
 
     // Collect the necessary params
     params.append("from_id", this.state.from_id);
     params.append("to_ids", too_ids);
-    console.log("sharesocialprofiles PARAMS==========", JSON.stringify(params));
 
     sharesocialprofiles(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of sharesocialprofiles",
-          JSON.stringify(res.value)
-        );
+        
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -126,15 +116,10 @@ export class ShareSocialsScreen extends Component {
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("from_id", this.state.from_id);
-    console.log("socialsharefriends PARAMS==========", JSON.stringify(params));
-    console.log("======================  globals.access_token",  globals.access_token);
+   
     socialsharefriends(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of socialsharefriends",
-          JSON.stringify(res.value.data.data)
-        );
+       
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {

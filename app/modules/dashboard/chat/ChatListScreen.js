@@ -43,7 +43,6 @@ export class ChatListScreen extends Component {
 
       isUserRegister: false,
       loader: false,
-      is_chat_user_id: "",
     };
     global.ws = null;
     this.registerDeviceTimer = null;
@@ -371,7 +370,6 @@ export class ChatListScreen extends Component {
     this.updateUnreadCount(user_info);
     NavigationService.navigate("ChatMessages", {
       user_info: user_info,
-      is_chat_user_id: this.state.is_chat_user_id,
     });
   };
 
