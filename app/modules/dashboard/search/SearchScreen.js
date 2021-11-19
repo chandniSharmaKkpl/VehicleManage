@@ -36,6 +36,7 @@ export class SearchScreen extends Component {
       searchListdata: [],
       theme: {},
       searched_count: "",
+      messages_count:"",
       countDeatils: {},
       appState: AppState.currentState,
     };
@@ -48,6 +49,10 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });
+    DeviceEventEmitter.addListener("ChatCountRemove", () => {
+      this.setChatCountsafterreview();
+    });
+
     await this.setThemeModes();
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
@@ -92,6 +97,12 @@ export class SearchScreen extends Component {
     });
   };
 
+  setChatCountsafterreview = () => {
+    this.setState({
+      messages_count: 0,
+    });
+  };
+
   getnotificationCount = async () => {
     const { notificationCount } = this.props;
     notificationCount().then((res) => {
@@ -115,16 +126,14 @@ export class SearchScreen extends Component {
     let getsearchedCount = await JSON.parse(
       await AsyncStorage.getItem("searched_count")
     );
-    // console.log(
-    //   "getsearchedCount--setNotificationCounts------",
-    //   countDeatils.searched_count
-    // );
+   
     this.setState({
       searched_count:
         getsearchedCount == "0"
           ? getsearchedCount
           : countDeatils.searched_count,
       countDeatils: countDeatils,
+      messages_count:countDeatils.messages_count
     });
     await AsyncStorage.setItem(
       "searched_count",
@@ -287,9 +296,8 @@ export class SearchScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-    const { txtSearch, searchListdata, searched_count, countDeatils } =
+    const { txtSearch, searchListdata, searched_count, messages_count,countDeatils } =
       this.state;
-
     return (
       <>
         <View
@@ -310,6 +318,7 @@ export class SearchScreen extends Component {
             theme={theme}
             searchcount={searched_count}
             countDeatils={countDeatils}
+            messages_count={messages_count}
           />
           <Search
             theme={theme}

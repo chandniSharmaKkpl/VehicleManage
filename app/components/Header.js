@@ -32,8 +32,10 @@ const Header = ({
   onPressed,
   searchcount,
   countDeatils,
+  messages_count,
   ...props
 }) => {
+  console.log("messages_count===", messages_count);
   const gotoBack = async () => {
     NavigationService.back();
   };
@@ -117,6 +119,13 @@ const Header = ({
                 source={IMAGE.notification_img}
                 resizeMode={FastImage.resizeMode.contain}
               ></FastImage>
+              {messages_count == 0 ? null : (
+                <View style={ComponentStyle.countcircleview}>
+                  <Text style={ComponentStyle.messagescountstyle}>
+                    {messages_count}
+                  </Text>
+                </View>
+              )}
               {searchcount == 0 ? null : (
                 <View style={ComponentStyle.countcircleview}>
                   <Text style={ComponentStyle.messagescountstyle}>
@@ -157,8 +166,8 @@ const Header = ({
           >
             <FastImage
               style={{
-                width: isFrom == "ShareSocial"?wp(6) : wp(5.5),
-                height:  isFrom == "ShareSocial" ?wp(6) :wp(5.5),
+                width: isFrom == "ShareSocial" ? wp(6) : wp(5.5),
+                height: isFrom == "ShareSocial" ? wp(6) : wp(5.5),
                 marginLeft: 15,
                 marginRight: 20,
               }}

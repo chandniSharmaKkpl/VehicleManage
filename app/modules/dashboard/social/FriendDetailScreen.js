@@ -373,7 +373,6 @@ export class FriendDetailScreen extends Component {
   // navigate to gotochatdetailscreen
   gotochatdetailscreen = () => {
     const { friendDetail } = this.state;
-    // Alert.alert("coming soon...");
     NavigationService.navigate("ChatMessages", { user_info: friendDetail });
   };
 

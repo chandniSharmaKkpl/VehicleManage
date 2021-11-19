@@ -35,15 +35,15 @@ const SearchStack = createStackNavigator(
     FriendDetail: {
       screen: FriendDetailScreen,
     },
-    ChatList: {
-      screen: ChatListScreen,
-    },
-    ChatMessages: {
-      screen: ChatMessagesScreen,
-    },
-    ShareSocials:{
-      screen:ShareSocialsScreen
-    }
+    // ChatList: {
+    //   screen: ChatListScreen,
+    // },
+    // ChatMessages: {
+    //   screen: ChatMessagesScreen,
+    // },
+    // ShareSocials:{
+    //   screen:ShareSocialsScreen
+    // }
   },
   {
     headerMode: "none",
@@ -64,15 +64,15 @@ const SocialStack = createStackNavigator(
     FriendDetail: {
       screen: FriendDetailScreen,
     },
-    ChatList: {
-      screen: ChatListScreen,
-    },
-    ChatMessages: {
-      screen: ChatMessagesScreen,
-    },
-    ShareSocials:{
-      screen:ShareSocialsScreen
-    }
+    // ChatList: {
+    //   screen: ChatListScreen,
+    // },
+    // ChatMessages: {
+    //   screen: ChatMessagesScreen,
+    // },
+    // ShareSocials:{
+    //   screen:ShareSocialsScreen
+    // }
   },
   {
     headerMode: "none",

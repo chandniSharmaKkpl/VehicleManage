@@ -127,13 +127,7 @@ export class ChatListScreen extends Component {
   }
 
   onFocusFunction = async () => {
-    let getchatCount = await JSON.parse(
-      await AsyncStorage.getItem("chat_count")
-    );
-    if (getchatCount != "0") {
-      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("ChatCountRemove");
-    }
+   
     this._isMounted = true;
     if (globals.isInternetConnected == true) {
       this.callMessageListAPI();

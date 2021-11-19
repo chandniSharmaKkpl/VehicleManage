@@ -53,6 +53,7 @@ import {
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as actions from "./redux/Actions";
 const avatar = require("../../../assets/images/user.jpeg");
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "ChatMessagesScreen ::=";
 
@@ -100,8 +101,18 @@ export class ChatMessagesScreen extends Component {
     );
   };
 
-  componentDidMount() {
+ async componentDidMount() {
     this._isMounted = true;
+    let getchatCount = await JSON.parse(
+      await AsyncStorage.getItem("chat_count")
+    );
+    if (getchatCount != "0") {
+      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("ChatCountRemove");
+    }else{
+      DeviceEventEmitter.emit("ChatCountRemove");
+    }
+    
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
         {
