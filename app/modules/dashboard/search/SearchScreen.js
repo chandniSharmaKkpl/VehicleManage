@@ -6,6 +6,7 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  AppState,
   DeviceEventEmitter,
 } from "react-native";
 import { connect } from "react-redux";
@@ -23,6 +24,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import FastImage from "react-native-fast-image";
 import { isEmpty } from "../../../utils/Validators";
+import { darkTheme, lightTheme } from "../../../assets/Theme";
+
 const TAG = "SearchScreen ::=";
 
 export class SearchScreen extends Component {
@@ -34,6 +37,7 @@ export class SearchScreen extends Component {
       theme: {},
       searched_count: "",
       countDeatils: {},
+      appState: AppState.currentState,
     };
   }
 
@@ -44,6 +48,7 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });
+    await this.setThemeModes();
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
         this.getnotificationCount();
@@ -51,17 +56,40 @@ export class SearchScreen extends Component {
         Alert.alert(globals.warning, globals.noInternet);
       }
     });
+    AppState.addEventListener("change", this._handleAppStateThemeChange);
   }
 
   componentWillUnmount = () => {
     DeviceEventEmitter.removeAllListeners("NotificationCountRemove");
+    AppState.removeAllListeners("change", this._handleAppStateThemeChange);
+  };
+
+  _handleAppStateThemeChange = async (nextAppState) => {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
+      this.setThemeModes();
+    }
+    this.setState({ appState: nextAppState });
+    this.setThemeModes();
+  };
+
+  setThemeModes = async () => {
+    let them_mode = await AsyncStorage.getItem("them_mode");
+
+    var newTheme = lightTheme;
+    if (them_mode === globals.THEME_MODE.DARK) {
+      newTheme = darkTheme;
+    }
+    this.setState({ theme: them_mode });
+    this.props.swicthTheme(newTheme);
   };
 
   setNotificationCountsafterreview = () => {
     this.setState({
       searched_count: 0,
     });
-    console.log("After -----------------", this.state.searched_count);
   };
 
   getnotificationCount = async () => {
@@ -73,6 +101,11 @@ export class SearchScreen extends Component {
           this.setNotificationCounts(res.value.data.data);
         }
       } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
         console.log(TAG, "notification count can't fetched", err);
       }
     });
@@ -82,13 +115,13 @@ export class SearchScreen extends Component {
     let getsearchedCount = await JSON.parse(
       await AsyncStorage.getItem("searched_count")
     );
-    console.log(
-      "getsearchedCount--setNotificationCounts------",
-      getsearchedCount
-    );
+    // console.log(
+    //   "getsearchedCount--setNotificationCounts------",
+    //   countDeatils.searched_count
+    // );
     this.setState({
       searched_count:
-        getsearchedCount == "0" || getsearchedCount != null
+        getsearchedCount == "0"
           ? getsearchedCount
           : countDeatils.searched_count,
       countDeatils: countDeatils,
@@ -143,7 +176,11 @@ export class SearchScreen extends Component {
               this.setSearchdataList(res.value.data.data);
             }
           } else {
-            if (res.value && res.value.data.search_by_vehicle) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.search_by_vehicle) {
               await showMessage({
                 message: res.value.data.search_by_vehicle,
                 type: "danger",
@@ -197,13 +234,18 @@ export class SearchScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>
+          <Text
+            style={[
+              FriendListStyle.titleBig,
+              { color: this.props.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
             {item.car_make_model ? item.car_make_model : "-"}
@@ -211,7 +253,7 @@ export class SearchScreen extends Component {
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
             {item.registration_number ? item.registration_number : "-"}
@@ -220,7 +262,7 @@ export class SearchScreen extends Component {
         <TouchableOpacity
           style={[
             FriendListStyle.squareView,
-            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+            { backgroundColor: this.props.theme.NAVIGATION_ARROW_COLOR },
           ]}
           onPress={() => this.navigateToDetailScreen(item, index)}
         >
@@ -316,6 +358,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   searchvehicle: (params) => dispatch(actions.searchvehicle(params)),
   notificationCount: (params) => dispatch(actions.notificationCount(params)),
+  swicthTheme: (params) => dispatch(actions.swicthTheme(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);

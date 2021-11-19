@@ -53,19 +53,19 @@ export class SignUpScreen extends Component {
     this.state = {
       //initialize variable
 
-      txtEmail: "1044@mailinator.com",
-      txtFirstName: "ssCss",
-      txtLastName: "ssDss",
-      txtPassword: "Abcd1234",
-      txtConfirmPassword: "Abcd1234",
-      txtDob: "",
-
-      // txtEmail: "",
-      // txtFirstName: "",
-      // txtLastName: "",
-      // txtPassword: "",
-      // txtConfirmPassword: "",
+      // txtEmail: "we@mailinator.com",
+      // txtFirstName: "new",
+      // txtLastName: "one",
+      // txtPassword: "Abcd@1234",
+      // txtConfirmPassword: "Abcd@1234",
       // txtDob: "",
+
+      txtEmail: "",
+      txtFirstName: "",
+      txtLastName: "",
+      txtPassword: "",
+      txtConfirmPassword: "",
+      txtDob: "",
 
       isShowPassword: true,
       isShowConfirmPassword: true,
@@ -211,7 +211,11 @@ export class SignUpScreen extends Component {
               });
             }
           } else {
-            if (res.value && res.value.data.email) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.email) {
               await showMessage({
                 message: res.value.data.email,
                 type: "danger",
@@ -275,7 +279,7 @@ export class SignUpScreen extends Component {
     if (isEmpty(txtLastName)) {
       this.setState({
         isLastNameError: true,
-        lastNameValidMsg: Messages.name,
+        lastNameValidMsg: Messages.lname,
       });
       return false;
     }
@@ -348,20 +352,20 @@ export class SignUpScreen extends Component {
       });
       return false;
     }
-    if (!onlycharandnum(txtPassword)) {
-      this.setState({
-        isPasswordError: true,
-        passwdValidMsg: Messages.passwordValid,
-      });
-      return false;
-    }
-    if (!onlycharandnum(txtConfirmPassword)) {
-      this.setState({
-        isConfirmPasswordError: true,
-        confirmPasswordValidMsg: Messages.passwordValid,
-      });
-      return false;
-    }
+    // if (!onlycharandnum(txtPassword)) {
+    //   this.setState({
+    //     isPasswordError: true,
+    //     passwdValidMsg: Messages.passwordValid,
+    //   });
+    //   return false;
+    // }
+    // if (!onlycharandnum(txtConfirmPassword)) {
+    //   this.setState({
+    //     isConfirmPasswordError: true,
+    //     confirmPasswordValidMsg: Messages.passwordValid,
+    //   });
+    //   return false;
+    // }
     if (!isPassword(txtPassword)) {
       this.setState({
         isPasswordError: true,
@@ -423,7 +427,7 @@ export class SignUpScreen extends Component {
     const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
-       <View
+        <View
           style={[
             AuthStyle.container,
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
@@ -444,7 +448,7 @@ export class SignUpScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-              <Image
+                <Image
                   source={
                     theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
                   }
@@ -453,9 +457,12 @@ export class SignUpScreen extends Component {
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image source={
+                <Image
+                  source={
                     theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
-                  } style={AuthStyle.imgcar} />
+                  }
+                  style={AuthStyle.imgcar}
+                />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
@@ -483,6 +490,7 @@ export class SignUpScreen extends Component {
                       </Text>
                     </View>
                     <Input
+                      theme={theme}
                       value={this.state.txtFirstName}
                       inputStyle={{ marginTop: 0 }}
                       placeholderText={StaticTitle.enterFirstName}
@@ -506,6 +514,7 @@ export class SignUpScreen extends Component {
                     />
 
                     <Input
+                      theme={theme}
                       value={this.state.txtLastName}
                       placeholderText={StaticTitle.enterLastName}
                       onSubmitEditing={() =>
@@ -533,6 +542,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <Input
+                      theme={theme}
                       value={this.state.txtEmail}
                       placeholderText={StaticTitle.enterUsaerName}
                       onSubmitEditing={() =>
@@ -559,6 +569,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <PasswordInput
+                      theme={theme}
                       value={this.state.txtPassword}
                       placeholderText={StaticTitle.enterPassword}
                       autoCapitalize={"none"}
@@ -587,6 +598,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <PasswordInput
+                      theme={theme}
                       value={this.state.txtConfirmPassword}
                       placeholderText={StaticTitle.confirmPassword}
                       autoCapitalize={"none"}
@@ -613,6 +625,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <InputWithIcon
+                    theme={theme}
                       onPressIcon={() => this.showDatePicker()}
                       value={this.state.txtDob}
                       placeholderText={StaticTitle.enterDOB}

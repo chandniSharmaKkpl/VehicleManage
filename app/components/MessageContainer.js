@@ -25,36 +25,89 @@ export const renderBubble = (props) => (
     // renderTime={() => <Text>Time</Text>}
     // renderTicks={() => <Text>Ticks</Text>}
 
-    timeTextStyle={{
-      right: { color: Colors.black },
-      left: { color: Colors.black },
-    }}
-    textStyle={{
+    containerStyle={{
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
       right: {
         color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
       },
     }}
     wrapperStyle={{
       left: {
-        backgroundColor: Colors.msgBG,
+        color: Colors.black,
+        backgroundColor: Colors.placeholderColor,
         marginBottom: 10,
+       opacity:0.7,
+        paddingVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
       },
       right: {
-        backgroundColor: Colors.msgBG,
+        color: Colors.black,
+        backgroundColor: Colors.placeholderColor,
         marginBottom: 10,
+        opacity:0.7,
+        paddingVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
+      },
+    }}
+    timeTextStyle={{
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      left: { color: Colors.black,fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular, },
+    }}
+    textStyle={{
+      right: { color: Colors.black,fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular, },
+      left: { color: Colors.black,fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular, },
+    }}
+    bottomContainerStyle={{
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+    }}
+    tickStyle={{}}
+    containerToNextStyle={{
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
       },
     }}
     containerToPreviousStyle={{
-      right: { borderTopRightRadius: 10 },
-      left: { borderTopLeftRadius: 10 },
-    }}
-    containerToNextStyle={{
-      right: { borderTopRightRadius: 10 },
-      left: { borderTopLeftRadius: 10 },
-    }}
-    containerStyle={{
-      right: { borderTopRightRadius: 10 },
-      left: { borderTopLeftRadius: 10 },
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
     }}
   />
 );

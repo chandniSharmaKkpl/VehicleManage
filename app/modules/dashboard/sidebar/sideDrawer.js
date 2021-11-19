@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  DeviceEventEmitter,
 } from "react-native";
 import Colors from "../../../assets/Colors";
 import * as globals from "../../../utils/Globals";
@@ -22,14 +23,24 @@ import NavigationService from "../../../utils/NavigationService";
 import FastImage from "react-native-fast-image";
 import { SideDrawerStyle } from "../../../assets/styles/SideDrawerStyle";
 
+let _this = null;
 class sideDrawer extends Component {
   constructor(props) {
     super(props);
+    _this = this;
     this.state = {
-      userDetails: this.props.userDetails
-        ? this.props.userDetails.user_data
-        : {},
+      userDetails: {},
     };
+  }
+
+  static updateUserInfo(userData) {
+    _this.setState({ userDetails: userData.userData });
+  }
+
+  componentDidMount() {
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setState({ userDetails: this.props.userDetails.user_data });
+    }
   }
 
   async logoutFinal() {
@@ -49,7 +60,12 @@ class sideDrawer extends Component {
             });
             NavigationService.navigate("Login");
             return;
-          } else {
+          }
+        } else {
+          if (res.value && res.value.data.error == "Unauthenticated.") {
+            {
+              NavigationService.navigate("Login");
+            }
           }
         }
       });
@@ -72,7 +88,6 @@ class sideDrawer extends Component {
   render() {
     const { userDetails } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
-
     return (
       <SafeAreaView style={SideDrawerStyle.container}>
         <View
@@ -87,12 +102,12 @@ class sideDrawer extends Component {
 
           <View style={SideDrawerStyle.headerSeprate}>
             <View style={SideDrawerStyle.circleview}>
-              {userDetails.user_photo ? (
+              {userDetails.avatar ? (
                 <FastImage
                   resizeMethod="resize"
                   style={SideDrawerStyle.userimgstyle}
                   source={{
-                    uri: userDetails.user_photo,
+                    uri: userDetails.avatar,
                   }}
                 ></FastImage>
               ) : (
@@ -122,7 +137,7 @@ class sideDrawer extends Component {
             </TouchableOpacity>
           </View>
 
-          <View style={SideDrawerStyle.beforeDrawerOption}></View>
+          {/* <View style={SideDrawerStyle.beforeDrawerOption}></View>
           <TouchableOpacity
             style={[SideDrawerStyle.dashBoardButtonViewStyle]}
             onPress={() => {
@@ -144,7 +159,7 @@ class sideDrawer extends Component {
             >
               {StaticTitle.subscriptions}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => NavigationService.navigate("TermsCondition")}
             style={[SideDrawerStyle.dashBoardButtonViewStyle]}
@@ -153,14 +168,17 @@ class sideDrawer extends Component {
               style={{
                 width: 20,
                 height: 20,
-                tintColor: Colors.black,
+                tintColor: this.props.theme.LITE_FONT_COLOR,
               }}
               source={IMAGE.terms_conditions_img}
             />
 
             <Text
               numberOfLines={1}
-              style={[SideDrawerStyle.dashBoardTextStyle]}
+              style={[
+                SideDrawerStyle.dashBoardTextStyle,
+                { color: this.props.theme.LITE_FONT_COLOR },
+              ]}
             >
               {StaticTitle.termandcond}
             </Text>

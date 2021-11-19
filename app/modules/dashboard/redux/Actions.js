@@ -8,7 +8,7 @@ import {
   LOGOUT,
   UPDATE_SETTINGS,
   NOTIFICATION_COUNT,
-  SEARCH_FRIEND,WHO_SEARCH_YOU
+  SEARCH_FRIEND,WHO_SEARCH_YOU, SWITCH_THEME
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({

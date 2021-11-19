@@ -178,9 +178,9 @@ export const ComponentStyle = StyleSheet.create({
   },
   tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
   roundedtab_img: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
     tintColor: Colors.primary,
   },
 
@@ -188,7 +188,7 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? globals.deviceHeight * 0.03 : 0,
+    paddingTop: Platform.OS === "android" ? globals.deviceHeight * 0.04 : 0,
   },
   headerContain: {
     flexDirection: "row",
@@ -203,7 +203,7 @@ export const ComponentStyle = StyleSheet.create({
     // width:globals.deviceWidth * 0.42
   },
   messagescountstyle: {
-    fontSize: RFPercentage(2.2),
+    fontSize: RFPercentage(2),
     fontFamily: FontFamily.RalewaRegular,
     color: Colors.white,
     textAlign: "center",
@@ -230,7 +230,7 @@ export const ComponentStyle = StyleSheet.create({
     position: "absolute",
     bottom: globals.deviceWidth * 0.09,
     left: globals.deviceWidth * 0.09,
-    backgroundColor:Colors.red,
+    backgroundColor: Colors.red,
   },
   /////// Social media textinput for snapchat
 
@@ -362,6 +362,6 @@ export const ComponentStyle = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50 / 2,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
 });

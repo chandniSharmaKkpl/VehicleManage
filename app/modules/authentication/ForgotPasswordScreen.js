@@ -14,7 +14,7 @@ import {
 import { connect } from "react-redux";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { StaticTitle } from "../../utils/StaticTitle";
-import { Input, PrimaryButton,Loader } from "../../components";
+import { Input, PrimaryButton, Loader } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isEmail } from "../../utils/Validators";
@@ -65,46 +65,45 @@ export class ForgotPasswordScreen extends Component {
     params.append("email", txtEmail);
 
     const { forgotpassword } = this.props;
-    if (globals.isInternetConnected == true){
+    if (globals.isInternetConnected == true) {
       forgotpassword(params)
-      .then(async (res) => {
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.invalid_email) {
-            this.setState({
-              emailValidMsg: res.value.invalid_email,
-              isEmailError: true,
-            });
-          } else if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "info",
-              duration: 4000,
-            });
-            NavigationService.navigate("SignIn");
+        .then(async (res) => {
+          // console.log("res=====forgotpassword", JSON.stringify(res.value.data));
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              NavigationService.navigate("SignIn");
+            } else {
+              this.setState({
+                emailValidMsg: res.value.data.email,
+                isEmailError: true,
+              });
+            }
           } else {
-            this.setState({
-              emailValidMsg: res.value.invalid_email,
-              isEmailError: true,
-            });
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.email) {
+              await showMessage({
+                message: res.value.data.email,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
           }
-        } else {
-          if (res.value && res.value.data.error) {
-            await showMessage({
-              message: res.value.message,
-              type: "danger",
-              icon: "info",
-              duration: 4000,
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG,"i am in catch error forgot passeord", err);
-      });
-    }
-    else {
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error forgot passeord", err);
+        });
+    } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
   };
@@ -131,7 +130,7 @@ export class ForgotPasswordScreen extends Component {
   };
 
   render() {
-    const { isLoading, loaderMessage,theme } = this.props;
+    const { isLoading, loaderMessage, theme } = this.props;
     return (
       <>
         <View
@@ -140,7 +139,7 @@ export class ForgotPasswordScreen extends Component {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-        {isLoading && (
+          {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
           <NavigationEvents onWillBlur={() => this.clearStates()} />
@@ -150,15 +149,21 @@ export class ForgotPasswordScreen extends Component {
           >
             <View style={AuthStyle.onlyFlex}>
               <View style={AuthStyle.imglogoContainer}>
-                <Image source={
+                <Image
+                  source={
                     theme.mode == "dark" ? IMAGE.dark_Logo_img : IMAGE.logo_img
-                  } style={AuthStyle.imglogo} />
+                  }
+                  style={AuthStyle.imglogo}
+                />
               </View>
 
               <View style={AuthStyle.imgcarContainer}>
-                <Image  source={
+                <Image
+                  source={
                     theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
-                  } style={AuthStyle.imgcar} />
+                  }
+                  style={AuthStyle.imgcar}
+                />
               </View>
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
@@ -187,6 +192,7 @@ export class ForgotPasswordScreen extends Component {
                       </Text>
                     </View>
                     <Input
+                      theme={theme}
                       value={this.state.txtEmail}
                       placeholderText={StaticTitle.enterUsaerName}
                       onSubmitEditing={Keyboard.dismiss}

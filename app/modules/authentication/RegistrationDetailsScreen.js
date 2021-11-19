@@ -73,7 +73,6 @@ export class RegistrationDetailsScreen extends Component {
   // set userInformation
   setUserInfo = async () => {
     var user = this.props.navigation.state.params.user;
-    console.log(TAG, "user==setUserInfo===", user);
     if (this._isMounted) {
       if (user && user.user_data) {
         this.setState({
@@ -116,6 +115,7 @@ export class RegistrationDetailsScreen extends Component {
       attachPaperObj,
       attachphotoObj,
     } = this.state;
+
     if (isEmpty(txtRegNumber)) {
       await showMessage({
         message: StaticTitle.registernumberfieldrequire,
@@ -134,35 +134,49 @@ export class RegistrationDetailsScreen extends Component {
         isRegNumberError: true,
         regNumberValidMsg: Messages.registernumberfieldvalidation,
       });
-    } else if (
-      attachPaperObj.uri == undefined ||
-      (attachPaperObj.uri == "") != [] ||
-      attachPaperUrl == "" ||
-      attachPaperUrl == "Dummy.jpg"
-    ) {
-      await showMessage({
-        message: StaticTitle.registrationpaper,
-        type: "danger",
-        icon: "info",
-        duration: 4000,
-      });
-    } else if (
-      attachphotoObj.uri == undefined ||
-      (attachphotoObj.uri == "") != [] ||
-      attachphotoUrl == "" ||
-      attachphotoUrl == "Dummy.jpg"
-    ) {
-      await showMessage({
-        message: StaticTitle.vehicalphotorequired,
-        type: "danger",
-        icon: "info",
-        duration: 4000,
-      });
     } else {
       if (isFrom == "Profile") {
-        this.updateRegisterDetailAPIcall();
+        if (attachphotoUrl == "" || attachphotoUrl == "Dummy.jpg") {
+          await showMessage({
+            message: StaticTitle.registrationpaper,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else if (attachPaperUrl == "" || attachPaperUrl == "Dummy.jpg") {
+          await showMessage({
+            message: StaticTitle.registrationpaper,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else {
+          this.updateRegisterDetailAPIcall();
+        }
       } else {
-        this.registerDetailAPIcall();
+        if (
+          attachPaperObj.uri == undefined ||
+          (attachPaperObj.uri == "") != []
+        ) {
+          await showMessage({
+            message: StaticTitle.registrationpaper,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else if (
+          attachphotoObj.uri == undefined ||
+          (attachphotoObj.uri == "") != []
+        ) {
+          await showMessage({
+            message: StaticTitle.vehicalphotorequired,
+            type: "danger",
+            icon: "info",
+            duration: 4000,
+          });
+        } else {
+          this.registerDetailAPIcall();
+        }
       }
     }
   };
@@ -180,12 +194,20 @@ export class RegistrationDetailsScreen extends Component {
     var params = new FormData();
     // Collect the necessary params
     params.append("id", user.user_data.user_id);
-    if (attachphotoObj.uri == undefined || (attachphotoObj.uri == "") != []) {
+    if (
+      attachphotoUrl == "" ||
+      attachphotoObj.uri == undefined ||
+      (attachphotoObj.uri == "") != []
+    ) {
       params.append("vehicle_photo", "");
     } else {
       params.append("vehicle_photo", attachphotoObj);
     }
-    if (attachPaperObj.uri == undefined || (attachPaperObj.uri == "") != []) {
+    if (
+      attachPaperUrl == "" ||
+      attachPaperObj.uri == undefined ||
+      (attachPaperObj.uri == "") != []
+    ) {
       params.append("registration_paper", "");
     } else {
       params.append("registration_paper", attachPaperObj);
@@ -194,17 +216,17 @@ export class RegistrationDetailsScreen extends Component {
 
     const { updateRegistrationDetail } = this.props;
 
-    console.log(
-      "updateRegisterDetailAPIcall params----------",
-      JSON.stringify(params)
-    );
+    // console.log(
+    //   "updateRegisterDetailAPIcall params----------",
+    //   JSON.stringify(params)
+    // );
     if (globals.isInternetConnected == true) {
       updateRegistrationDetail(params)
         .then(async (res) => {
-          console.log(
-            "updateRegisterDetailAPIcall res.value.data---",
-            JSON.stringify(res.value)
-          );
+          // console.log(
+          //   "updateRegisterDetailAPIcall res.value.data---",
+          //   JSON.stringify(res.value)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -218,7 +240,11 @@ export class RegistrationDetailsScreen extends Component {
             } else {
             }
           } else {
-            if (res.value && res.value.data.registration_paper) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.registration_paper) {
               await showMessage({
                 message: res.value.data.registration_paper,
                 type: "danger",
@@ -261,11 +287,11 @@ export class RegistrationDetailsScreen extends Component {
     params.append("registration_paper", attachPaperObj);
     const { registerdetail } = this.props;
 
-    console.log("params----------", JSON.stringify(params));
+    // console.log("params----------", JSON.stringify(params));
     if (globals.isInternetConnected == true) {
       registerdetail(params)
         .then(async (res) => {
-          console.log("res.value.data---", JSON.stringify(res.value.data.data));
+          // console.log("res.value.data---", JSON.stringify(res.value.data.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -280,6 +306,11 @@ export class RegistrationDetailsScreen extends Component {
             } else {
             }
           } else {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
             if (res.value && res.value.data.registration_paper) {
               await showMessage({
                 message: res.value.data.registration_paper,
@@ -382,7 +413,7 @@ export class RegistrationDetailsScreen extends Component {
   };
 
   // choose profile photo from gallery
-  chooseMedia = () => {
+  chooseMedia = async () => {
     launchImageLibrary(
       {
         mediaType: "photo",
@@ -390,7 +421,7 @@ export class RegistrationDetailsScreen extends Component {
         maxHeight: 200,
         maxWidth: 200,
       },
-      (response) => {
+      async (response) => {
         // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
@@ -399,6 +430,7 @@ export class RegistrationDetailsScreen extends Component {
           type: response.type,
         };
         if (this.state.isattachPaper) {
+          await this.closeAttchPaper();
           this.setState({
             isattachPaper: false,
             attachPaperUrl: response.uri,
@@ -408,6 +440,7 @@ export class RegistrationDetailsScreen extends Component {
             attachPaperObj: source ? source : "",
           });
         } else {
+          await this.closeAttchPhoto();
           this.setState({
             isattachphoto: false,
             attachphotoUrl: response.uri,
@@ -494,7 +527,12 @@ export class RegistrationDetailsScreen extends Component {
             </MediaModel>
             <View style={AuthStyle.onlyFlex}>
               <View style={[AuthStyle.titleviewStyle]}>
-                <Text style={[AuthStyle.registrationStyle]}>
+                <Text
+                  style={[
+                    AuthStyle.registrationStyle,
+                    { color: theme.LITE_FONT_COLOR },
+                  ]}
+                >
                   {StaticTitle.registartionDetail}
                 </Text>
               </View>
@@ -512,6 +550,7 @@ export class RegistrationDetailsScreen extends Component {
               </View>
               <View style={AuthStyle.registernumView}>
                 <Input
+                  theme={theme}
                   value={this.state.txtRegNumber}
                   inputStyle={{ marginTop: 0, borderColor: Colors.black }}
                   placeholderText={StaticTitle.enterRegisterNumber}

@@ -6,8 +6,24 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
+  KeyboardAvoidingView,
   DeviceEventEmitter,
 } from "react-native";
+import KeyboardSpacer from "react-native-keyboard-spacer";
+import {
+  Avatar,
+  Bubble,
+  GiftedAvatar,
+  GiftedChat,
+  Message,
+  MessageImage,
+  MessageText,
+  Send,
+  Time,
+} from "react-native-gifted-chat";
+import moment from "moment";
+import { CHAT_MESSAGE_TYPE } from "../../../utils/Globals";
 import { connect } from "react-redux";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import FastImage from "react-native-fast-image";
@@ -19,7 +35,6 @@ import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import * as globals from "../../../utils/Globals";
 import { DefaultChatOptions } from "../../../components/DefaultChatOptions";
-import { GiftedChat } from "react-native-gifted-chat";
 import {
   renderAvatar,
   renderBubble,
@@ -37,8 +52,6 @@ import {
 } from "../../../components/InputToolbar";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as actions from "./redux/Actions";
-
-import ChatMessages from "../../../dummyData/ChatMessages";
 const avatar = require("../../../assets/images/user.jpeg");
 
 const TAG = "ChatMessagesScreen ::=";
@@ -64,37 +77,30 @@ export class ChatMessagesScreen extends Component {
       isMessageSend: false,
     };
     this.onSend = this.onSend.bind(this);
-    this.callFetchAPI = this.callFetchAPI.bind(this);
     this.callSendAPI = this.callSendAPI.bind(this);
-    this.formatMessageAndStore = this.formatMessageAndStore.bind(this);
     this.readMessagesAPI = this.readMessagesAPI.bind(this);
+    this.callFetchAPI = this.callFetchAPI.bind(this);
+    this.formatMessageAndStore = this.formatMessageAndStore.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
-    // console.log(
-    //   Platform.OS + " - ChatDetails ---- UNSAFE_componentWillReceiveProps :-->"
-    // );
-    // this.setState(
-    //   (previousState) => {
-    //     return {
-    //       messages: GiftedChat.append(
-    //         previousState.messages,
-    //         ...[newProps.chatMessages]
-    //       ),
-    //       isMessageSend: true,
-    //     };
-    //   },
-    //   () => {
-    //     // this.callFetchAPI();
-    //   }
-    // );
+    this.setState(
+      (previousState) => {
+        return {
+          messages: GiftedChat.append(
+            previousState.messages,
+            ...[newProps.chatMessages]
+          ),
+          isMessageSend: true,
+        };
+      },
+      () => {
+        this.callFetchAPI();
+      }
+    );
   };
 
-  async componentDidMount() {
-    console.log(
-      " this.state.user_info.id==============",
-      this.state.user_info.id
-    );
+  componentDidMount() {
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -118,67 +124,16 @@ export class ChatMessagesScreen extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+    if (this.state.isMessageSend) {
+      DeviceEventEmitter.emit("fetch_message_list");
+    }
+  }
+
   callFetchAPI = () => {
     this.callMessageDetailsAPI();
   };
-
-  formatMessageAndStore(response) {
-    console.log("response==================", response);
-    var msgArr = [];
-
-    this.readMessagesAPI(response);
-
-    var messages = response.messages;
-    var fromUser = response.from_detail;
-    var toUser = response.to_detail;
-
-    messages.forEach((msg) => {
-      // console.log("3 msg :->", msg);
-
-      // console.log("fromUser :->", fromUser);
-      var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
-      // console.log("fromUserDtl :->", fromUserDtl);
-
-      var avatar_img = avatar;
-      if (fromUserDtl.avatar != null && fromUserDtl.avatar != "null") {
-        avatar_img = fromUserDtl.avatar;
-      }
-
-      // console.log("avatar_img :->", avatar_img);
-
-      var msgDic = {
-        _id: msg.id,
-        from_id: msg.from_id,
-        from_type: msg.from_type,
-        to_id: msg.to_id != undefined ? msg.to_id : "",
-
-        text: msg.message,
-        created_at: msg.created_at,
-        is_received: msg.is_received,
-        user: {
-          _id: fromUserDtl.id,
-          name: fromUserDtl.full_name,
-          avatar: avatar_img,
-        },
-        image: fromUserDtl.image_url,
-        sent: this.state.from_id == fromUserDtl.id ? true : false,
-        received: parseInt(this.state.is_received) == 1 ? true : false,
-        pending: false,
-      };
-
-      // console.log("msgDic :->", msgDic);
-
-      msgArr.push(msgDic);
-    });
-
-    // console.log("Before msgArr :-->", msgArr);
-    msgArr = msgArr.sort((a, b) => parseInt(a._id) < parseInt(b._id));
-    // console.log("After msgArr :-->", msgArr);
-
-    this.setState({
-      messages: msgArr,
-    });
-  }
 
   // Message Details API
   callMessageDetailsAPI = async () => {
@@ -187,7 +142,6 @@ export class ChatMessagesScreen extends Component {
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("to_id", to_id);
-    console.log("to_id========params========", JSON.stringify(params));
     messagesDetails(params)
       .then(async (res) => {
         // console.log(
@@ -216,12 +170,6 @@ export class ChatMessagesScreen extends Component {
           }
         } else {
           if (res.value && res.value.data.error) {
-            // await showMessage({
-            //   message: res.value.message,
-            //   type: "danger",
-            //   icon: "info",
-            //   duration: 4000,
-            // });
           }
         }
       })
@@ -230,8 +178,75 @@ export class ChatMessagesScreen extends Component {
       });
   };
 
+  formatMessageAndStore(response) {
+    // console.log("response=============formatMessageAndStore=====", response);
+    var msgArr = [];
+
+    this.readMessagesAPI(response);
+
+    var messages = response.messages;
+    var fromUser = response.from_detail;
+    var toUser = response.to_detail;
+
+    messages.forEach((msg) => {
+      // console.log(
+      //   "3 msg *->",
+      //   msg.id
+      // );
+
+      // console.log("fromUser :->", fromUser);
+      var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
+      // console.log("fromUserDtl :->", fromUserDtl);
+
+      var avatar_img = avatar;
+      if (fromUserDtl.avatar != null && fromUserDtl.avatar != "null") {
+        avatar_img = fromUserDtl.avatar;
+      }
+      var from_id = Number(this.state.from_id);
+
+      // convert DB's UTC-time into moment object,
+      // Gifted-chat module will convert to local time and display on screen
+      let currentDate = moment.utc(msg.created_at);
+
+      var msgDic = {
+        _id: msg.id,
+        from_id: msg.from_id,
+        to_id: msg.to_id != undefined ? msg.to_id : "",
+        text: msg.message,
+        createdAt: currentDate,
+        is_received: msg.is_received,
+        user: {
+          _id: fromUserDtl.id,
+          name: fromUserDtl.full_name,
+          avatar: avatar_img,
+        },
+        sent: from_id == fromUserDtl.id ? true : false,
+        received: parseInt(msg.is_received) == 1 ? true : false,
+        pending: false,
+      };
+
+      // console.log("msgDic :->", msgDic);
+
+      msgArr.push(msgDic);
+    });
+
+    // console.log("Before msgArr :-->", msgArr);
+    msgArr = msgArr.sort((a, b) => parseInt(a._id) < parseInt(b._id));
+    // console.log("After msgArr :-->", msgArr);
+
+    const newArray = [];
+    msgArr.forEach((obj) => {
+      if (!newArray.some((o) => o._id === obj._id)) {
+        newArray.push({ ...obj });
+      }
+    });
+
+    this.setState({
+      messages: newArray,
+    });
+  }
+
   readMessagesAPI = (response) => {
-    const { userDetails } = this.state;
     const messages = response.messages;
     // console.log("in messages() :->", messages);
 
@@ -266,7 +281,7 @@ export class ChatMessagesScreen extends Component {
         // console.log(
         //   TAG,
         //   "response of get readMessage",
-        //   JSON.stringify(res.value)
+        //   JSON.stringify(res.value.data)
         // );
       })
       .catch((err) => {
@@ -274,54 +289,46 @@ export class ChatMessagesScreen extends Component {
       });
   };
 
-  async componentWillUnmount() {
-    this._isMounted = false;
-    await hideMessage();
-    if (this.state.isMessageSend) {
-      DeviceEventEmitter.emit("fetch_message_list");
-    }
-  }
-
   onSend(messages = []) {
-    const { userDetails } = this.state;
+    const { userDetails } = this.props;
+    // console.log("onSend() messages  :->", this.props.userDetails);
 
-    console.log("onSend() messages :->", userDetails);
     var newMsgs = [];
-
     messages.forEach((msg) => {
       msg.user.avatar = userDetails.user_data.user_photo;
       msg.user.name = userDetails.user_data.username;
+      msg.sent = true;
+      msg.received = false;
       newMsgs.push(msg);
     });
-    console.log("onSend() :->", global.ws);
 
-    try {
-      global.ws.send(
-        JSON.stringify({
-          command: "message",
-          from: this.state.from_id,
-          to: this.state.to_id,
-          message: messages,
-          from_user: userDetails,
-        })
-      );
+    // console.log("onSend() :->", global.ws);
+    console.log("onSend() newMsgs:->", newMsgs);
+    {
+      // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
+      try {
+        global.ws.send(
+          JSON.stringify({
+            command: "message",
+            from: this.state.from_id,
+            to: this.state.to_id,
+            message: messages,
+            from_user: userDetails,
+          })
+        );
 
-      this.callSendAPI(newMsgs);
+        this.callSendAPI(newMsgs);
 
-      this.setState(
-        (previousState) => {
+        this.setState((previousState) => {
           return {
             messages: GiftedChat.append(previousState.messages, newMsgs),
             isMessageSend: true,
           };
-        },
-        () => {
-          console.log("onSend() messages->", this.state.messages);
-        }
-      );
-    } catch (err) {
-      console.log("2nd Error while send socket message. Error:->", err);
-      console.log("to_detail :->" + err);
+        });
+      } catch (err) {
+        // console.log("2nd Error while send socket message. Error:->", err);
+        // console.log("to_detail :->"+err);
+      }
     }
   }
 
@@ -340,23 +347,18 @@ export class ChatMessagesScreen extends Component {
 
     insertMessage(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of insertMessage",
-          JSON.stringify(res.value.data)
-        );
+        // console.log(
+        //   TAG,
+        //   "response of insertMessage",
+        //   JSON.stringify(res.value.data)
+        // );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
           }
         } else {
-          if (res.value && res.value.data.error) {
-            // await showMessage({
-            //   message: res.value.message,
-            //   type: "danger",
-            //   icon: "info",
-            //   duration: 4000,
-            // });
+          if (res.value && res.value.data.success == false) {
+          } else if (res.value && res.value.data.error) {
           }
         }
       })
@@ -365,10 +367,29 @@ export class ChatMessagesScreen extends Component {
       });
   }
 
+  // Render modal faltlist view to choose camera or gallery
+  renderOptionsview = (item, index) => {
+    return (
+      <>
+        <TouchableOpacity onPress={() => this.reportorblockuser(item)}>
+          <View style={ComponentStyle.viewPopupStyle}>
+            <FastImage
+              resizeMethod="resize"
+              style={ComponentStyle.imagePopupStyle}
+              source={item.image}
+            ></FastImage>
+
+            <Text style={ComponentStyle.textStylePopup}>{item.title}</Text>
+          </View>
+        </TouchableOpacity>
+        {index < 1 ? <View style={ComponentStyle.lineStyle1}></View> : null}
+      </>
+    );
+  };
+
   // report User API
   reportUserAPI = () => {
     const { user_info } = this.state;
-    console.log("user_info=====", user_info);
     const { reportUser } = this.props;
     let params = new URLSearchParams();
 
@@ -392,6 +413,8 @@ export class ChatMessagesScreen extends Component {
               duration: 4000,
             });
             this.displayMsgReportPicker();
+            NavigationService.back();
+            DeviceEventEmitter.emit("fetch_message_list");
           }
         } else {
           if (res.value && res.value.data.error) {
@@ -406,7 +429,6 @@ export class ChatMessagesScreen extends Component {
   //block User API
   blockUserAPI = async () => {
     const { user_info } = this.state;
-    console.log("user_info=====", user_info);
     const { blockUser } = this.props;
     let params = new URLSearchParams();
 
@@ -430,6 +452,8 @@ export class ChatMessagesScreen extends Component {
               duration: 4000,
             });
             this.displayMsgReportPicker();
+            NavigationService.back();
+            DeviceEventEmitter.emit("fetch_message_list");
           }
         } else {
           if (res.value && res.value.data.error) {
@@ -458,24 +482,8 @@ export class ChatMessagesScreen extends Component {
     }
   };
 
-  // Render modal faltlist view to choose camera or gallery
-  renderOptionsview = (item, index) => {
-    return (
-      <>
-        <TouchableOpacity onPress={() => this.reportorblockuser(item)}>
-          <View style={ComponentStyle.viewPopupStyle}>
-            <FastImage
-              resizeMethod="resize"
-              style={ComponentStyle.imagePopupStyle}
-              source={item.image}
-            ></FastImage>
-
-            <Text style={ComponentStyle.textStylePopup}>{item.title}</Text>
-          </View>
-        </TouchableOpacity>
-        {index < 1 ? <View style={ComponentStyle.lineStyle1}></View> : null}
-      </>
-    );
+  setsendText = (text) => {
+    this.setState({ txtmessage: text });
   };
 
   //display gallry picker model
@@ -483,8 +491,33 @@ export class ChatMessagesScreen extends Component {
     this.setState({ isMsgReportPicker: !this.state.isMsgReportPicker });
   };
 
-  setsendText = (text) => {
-    this.setState({ txtmessage: text });
+  // navigate to shareSocials
+  shareSocials = () => {
+    NavigationService.navigate("ShareSocials", {
+      from_id: this.state.to_id,
+    });
+  };
+
+  renderTicks = (message, user_id) => {
+    if (message && user_id && parseInt(message.user._id) != parseInt(user_id)) {
+      return null;
+    }
+    if (message && (message.sent || message.received || message.pending)) {
+      return (
+        <View style={{ flexDirection: "row", padding: 5 }}>
+          {!!message.received && (
+            <Text style={{ color: Colors.white, fontSize: 10 }}>✓</Text>
+          )}
+          {!!message.sent && (
+            <Text style={{ color: Colors.white, fontSize: 10 }}>✓</Text>
+          )}
+          {!!message.pending && (
+            <Text style={{ color: Colors.white, fontSize: 10 }}>🕓</Text>
+          )}
+        </View>
+      );
+    }
+    return null;
   };
 
   render() {
@@ -501,10 +534,21 @@ export class ChatMessagesScreen extends Component {
     } = this.state;
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
     var user_id = from_id;
-
+    let platformConf =
+      Platform.OS === "ios"
+        ? {
+            minInputToolbarHeight: 70,
+            bottomOffset: 0,
+          }
+        : {};
     return (
       <>
-        <View style={ChatStyle.container}>
+        <View
+          style={[
+            ChatStyle.container,
+            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+          ]}
+        >
           <ChatHeader
             theme={theme}
             isShowBack={true}
@@ -512,6 +556,7 @@ export class ChatMessagesScreen extends Component {
             isShowRighttwo={true}
             isuserImage={user_photo}
             isMsgReportPicker={() => this.displayMsgReportPicker()}
+            isShareSocials={() => this.shareSocials()}
           />
           <View>
             <MediaModel
@@ -538,7 +583,6 @@ export class ChatMessagesScreen extends Component {
                         }
                         bounces={false}
                         showsVerticalScrollIndicator={false}
-                        listKey={(item, index) => "D" + index.toString()}
                         keyExtractor={(item, index) => "D" + index.toString()}
                       />
                     </View>
@@ -547,35 +591,44 @@ export class ChatMessagesScreen extends Component {
               </View>
             </MediaModel>
           </View>
+
           <GiftedChat
-            text={txtmessage}
-            onInputTextChanged={(text) => this.setsendText(text)}
             messages={messages}
             onSend={this.onSend}
+            showUserAvatar={false}
+            shouldRenderUsername={true}
+            messagesContainerStyle={{
+              paddingBottom: 40,
+              backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+            }}
             user={{
               _id: Number(user_id),
             }}
-            minInputToolbarHeight={60}
-            alwaysShowSend
-            scrollToBottom
-            renderUsernameOnMessage
-            bottomOffset={26}
+            maxInputLength={1000}
+            showAvatarForEveryMessage={false}
+            renderMessageImage={(props) => {
+              <View>
+                <MessageImage {...props} />
+              </View>;
+            }}
+            textInputProps={{}}
+            keyboardShouldPersistTaps="never"
+            renderTicks={(message) => this.renderTicks(message, user_id)}
+            alwaysShowSend={true}
+            timeFormat={"HH:mm"}
             onPressAvatar={console.log("onPressAvatar")}
-            isTyping={true}
-            alwaysShowSends
+            alwaysShowSend={true}
+            style={{ flex: 1 }}
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
-            renderActions={renderActions}
-            renderComposer={renderComposer}
+            // renderActions={renderActions}
+            // renderComposer={renderComposer}
             renderSend={renderSend}
-            renderAvatar={renderAvatar}
+            // renderAvatar={renderAvatar}
             renderBubble={renderBubble}
-            renderMessage={renderMessage}
-            renderMessageText={renderMessageText}
+            // renderMessage={renderMessage}
+            // renderMessageText={renderMessageText}
             isCustomViewBottom
-            messagesContainerStyle={{
-              backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-            }}
             parsePatterns={(linkStyle) => [
               {
                 pattern: /#(\w+)/,
@@ -583,7 +636,11 @@ export class ChatMessagesScreen extends Component {
                 onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
               },
             ]}
+            {...platformConf}
           />
+          {Platform.OS === "android" ? (
+            <KeyboardSpacer topSpacing={-160} />
+          ) : null}
         </View>
       </>
     );

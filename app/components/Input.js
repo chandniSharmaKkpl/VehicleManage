@@ -24,6 +24,7 @@ const Input = ({
   multiline,
   numberOfLines,
   autoFocus,
+  theme,
   ...props
 }) => {
   return (
@@ -41,7 +42,7 @@ const Input = ({
           },
         ]}
         placeholder={placeholderText}
-        placeholderTextColor={Colors.placeholderColor}
+        placeholderTextColor={theme.BASIC_FONT_COLOR}
         blurOnSubmit={blurOnSubmit}
         onChangeText={onChangeText}
         keyboardType={keyboardType}

@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { View,DeviceEventEmitter, Alert, Text, ScrollView } from "react-native";
+import {
+  View,
+  DeviceEventEmitter,
+  Alert,
+  Text,
+  ScrollView,
+} from "react-native";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";
 import { PrivacySettingStyle } from "../../../assets/styles/PrivacySettingStyle";
@@ -7,7 +13,6 @@ import { StaticTitle } from "../../../utils/StaticTitle";
 import * as actions from "../redux/Actions";
 import { SwitchComponent, Header } from "../../../components";
 import * as Authactions from "../../authentication/redux/Actions";
-
 
 const TAG = "PrivacySettingsScreen ::=";
 
@@ -27,9 +32,7 @@ export class PrivacySettingsScreen extends Component {
     };
   }
 
-  async componentWillUnmount() {
-    await this.getUserData();
-  }
+ 
 
   async componentDidMount() {
     await this.onFocus();
@@ -47,7 +50,6 @@ export class PrivacySettingsScreen extends Component {
     this._isMounted = false;
     this.getUserData();
     DeviceEventEmitter.emit("initializeApp");
-
   }
 
   // set userInformation
@@ -168,6 +170,11 @@ export class PrivacySettingsScreen extends Component {
             } else {
             }
           } else {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            }
           }
         })
         .catch((err) => {
@@ -185,6 +192,12 @@ export class PrivacySettingsScreen extends Component {
         if (res.value && res.value.data.success == true) {
           if (res.value && res.value.status === 200) {
           } else {
+          }
+        } else {
+          if (res.value && res.value.data.error == "Unauthenticated.") {
+            {
+              NavigationService.navigate("Login");
+            }
           }
         }
       });
@@ -221,7 +234,12 @@ export class PrivacySettingsScreen extends Component {
             onPressed={() => this.props.navigation.openDrawer()}
           />
           <View style={PrivacySettingStyle.maincontainer}>
-            <Text style={PrivacySettingStyle.headingtitle}>
+            <Text
+              style={[
+                PrivacySettingStyle.headingtitle,
+                { color: theme.LITE_FONT_COLOR },
+              ]}
+            >
               {StaticTitle.privacysettings}
             </Text>
             <View style={PrivacySettingStyle.separatorLine}></View>
@@ -337,7 +355,7 @@ export class PrivacySettingsScreen extends Component {
               <Text
                 style={[
                   PrivacySettingStyle.headingtitle,
-                  { marginVertical: 5 },
+                  { color: theme.LITE_FONT_COLOR, marginVertical: 5 },
                 ]}
               >
                 {StaticTitle.premiumsetting}

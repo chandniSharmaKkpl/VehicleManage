@@ -29,7 +29,7 @@ class GoogleLogin extends Component {
 
   async componentDidMount() {
     this.configureGoogleSignIn(); // configure Google SignIn
-    await this.getCurrentUser(); // check Current user
+    // await this.getCurrentUser(); // check Current user
   }
 
   // check Current user  Silently
@@ -52,8 +52,9 @@ class GoogleLogin extends Component {
     GoogleSignin.configure({
       webClientId: WEB_CLIENT_ID,
       // androidClientId: WEB_CLIENT_ID,
-      // offlineAccess: true,
-      // forceConsentPrompt: true,
+      offlineAccess: false,
+      hostedDomain: '',
+      forceConsentPrompt: true,
     });
   }
 
@@ -121,7 +122,11 @@ class GoogleLogin extends Component {
               }
             }
           } else {
-            if (res.value && res.value.data.error) {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.data.error) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",

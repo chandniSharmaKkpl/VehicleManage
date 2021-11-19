@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   DeviceEventEmitter,
 } from "react-native";
-import Colors from "../../../assets/Colors";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -41,80 +40,46 @@ export class ChatListScreen extends Component {
       searchTxt: "",
       dataArray: [],
       chatName: [],
-      theme: {},
+
       isUserRegister: false,
       loader: false,
     };
     global.ws = null;
     this.registerDeviceTimer = null;
+    this.callAPI = this.callAPI.bind(this);
+    this.searchFromUser = this.searchFromUser.bind(this);
+    this.getchatListAPI = this.getchatListAPI.bind(this);
     this.connectWebSocket = this.connectWebSocket.bind(this);
     this.callMessageListAPI = this.callMessageListAPI.bind(this);
     this.registerAndSubscribe = this.registerAndSubscribe.bind(this);
     this.searchByName = this.searchByName.bind(this);
-  }
-
-  searchByName(searchText) {
-    console.log("Value of item is :->", searchText);
-    console.log("this.state.chatName :-->", this.state);
-    const newData = Object.values(this.state.chatName).filter((item) => {
-      const itemData = item.name.toUpperCase();
-      const textData = searchText.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    this.setState({
-      dataArray: newData,
-      searchTxt: searchText,
-    });
+    this.updateUnreadCount = this.updateUnreadCount.bind(this);
+    this.closeOrInActiveScreen = this.closeOrInActiveScreen.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
-    console.log(
-      Platform.OS +
-        " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
-      newProps.isReceiveChatMessage +
-        ", chatMsg Length:" +
-        JSON.stringify(newProps.chatMessages)
-    );
+    // console.log(
+    //   Platform.OS +
+    //     " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
+    //   newProps.isReceiveChatMessage +
+    //     ", chatMsg Length:" +
+    //     newProps.chatMessages.length
+    // );
     // When user is inside Inbox screen and any 1-1 or group message is received, then IF condition is true
     if (
       this.state.dataArray.length == newProps.chatList.length &&
       newProps.isReceiveChatMessage == true &&
       newProps.chatMessages.length > 0
     ) {
-      console.log("in IF -------------------->");
-      // from_id": from_id,
-      // "from_type": user_details.user_role == USER_ROLE.COACH ? 1 : 0,
-      // "class_id
       var newDataArray = this.state.dataArray;
       newDataArray.forEach((data) => {
         newProps.chatMessages.forEach((msg) => {
-          console.log(
-            "msg=====================================================",
-            msg
-          );
           var from_id = msg.from_id;
-          var class_id = msg.class_id;
-          console.log("from_id :->", from_id);
-          console.log("class_id :->", class_id);
-          if (class_id !== "") {
-            // group message receivee
-            // console.log("in IF ---->");
-            if (
-              data.type == CHAT_MESSAGE_TYPE.CLASS &&
-              parseInt(data.id) == parseInt(class_id)
-            ) {
-              // console.log("in IF-IF ---->",data);
-              data.unread_count = parseInt(data.unread_count) + 1;
-            }
-          } else {
-            // console.log("in ELSE ---->");
-            if (
-              data.type == CHAT_MESSAGE_TYPE.ROADIE &&
-              parseInt(data.id) == parseInt(from_id)
-            ) {
-              // console.log("in ELSE-IF ---->",data);
-              data.unread_count = parseInt(data.unread_count) + 1;
-            }
+          if (
+            data.type == CHAT_MESSAGE_TYPE.ROADIE &&
+            parseInt(data.id) == parseInt(from_id)
+          ) {
+            data.unread_count = parseInt(data.unread_count) + 1;
           }
         });
       });
@@ -125,15 +90,6 @@ export class ChatListScreen extends Component {
           chatName: newProps.chatList,
         },
         () => {
-          console.log(
-            Platform.OS +
-              " - this.state.dataArray.length:->" +
-              this.state.dataArray.length
-          );
-          console.log(
-            " this.state.isUserRegister -->",
-            this.state.isUserRegister
-          );
           // Register is one call at single time, after
           if (
             this.state.dataArray.length > 0 &&
@@ -142,25 +98,17 @@ export class ChatListScreen extends Component {
           ) {
             // Start 3 seconds interval,
             // This will check is internel
-            console.log("START INERVAL() ----------------->");
+
             this.registerDeviceTimer = setInterval(() => {
-              console.log(
-                "inside Timer this.state.webSocketServerConnected:->",
-                this.state.webSocketServerConnected
-              );
               if (this.state.webSocketServerConnected) {
-                console.log(
-                  "in IF this.registerDeviceTimer :->",
-                  this.registerDeviceTimer
-                );
                 if (
                   this.registerDeviceTimer != undefined ||
                   this.registerDeviceTimer != null
                 ) {
-                  console.log("in side IF this.registerDeviceTimer CLEAR...");
                   clearInterval(this.registerDeviceTimer);
                   this.registerDeviceTimer = null;
                 }
+
                 this.registerAndSubscribe();
               }
             }, 3000);
@@ -170,189 +118,48 @@ export class ChatListScreen extends Component {
     }
   };
 
-  registerAndSubscribe() {
-    const { userDetails, chatList } = this.props;
-    let usersdata = userDetails.user_data;
-    const chat_user_id = chatList + "_" + usersdata.user_id;
-
-    console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
-    global.ws.send(
-      JSON.stringify({ command: "register", userId: chat_user_id })
-    );
-
-    this.setState({
-      isUserRegister: true,
-    });
-
-    this.state.dataArray.forEach((chatMsg) => {
-      if (chatMsg.type == CHAT_MESSAGE_TYPE.CLASS) {
-        global.ws.send(
-          JSON.stringify({
-            command: "subscribe",
-            channel: "class_" + chatMsg.id,
-          })
-        );
-      }
-    });
-  }
-
   async componentDidMount() {
-    this._isMounted = true;
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      if (globals.isInternetConnected == true) {
-        this.callMessageListAPI();
-        this.connectWebSocket();
-      } else {
-        Alert.alert(globals.warning, globals.noInternet);
-      }
-    });
-    this.setState({ theme: this.props.theme });
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
+    // this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    //   this.onFocusFunction();
+    // });
+  }
 
-    var live_chatMessage =
-      JSON.parse(await AsyncStorage.getItem("live_chatMessage")) || {};
-    console.log(
-      "chatDashboad screen componentDidMount() -----> params.chatMessage :-->",
-      live_chatMessage
+  onFocusFunction = async () => {
+    let getchatCount = await JSON.parse(
+      await AsyncStorage.getItem("chat_count")
     );
-
-    if (live_chatMessage != undefined && live_chatMessage.id != undefined) {
-      console.log("inSide IF NavigationService.navigate('ChatMessages') ...");
-      NavigationService.navigate("ChatMessages", {
-        chatMessage: live_chatMessage,
-      });
-      await AsyncStorage.removeItem("live_chatMessage");
+    if (getchatCount != "0") {
+      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("ChatCountRemove");
     }
-
-    DeviceEventEmitter.removeAllListeners("fetch_message_list");
-    DeviceEventEmitter.addListener("fetch_message_list", this.callAPI());
-
-    console.log("addEventListener ---> AppState");
-    AppState.addEventListener("change", this._handleAppStateChange);
-  }
-
-  callAPI() {
-    setTimeout(() => {
-      this.callMessageListAPI();
-    }, 1000);
-  }
-
-  _handleAppStateChange = (nextAppState) => {
-    console.log("_handleAppStateChange() nextAppState :-->", nextAppState);
-    if (nextAppState.match(/inactive|background/)) {
-      console.log("in IF inactive or background");
-
-      this.closeOrInActiveScreen();
-    } else if (nextAppState.match(/active/)) {
-      console.log("in IF active");
-
+    this._isMounted = true;
+    if (globals.isInternetConnected == true) {
       this.callMessageListAPI();
       this.connectWebSocket();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
     }
+
+    // DeviceEventEmitter.removeAllListeners("fetch_message_list");
+    DeviceEventEmitter.addListener("fetch_message_list", this.callAPI.bind());
+
+    AppState.addEventListener("change", this._handleAppStateChange);
   };
 
-  async componentWillUnmount() {
+  componentWillUnmount() {
     this._isMounted = false;
-    this.focusListener.remove();
-    console.log(
-      Platform.OS + " --- componentWillUnmount() this.registerDeviceTimer:->",
-      this.registerDeviceTimer
-    );
-    await hideMessage();
-
     AppState.removeAllListeners("change", this._handleAppStateChange);
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
 
     this.closeOrInActiveScreen();
-  }
-
-  callMessageListAPI() {
-    if (globals.isInternetConnected == true) {
-      this.getchatListAPI();
-    } else {
-      Alert.alert(globals.warning, globals.noInternet);
-    }
-  }
-
-  getchatListAPI = async () => {
-    const { user, txtSearch } = this.state;
-    const { messagesList } = this.props;
-    let params = new URLSearchParams();
-    // Collect the necessary params
-    params.append("search", txtSearch);
-
-    messagesList(params)
-      .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get messagesList",
-        //   JSON.stringify(res.value.data.data)
-        // );
-        if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-          if (res.value && res.value.status === 200) {
-            if (this._isMounted) {
-              this.setState({
-                dataArray: this.props.chatList,
-              });
-            }
-          }
-        } else {
-          if (res.value && res.value.data.error) {
-            // await showMessage({
-            //   message: res.value.message,
-            //   type: "danger",
-            //   icon: "info",
-            //   duration: 4000,
-            // });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(TAG, "i am in catch error search by vehical name", err);
-      });
-  };
-
-  closeOrInActiveScreen() {
-    console.log("closeOrInActiveScreen :--->");
-    if (this.registerDeviceTimer !== null) {
-      console.log("closeOrInActiveScreen :---> IN IF");
-      clearInterval(this.registerDeviceTimer);
-      this.registerDeviceTimer = null;
-    }
-
-    if (global.ws !== null) {
-      const { userDetails, userRole } = this.props;
-
-      const chat_user_id = userRole + "_" + userDetails.id;
-
-      console.log("unregister chat_user_id :->", chat_user_id);
-
-      global.ws.send(
-        JSON.stringify({
-          command: "unregister",
-          userId: chat_user_id,
-          offline_user_id: userDetails.id,
-        })
-      );
-
-      // setTimeout(() => {
-      try {
-        global.ws.close();
-      } catch (err) {
-        console.log("Error while connection close :->", err);
-      }
-      // }, 3000)
-    }
+    // this.focusListener.remove();
   }
 
   connectWebSocket() {
     global.ws = new WebSocket("ws://20.37.36.107:56113");
     global.ws.onopen = (data) => {
-      console.log(
-        Platform.OS + " --- Connected-------------------------",
-        data
-      );
-
       if (data.isTrusted === false) {
         this.setState({
           loader: false,
@@ -362,35 +169,41 @@ export class ChatListScreen extends Component {
         this.setState({
           webSocketServerConnected: true,
         });
-        // alert("Something wen to wrong");
+        alert("Something wen to wrong");
       }
     };
     global.ws.onmessage = ({ data }) => {
-      console.log(
-        "============================================================================---->",
-        JSON.stringify(data)
-      );
-      // console.log("data :->",message.data);
+      // console.log(Platform.OS + " --- WS OnMessage() ---->", data);
+      // alert(" --- Connected-------------------------", data)
       const object = JSON.parse(data);
-      console.log("object onmessage:->", object.command);
       if (object.command != undefined) {
         if (object.command == "message") {
-          console.log("in IF onMessage commant is 'message'");
           // Message received
-          var from_id = Number(object.from.split("_")[1]);
-
+          var from_id = Number(object.from);
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
           const { nav } = this.props;
-          console.log("nav.routes===========", JSON.stringify(nav.routes));
-          const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-          if (currentScreen == "App") {
-            const currentScreenParams =
-              nav.routes[nav.routes.length - 1].params;
+          let currentScreen =
+            nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
+          // console.log(
+          //   "navigate--------------nav------",
+          //   JSON.stringify(currentScreen)
+          // );
+
+          // var payload = {
+          //   msg_data: object,
+          //   user_data: this.searchFromUser(from_id),
+          // };
+          // this.props.receivedChatMessage(payload);
+          // }
+          if (currentScreen[1].routeName == "ChatMessages") {
+            const currentScreenParams = currentScreen[1].params;
             console.log("currentScreenParams :->", currentScreenParams);
+            console.log("parseInt(from_id)===", parseInt(from_id));
             if (currentScreenParams !== undefined) {
-              var userScreenLoadUserId = currentScreenParams.chatMessage.id;
+              var userScreenLoadUserId = currentScreenParams.user_info.id;
               console.log("userScreenLoadUserId :->", userScreenLoadUserId);
+
               console.log("from_id :->", from_id);
 
               if (parseInt(from_id) == userScreenLoadUserId) {
@@ -403,59 +216,85 @@ export class ChatListScreen extends Component {
               }
             }
           }
-        } else if (
-          object.command == "register" ||
-          object.command == "unregister"
-        ) {
-          console.log(" --- WS register() ---->");
-
-          const { userDetails } = this.props;
-          console.log("userDetails==========", userDetails);
-          console.log(
-            "object.offline_user_id=============",
-            JSON.stringify(object)
-          );
-          let userdata = userDetails.user_data;
-          if (parseInt(object.offline_user_id) != parseInt(userdata.user_id)) {
-            var onlineUsers = object.online;
-            console.log("command register --- onlineUsers :-->", onlineUsers);
-            const { nav } = this.props;
-            const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-            console.log("online command currentScreen :->", currentScreen);
-            if (currentScreen == "App") {
-              const currentScreenParams =
-                nav.routes[nav.routes.length - 1].params;
-              console.log("currentScreenParams :->", currentScreenParams);
-              if (currentScreenParams !== undefined) {
-                var userScreenLoadUserId = currentScreenParams.chatMessage.id;
-                onlineUsers.forEach((user) => {
-                  var online_user_id = user.split("_")[1];
-                  if (online_user_id == userScreenLoadUserId) {
-                    DeviceEventEmitter.emit("update_header_online_stattus", {
-                      status: true,
-                    });
-                  }
-                });
-                onlineUsers.forEach;
-              }
-            }
-            // alwayse update online/offline statime, weather user on chat-details or chat-listing screen
-          }
         }
       }
     };
     global.ws.onerror = ({ error }) => {
       console.log(Platform.OS + " --- WS OnError() ---->", error);
+      // Alert.alert("Websocket Error", error);
       global.ws = null;
     };
 
     global.ws.onclose = ({ event }) => {
       console.log(Platform.OS + " --- WS onClose() ---->", event);
+      // console.warn(" --- WS onClose() ---->");
     };
   }
 
+  _handleAppStateChange = (nextAppState) => {
+    // console.log("_handleAppStateChange() nextAppState :-->", nextAppState);
+    if (nextAppState.match(/inactive|background/)) {
+      this.closeOrInActiveScreen();
+    } else if (nextAppState.match(/active/)) {
+      this.callMessageListAPI();
+      this.connectWebSocket();
+    }
+  };
+
+  closeOrInActiveScreen() {
+    if (this.registerDeviceTimer !== null) {
+      clearInterval(this.registerDeviceTimer);
+      this.registerDeviceTimer = null;
+    }
+
+    if (global.ws !== null) {
+      const { userDetails } = this.props;
+      let usersdata = userDetails.user_data;
+      const chat_user_id = usersdata.user_id;
+
+      // console.log("unregister chat_user_id :->", chat_user_id);
+
+      global.ws.send(
+        JSON.stringify({
+          command: "unregister",
+          userId: chat_user_id,
+          offline_user_id: userDetails.user_data.user_id,
+        })
+      );
+
+      // setTimeout(() => {
+      try {
+        global.ws.close();
+      } catch (err) {
+        // console.log("Error while connection close :->", err);
+      }
+      // }, 3000)
+    }
+  }
+
+  registerAndSubscribe() {
+    const { userDetails } = this.props;
+    let usersdata = userDetails.user_data;
+    const chat_user_id = usersdata.user_id;
+
+    // console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
+    global.ws.send(
+      JSON.stringify({ command: "register", userId: chat_user_id })
+    );
+
+    this.setState({
+      isUserRegister: true,
+    });
+  }
+
+  callAPI() {
+    setTimeout(() => {
+      this.callMessageListAPI();
+    }, 1000);
+  }
+
   searchFromUser(from_id) {
-    console.log("searchFromUser() from_id :-->", from_id);
+    // console.log("searchFromUser() from_id :-->", from_id);
 
     var user = {};
     this.state.dataArray.forEach((msg) => {
@@ -464,9 +303,94 @@ export class ChatListScreen extends Component {
       }
     });
 
-    console.log("from User :->", user);
-
     return user;
+  }
+
+  callMessageListAPI() {
+    if (globals.isInternetConnected == true) {
+      this.getchatListAPI();
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
+
+  getchatListAPI = async () => {
+    const { user, searchTxt } = this.state;
+    const { messagesList } = this.props;
+    let params = new URLSearchParams();
+    // Collect the necessary params
+    params.append("search", searchTxt);
+
+    messagesList(params)
+      .then(async (res) => {
+        // console.log(
+        //   TAG,
+        //   "response of get messagesList",
+        //   JSON.stringify(res.value.data.data)
+        // );
+        // console.log("this.props.chatList--------", this.props.chatList);
+        if (res.value && res.value.data.success == true) {
+          //OK 200 The request was fulfilled
+          if (res.value && res.value.status === 200) {
+            if (this._isMounted) {
+              this.setState({
+                dataArray: this.props.chatList,
+              });
+            }
+          }
+        } else {
+          if (res.value && res.value.data.error) {
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error get messagesList", err);
+      });
+  };
+
+  searchByName(searchText) {
+    // console.log("Value of item is :->", searchText);
+    // console.log("this.state.chatName :-->", this.state);
+    const newData = Object.values(this.state.chatName).filter((item) => {
+      const itemnumData = item.registration_number.toUpperCase();
+      const itemData = item.name.toUpperCase();
+      const textData = searchText.toUpperCase();
+      return (
+        itemData.indexOf(textData) > -1 || itemnumData.indexOf(textData) > -1
+      );
+    });
+    this.setState({
+      dataArray: newData,
+      searchTxt: searchText,
+    });
+  }
+
+  // navigate to chat screen
+  gotoChatDetails = (user_info) => {
+    this.updateUnreadCount(user_info);
+    NavigationService.navigate("ChatMessages", {
+      user_info: user_info,
+    });
+  };
+
+  updateUnreadCount(chatMessage) {
+    var newDataArray = this.state.dataArray;
+
+    newDataArray.forEach((data) => {
+      if (
+        data.type == CHAT_MESSAGE_TYPE.ROADIE &&
+        chatMessage.from_id == data.from_id &&
+        chatMessage.to_id == data.to_id
+      ) {
+        // record is matched
+        data.unread_count = parseInt(0);
+      }
+    });
+
+    this.setState({
+      dataArray: newDataArray,
+      chatList: newDataArray,
+    });
   }
 
   // render friendlist dataItem
@@ -501,17 +425,21 @@ export class ChatListScreen extends Component {
           <Text
             style={[
               FriendListStyle.titleBig,
-              { fontWeight: item.unread_count == 0 ? null : "bold" },
+              {
+                fontWeight: item.unread_count == 0 ? null : "bold",
+                color: this.props.theme.LITE_FONT_COLOR,
+              },
             ]}
           >
             {item.name ? item.name + " " + item.surname : ""}
           </Text>
-          <Text
+
+          <Text numberOfLines={2}
             style={[
               FriendListStyle.titleSmall,
               {
                 fontWeight: item.unread_count == 0 ? null : "bold",
-                color: this.state.theme.LITE_FONT_COLOR,
+                color: this.props.theme.LITE_FONT_COLOR,
               },
             ]}
           >
@@ -524,7 +452,7 @@ export class ChatListScreen extends Component {
             style={[
               FriendListStyle.titleSmall,
               {
-                color: this.state.theme.LITE_FONT_COLOR,
+                color: this.props.theme.LITE_FONT_COLOR,
                 width: globals.deviceWidth * 0.2,
               },
             ]}
@@ -543,20 +471,9 @@ export class ChatListScreen extends Component {
     );
   };
 
-  // navigate to chat screen
-  gotoChatDetails = (user_info) => {
-    NavigationService.navigate("ChatMessages", { user_info: user_info });
-  };
-
-  // seprate component
-  separatorComponent = () => {
-    return <View style={FriendListStyle.separatorLine} />;
-  };
-
   render() {
     const { dataArray, searchTxt } = this.state;
     const { isLoading, loaderMessage, theme, chatList } = this.props;
-
     return (
       <>
         <View
@@ -568,6 +485,8 @@ export class ChatListScreen extends Component {
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
+          <NavigationEvents onDidFocus={() => this.onFocusFunction()} />
+
           <Header
             title={StaticTitle.msges}
             onPressed={() => this.props.navigation.openDrawer()}
@@ -623,4 +542,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatListScreen);
-// export default ChatListScreen;

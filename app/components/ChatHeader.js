@@ -30,14 +30,13 @@ const ChatHeader = ({
   isFrom,
   isMsgReportPicker,
   isuserImage,
+  isShareSocials,
   ...props
 }) => {
   const gotoBack = async () => {
     NavigationService.back();
   };
-  const gotoForword = async () => {
-    NavigationService.navigate("Notification");
-  };
+
   return (
     <SafeAreaView
       style={[
@@ -94,7 +93,6 @@ const ChatHeader = ({
                 source={{
                   uri: isuserImage,
                 }}
-                resizeMode={FastImage.resizeMode.contain}
               />
             ) : (
               <FastImage source={IMAGE.user} style={ComponentStyle.tab_Image} />
@@ -118,7 +116,7 @@ const ChatHeader = ({
         {isShowRighttwo == true ? (
           <>
             <TouchableOpacity
-              // onPress={gotoForword}
+              onPress={isShareSocials}
               style={{
                 width: wp(5),
                 marginLeft: 25,

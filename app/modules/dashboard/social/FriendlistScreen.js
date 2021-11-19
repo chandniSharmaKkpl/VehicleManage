@@ -36,7 +36,6 @@ export class FriendlistScreen extends Component {
       friendListData: [],
       filterdfriendListData: [],
       user: {},
-      theme: {},
     };
   }
 
@@ -56,16 +55,13 @@ export class FriendlistScreen extends Component {
   onFocusFunction = async () => {
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
-      this.setState(
-        { user: this.props.userDetails.user_data, theme: this.props.theme },
-        () => {
-          if (globals.isInternetConnected == true) {
-            this.getfriendListAPI();
-          } else {
-            Alert.alert(globals.warning, globals.noInternet);
-          }
+      this.setState({ user: this.props.userDetails.user_data }, () => {
+        if (globals.isInternetConnected == true) {
+          this.getfriendListAPI();
+        } else {
+          Alert.alert(globals.warning, globals.noInternet);
         }
-      );
+      });
     }
   };
 
@@ -102,7 +98,11 @@ export class FriendlistScreen extends Component {
             }
           }
         } else {
-          if (res.value && res.value.data.error) {
+          if (res.value && res.value.data.error == "Unauthenticated.") {
+            {
+              NavigationService.navigate("Login");
+            }
+          } else if (res.value && res.value.data.error) {
             await showMessage({
               message: res.value.message,
               type: "danger",
@@ -129,9 +129,13 @@ export class FriendlistScreen extends Component {
     // console.log("this.state.filterdfriendListData :-->", this.state);
     const newData = Object.values(this.state.filterdfriendListData).filter(
       (item) => {
+        const itemnumData = item.registration_number.toUpperCase();
         const itemData = item.name.toUpperCase();
         const textData = searchText.toUpperCase();
-        return itemData.indexOf(textData) > -1;
+
+        return (
+          itemData.indexOf(textData) > -1 || itemnumData.indexOf(textData) > -1
+        );
       }
     );
     this.setState({
@@ -161,7 +165,6 @@ export class FriendlistScreen extends Component {
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
-   
     return (
       <View style={FriendListStyle.itemcell}>
         {item.avatar ? (
@@ -183,13 +186,18 @@ export class FriendlistScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>
-          {item.name ? item.name + " " + item.surname : "-"}
+          <Text
+            style={[
+              FriendListStyle.titleBig,
+              { color: this.props.theme.LITE_FONT_COLOR },
+            ]}
+          >
+            {item.name ? item.name + " " + item.surname : "-"}
           </Text>
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
             {item.car_make_model ? item.car_make_model : "-"}
@@ -197,17 +205,17 @@ export class FriendlistScreen extends Component {
           <Text
             style={[
               FriendListStyle.titleSmall,
-              { color: this.state.theme.LITE_FONT_COLOR },
+              { color: this.props.theme.LITE_FONT_COLOR },
             ]}
           >
-            {item.registration_number ? item.registration_number : "-"}
+            {item.registration_number ? item.registration_number : ""}
           </Text>
         </View>
         <TouchableOpacity
           onPress={() => this.gotoFriendDetails(item)}
           style={[
             FriendListStyle.squareView,
-            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+            { backgroundColor: this.props.theme.NAVIGATION_ARROW_COLOR },
           ]}
         >
           <FastImage

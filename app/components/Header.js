@@ -18,6 +18,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import NavigationService from "../utils/NavigationService";
+import Icon from "react-native-vector-icons/AntDesign";
 
 const Header = ({
   theme,
@@ -66,7 +67,7 @@ const Header = ({
         {isShowBack == true ? (
           <TouchableOpacity
             onPress={gotoBack}
-            style={{ width: wp(15), height: hp(5), justifyContent: "center" }}
+            style={{ width: wp(15), justifyContent: "center" }}
           >
             <View style={{ paddingLeft: 20, padding: 5 }}>
               <FastImage
@@ -116,13 +117,13 @@ const Header = ({
                 source={IMAGE.notification_img}
                 resizeMode={FastImage.resizeMode.contain}
               ></FastImage>
-              {searchcount == 0 ? (
-                null
-              ) : <View style={ComponentStyle.countcircleview}>
-              <Text style={ComponentStyle.messagescountstyle}>
-                {searchcount}
-              </Text>
-            </View>}
+              {searchcount == 0 ? null : (
+                <View style={ComponentStyle.countcircleview}>
+                  <Text style={ComponentStyle.messagescountstyle}>
+                    {searchcount}
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -156,14 +157,16 @@ const Header = ({
           >
             <FastImage
               style={{
-                width: wp(5.5),
-                height: wp(5.5),
+                width: isFrom == "ShareSocial"?wp(6) : wp(5.5),
+                height:  isFrom == "ShareSocial" ?wp(6) :wp(5.5),
                 marginLeft: 15,
                 marginRight: 20,
               }}
               source={
                 isFrom == "Notification"
                   ? IMAGE.notification_img
+                  : isFrom == "ShareSocial"
+                  ? IMAGE.next_img
                   : IMAGE.sidebar_img
               }
               resizeMode={FastImage.resizeMode.contain}

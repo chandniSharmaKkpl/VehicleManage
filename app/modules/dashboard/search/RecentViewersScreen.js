@@ -8,6 +8,7 @@ import {
   Text,
   DeviceEventEmitter,
 } from "react-native";
+import moment from "moment";
 import { connect } from "react-redux";
 import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
@@ -40,10 +41,7 @@ export class RecentViewersScreen extends Component {
       await AsyncStorage.getItem("searched_count")
     );
     if (getsearchedCount != "0") {
-      await AsyncStorage.setItem(
-        "searched_count",
-        JSON.stringify(parseInt(0))
-      );
+      await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
       DeviceEventEmitter.emit("NotificationCountRemove");
     }
     this.setState({ theme: this.props.theme }, () => {
@@ -96,6 +94,11 @@ export class RecentViewersScreen extends Component {
         if (res.value && res.value.status === 200) {
         }
       } else {
+        if (res.value && res.value.data.error == "Unauthenticated.") {
+          {
+            NavigationService.navigate("Login");
+          }
+        }
         console.log(TAG, "notification count can't fetched", err);
       }
     });
@@ -108,6 +111,10 @@ export class RecentViewersScreen extends Component {
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
+    // console.log("item.updated_at======", item.updated_at);
+    // let converttoUtc = moment.utc(item.updated_at);
+    // console.log("ss ", converttoUtc);
+
     let id = item.updated_at.split("T");
     let onlytime = id[1].substring(0, 5);
 
@@ -132,14 +139,19 @@ export class RecentViewersScreen extends Component {
           </View>
         )}
         <View style={FriendListStyle.userdetail}>
-          <Text style={FriendListStyle.titleBig}>
+          <Text
+            style={[
+              FriendListStyle.titleBig,
+              { color: this.props.theme.LITE_FONT_COLOR },
+            ]}
+          >
             {item.name ? item.name + " " + item.surname : ""}
           </Text>
           <View style={FriendListStyle.detailsview}>
             <Text
               style={[
                 FriendListStyle.titleSmall,
-                { color: this.state.theme.LITE_FONT_COLOR },
+                { color: this.props.theme.LITE_FONT_COLOR },
               ]}
             >
               {id ? onlytime : ""}
@@ -148,7 +160,7 @@ export class RecentViewersScreen extends Component {
             <Text
               style={[
                 FriendListStyle.titleSmall,
-                { color: this.state.theme.LITE_FONT_COLOR },
+                { color: this.props.theme.LITE_FONT_COLOR },
               ]}
             >
               {id ? id[0] : ""}
@@ -159,7 +171,7 @@ export class RecentViewersScreen extends Component {
           onPress={() => this.gotoFriendDetails(item)}
           style={[
             FriendListStyle.squareView,
-            { backgroundColor: this.state.theme.NAVIGATION_ARROW_COLOR },
+            { backgroundColor: this.props.theme.NAVIGATION_ARROW_COLOR },
           ]}
         >
           <FastImage

@@ -5,6 +5,7 @@ import {
   StatusBar,
   ScrollView,
   Image,
+  AppState,
   TouchableOpacity,
 } from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -30,11 +31,13 @@ export class LoginScreen extends Component {
     super(props);
     this.state = {
       theme: {},
+      appState: AppState.currentState,
     };
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    AppState.removeAllListeners("change", this._handleAppStateThemeChange);
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
@@ -42,12 +45,20 @@ export class LoginScreen extends Component {
     this.parseData(theme);
   };
 
-  componentDidMount = async () => {
-    this._isMounted = true;
+  _handleAppStateThemeChange = async (nextAppState) => {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
+      this.setThemeModes();
+    }
+    this.setState({ appState: nextAppState });
+    this.setThemeModes();
+  };
+
+  setThemeModes = async () => {
     let them_mode = await AsyncStorage.getItem("them_mode");
 
-
-    console.log(TAG, "componentDidMount ======them_mode", them_mode);
     var newTheme = lightTheme;
     if (them_mode === globals.THEME_MODE.DARK) {
       newTheme = darkTheme;
@@ -56,12 +67,16 @@ export class LoginScreen extends Component {
     this.props.swicthTheme(newTheme);
   };
 
+  componentDidMount = async () => {
+    this._isMounted = true;
+    await this.setThemeModes();
+    AppState.addEventListener("change", this._handleAppStateThemeChange);
+  };
+
   // parse lite and dark theme data
   parseData = (newTheme) => {
     this.setState({ theme: newTheme });
   };
-
-  
 
   // Login with Email navigate to sign in screen
   performLoginwithEmail = () => {
@@ -74,9 +89,8 @@ export class LoginScreen extends Component {
   };
 
   render() {
-    const { isLoading, loaderMessage } = this.props;
-    const { theme } = this.state;
-    
+    const { isLoading, loaderMessage, theme } = this.props;
+    // const { theme } = this.state;
 
     if (theme == undefined || theme.PRIMARY_BACKGROUND_COLOR === undefined) {
       return <></>;
@@ -107,9 +121,10 @@ export class LoginScreen extends Component {
           </View>
 
           <View style={AuthStyle.imgcarContainer}>
-            <Image source={
-                    theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img
-                  } style={AuthStyle.imgcar} />
+            <Image
+              source={theme.mode == "dark" ? IMAGE.dark_Car_img : IMAGE.car_img}
+              style={AuthStyle.imgcar}
+            />
           </View>
 
           <View style={AuthStyle.titleContainer}>

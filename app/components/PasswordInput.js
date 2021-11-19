@@ -22,6 +22,7 @@ const PasswordInput = ({
   Style,
   keyboardType,
   placeholderStyle,
+  theme,
   ...props
 }) => {
   return (
@@ -33,7 +34,7 @@ const PasswordInput = ({
             ComponentStyle.passwordInputText,
             { borderColor: isValidationShow ? Colors.red : Colors.white },
           ]}
-          placeholderTextColor={Colors.placeholderColor}
+          placeholderTextColor={theme.BASIC_FONT_COLOR}
           ref={forwardRef}
           onSubmitEditing={onSubmitEditing}
           secureTextEntry={secureTextEntry}

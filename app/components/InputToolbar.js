@@ -9,6 +9,7 @@ import {
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../assets/Images";
 import FontFamily from "../assets/styles/FontFamily";
+
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
 
@@ -23,6 +24,7 @@ export const renderInputToolbar = (props) => (
         width: 2,
         height: 12,
       },
+     
       shadowOpacity: 0.58,
       shadowRadius: 16,
       elevation: 24,

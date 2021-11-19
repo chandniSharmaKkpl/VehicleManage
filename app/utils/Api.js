@@ -88,7 +88,9 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/messages/read" ||
       request.url === "api/block" ||
       request.url === "api/report" ||
-      request.url === "api/friend_search"
+      request.url === "api/friend_search" ||
+      request.url === "api/messages/social_share_friends" ||
+      request.url === "api/messages/social_share_send"
     ) {
       request.headers = makeURLencodedPostHeaders();
     } else {
@@ -110,37 +112,49 @@ axiosApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    return Promise.reject(error.response.data);
-
-    // if (error.response.status === 401) {
-    //   return Promise.reject(error.response);
-    // } else if (error.response.status === 402) {
-    //   showMessage({
-    //     message: error.response.data.error,
-    //     type: "danger",
-    //     icon: "danger",
-    //     duration: 4000,
-    //   });
-    //   AsyncStorage.clear();
-    //   NavigationService.reset("Login");
-    // }
-    // else {
-    //   // showMessage({
-    //   //   message: "Device offline",
-    //   //   type: "danger",
-    //   //   icon: "danger",
-    //   //   duration: 10000,
-    //   // });
-    // }
-    // console.log("i am in axios get error", error);
-    // console.log("error.response.data", error.response.data);
-    // console.log("error.response.headers", error.response.headers);
-    // console.log("error.response.status", error.response.status);
-    // console.log("error.request", error.request);
-    // console.log("ErrorErrormsg", error.message);
-    // console.log("error.config", error.config);
-    // return Promise.reject(error.response);
+    console.log("API error=====", error);
+    if (error.response.status === 401) {
+      showMessage({
+        message: "Something went wrong,,Please try again..!!",
+        type: "danger",
+        icon: "danger",
+        duration: 4000,
+      });
+      NavigationService.reset("Login");
+      return Promise.reject(error.response);
+    } else {
+      return Promise.reject(error.response.data);
+    }
   }
+  // return Promise.reject(error.response.data);
+
+  // } else if (error.response.status === 402) {
+  //   showMessage({
+  //     message: error.response.data.error,
+  //     type: "danger",
+  //     icon: "danger",
+  //     duration: 4000,
+  //   });
+  //   AsyncStorage.clear();
+  //   NavigationService.reset("Login");
+  // }
+  // else {
+  //   // showMessage({
+  //   //   message: "Device offline",
+  //   //   type: "danger",
+  //   //   icon: "danger",
+  //   //   duration: 10000,
+  //   // });
+  // }
+  // console.log("i am in axios get error", error);
+  // console.log("error.response.data", error.response.data);
+  // console.log("error.response.headers", error.response.headers);
+  // console.log("error.response.status", error.response.status);
+  // console.log("error.request", error.request);
+  // console.log("ErrorErrormsg", error.message);
+  // console.log("error.config", error.config);
+  // return Promise.reject(error.response);
+  // }
 );
 
 export default axiosApi;
