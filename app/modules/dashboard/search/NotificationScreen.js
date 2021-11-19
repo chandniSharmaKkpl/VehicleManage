@@ -47,6 +47,7 @@ export class NotificationScreen extends Component {
     let getchatCount = await JSON.parse(
       await AsyncStorage.getItem("chat_count")
     );
+
     if (getsearchedCount != "0") {
       await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
       DeviceEventEmitter.emit("NotificationCountRemove");
@@ -59,10 +60,9 @@ export class NotificationScreen extends Component {
     this.setState({
       theme: this.props.theme,
       searched_avatars: this.state.countDeatils.searched_avatars,
-      messages_count:
-        getchatCount == "0"
-          ? getchatCount
-          : this.state.countDeatils.messages_count,
+      messages_count: this.state.countDeatils.messages_count
+        ? this.state.countDeatils.messages_count
+        : getchatCount,
     });
   };
 
@@ -70,7 +70,6 @@ export class NotificationScreen extends Component {
     this.setState({
       messages_count: 0,
     });
-    console.log("After -----------------", this.state.messages_count);
   };
 
   gotoRecentViewers = () => {
@@ -78,8 +77,8 @@ export class NotificationScreen extends Component {
   };
 
   gotoChatdetails = () => {
-    Alert.alert("coming soon...");
-    // NavigationService.navigate("ChatList");
+    // Alert.alert("coming soon...");
+    NavigationService.navigate("ChatList");
   };
 
   // render friendlist dataItem
@@ -239,7 +238,7 @@ export class NotificationScreen extends Component {
               null
             : this.retunNotificationList()}
 
-          {messages_count != "0" ? this.retunChatMsgList() : null}
+          {messages_count == "0" ? null : this.retunChatMsgList()}
         </View>
       </>
     );
