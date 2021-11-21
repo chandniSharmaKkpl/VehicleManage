@@ -26,7 +26,6 @@ import * as globals from "../../../utils/Globals";
 import * as actions from "../redux/Actions";
 import * as chatactions from "../chat/redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "FriendDetailScreen ::=";
 
@@ -156,7 +155,7 @@ export class FriendDetailScreen extends Component {
         alert("Something wen to wrong");
       }
     };
-    alert(" --- Connected-------------------------");
+    // alert(" --- Connected-------------------------");
 
     global.ws.onmessage = ({ data }) => {
       console.log(Platform.OS + " --- WS OnMessage() ---->", data);

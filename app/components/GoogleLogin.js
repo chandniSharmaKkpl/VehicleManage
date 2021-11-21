@@ -53,7 +53,7 @@ class GoogleLogin extends Component {
       webClientId: WEB_CLIENT_ID,
       // androidClientId: WEB_CLIENT_ID,
       offlineAccess: false,
-      hostedDomain: '',
+      hostedDomain: "",
       forceConsentPrompt: true,
     });
   }
@@ -61,7 +61,7 @@ class GoogleLogin extends Component {
   // signout fb account from application
   _signOut = async () => {
     try {
-      await GoogleSignin.revokeAccess();
+      // await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
     } catch (error) {
       // console.log("Error", error);
@@ -73,6 +73,7 @@ class GoogleLogin extends Component {
    * @function performGoogleLogin
    */
   performGoogleLogin = async (props) => {
+    await this._signOut();
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -146,7 +147,7 @@ class GoogleLogin extends Component {
           //   Alert.alert("cancelled");
           break;
         case statusCodes.IN_PROGRESS:
-          // operation (eg. sign in) already in progress
+          // operation (eg. sign in)i already n progress
           Alert.alert("in progress");
           break;
         case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:

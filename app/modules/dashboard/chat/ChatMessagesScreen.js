@@ -52,7 +52,7 @@ import {
 } from "../../../components/InputToolbar";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as actions from "./redux/Actions";
-const avatar = require("../../../assets/images/user.jpeg");
+const avatar = require("../../../assets/images/user_default.jpeg");
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "ChatMessagesScreen ::=";
@@ -101,7 +101,7 @@ export class ChatMessagesScreen extends Component {
     );
   };
 
- async componentDidMount() {
+  async componentDidMount() {
     this._isMounted = true;
     let getchatCount = await JSON.parse(
       await AsyncStorage.getItem("chat_count")
@@ -109,10 +109,10 @@ export class ChatMessagesScreen extends Component {
     if (getchatCount != "0") {
       await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
       DeviceEventEmitter.emit("ChatCountRemove");
-    }else{
+    } else {
       DeviceEventEmitter.emit("ChatCountRemove");
     }
-    
+
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
         {
@@ -299,6 +299,12 @@ export class ChatMessagesScreen extends Component {
         console.log(TAG, "i am in catch error readMessage", err);
       });
   };
+
+  onLongPress(context, message){
+    console.log("onLongPress=========context===",JSON.stringify(context));
+    console.log("onLongPress=========message===", message);
+
+  }
 
   onSend(messages = []) {
     const { userDetails } = this.props;
@@ -622,6 +628,9 @@ export class ChatMessagesScreen extends Component {
                 <MessageImage {...props} />
               </View>;
             }}
+            onLongPress={(context, message) =>
+              this.onLongPress(context, message)
+            }
             textInputProps={{}}
             keyboardShouldPersistTaps="never"
             renderTicks={(message) => this.renderTicks(message, user_id)}
