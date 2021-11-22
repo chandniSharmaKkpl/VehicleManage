@@ -35,8 +35,8 @@ export class SearchScreen extends Component {
       txtSearch: "Gj",
       searchListdata: [],
       theme: {},
-      searched_count: "",
-      messages_count:"",
+      searched_count:0,
+      messages_count: 0,
       countDeatils: {},
       appState: AppState.currentState,
     };
@@ -126,18 +126,27 @@ export class SearchScreen extends Component {
     let getsearchedCount = await JSON.parse(
       await AsyncStorage.getItem("searched_count")
     );
-   
+
+    let getchatCount = await JSON.parse(
+      await AsyncStorage.getItem("chat_count")
+    );
+
     this.setState({
       searched_count:
         getsearchedCount == "0"
           ? getsearchedCount
           : countDeatils.searched_count,
       countDeatils: countDeatils,
-      messages_count:countDeatils.messages_count
+      messages_count:
+        getchatCount == "0" ? getchatCount : countDeatils.messages_count,
     });
     await AsyncStorage.setItem(
       "searched_count",
       JSON.stringify(parseInt(this.state.searched_count))
+    );
+    await AsyncStorage.setItem(
+      "chat_count",
+      JSON.stringify(parseInt(this.state.messages_count))
     );
   };
 
@@ -296,8 +305,13 @@ export class SearchScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-    const { txtSearch, searchListdata, searched_count, messages_count,countDeatils } =
-      this.state;
+    const {
+      txtSearch,
+      searchListdata,
+      searched_count,
+      messages_count,
+      countDeatils,
+    } = this.state;
     return (
       <>
         <View

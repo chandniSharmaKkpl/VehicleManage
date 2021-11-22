@@ -1,7 +1,7 @@
 const IMAGE = {
   backArrow: require("../assets/images/back-arrow.png"),
   edit: require("../assets/images/edit.png"),
-  user: require("../assets/images/user.png"),
+  user: require("../assets/images/user_roadie.jpeg"),
   logo_img: require("../assets/images/roadie_logo.png"),
   car_img: require("../assets/images/car_bg.png"),
   snap_img: require("../assets/images/snapchat.png"),

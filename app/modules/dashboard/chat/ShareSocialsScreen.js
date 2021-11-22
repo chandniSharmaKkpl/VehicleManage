@@ -116,10 +116,10 @@ export class ShareSocialsScreen extends Component {
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("from_id", this.state.from_id);
-   
+   console.log("Params----", JSON.stringify(params));
     socialsharefriends(params)
       .then(async (res) => {
-       
+       console.log("socialsharefriends   responses===", JSON.stringify(res.value.data));
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {

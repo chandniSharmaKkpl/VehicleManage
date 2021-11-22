@@ -244,7 +244,7 @@ export class ChatListScreen extends Component {
     if (global.ws !== null) {
       const { userDetails } = this.props;
       let usersdata = userDetails.user_data;
-      const chat_user_id = usersdata.user_id;
+      let chat_user_id = usersdata.user_id;
 
       // console.log("unregister chat_user_id :->", chat_user_id);
 
@@ -269,7 +269,7 @@ export class ChatListScreen extends Component {
   registerAndSubscribe() {
     const { userDetails } = this.props;
     let usersdata = userDetails.user_data;
-    const chat_user_id = usersdata.user_id;
+    let chat_user_id = usersdata.user_id;
 
     // console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
     global.ws.send(
