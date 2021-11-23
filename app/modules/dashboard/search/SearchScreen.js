@@ -35,8 +35,8 @@ export class SearchScreen extends Component {
       txtSearch: "Gj",
       searchListdata: [],
       theme: {},
-      searched_count:0,
-      messages_count: 0,
+      searched_count:"",
+      messages_count: "",
       countDeatils: {},
       appState: AppState.currentState,
     };
@@ -45,7 +45,6 @@ export class SearchScreen extends Component {
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });

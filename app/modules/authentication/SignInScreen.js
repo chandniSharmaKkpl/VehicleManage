@@ -188,7 +188,7 @@ export class SignInScreen extends Component {
         .then(async (res) => {
           console.log(
             "res.value.data.data------login-------",
-            JSON.stringify(res.value)
+            JSON.stringify(res.value.data.error)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
@@ -244,7 +244,15 @@ export class SignInScreen extends Component {
               {
                 NavigationService.navigate("Login");
               }
-            } else if (res.value && res.value.data.error) {
+            }
+            else if (res.value && res.value.data.error) {
+              await showMessage({
+                message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (res.value && res.value.success == false) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",

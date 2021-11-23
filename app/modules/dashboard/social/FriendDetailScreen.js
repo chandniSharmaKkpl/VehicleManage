@@ -155,7 +155,7 @@ export class FriendDetailScreen extends Component {
         alert("Something wen to wrong");
       }
     };
-    // alert(" --- Connected-------------------------");
+    alert(" --- Connected-------------------------");
 
     global.ws.onmessage = ({ data }) => {
       console.log(Platform.OS + " --- WS OnMessage() ---->", data);
@@ -201,6 +201,25 @@ export class FriendDetailScreen extends Component {
                 this.props.receivedChatMessage(payload);
               }
             }
+          }
+        }else if (object.command == "register" || object.command == "unregister"){
+          if (!this.state.isUserRegister && this.registerDeviceTimer == null) {
+            // Start 3 seconds interval,
+            // This will check is internel
+      
+            this.registerDeviceTimer = setInterval(() => {
+              if (this.state.webSocketServerConnected) {
+                if (
+                  this.registerDeviceTimer != undefined ||
+                  this.registerDeviceTimer != null
+                ) {
+                  clearInterval(this.registerDeviceTimer);
+                  this.registerDeviceTimer = null;
+                }
+      
+                this.registerAndSubscribe();
+              }
+            }, 3000);
           }
         }
       }

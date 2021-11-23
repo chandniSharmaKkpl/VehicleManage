@@ -42,7 +42,7 @@ export const renderBubble = (props) => (
         color: Colors.black,
         backgroundColor: Colors.placeholderColor,
         marginBottom: 10,
-       opacity:0.7,
+        opacity: 0.7,
         paddingVertical: 5,
         justifyContent: "center",
         alignItems: "center",
@@ -51,7 +51,7 @@ export const renderBubble = (props) => (
         color: Colors.black,
         backgroundColor: Colors.placeholderColor,
         marginBottom: 10,
-        opacity:0.7,
+        opacity: 0.7,
         paddingVertical: 5,
         justifyContent: "center",
         alignItems: "center",
@@ -63,14 +63,23 @@ export const renderBubble = (props) => (
         fontSize: globals.normalize(12),
         fontFamily: FontFamily.RalewaRegular,
       },
-      left: { color: Colors.black,fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular, },
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
     }}
     textStyle={{
-      right: { color: Colors.black,fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular, },
-      left: { color: Colors.black,fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular, },
+      right: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
+      left: {
+        color: Colors.black,
+        fontSize: globals.normalize(12),
+        fontFamily: FontFamily.RalewaRegular,
+      },
     }}
     bottomContainerStyle={{
       left: {

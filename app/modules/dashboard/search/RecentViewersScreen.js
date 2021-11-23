@@ -111,13 +111,6 @@ export class RecentViewersScreen extends Component {
 
   // render friendlist dataItem
   renderFriendList = ({ item, index }) => {
-    // console.log("item.updated_at======", item.updated_at);
-    // let converttoUtc = moment.utc(item.updated_at);
-    // console.log("ss ", converttoUtc);
-
-    let id = item.updated_at.split("T");
-    let onlytime = id[1].substring(0, 5);
-
     return (
       <View style={FriendListStyle.itemcell}>
         {item.avatar ? (
@@ -154,7 +147,7 @@ export class RecentViewersScreen extends Component {
                 { color: this.props.theme.LITE_FONT_COLOR },
               ]}
             >
-              {id ? onlytime : ""}
+              {item.updated_time ? item.updated_time : ""}
             </Text>
             <Text style={{ marginHorizontal: 5, marginTop: -3 }}>{"|"}</Text>
             <Text
@@ -163,7 +156,7 @@ export class RecentViewersScreen extends Component {
                 { color: this.props.theme.LITE_FONT_COLOR },
               ]}
             >
-              {id ? id[0] : ""}
+              {item.updated_date ? item.updated_date : ""}
             </Text>
           </View>
         </View>
