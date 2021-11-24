@@ -66,6 +66,7 @@ export class UserProfileScreen extends Component {
       selectedColour: "",
 
       txtUserName: "",
+      txtusernameInstedofname: "",
       txtDescription: "",
       txtSnapName: "",
       txtInstaName: "",
@@ -134,7 +135,8 @@ export class UserProfileScreen extends Component {
           selectedCity: user.user_data.city,
           selectedModel: user.user_data.car_make_model,
           selectedColour: user.user_data.car_colour,
-          txtUserName: user.user_data.username,
+          txtUserName: user.user_data.name + " " + user.user_data.surname,
+          txtusernameInstedofname: user.user_data.username,
           txtDescription: user.user_data.car_description,
           photoUrl: user.user_data.avatar,
           txtSnapName: user.user_data.snapchat_username,
@@ -344,6 +346,20 @@ export class UserProfileScreen extends Component {
       });
       return false;
     }
+    if (isEmpty(txtusernameInstedofname)) {
+      this.setState({
+        isUserNameError: true,
+        userNameValidMsg: Messages.enterUsername,
+      });
+      return false;
+    }
+    if (!isText(txtusernameInstedofname)) {
+      this.setState({
+        isUserNameError: true,
+        userNameValidMsg: Messages.userNameFail,
+      });
+      return false;
+    }
 
     return true;
   };
@@ -361,6 +377,7 @@ export class UserProfileScreen extends Component {
       txtFbName,
       txtDescription,
       txtUserName,
+      txtusernameInstedofname,
     } = this.state;
 
     if (!this.checkValidation()) {
@@ -372,7 +389,10 @@ export class UserProfileScreen extends Component {
     // Collect the necessary params
     const { updateprofile } = this.props;
     params.append("email", user.email);
-    params.append("username", txtUserName);
+    params.append(
+      "username",
+      user.setting_6 == 1 ? txtusernameInstedofname : txtUserName
+    );
     if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
       params.append("image", "");
     } else {
@@ -625,7 +645,7 @@ export class UserProfileScreen extends Component {
                     })
                   }
                 />
-                {user.setting_6 == 1 ? null : (
+                {user.setting_6 == 0 ? (
                   <Input
                     theme={theme}
                     value={this.state.txtUserName}
@@ -653,6 +673,38 @@ export class UserProfileScreen extends Component {
                     onChangeText={(text) =>
                       this.setState({
                         txtUserName: text,
+                        isUserNameError: false,
+                      })
+                    }
+                  />
+                ) : (
+                  <Input
+                    theme={theme}
+                    value={this.state.txtusernameInstedofname}
+                    placeholderText={StaticTitle.userName}
+                    inputStyle={{
+                      marginTop: 8,
+                      color: Colors.placeholderColor,
+                    }}
+                    onSubmitEditing={Keyboard.dismiss}
+                    blurOnSubmit={false}
+                    forwardRef={(ref) => {
+                      (this.input.txtusernameInstedofname = ref),
+                        this.input.txtusernameInstedofname &&
+                          this.input.txtusernameInstedofname.setNativeProps({
+                            style: { fontFamily: "Raleway-Regular" },
+                          });
+                    }}
+                    autoFocus={true}
+                    returnKeyType="done"
+                    autoCapitalize={"none"}
+                    maxLength={26}
+                    minLength={3}
+                    isValidationShow={this.state.isUserNameError}
+                    validateMesssage={this.state.userNameValidMsg}
+                    onChangeText={(text) =>
+                      this.setState({
+                        txtusernameInstedofname: text,
                         isUserNameError: false,
                       })
                     }
@@ -701,34 +753,32 @@ export class UserProfileScreen extends Component {
                     },
                   ]}
                 >
-                  {user.setting_5 == 1 ? null : (
-                    <>
-                      <InstagramIntegration
-                        isFrom="Instagram"
-                        URL={
-                          user.instagram_username
-                            ? user.instagram_username
-                            : "https://www.google.com"
-                        }
-                      />
-                      <FacebookIntegration
-                        isFrom="Facebook"
-                        URL={
-                          user.fb_username
-                            ? user.fb_username
-                            : "https://www.google.com"
-                        }
-                      />
-                      <SnapchatIntegration
-                        isFrom="Snap"
-                        URL={
-                          user.snapchat_username
-                            ? user.snapchat_username
-                            : "https://www.google.com"
-                        }
-                      />
-                    </>
-                  )}
+                  <>
+                    <InstagramIntegration
+                      isFrom="Instagram"
+                      URL={
+                        user.instagram_username
+                          ? user.instagram_username
+                          : "https://www.google.com"
+                      }
+                    />
+                    <FacebookIntegration
+                      isFrom="Facebook"
+                      URL={
+                        user.fb_username
+                          ? user.fb_username
+                          : "https://www.google.com"
+                      }
+                    />
+                    <SnapchatIntegration
+                      isFrom="Snap"
+                      URL={
+                        user.snapchat_username
+                          ? user.snapchat_username
+                          : "https://www.google.com"
+                      }
+                    />
+                  </>
 
                   {/* <PrimaryTextinputwithIcon
                     isFrom="Instagram"

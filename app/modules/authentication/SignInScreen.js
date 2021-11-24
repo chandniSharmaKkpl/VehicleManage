@@ -40,7 +40,7 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      // txtEmail: "we@mailinator.com",
+      // txtEmail: "we1@mailinator.com ",
       // txtPassword: "Abcd@1234",
       txtEmail: "",
       txtPassword: "",
@@ -95,7 +95,7 @@ export class SignInScreen extends Component {
     //   });
     //   return false;
     // } else {
-      NavigationService.navigate("ForgotPassword");
+    NavigationService.navigate("ForgotPassword");
     // }
   };
 
@@ -188,7 +188,7 @@ export class SignInScreen extends Component {
         .then(async (res) => {
           console.log(
             "res.value.data.data------login-------",
-            JSON.stringify(res.value.data.error)
+            JSON.stringify(res.value)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
@@ -244,10 +244,13 @@ export class SignInScreen extends Component {
               {
                 NavigationService.navigate("Login");
               }
-            }
-            else if (res.value && res.value.data.error) {
+            } else if (
+              res.value &&
+              res.value.message == "Validation Error." &&
+              res.value.success == false
+            ) {
               await showMessage({
-                message: res.value.message,
+                message: res.value.data.email,
                 type: "danger",
                 icon: "info",
                 duration: 4000,
