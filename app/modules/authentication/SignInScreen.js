@@ -40,7 +40,7 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      // txtEmail: "we1@mailinator.com ",
+      // txtEmail: "we@mailinator.com",
       // txtPassword: "Abcd@1234",
       txtEmail: "",
       txtPassword: "",
@@ -258,6 +258,16 @@ export class SignInScreen extends Component {
             } else if (res.value && res.value.success == false) {
               await showMessage({
                 message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (
+              res.value &&
+              res.value.message == "The given data was invalid."
+            ) {
+              await showMessage({
+                message: res.value.data.errors.email,
                 type: "danger",
                 icon: "info",
                 duration: 4000,
