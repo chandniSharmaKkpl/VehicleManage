@@ -58,7 +58,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 
 const TAG = "ChatMessagesScreen ::=";
-let getparticularMsg_id;
 export class ChatMessagesScreen extends Component {
   _isMounted = false;
   constructor(props) {
@@ -80,6 +79,8 @@ export class ChatMessagesScreen extends Component {
       isMessageSend: false,
       emoji: " ",
       isopenEmojiPicker: false,
+      currentMsg_id: "",
+      getparticularMsg_id: "",
     };
     this.onSend = this.onSend.bind(this);
     this.callSendAPI = this.callSendAPI.bind(this);
@@ -159,12 +160,12 @@ export class ChatMessagesScreen extends Component {
     params.append("to_id", to_id);
     messagesDetails(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get messagesDetails",
-        //   JSON.stringify(res.value.data.data)
-        // );
-        // console.log("this.props.chatMessages======", this.props.chatMessages);
+        console.log(
+          TAG,
+          "response of get messagesDetails",
+          JSON.stringify(res.value.data.data)
+        );
+        console.log("this.props.chatMessages======", this.props.chatMessages);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           // console.log(
@@ -308,37 +309,48 @@ export class ChatMessagesScreen extends Component {
     let addkey;
     var tempmsgArr = [];
     if (currentemoji) {
-      this.setState({ emoji: currentemoji }, () => {
-        this.state.messages.map((item) => {
-          if (item._id == getparticularMsg_id._id) {
-            const target = { emoji: currentemoji };
-            let newkey = Object.assign(target, item);
-            tempmsgArr.push(newkey);
-          }
-        });
-
-        const finalupdatedArray = this.state.messages.map((itm) => ({
-          ...tempmsgArr.find((item) => item._id === itm._id && item),
-          ...itm,
-        }));
-        this.setState({ messages: finalupdatedArray });
+      this.state.messages.forEach((msg) => {
+        if (msg._id == this.state.getparticularMsg_id) {
+          this.setState({ emoji: currentemoji, currentMsg_id: msg._id });
+        }
       });
     }
   };
 
   onLongPress(context, message) {
-    if (message._id) {
+    if (message._id == this.state.from_id) {
+    } else {
       this.setState({ isopenEmojiPicker: true }, () => {
         this.state.messages.map((item) => {
           if (item._id == message._id) {
-            return (getparticularMsg_id = item);
+            this.setState({ getparticularMsg_id: item._id });
           }
         });
       });
     }
   }
 
-  onSend(messages = []) {
+  onSend = (message, callback) => {
+    this.waitForConnection(() => {
+      this.callOnSend(message);
+      if (typeof callback !== "undefined") {
+        callback();
+      }
+    }, 1000);
+  };
+
+  waitForConnection = (callback, interval) => {
+    if (global.ws.readyState === 1) {
+      callback();
+    } else {
+      // optional: implement backoff for interval here
+      setTimeout(function () {
+        this.waitForConnection(callback, interval);
+      }, interval);
+    }
+  };
+
+  callOnSend = (messages = []) => {
     const { userDetails } = this.props;
     // console.log("onSend() messages  :->", this.props.userDetails);
 
@@ -356,15 +368,16 @@ export class ChatMessagesScreen extends Component {
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
-        global.ws.send(
-          JSON.stringify({
-            command: "message",
-            from: this.state.from_id,
-            to: this.state.to_id,
-            message: messages,
-            from_user: userDetails,
-          })
-        );
+        global.ws.onopen = () =>
+          global.ws.send(
+            JSON.stringify({
+              command: "message",
+              from: this.state.from_id,
+              to: this.state.to_id,
+              message: messages,
+              from_user: userDetails,
+            })
+          );
 
         this.callSendAPI(newMsgs);
 
@@ -379,7 +392,7 @@ export class ChatMessagesScreen extends Component {
         // console.log("to_detail :->"+err);
       }
     }
-  }
+  };
 
   callSendAPI(messages) {
     var allTextMsg = messages.map((item) => {
@@ -587,8 +600,9 @@ export class ChatMessagesScreen extends Component {
       from_id,
       isopenEmojiPicker,
       emoji,
+      currentMsg_id,
+      getparticularMsg_id,
     } = this.state;
-    console.log("messagesmessagesmessages=== render", messages);
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
     var user_id = from_id;
     let platformConf =
@@ -661,6 +675,11 @@ export class ChatMessagesScreen extends Component {
             }}
             user={{
               _id: Number(user_id),
+              emoji: this.state.emoji,
+              from_id: this.state.from_id,
+              to_id:this.state.to_id,
+              getparticularMsg_id: getparticularMsg_id,
+              currentMsg_id: currentMsg_id,
             }}
             maxInputLength={1000}
             showAvatarForEveryMessage={false}
@@ -682,6 +701,9 @@ export class ChatMessagesScreen extends Component {
             style={{ flex: 1 }}
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
+            renderCustomView={
+              getparticularMsg_id == currentMsg_id ? renderCustomView : null
+            }
             // renderActions={renderActions}
             // renderComposer={renderComposer}
             renderSend={renderSend}

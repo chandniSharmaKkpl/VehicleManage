@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Image, Text } from "react-native";
 import {
   Avatar,
   Bubble,
@@ -10,6 +10,7 @@ import {
 import FontFamily from "../assets/styles/FontFamily";
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
+import FastImage from "react-native-fast-image";
 
 export const renderAvatar = (props) => (
   <Avatar
@@ -165,11 +166,29 @@ export const renderMessageText = (props) => (
 );
 
 export const renderCustomView = ({ user }) => (
-  <View style={{ minHeight: 20, alignItems: "center" }}>
-    <Text>
-      Current user:
-      {user.name}
-    </Text>
-    <Text>From CustomView</Text>
-  </View>
+  console.log("user=====", user),
+  user.currentMsg_id == user.getparticularMsg_id ? (
+    <View
+      style={{
+        // position: "absolute",
+        // top: 35,
+        // right: 50,
+        width: 30,
+        height: 30,
+        alignContent: "center",
+        justifyContent: "center",
+        alignItems: "baseline",
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 25,
+          fontFamily: FontFamily.RalewaRegular,
+          fontWeight: "400",
+        }}
+      >
+        {user.emoji}
+      </Text>
+    </View>
+  ) : null
 );
