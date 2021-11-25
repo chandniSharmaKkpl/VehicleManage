@@ -83,10 +83,10 @@ export class SearchScreen extends Component {
     AppState.removeAllListeners("change", this._handleAppStateThemeChange);
   };
 
-  callInitAPI() {
+  callInitAPI= async()=> {
     if (globals.isInternetConnected == true) {
       const { initializeApp } = this.props;
-      initializeApp().then((res) => {
+      initializeApp  ().then(async (res) => {
         let token = await AsyncStorage.getItem("access_token");
         globals.access_token = token;
       });
