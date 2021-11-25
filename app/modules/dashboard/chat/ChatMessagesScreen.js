@@ -160,12 +160,12 @@ export class ChatMessagesScreen extends Component {
     params.append("to_id", to_id);
     messagesDetails(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of get messagesDetails",
-          JSON.stringify(res.value.data.data)
-        );
-        console.log("this.props.chatMessages======", this.props.chatMessages);
+        // console.log(
+        //   TAG,
+        //   "response of get messagesDetails",
+        //   JSON.stringify(res.value.data.data)
+        // );
+        // console.log("this.props.chatMessages======", this.props.chatMessages);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           // console.log(
@@ -368,16 +368,15 @@ export class ChatMessagesScreen extends Component {
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
-        global.ws.onopen = () =>
-          global.ws.send(
-            JSON.stringify({
-              command: "message",
-              from: this.state.from_id,
-              to: this.state.to_id,
-              message: messages,
-              from_user: userDetails,
-            })
-          );
+        global.ws.send(
+          JSON.stringify({
+            command: "message",
+            from: this.state.from_id,
+            to: this.state.to_id,
+            message: messages,
+            from_user: userDetails,
+          })
+        );
 
         this.callSendAPI(newMsgs);
 
@@ -675,11 +674,11 @@ export class ChatMessagesScreen extends Component {
             }}
             user={{
               _id: Number(user_id),
-              emoji: this.state.emoji,
-              from_id: this.state.from_id,
-              to_id: this.state.to_id,
-              getparticularMsg_id: getparticularMsg_id,
-              currentMsg_id: currentMsg_id,
+              // emoji: this.state.emoji,
+              // from_id: this.state.from_id,
+              // to_id: this.state.to_id,
+              // getparticularMsg_id: getparticularMsg_id,
+              // currentMsg_id: currentMsg_id,
             }}
             maxInputLength={1000}
             showAvatarForEveryMessage={false}
@@ -701,14 +700,14 @@ export class ChatMessagesScreen extends Component {
             style={{ flex: 1 }}
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
-            renderCustomView={
-              (getparticularMsg_id == "" || getparticularMsg_id == undefined) &&
-              (currentMsg_id == "" || currentMsg_id == undefined)
-                ? null
-                : getparticularMsg_id == currentMsg_id
-                ? renderCustomView
-                : null
-            }
+            // renderCustomView={
+            //   (getparticularMsg_id == "" || getparticularMsg_id == undefined) &&
+            //   (currentMsg_id == "" || currentMsg_id == undefined)
+            //     ? null
+            //     : getparticularMsg_id == currentMsg_id
+            //     ? renderCustomView
+            //     : null
+            // }
             // renderActions={renderActions}
             // renderComposer={renderComposer}
             renderSend={renderSend}

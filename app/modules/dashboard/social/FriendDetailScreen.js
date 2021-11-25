@@ -202,29 +202,30 @@ export class FriendDetailScreen extends Component {
               }
             }
           }
-        } else if (
-          object.command == "register" ||
-          object.command == "unregister"
-        ) {
-          if (!this.state.isUserRegister && this.registerDeviceTimer == null) {
-            // Start 3 seconds interval,
-            // This will check is internel
+        } 
+        // else if (
+        //   object.command == "register" ||
+        //   object.command == "unregister"
+        // ) {
+        //   if (!this.state.isUserRegister && this.registerDeviceTimer == null) {
+        //     // Start 3 seconds interval,
+        //     // This will check is internel
 
-            this.registerDeviceTimer = setInterval(() => {
-              if (this.state.webSocketServerConnected) {
-                if (
-                  this.registerDeviceTimer != undefined ||
-                  this.registerDeviceTimer != null
-                ) {
-                  clearInterval(this.registerDeviceTimer);
-                  this.registerDeviceTimer = null;
-                }
+        //     this.registerDeviceTimer = setInterval(() => {
+        //       if (this.state.webSocketServerConnected) {
+        //         if (
+        //           this.registerDeviceTimer != undefined ||
+        //           this.registerDeviceTimer != null
+        //         ) {
+        //           clearInterval(this.registerDeviceTimer);
+        //           this.registerDeviceTimer = null;
+        //         }
 
-                this.registerAndSubscribe();
-              }
-            }, 3000);
-          }
-        }
+        //         this.registerAndSubscribe();
+        //       }
+        //     }, 3000);
+        //   }
+        // }
       }
     };
     global.ws.onerror = ({ error }) => {
