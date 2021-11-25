@@ -43,7 +43,7 @@ export default class FireBase {
       }
     }
 
-    const authStatus = await firebase.messaging().hasPermission();
+    const authStatus = await firebase.messaging().requestPermission();
     this.isFCMEnabled =
       authStatus === firebase.messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
@@ -65,7 +65,7 @@ export default class FireBase {
           })
           .catch((err) => {
             Alert.alert(
-              "Roadie",
+              "What's Local",
               "App needs permission for sending remote notification.\nKindly goto Settings to enable permission.",
               [
                 {
@@ -73,8 +73,10 @@ export default class FireBase {
                   onPress: () => {
                     console.log("Settings Pressed");
                     // Linking.openURL('app-settings://notification/${com.Fleurieu}');
-                    // Linking.openURL('app-settings://notification/<com.whatslocalapp>')
-                    Linking.openURL("app-settings:");
+                    Linking.openURL(
+                      "app-settings://notification/<com.whatslocalapp>"
+                    );
+                    // Linking.openURL('app-settings:');
                   },
                 },
                 {
@@ -98,6 +100,7 @@ export default class FireBase {
   };
 
   setFCMToken = async () => {
+    console.log("Firebase.js ------------->");
     this.fcmToken = await firebase.messaging().getToken();
     this.saveToken();
     return this.fcmToken;
@@ -182,7 +185,7 @@ export default class FireBase {
 
       // const {nav} = this.props;
       // const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-      console.log("Roadie::::::::: onMessage()----->", message);
+      console.log("Roadie ::::::::: onMessage()----->", message);
       // console.log("this.props :-->",this.props);
       const { title, body, detail } = message.data;
       if (title !== undefined && body !== undefined && detail !== undefined) {

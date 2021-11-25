@@ -35,7 +35,7 @@ const Header = ({
   messages_count,
   ...props
 }) => {
-  console.log("messages_count===", messages_count);
+  // console.log("messages_count===", messages_count);
   const gotoBack = async () => {
     NavigationService.back();
   };

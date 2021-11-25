@@ -552,7 +552,11 @@ export class RegistrationDetailsScreen extends Component {
                 <Input
                   theme={theme}
                   value={this.state.txtRegNumber}
-                  inputStyle={{ marginTop: 0, borderColor: Colors.black }}
+                  inputStyle={{
+                    color: Colors.placeholderColor,
+                    marginTop: 0,
+                    borderColor: Colors.black,
+                  }}
                   placeholderText={StaticTitle.enterRegisterNumber}
                   onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}

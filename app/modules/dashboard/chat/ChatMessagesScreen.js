@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  Keyboard,
   KeyboardAvoidingView,
   DeviceEventEmitter,
 } from "react-native";
@@ -54,9 +55,9 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import * as actions from "./redux/Actions";
 const avatar = require("../../../assets/images/user_default.jpeg");
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import EmojiSelector, { Categories } from "react-native-emoji-selector";
 
 const TAG = "ChatMessagesScreen ::=";
-
 export class ChatMessagesScreen extends Component {
   _isMounted = false;
   constructor(props) {
@@ -76,6 +77,10 @@ export class ChatMessagesScreen extends Component {
       user_info: this.props.navigation.state.params.user_info,
       to_id: "",
       isMessageSend: false,
+      emoji: " ",
+      isopenEmojiPicker: false,
+      currentMsg_id: "",
+      getparticularMsg_id: "",
     };
     this.onSend = this.onSend.bind(this);
     this.callSendAPI = this.callSendAPI.bind(this);
@@ -165,7 +170,7 @@ export class ChatMessagesScreen extends Component {
           //OK 200 The request was fulfilled
           // console.log(
           //   "tres.value.data.success == true   ",
-          //   res.value.data.success
+          //   res.value.data.data
           // );
 
           // this.setState({
@@ -300,13 +305,52 @@ export class ChatMessagesScreen extends Component {
       });
   };
 
-  onLongPress(context, message){
-    console.log("onLongPress=========context===",JSON.stringify(context));
-    console.log("onLongPress=========message===", message);
+  updateSelectedEmoji = (currentemoji) => {
+    let addkey;
+    var tempmsgArr = [];
+    if (currentemoji) {
+      this.state.messages.forEach((msg) => {
+        if (msg._id == this.state.getparticularMsg_id) {
+          this.setState({ emoji: currentemoji, currentMsg_id: msg._id });
+        }
+      });
+    }
+  };
 
+  onLongPress(context, message) {
+    if (message._id == this.state.from_id) {
+    } else {
+      this.setState({ isopenEmojiPicker: true }, () => {
+        this.state.messages.map((item) => {
+          if (item._id == message._id) {
+            this.setState({ getparticularMsg_id: item._id });
+          }
+        });
+      });
+    }
   }
 
-  onSend(messages = []) {
+  onSend = (message, callback) => {
+    this.waitForConnection(() => {
+      this.callOnSend(message);
+      if (typeof callback !== "undefined") {
+        callback();
+      }
+    }, 1000);
+  };
+
+  waitForConnection = (callback, interval) => {
+    if (global.ws.readyState === 1) {
+      callback();
+    } else {
+      // optional: implement backoff for interval here
+      setTimeout(function () {
+        this.waitForConnection(callback, interval);
+      }, interval);
+    }
+  };
+
+  callOnSend = (messages = []) => {
     const { userDetails } = this.props;
     // console.log("onSend() messages  :->", this.props.userDetails);
 
@@ -347,7 +391,7 @@ export class ChatMessagesScreen extends Component {
         // console.log("to_detail :->"+err);
       }
     }
-  }
+  };
 
   callSendAPI(messages) {
     var allTextMsg = messages.map((item) => {
@@ -508,6 +552,11 @@ export class ChatMessagesScreen extends Component {
     this.setState({ isMsgReportPicker: !this.state.isMsgReportPicker });
   };
 
+  //display emoji picker model
+  displayMsgEmojiPicker = () => {
+    this.setState({ isopenEmojiPicker: !this.state.isopenEmojiPicker });
+  };
+
   // navigate to shareSocials
   shareSocials = () => {
     NavigationService.navigate("ShareSocials", {
@@ -548,6 +597,10 @@ export class ChatMessagesScreen extends Component {
       userDetails,
       user_info,
       from_id,
+      isopenEmojiPicker,
+      emoji,
+      currentMsg_id,
+      getparticularMsg_id,
     } = this.state;
     const { isLoading, loaderMessage, theme, chatMessages } = this.props;
     var user_id = from_id;
@@ -575,6 +628,7 @@ export class ChatMessagesScreen extends Component {
             isMsgReportPicker={() => this.displayMsgReportPicker()}
             isShareSocials={() => this.shareSocials()}
           />
+
           <View>
             <MediaModel
               modalVisible={isMsgReportPicker}
@@ -620,6 +674,11 @@ export class ChatMessagesScreen extends Component {
             }}
             user={{
               _id: Number(user_id),
+              // emoji: this.state.emoji,
+              // from_id: this.state.from_id,
+              // to_id: this.state.to_id,
+              // getparticularMsg_id: getparticularMsg_id,
+              // currentMsg_id: currentMsg_id,
             }}
             maxInputLength={1000}
             showAvatarForEveryMessage={false}
@@ -641,6 +700,14 @@ export class ChatMessagesScreen extends Component {
             style={{ flex: 1 }}
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
+            // renderCustomView={
+            //   (getparticularMsg_id == "" || getparticularMsg_id == undefined) &&
+            //   (currentMsg_id == "" || currentMsg_id == undefined)
+            //     ? null
+            //     : getparticularMsg_id == currentMsg_id
+            //     ? renderCustomView
+            //     : null
+            // }
             // renderActions={renderActions}
             // renderComposer={renderComposer}
             renderSend={renderSend}
@@ -660,6 +727,16 @@ export class ChatMessagesScreen extends Component {
           />
           {Platform.OS === "android" ? (
             <KeyboardSpacer topSpacing={-160} />
+          ) : null}
+          {isopenEmojiPicker == true ? (
+            <EmojiSelector
+              onEmojiSelected={(emoji) => this.updateSelectedEmoji(emoji)}
+              showSearchBar={true}
+              showTabs={true}
+              showHistory={true}
+              showSectionTitles={true}
+              category={Categories.all}
+            />
           ) : null}
         </View>
       </>

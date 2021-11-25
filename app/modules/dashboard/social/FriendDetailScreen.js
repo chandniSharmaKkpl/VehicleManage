@@ -155,7 +155,7 @@ export class FriendDetailScreen extends Component {
         alert("Something wen to wrong");
       }
     };
-    // alert(" --- Connected-------------------------");
+    alert(" --- Connected-------------------------");
 
     global.ws.onmessage = ({ data }) => {
       console.log(Platform.OS + " --- WS OnMessage() ---->", data);
@@ -202,7 +202,30 @@ export class FriendDetailScreen extends Component {
               }
             }
           }
-        }
+        } 
+        // else if (
+        //   object.command == "register" ||
+        //   object.command == "unregister"
+        // ) {
+        //   if (!this.state.isUserRegister && this.registerDeviceTimer == null) {
+        //     // Start 3 seconds interval,
+        //     // This will check is internel
+
+        //     this.registerDeviceTimer = setInterval(() => {
+        //       if (this.state.webSocketServerConnected) {
+        //         if (
+        //           this.registerDeviceTimer != undefined ||
+        //           this.registerDeviceTimer != null
+        //         ) {
+        //           clearInterval(this.registerDeviceTimer);
+        //           this.registerDeviceTimer = null;
+        //         }
+
+        //         this.registerAndSubscribe();
+        //       }
+        //     }, 3000);
+        //   }
+        // }
       }
     };
     global.ws.onerror = ({ error }) => {
@@ -218,8 +241,6 @@ export class FriendDetailScreen extends Component {
   }
 
   searchFromUser(from_id) {
-    console.log("searchFromUser() from_id :-->", this.state.getfriendData);
-
     var user = {};
 
     if (Number(this.state.getfriendData.id) == Number(from_id)) {
@@ -239,11 +260,11 @@ export class FriendDetailScreen extends Component {
       params.append("friend_id", getfriendData.id);
       getfriendDetails(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "response of getfriend Details",
-          //   JSON.stringify(res.value.data.data)
-          // );
+          console.log(
+            TAG,
+            "response of getfriend Details",
+            JSON.stringify(res.value.data.data)
+          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -472,51 +493,58 @@ export class FriendDetailScreen extends Component {
               </TouchableOpacity>
             ) : null}
 
-            <TouchableOpacity
-              onPress={() =>
-                this.navigatetoSocialProfiles("Fb", friendDetail.username)
-              }
-              style={[
-                FriendDetailStyle.circleview,
-                { backgroundColor: Colors.blue },
-              ]}
-            >
-              <FastImage
-                style={[FriendDetailStyle.socialicon]}
-                source={IMAGE.fb_icon_square}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                this.navigatetoSocialProfiles("Insta", friendDetail.username)
-              }
-            >
-              <LinearGradient
-                start={{ x: 0.0, y: 0.5 }}
-                end={{ x: 0.7, y: 1.0 }}
-                colors={[Colors.orange, Colors.pink, Colors.purple]}
-                style={FriendDetailStyle.circleview}
-              >
-                <FastImage
-                  style={[FriendDetailStyle.socialicon]}
-                  source={IMAGE.insta_icon_img}
-                />
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                this.navigatetoSocialProfiles("Snap", friendDetail.username)
-              }
-              style={[
-                FriendDetailStyle.circleview,
-                { backgroundColor: Colors.snapChat },
-              ]}
-            >
-              <FastImage
-                style={[FriendDetailStyle.socialicon]}
-                source={IMAGE.snap_img}
-              />
-            </TouchableOpacity>
+            {friendDetail.setting_5 == 0 ? null : (
+              <>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.navigatetoSocialProfiles("Fb", friendDetail.username)
+                  }
+                  style={[
+                    FriendDetailStyle.circleview,
+                    { backgroundColor: Colors.blue },
+                  ]}
+                >
+                  <FastImage
+                    style={[FriendDetailStyle.socialicon]}
+                    source={IMAGE.fb_icon_square}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.navigatetoSocialProfiles(
+                      "Insta",
+                      friendDetail.username
+                    )
+                  }
+                >
+                  <LinearGradient
+                    start={{ x: 0.0, y: 0.5 }}
+                    end={{ x: 0.7, y: 1.0 }}
+                    colors={[Colors.orange, Colors.pink, Colors.purple]}
+                    style={FriendDetailStyle.circleview}
+                  >
+                    <FastImage
+                      style={[FriendDetailStyle.socialicon]}
+                      source={IMAGE.insta_icon_img}
+                    />
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.navigatetoSocialProfiles("Snap", friendDetail.username)
+                  }
+                  style={[
+                    FriendDetailStyle.circleview,
+                    { backgroundColor: Colors.snapChat },
+                  ]}
+                >
+                  <FastImage
+                    style={[FriendDetailStyle.socialicon]}
+                    source={IMAGE.snap_img}
+                  />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
 
           <View

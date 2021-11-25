@@ -35,15 +35,15 @@ const SearchStack = createStackNavigator(
     FriendDetail: {
       screen: FriendDetailScreen,
     },
-    // ChatList: {
-    //   screen: ChatListScreen,
-    // },
-    // ChatMessages: {
-    //   screen: ChatMessagesScreen,
-    // },
-    // ShareSocials:{
-    //   screen:ShareSocialsScreen
-    // }
+    ChatList: {
+      screen: ChatListScreen,
+    },
+    ChatMessages: {
+      screen: ChatMessagesScreen,
+    },
+    ShareSocials:{
+      screen:ShareSocialsScreen
+    }
   },
   {
     headerMode: "none",
@@ -64,15 +64,15 @@ const SocialStack = createStackNavigator(
     FriendDetail: {
       screen: FriendDetailScreen,
     },
-    // ChatList: {
-    //   screen: ChatListScreen,
-    // },
-    // ChatMessages: {
-    //   screen: ChatMessagesScreen,
-    // },
-    // ShareSocials:{
-    //   screen:ShareSocialsScreen
-    // }
+    ChatList: {
+      screen: ChatListScreen,
+    },
+    ChatMessages: {
+      screen: ChatMessagesScreen,
+    },
+    ShareSocials:{
+      screen:ShareSocialsScreen
+    }
   },
   {
     headerMode: "none",
@@ -218,6 +218,15 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 ChatStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
+SocialStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   if (navigation.state.index > 0) {
     tabBarVisible = false;
