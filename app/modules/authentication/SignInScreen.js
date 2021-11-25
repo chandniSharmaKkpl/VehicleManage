@@ -165,7 +165,8 @@ export class SignInScreen extends Component {
     var deviceUUID = DeviceInfo.getUniqueId();
     var deviceName = DeviceInfo.getDeviceNameSync();
     var deviceToken = DeviceInfo.getDeviceToken();
-
+    let fcmToken = await AsyncStorage.getItem("fcmToken");
+    console.log(Platform.OS +" - fcmToken :->",fcmToken);
     // var deviceToken = (await AsyncStorage.getItem("fcmToken")) || "";
     // if (deviceToken === "") {
     //   deviceToken = await firebase.messaging().getToken();
@@ -176,7 +177,7 @@ export class SignInScreen extends Component {
     // Collect the necessary params
     params.append("email", txtEmail);
     params.append("password", txtPassword);
-    params.append("device_token", deviceToken);
+    params.append("device_token", fcmToken);
     params.append("device_uuid", deviceUUID);
     params.append("device_type", Platform.OS == "android" ? "1" : "0");
     params.append("device_name", deviceName);

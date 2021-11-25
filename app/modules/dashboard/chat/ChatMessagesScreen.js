@@ -677,7 +677,7 @@ export class ChatMessagesScreen extends Component {
               _id: Number(user_id),
               emoji: this.state.emoji,
               from_id: this.state.from_id,
-              to_id:this.state.to_id,
+              to_id: this.state.to_id,
               getparticularMsg_id: getparticularMsg_id,
               currentMsg_id: currentMsg_id,
             }}
@@ -702,7 +702,12 @@ export class ChatMessagesScreen extends Component {
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
             renderCustomView={
-              getparticularMsg_id == currentMsg_id ? renderCustomView : null
+              (getparticularMsg_id == "" || getparticularMsg_id == undefined) &&
+              (currentMsg_id == "" || currentMsg_id == undefined)
+                ? null
+                : getparticularMsg_id == currentMsg_id
+                ? renderCustomView
+                : null
             }
             // renderActions={renderActions}
             // renderComposer={renderComposer}
