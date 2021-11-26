@@ -25,6 +25,7 @@ import { FriendListStyle } from "../../../assets/styles/FriendListStyle";
 import FastImage from "react-native-fast-image";
 import { isEmpty } from "../../../utils/Validators";
 import { darkTheme, lightTheme } from "../../../assets/Theme";
+import * as Authactions from "../../authentication/redux/Actions";
 
 const TAG = "SearchScreen ::=";
 
@@ -35,22 +36,34 @@ export class SearchScreen extends Component {
       txtSearch: "Gj",
       searchListdata: [],
       theme: {},
-      searched_count:"",
+      searched_count: "",
       messages_count: "",
       countDeatils: {},
       appState: AppState.currentState,
     };
+    this.alert = "no";
+    this.callInitAPI = this.callInitAPI.bind(this);
+    this.receivedPushNotification = this.receivedPushNotification.bind(this);
+    this.showAlert = this.showAlert.bind(this);
   }
 
   async componentDidMount() {
+    this.callInitAPI();
+
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
+
     DeviceEventEmitter.addListener("NotificationCountRemove", () => {
       this.setNotificationCountsafterreview();
     });
     DeviceEventEmitter.addListener("ChatCountRemove", () => {
       this.setChatCountsafterreview();
     });
+    DeviceEventEmitter.addListener(
+      "received_push_notification",
+      this.receivedPushNotification.bind()
+    );
+    DeviceEventEmitter.addListener("recall_init_api", this.callInitAPI.bind());
 
     await this.setThemeModes();
     this.setState({ theme: this.props.theme }, () => {
@@ -64,9 +77,23 @@ export class SearchScreen extends Component {
   }
 
   componentWillUnmount = () => {
+    DeviceEventEmitter.removeAllListeners("recall_init_api");
+    DeviceEventEmitter.removeAllListeners("received_push_notification");
     DeviceEventEmitter.removeAllListeners("NotificationCountRemove");
     AppState.removeAllListeners("change", this._handleAppStateThemeChange);
   };
+
+  callInitAPI() {
+    if (globals.isInternetConnected == true) {
+      const { initializeApp } = this.props;
+      initializeApp().then((res) => {
+        let token = await AsyncStorage.getItem("access_token");
+        globals.access_token = token;
+      });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
 
   _handleAppStateThemeChange = async (nextAppState) => {
     if (
@@ -148,6 +175,100 @@ export class SearchScreen extends Component {
       JSON.stringify(parseInt(this.state.messages_count))
     );
   };
+
+  receivedPushNotification = (msgDetails) => {
+    console.log("receivedPushNotification() message:", msgDetails);
+    // console.log("this.props :-->", this.props.nav);
+
+    const { nav } = this.props;
+    const currentScreen =
+      nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
+
+    console.log("currentScreen :-->", currentScreen);
+
+    const { title, body, detail } = msgDetails;
+    var detailObj = JSON.parse(detail);
+
+    if (currentScreen[0].routeName == "ChatList") {
+      this.showAlert(title, body, detail);
+    } else {
+      console.log("in ELSE -->", currentScreen);
+      // if user on same Chat details screen, then check, is user open same sendrer's chat details screen or not,
+      // if user on diff sender chat screen then also display alert
+
+      console.log("object :->", detailObj);
+
+      const currentScreenParams = currentScreen[0].params;
+      console.log("currentScreenParams :->", currentScreenParams);
+      if (currentScreenParams !== undefined) {
+        var userScreenLoadUserId = currentScreenParams.chatMessage.id;
+        console.log("userScreenLoadUserId :->", userScreenLoadUserId);
+        var notificationSenderUserId = detailObj.sender_detail.id;
+        console.log("notificationSenderUserId :->", notificationSenderUserId);
+
+        if (notificationSenderUserId != userScreenLoadUserId) {
+          this.showAlert(title, body, detail);
+        }
+      }
+    }
+  };
+
+  showAlert(title, body, detail) {
+    var detailObj = JSON.parse(detail);
+
+    if (this.alert === "yes") {
+      return;
+    }
+    this.alert = "yes";
+
+    Alert.alert(
+      title,
+      body,
+      [
+        {
+          text: "Open Now",
+          onPress: () => {
+            console.log("Open-Now Pressed.");
+
+            this.redirectToChatDetails(detail);
+
+            this.alert = "no";
+          },
+        },
+        {
+          text: "Open Later",
+          onPress: () => {
+            console.log("Open-Later Pressed.");
+            this.alert = "no";
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  async redirectToChatDetails(chatDetail) {
+    var object = JSON.parse(chatDetail);
+    console.log("redirectToChatDetails() :->", object);
+
+    const { nav } = this.props;
+    const currentScreen =
+      nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
+    if (currentScreen[0].routeName == "ChatList") {
+      NavigationService.replace("ChatList", {
+        chatMessage: object,
+      });
+    } else {
+      if (currentScreen[0].routeName == "ChatMessages") {
+        NavigationService.navigate("ChatList", {
+          chatMessage: object,
+        });
+      } else {
+        await AsyncStorage.setItem("live_chatMessage", JSON.stringify(object));
+        NavigationService.navigate("ChatMessages");
+      }
+    }
+  }
 
   // clear States before leave this screen
   clearStates = () => {
@@ -372,6 +493,7 @@ export class SearchScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    nav: state.nav,
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
@@ -381,6 +503,7 @@ const mapDispatchToProps = (dispatch) => ({
   searchvehicle: (params) => dispatch(actions.searchvehicle(params)),
   notificationCount: (params) => dispatch(actions.notificationCount(params)),
   swicthTheme: (params) => dispatch(actions.swicthTheme(params)),
+  initializeApp: (params) => dispatch(Authactions.initializeApp(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);
