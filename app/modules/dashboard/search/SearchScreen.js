@@ -43,7 +43,6 @@ export class SearchScreen extends Component {
     };
     this.alert = "no";
     this.callInitAPI = this.callInitAPI.bind(this);
-    this.receivedPushNotification = this.receivedPushNotification.bind(this);
     this.showAlert = this.showAlert.bind(this);
   }
 
@@ -72,10 +71,10 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("ChatCountRemove", () => {
       this.setChatCountsafterreview();
     });
-    DeviceEventEmitter.addListener(
-      "received_push_notification",
-      this.receivedPushNotification.bind()
-    );
+    // DeviceEventEmitter.addListener(
+    //   "received_push_notification",
+    //   this.receivedPushNotification.bind()
+    // );
     DeviceEventEmitter.addListener("recall_init_api", this.callInitAPI.bind());
 
     await this.setThemeModes();
