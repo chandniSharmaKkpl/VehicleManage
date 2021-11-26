@@ -53,6 +53,11 @@ export class NotificationScreen extends Component {
       DeviceEventEmitter.emit("NotificationCountRemove");
     }
 
+    if (getchatCount != "0") {
+      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("ChatCountRemove");
+    }
+
     DeviceEventEmitter.addListener("ChatCountRemove", () => {
       this.setChatCountsafterreview();
     });
@@ -70,6 +75,7 @@ export class NotificationScreen extends Component {
     this.setState({
       messages_count: 0,
     });
+    console.log("after-----", this.state.messages_count);
   };
 
   gotoRecentViewers = () => {
