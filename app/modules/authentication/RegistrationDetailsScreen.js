@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   Alert,
+  PermissionsAndroid,
   TouchableOpacity,
 } from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
@@ -29,6 +30,7 @@ import {
   GenerateRandomFileName,
 } from "../../components";
 import { Messages } from "../../utils/Messages";
+import * as Authactions from "../authentication/redux/Actions";
 
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { DefaultOptions } from "../../components/DefaultOptions";
@@ -236,6 +238,11 @@ export class RegistrationDetailsScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
+              this.setState({
+                attachphotoUrl: res.value.data.data.vehicle_photo,
+                attachPaperUrl: res.value.data.data.registration_paper,
+              });
+              this.getUserData();
               NavigationService.back();
             } else {
             }
@@ -275,6 +282,15 @@ export class RegistrationDetailsScreen extends Component {
       Alert.alert(globals.warning, globals.noInternet);
     }
   };
+
+  getUserData() {
+    if (globals.isInternetConnected == true) {
+      const { initializeApp } = this.props;
+      initializeApp().then((res) => {});
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
+  }
 
   // API CALL begin
   registerDetailAPIcall = () => {
@@ -373,7 +389,28 @@ export class RegistrationDetailsScreen extends Component {
   };
 
   // capture img from camera
-  captureImage = () => {
+  captureImage = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "Roadie App Camera Permission",
+          message:
+            "Roadie App needs access to your camera " +
+            "so you can take awesome pictures.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
     launchCamera(
       {
         mediaType: "photo",
@@ -382,31 +419,39 @@ export class RegistrationDetailsScreen extends Component {
         maxWidth: 200,
       },
       (response) => {
-        // console.log(TAG, "I am in open camera", response);
-        const source = {
-          uri: response.uri,
-          name: response.fileName ? response.fileName : "Dummy.jpg",
-          size: response.fileSize,
-          type: response.type,
-        };
-        if (this.state.isattachPaper) {
+        if (response.didCancel === true) {
           this.setState({
+            ImageSource: IMAGE.user,
             isattachPaper: false,
-            attachPaperUrl: response.uri,
-            attachPaperName: response.fileName
-              ? response.fileName
-              : "Dummy.jpg",
-            attachphotoObj: source ? source : "",
+            isattachphoto: false,
           });
         } else {
-          this.setState({
-            isattachphoto: false,
-            attachphotoUrl: response.uri,
-            attachphotoName: response.fileName
-              ? response.fileName
-              : "Dummy.jpg",
-            attachPaperObj: source ? source : "",
-          });
+          // console.log(TAG, "I am in open camera", response);
+          const source = {
+            uri: response.uri,
+            name: response.fileName ? response.fileName : "Dummy.jpg",
+            size: response.fileSize,
+            type: response.type,
+          };
+          if (this.state.isattachPaper === true) {
+            this.setState({
+              isattachPaper: false,
+              attachPaperUrl: response.uri,
+              attachPaperName: response.fileName
+                ? response.fileName
+                : "Dummy.jpg",
+              attachPaperObj: source ? source : "",
+            });
+          } else if (this.state.isattachphoto === true) {
+            this.setState({
+              isattachphoto: false,
+              attachphotoUrl: response.uri,
+              attachphotoName: response.fileName
+                ? response.fileName
+                : "Dummy.jpg",
+              attachphotoObj: source ? source : "",
+            });
+          }
         }
       }
     );
@@ -414,6 +459,28 @@ export class RegistrationDetailsScreen extends Component {
 
   // choose profile photo from gallery
   chooseMedia = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "Roadie App Camera Permission",
+          message:
+            "Roadie needs access to your camera " +
+            "so you can take awesome pictures.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+
     launchImageLibrary(
       {
         mediaType: "photo",
@@ -423,32 +490,40 @@ export class RegistrationDetailsScreen extends Component {
       },
       async (response) => {
         // console.log(TAG, "response---", response);
-        const source = {
-          uri: response.uri,
-          name: response.fileName ? response.fileName : "Dummy.jpg",
-          size: response.fileSize,
-          type: response.type,
-        };
-        if (this.state.isattachPaper) {
-          await this.closeAttchPaper();
+        if (response.didCancel === true) {
           this.setState({
+            ImageSource: IMAGE.user,
             isattachPaper: false,
-            attachPaperUrl: response.uri,
-            attachPaperName: response.fileName
-              ? response.fileName
-              : "Dummy.jpg",
-            attachPaperObj: source ? source : "",
+            isattachphoto: false,
           });
         } else {
-          await this.closeAttchPhoto();
-          this.setState({
-            isattachphoto: false,
-            attachphotoUrl: response.uri,
-            attachphotoName: response.fileName
-              ? response.fileName
-              : "Dummy.jpg",
-            attachphotoObj: source ? source : "",
-          });
+          const source = {
+            uri: response.uri,
+            name: response.fileName ? response.fileName : "Dummy.jpg",
+            size: response.fileSize,
+            type: response.type,
+          };
+          if (this.state.isattachPaper) {
+            await this.closeAttchPaper();
+            this.setState({
+              isattachPaper: false,
+              attachPaperUrl: response.uri,
+              attachPaperName: response.fileName
+                ? response.fileName
+                : "Dummy.jpg",
+              attachPaperObj: source ? source : "",
+            });
+          } else {
+            await this.closeAttchPhoto();
+            this.setState({
+              isattachphoto: false,
+              attachphotoUrl: response.uri,
+              attachphotoName: response.fileName
+                ? response.fileName
+                : "Dummy.jpg",
+              attachphotoObj: source ? source : "",
+            });
+          }
         }
       }
     );
@@ -642,6 +717,7 @@ const mapDispatchToProps = (dispatch) => ({
   registerdetail: (params) => dispatch(actions.registerdetail(params)),
   updateRegistrationDetail: (params) =>
     dispatch(actions.updateRegistrationDetail(params)),
+  initializeApp: (params) => dispatch(Authactions.initializeApp(params)),
 });
 
 export default connect(
