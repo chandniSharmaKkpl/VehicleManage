@@ -7,6 +7,7 @@ import {
   Image,
   AppState,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { AuthStyle } from "../../assets/styles/AuthStyle";
 import { connect } from "react-redux";
@@ -20,6 +21,7 @@ import * as globals from "../../utils/Globals";
 import { darkTheme, lightTheme } from "../../assets/Theme";
 import * as actions from "./redux/Actions";
 import Colors from "../../assets/Colors";
+import messaging, { firebase } from '@react-native-firebase/messaging';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -31,6 +33,7 @@ export class LoginScreen extends Component {
     super(props);
     this.state = {
       theme: {},
+      deviceToken: "",
       appState: AppState.currentState,
     };
   }
@@ -68,10 +71,60 @@ export class LoginScreen extends Component {
   };
 
   componentDidMount = async () => {
+    Alert.alert("DIDMOUNT ")
+    this.checkPermission();
+
     this._isMounted = true;
     await this.setThemeModes();
     AppState.addEventListener("change", this._handleAppStateThemeChange);
   };
+
+  async checkPermission() {
+    const authStatus = await messaging().hasPermission();
+    const enabled =
+      authStatus === firebase.messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Notification have permission");
+      this.getToken();
+    } else {
+      this.requestUserPermission();
+    }
+  }
+
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem("fcmToken");
+    if (!fcmToken) {
+      fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        // Alert.alert("Device Token", fcmToken);
+        // console.log("Device TOKEN ======>" , fcmToken);
+        this.setState({ deviceToken: fcmToken });
+
+        // user has a device token
+        await AsyncStorage.setItem("fcmToken", fcmToken);
+      } else {
+        // await AsyncStorage.setItem("dt_logs", "in else not getToken");
+      }
+    } else {
+      console.log("Already Saved Device TOKEN ======>" , fcmToken);
+      this.setState({ deviceToken: fcmToken });
+      // await AsyncStorage.setItem("dt_logs", "found dt:" + fcmToken);
+    }
+  }
+
+  async requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      this.getToken();
+      console.log('Authorization status:', authStatus);
+    }
+  }
 
   // parse lite and dark theme data
   parseData = (newTheme) => {

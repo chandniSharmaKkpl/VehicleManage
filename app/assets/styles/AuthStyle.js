@@ -67,9 +67,9 @@ export const AuthStyle = StyleSheet.create({
     width: "90%",
     // height: 300,
     flex: 1,
-    borderWidth: 8,
+    borderWidth: 2,
     borderRadius: 8,
-    borderColor: "white",
+    borderColor: Colors.placeholderColor
   },
   placeholder_font: {
     color: Colors.placeholderColor,

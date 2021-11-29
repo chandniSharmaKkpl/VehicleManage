@@ -207,7 +207,8 @@ export const ComponentStyle = StyleSheet.create({
     fontFamily: FontFamily.RalewaRegular,
     color: Colors.white,
     textAlign: "center",
-    bottom: 5,
+    alignSelf: "center",
+    bottom: 4,
   },
   countcircleview: {
     width: globals.deviceWidth * 0.045,

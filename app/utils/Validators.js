@@ -38,6 +38,23 @@ export const isText = (value) => {
   return false;
 };
 
+export const convertTo24Hour = (time) => {
+  let hours = Number(time.match(/^(\d+)/)[1]);
+  const minutes = Number(time.match(/:(\d+)/)[1]);
+  let meridian = time.match(/\s(.*)$/);
+  if (meridian) {
+    meridian = meridian[1]; // eslint-disable-line
+    if (meridian.toLowerCase() === 'pm' && hours < 12) hours += 12;
+    if (meridian.toLowerCase() === 'am' && hours === 12) hours -= 12;
+    let sHours = hours.toString();
+    let sMinutes = minutes.toString();
+    if (hours < 10) sHours = `0${sHours}`;
+    if (minutes < 10) sMinutes = `0${sMinutes}`;
+    return `${sHours}:${sMinutes}`;
+  }
+  return time;
+};
+
 export const isValidComparedPassword = (password, confirmPassword) => {
   if (password !== confirmPassword) {
     return true;

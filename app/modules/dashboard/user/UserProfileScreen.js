@@ -331,7 +331,7 @@ export class UserProfileScreen extends Component {
 
   // start of validation
   checkValidation = () => {
-    const { txtUserName } = this.state;
+    const { txtUserName, txtusernameInstedofname } = this.state;
     if (isEmpty(txtUserName)) {
       this.setState({
         isUserNameError: true,

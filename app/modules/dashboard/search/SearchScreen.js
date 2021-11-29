@@ -15,7 +15,7 @@ import { StaticTitle } from "../../../utils/StaticTitle";
 import { Search } from "../../../components";
 import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
-import { NavigationEvents } from "react-navigation";
+import { NavigationEvents, NavigationState } from "react-navigation";
 import { Header, Loader } from "../../../components";
 import * as actions from "../redux/Actions";
 import * as globals from "../../../utils/Globals";
@@ -43,9 +43,21 @@ export class SearchScreen extends Component {
     };
     this.alert = "no";
     this.callInitAPI = this.callInitAPI.bind(this);
-    this.receivedPushNotification = this.receivedPushNotification.bind(this);
     this.showAlert = this.showAlert.bind(this);
   }
+
+  getActiveRouteState = (route) => {
+    if (
+      !route.routes ||
+      route.routes.length === 0 ||
+      route.index >= route.routes.length
+    ) {
+      return route;
+    }
+
+    const childActiveRoute = route.routes[route.index];
+    return getActiveRouteState(childActiveRoute);
+  };
 
   async componentDidMount() {
     this.callInitAPI();
@@ -59,10 +71,10 @@ export class SearchScreen extends Component {
     DeviceEventEmitter.addListener("ChatCountRemove", () => {
       this.setChatCountsafterreview();
     });
-    DeviceEventEmitter.addListener(
-      "received_push_notification",
-      this.receivedPushNotification.bind()
-    );
+    // DeviceEventEmitter.addListener(
+    //   "received_push_notification",
+    //   this.receivedPushNotification.bind()
+    // );
     DeviceEventEmitter.addListener("recall_init_api", this.callInitAPI.bind());
 
     await this.setThemeModes();
@@ -83,17 +95,17 @@ export class SearchScreen extends Component {
     AppState.removeAllListeners("change", this._handleAppStateThemeChange);
   };
 
-  callInitAPI() {
+  callInitAPI = async () => {
     if (globals.isInternetConnected == true) {
       const { initializeApp } = this.props;
-      initializeApp().then((res) => {
+      initializeApp().then(async (res) => {
         let token = await AsyncStorage.getItem("access_token");
         globals.access_token = token;
       });
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
-  }
+  };
 
   _handleAppStateThemeChange = async (nextAppState) => {
     if (
@@ -176,40 +188,34 @@ export class SearchScreen extends Component {
     );
   };
 
-  receivedPushNotification = (msgDetails) => {
+  receivedPushNotification = async (msgDetails) => {
     console.log("receivedPushNotification() message:", msgDetails);
     // console.log("this.props :-->", this.props.nav);
 
     const { nav } = this.props;
-    const currentScreen =
-      nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
-
+    const currentScreen =  this.props.navigation.state.routeName
+    // const currentScreen = this.props.navigation.state.routeName;
     console.log("currentScreen :-->", currentScreen);
 
     const { title, body, detail } = msgDetails;
     var detailObj = JSON.parse(detail);
 
-    if (currentScreen[0].routeName == "ChatList") {
-      this.showAlert(title, body, detail);
-    } else {
-      console.log("in ELSE -->", currentScreen);
-      // if user on same Chat details screen, then check, is user open same sendrer's chat details screen or not,
-      // if user on diff sender chat screen then also display alert
-
-      console.log("object :->", detailObj);
-
-      const currentScreenParams = currentScreen[0].params;
-      console.log("currentScreenParams :->", currentScreenParams);
-      if (currentScreenParams !== undefined) {
-        var userScreenLoadUserId = currentScreenParams.chatMessage.id;
-        console.log("userScreenLoadUserId :->", userScreenLoadUserId);
-        var notificationSenderUserId = detailObj.sender_detail.id;
-        console.log("notificationSenderUserId :->", notificationSenderUserId);
-
-        if (notificationSenderUserId != userScreenLoadUserId) {
-          this.showAlert(title, body, detail);
-        }
+    if (currentScreen == "ChatMessages") {
+      await AsyncStorage.setItem("live_chatMessage", JSON.stringify(detailObj));
+      NavigationService.navigate("ChatMessages", { user_info: detailObj });
+    } else if (currentScreen == "ChatList") {
+      console.log("in ELSE -->", currentScreen.routeName);
+      {
+        await AsyncStorage.setItem(
+          "live_chatMessage",
+          JSON.stringify(detailObj)
+        );
+        NavigationService.navigate("ChatMessages", {
+          user_info: detailObj.sender_detail,
+        });
       }
+    } else {
+      this.showAlert(title, body, detail);
     }
   };
 
@@ -252,21 +258,21 @@ export class SearchScreen extends Component {
     console.log("redirectToChatDetails() :->", object);
 
     const { nav } = this.props;
-    const currentScreen =
-      nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
-    if (currentScreen[0].routeName == "ChatList") {
-      NavigationService.replace("ChatList", {
-        chatMessage: object,
+    const currentScreen = this.props.navigation.state.routeName; // console.log(
+    //   "redirectToChatDetails----------------currentScreen",
+    //   currentScreen
+    // );
+
+    if (currentScreen == "ChatMessages") {
+      await AsyncStorage.setItem("live_chatMessage", JSON.stringify(object));
+      NavigationService.navigate("ChatMessages");
+    } else if (currentScreen == "ChatList") {
+      await AsyncStorage.setItem("live_chatMessage", JSON.stringify(object));
+      NavigationService.navigate("ChatMessages", {
+        user_info: object.sender_detail,
       });
     } else {
-      if (currentScreen[0].routeName == "ChatMessages") {
-        NavigationService.navigate("ChatList", {
-          chatMessage: object,
-        });
-      } else {
-        await AsyncStorage.setItem("live_chatMessage", JSON.stringify(object));
-        NavigationService.navigate("ChatMessages");
-      }
+      NavigationService.navigate("ChatList");
     }
   }
 

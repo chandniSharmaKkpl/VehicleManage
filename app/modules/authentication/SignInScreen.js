@@ -41,7 +41,7 @@ export class SignInScreen extends Component {
     this.state = {
       //initialize variable
       // txtEmail: "we@mailinator.com",
-      // txtPassword: "Abcd@1234",
+      // txtPassword: "Abcd@1234fdgfd",
       txtEmail: "",
       txtPassword: "",
       isShowPassword: true,
@@ -166,7 +166,7 @@ export class SignInScreen extends Component {
     var deviceName = DeviceInfo.getDeviceNameSync();
     var deviceToken = DeviceInfo.getDeviceToken();
     let fcmToken = await AsyncStorage.getItem("fcmToken");
-    console.log(Platform.OS +" - fcmToken :->",fcmToken);
+    console.log(Platform.OS + " - fcmToken :->", fcmToken);
     // var deviceToken = (await AsyncStorage.getItem("fcmToken")) || "";
     // if (deviceToken === "") {
     //   deviceToken = await firebase.messaging().getToken();
@@ -248,10 +248,21 @@ export class SignInScreen extends Component {
             } else if (
               res.value &&
               res.value.message == "Validation Error." &&
-              res.value.success == false
+              res.value.data.email
             ) {
               await showMessage({
                 message: res.value.data.email,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (
+              res.value &&
+              res.value.message == "Validation Error." &&
+              res.value.data.device_token
+            ) {
+              await showMessage({
+                message: res.value.data.device_token,
                 type: "danger",
                 icon: "info",
                 duration: 4000,
