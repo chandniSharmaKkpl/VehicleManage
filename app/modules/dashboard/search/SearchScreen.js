@@ -28,7 +28,7 @@ import { darkTheme, lightTheme } from "../../../assets/Theme";
 import * as Authactions from "../../authentication/redux/Actions";
 
 const TAG = "SearchScreen ::=";
-
+let gettotalCount;
 export class SearchScreen extends Component {
   constructor(props) {
     super(props);
@@ -36,13 +36,12 @@ export class SearchScreen extends Component {
       txtSearch: "Gj",
       searchListdata: [],
       theme: {},
-      searched_count: "",
-      messages_count: "",
+
       countDeatils: {},
       appState: AppState.currentState,
+      total_count: 0,
     };
     this.alert = "no";
-    this.callInitAPI = this.callInitAPI.bind(this);
     this.showAlert = this.showAlert.bind(this);
   }
 
@@ -60,17 +59,14 @@ export class SearchScreen extends Component {
   };
 
   async componentDidMount() {
-    this.callInitAPI();
-
+    // this.callInitAPI();
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
 
-    DeviceEventEmitter.addListener("NotificationCountRemove", () => {
-      this.setNotificationCountsafterreview();
+    DeviceEventEmitter.addListener("total_count_remove", () => {
+      this.setTotalCountsafterreview();
     });
-    DeviceEventEmitter.addListener("ChatCountRemove", () => {
-      this.setChatCountsafterreview();
-    });
+
     // DeviceEventEmitter.addListener(
     //   "received_push_notification",
     //   this.receivedPushNotification.bind()
@@ -99,8 +95,8 @@ export class SearchScreen extends Component {
     if (globals.isInternetConnected == true) {
       const { initializeApp } = this.props;
       initializeApp().then(async (res) => {
-        let token = await AsyncStorage.getItem("access_token");
-        globals.access_token = token;
+        // let token = await AsyncStorage.getItem("access_token");
+        // globals.access_token = token;
       });
     } else {
       Alert.alert(globals.warning, globals.noInternet);
@@ -129,15 +125,12 @@ export class SearchScreen extends Component {
     this.props.swicthTheme(newTheme);
   };
 
-  setNotificationCountsafterreview = () => {
-    this.setState({
-      searched_count: 0,
-    });
-  };
-
-  setChatCountsafterreview = () => {
-    this.setState({
-      messages_count: 0,
+  setTotalCountsafterreview = () => {
+    this.setState({ total_count: 0 }, async () => {
+      await AsyncStorage.setItem(
+        "total_count",
+        JSON.stringify(parseInt(this.state.total_count))
+      );
     });
   };
 
@@ -155,36 +148,30 @@ export class SearchScreen extends Component {
             NavigationService.navigate("Login");
           }
         }
-        console.log(TAG, "notification count can't fetched", err);
+        console.log(TAG, "notification count can't fetched");
       }
     });
   };
 
   setNotificationCounts = async (countDeatils) => {
-    let getsearchedCount = await JSON.parse(
-      await AsyncStorage.getItem("searched_count")
+    console.log("countDeatils-----", countDeatils);
+    let gettotalCount = await JSON.parse(
+      await AsyncStorage.getItem("total_count")
     );
-
-    let getchatCount = await JSON.parse(
-      await AsyncStorage.getItem("chat_count")
-    );
-
-    this.setState({
-      searched_count:
-        getsearchedCount == "0"
-          ? getsearchedCount
-          : countDeatils.searched_count,
-      countDeatils: countDeatils,
-      messages_count:
-        getchatCount == "0" ? getchatCount : countDeatils.messages_count,
-    });
-    await AsyncStorage.setItem(
-      "searched_count",
-      JSON.stringify(parseInt(this.state.searched_count))
-    );
-    await AsyncStorage.setItem(
-      "chat_count",
-      JSON.stringify(parseInt(this.state.messages_count))
+    if (gettotalCount == 0 || gettotalCount == undefined) {
+      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    }
+    this.setState(
+      {
+        countDeatils: countDeatils,
+        total_count: gettotalCount == 0 ? gettotalCount : countDeatils.total_count,
+      },
+      async () => {
+        await AsyncStorage.setItem(
+          "total_count",
+          JSON.stringify(parseInt(this.state.total_count))
+        );
+      }
     );
   };
 
@@ -193,7 +180,7 @@ export class SearchScreen extends Component {
     // console.log("this.props :-->", this.props.nav);
 
     const { nav } = this.props;
-    const currentScreen =  this.props.navigation.state.routeName
+    const currentScreen = this.props.navigation.state.routeName;
     // const currentScreen = this.props.navigation.state.routeName;
     console.log("currentScreen :-->", currentScreen);
 
@@ -255,7 +242,6 @@ export class SearchScreen extends Component {
 
   async redirectToChatDetails(chatDetail) {
     var object = JSON.parse(chatDetail);
-    console.log("redirectToChatDetails() :->", object);
 
     const { nav } = this.props;
     const currentScreen = this.props.navigation.state.routeName; // console.log(
@@ -434,9 +420,9 @@ export class SearchScreen extends Component {
     const {
       txtSearch,
       searchListdata,
-      searched_count,
-      messages_count,
+
       countDeatils,
+      total_count,
     } = this.state;
     return (
       <>
@@ -456,9 +442,8 @@ export class SearchScreen extends Component {
             onPressed={() => this.props.navigation.openDrawer()}
             isShowRighttwo={true}
             theme={theme}
-            searchcount={searched_count}
             countDeatils={countDeatils}
-            messages_count={messages_count}
+            total_count={total_count}
           />
           <Search
             theme={theme}

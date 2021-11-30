@@ -202,7 +202,7 @@ export class FriendDetailScreen extends Component {
               }
             }
           }
-        } 
+        }
         // else if (
         //   object.command == "register" ||
         //   object.command == "unregister"
@@ -493,58 +493,53 @@ export class FriendDetailScreen extends Component {
               </TouchableOpacity>
             ) : null}
 
-            {friendDetail.setting_5 == 0 ? null : (
-              <>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.navigatetoSocialProfiles("Fb", friendDetail.username)
-                  }
-                  style={[
-                    FriendDetailStyle.circleview,
-                    { backgroundColor: Colors.blue },
-                  ]}
+            <>
+              <TouchableOpacity
+                onPress={() =>
+                  this.navigatetoSocialProfiles("Fb", friendDetail.username)
+                }
+                style={[
+                  FriendDetailStyle.circleview,
+                  { backgroundColor: Colors.blue },
+                ]}
+              >
+                <FastImage
+                  style={[FriendDetailStyle.socialicon]}
+                  source={IMAGE.fb_icon_square}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  this.navigatetoSocialProfiles("Insta", friendDetail.username)
+                }
+              >
+                <LinearGradient
+                  start={{ x: 0.0, y: 0.5 }}
+                  end={{ x: 0.7, y: 1.0 }}
+                  colors={[Colors.orange, Colors.pink, Colors.purple]}
+                  style={FriendDetailStyle.circleview}
                 >
                   <FastImage
                     style={[FriendDetailStyle.socialicon]}
-                    source={IMAGE.fb_icon_square}
+                    source={IMAGE.insta_icon_img}
                   />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.navigatetoSocialProfiles(
-                      "Insta",
-                      friendDetail.username
-                    )
-                  }
-                >
-                  <LinearGradient
-                    start={{ x: 0.0, y: 0.5 }}
-                    end={{ x: 0.7, y: 1.0 }}
-                    colors={[Colors.orange, Colors.pink, Colors.purple]}
-                    style={FriendDetailStyle.circleview}
-                  >
-                    <FastImage
-                      style={[FriendDetailStyle.socialicon]}
-                      source={IMAGE.insta_icon_img}
-                    />
-                  </LinearGradient>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.navigatetoSocialProfiles("Snap", friendDetail.username)
-                  }
-                  style={[
-                    FriendDetailStyle.circleview,
-                    { backgroundColor: Colors.snapChat },
-                  ]}
-                >
-                  <FastImage
-                    style={[FriendDetailStyle.socialicon]}
-                    source={IMAGE.snap_img}
-                  />
-                </TouchableOpacity>
-              </>
-            )}
+                </LinearGradient>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  this.navigatetoSocialProfiles("Snap", friendDetail.username)
+                }
+                style={[
+                  FriendDetailStyle.circleview,
+                  { backgroundColor: Colors.snapChat },
+                ]}
+              >
+                <FastImage
+                  style={[FriendDetailStyle.socialicon]}
+                  source={IMAGE.snap_img}
+                />
+              </TouchableOpacity>
+            </>
           </View>
 
           <View

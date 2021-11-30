@@ -24,7 +24,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../../../utils/Globals";
 
 const TAG = "NotificationScreen ::=";
-
+let getmsgCount;
 export class NotificationScreen extends Component {
   constructor(props) {
     super(props);
@@ -41,41 +41,25 @@ export class NotificationScreen extends Component {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
 
-    let getsearchedCount = await JSON.parse(
-      await AsyncStorage.getItem("searched_count")
-    );
-    let getchatCount = await JSON.parse(
-      await AsyncStorage.getItem("chat_count")
-    );
+  
 
-    if (getsearchedCount != "0") {
-      await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("NotificationCountRemove");
-    }
-
-    if (getchatCount != "0") {
-      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("ChatCountRemove");
-    }
-
-    DeviceEventEmitter.addListener("ChatCountRemove", () => {
-      this.setChatCountsafterreview();
+    getmsgCount = await JSON.parse(await AsyncStorage.getItem("msg_count"));
+    DeviceEventEmitter.addListener("msg_count_remove", () => {
+      this.setMsgCountsafterreview();
     });
 
     this.setState({
       theme: this.props.theme,
       searched_avatars: this.state.countDeatils.searched_avatars,
-      messages_count: this.state.countDeatils.messages_count
-        ? this.state.countDeatils.messages_count
-        : getchatCount,
+      messages_count:
+        getmsgCount == 0 ? getmsgCount : this.state.countDeatils.messages_count,
     });
   };
 
-  setChatCountsafterreview = () => {
+  setMsgCountsafterreview = () => {
     this.setState({
       messages_count: 0,
     });
-    console.log("after-----", this.state.messages_count);
   };
 
   gotoRecentViewers = () => {
@@ -219,6 +203,16 @@ export class NotificationScreen extends Component {
     const { notificationListData, searched_avatars, messages_count } =
       this.state;
     const { isLoading, loaderMessage, theme } = this.props;
+    // console.log(
+    //   TAG,
+    //   "messages_count-----------------------------------",
+    //   messages_count
+    // );
+    // console.log(
+    //   TAG,
+    //   "searched_avatars-----------------------------------",
+    //   searched_avatars
+    // );
     return (
       <>
         <View

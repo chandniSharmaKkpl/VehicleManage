@@ -37,13 +37,19 @@ export class RecentViewersScreen extends Component {
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-    let getsearchedCount = await JSON.parse(
-      await AsyncStorage.getItem("searched_count")
+   
+
+    let gettotalCount = await JSON.parse(
+      await AsyncStorage.getItem("total_count")
     );
-    if (getsearchedCount != "0") {
-      await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("NotificationCountRemove");
+   
+
+    if (gettotalCount != 0 || gettotalCount != undefined) {
+      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("total_count_remove");
     }
+
+   
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
         this.getrecentViewersList();
@@ -72,7 +78,7 @@ export class RecentViewersScreen extends Component {
             this.getnotificationCount();
           }
         } else if (res.value && res.value.error == "Unauthenticated") {
-          console.log(TAG, "notification count can't fetched", err);
+          console.log(TAG, "notification count can't fetched");
           await showMessage({
             message: res.value.error,
             type: "danger",
@@ -99,7 +105,7 @@ export class RecentViewersScreen extends Component {
             NavigationService.navigate("Login");
           }
         }
-        console.log(TAG, "notification count can't fetched", err);
+        console.log(TAG, "notification count can't fetched");
       }
     });
   };
