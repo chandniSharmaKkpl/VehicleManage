@@ -155,7 +155,6 @@ export class FriendDetailScreen extends Component {
         alert("Something wen to wrong");
       }
     };
-    alert(" --- Connected-------------------------");
 
     global.ws.onmessage = ({ data }) => {
       console.log(Platform.OS + " --- WS OnMessage() ---->", data);
