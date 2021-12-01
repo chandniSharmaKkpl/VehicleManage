@@ -26,6 +26,7 @@ import * as globals from "../../../utils/Globals";
 import * as actions from "../redux/Actions";
 import * as chatactions from "../chat/redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "FriendDetailScreen ::=";
 
@@ -39,6 +40,7 @@ export class FriendDetailScreen extends Component {
       loader: false,
       webSocketServerConnected: false,
       isUserRegister: false,
+      isrequested: 0,
     };
     global.ws = null;
     this.registerDeviceTimer = null;
@@ -86,6 +88,8 @@ export class FriendDetailScreen extends Component {
   }
 
   componentDidMount = async () => {
+    let token = await AsyncStorage.getItem("access_token");
+    globals.access_token = token;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState({ user: this.props.userDetails.user_data }, () => {
         this.getuserDetail();
@@ -274,7 +278,10 @@ export class FriendDetailScreen extends Component {
               //   duration: 4000,
               // });
               await this.friendsearchApi(res.value.data.data.user_data);
-              this.setState({ friendDetail: res.value.data.data.user_data });
+              this.setState({
+                friendDetail: res.value.data.data.user_data,
+                isrequested: res.value.data.data.requested,
+              });
             }
           } else {
             if (res.value && res.value.data.error == "Unauthenticated.") {
@@ -336,6 +343,66 @@ export class FriendDetailScreen extends Component {
   // Navigate to back friend list screen
   gotoback = () => {
     NavigationService.back();
+  };
+
+  // request for socials
+  requestforSocialApi = (friendDetail) => {
+    const { requestforsocial } = this.props;
+    let params = new FormData();
+    // Collect the necessary params
+    if (globals.isInternetConnected == true) {
+      params.append("to_id", friendDetail.id);
+
+      // console.log("params====requestforSocialApi", JSON.stringify(params));
+      requestforsocial(params)
+        .then(async (res) => {
+          // console.log(
+          //   TAG,
+          //   "response of requestforsocial",
+          //   JSON.stringify(res.value)
+          // );
+          if (res.value && res.value.data.success == true) {
+            //OK 200 The request was fulfilled
+            if (res.value && res.value.status === 200) {
+              this.setState({isrequested:1})
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          } else {
+            if (res.value && res.value.data.error == "Unauthenticated.") {
+              {
+                NavigationService.navigate("Login");
+              }
+            } else if (res.value && res.value.message == "Validation Error.") {
+              await showMessage({
+                message: res.value.data.to_id,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            } else if (
+              res.value &&
+              res.value.message == "Friend request is already requested."
+            ) {
+              await showMessage({
+                message: res.value.message,
+                type: "danger",
+                icon: "info",
+                duration: 4000,
+              });
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(TAG, "i am in catch error addfriend", err);
+        });
+    } else {
+      Alert.alert(globals.warning, globals.noInternet);
+    }
   };
 
   // AddasFriend API
@@ -418,7 +485,7 @@ export class FriendDetailScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-    const { friendDetail } = this.state;
+    const { friendDetail, isrequested, user, getfriendData } = this.state;
     return (
       <>
         <View
@@ -491,54 +558,106 @@ export class FriendDetailScreen extends Component {
                 />
               </TouchableOpacity>
             ) : null}
-
-            <>
-              <TouchableOpacity
-                onPress={() =>
-                  this.navigatetoSocialProfiles("Fb", friendDetail.username)
-                }
-                style={[
-                  FriendDetailStyle.circleview,
-                  { backgroundColor: Colors.blue },
-                ]}
-              >
-                <FastImage
-                  style={[FriendDetailStyle.socialicon]}
-                  source={IMAGE.fb_icon_square}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  this.navigatetoSocialProfiles("Insta", friendDetail.username)
-                }
-              >
-                <LinearGradient
-                  start={{ x: 0.0, y: 0.5 }}
-                  end={{ x: 0.7, y: 1.0 }}
-                  colors={[Colors.orange, Colors.pink, Colors.purple]}
-                  style={FriendDetailStyle.circleview}
+            {friendDetail.setting_4 == 1 ? (
+              isrequested ? (
+                <View
+                  style={[
+                    FriendDetailStyle.squareviews,
+                    {
+                      opacity: 0.7,
+                      backgroundColor: Colors.btnSecondaryPrimary,
+                    },
+                  ]}
+                >
+                  <Text
+                    numberOfLines={1}
+                    style={[
+                      FriendDetailStyle.dectext,
+                      {
+                        color: theme.PRIMARY_BACKGROUND_COLOR,
+                        fontSize: globals.font_14,
+                        width: "100%",
+                      },
+                    ]}
+                  >
+                    {"Requested"}
+                  </Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => this.requestforSocialApi(friendDetail)}
+                  style={[
+                    FriendDetailStyle.squareviews,
+                    { backgroundColor: Colors.btnSecondaryPrimary },
+                  ]}
+                >
+                  <Text
+                    numberOfLines={1}
+                    style={[
+                      FriendDetailStyle.dectext,
+                      {
+                        color: theme.PRIMARY_BACKGROUND_COLOR,
+                        fontSize: globals.font_14,
+                        width: "100%",
+                      },
+                    ]}
+                  >
+                    {"Request for social"}
+                  </Text>
+                </TouchableOpacity>
+              )
+            ) : (
+              <>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.navigatetoSocialProfiles("Fb", friendDetail.username)
+                  }
+                  style={[
+                    FriendDetailStyle.circleview,
+                    { backgroundColor: Colors.blue },
+                  ]}
                 >
                   <FastImage
                     style={[FriendDetailStyle.socialicon]}
-                    source={IMAGE.insta_icon_img}
+                    source={IMAGE.fb_icon_square}
                   />
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  this.navigatetoSocialProfiles("Snap", friendDetail.username)
-                }
-                style={[
-                  FriendDetailStyle.circleview,
-                  { backgroundColor: Colors.snapChat },
-                ]}
-              >
-                <FastImage
-                  style={[FriendDetailStyle.socialicon]}
-                  source={IMAGE.snap_img}
-                />
-              </TouchableOpacity>
-            </>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.navigatetoSocialProfiles(
+                      "Insta",
+                      friendDetail.username
+                    )
+                  }
+                >
+                  <LinearGradient
+                    start={{ x: 0.0, y: 0.5 }}
+                    end={{ x: 0.7, y: 1.0 }}
+                    colors={[Colors.orange, Colors.pink, Colors.purple]}
+                    style={FriendDetailStyle.circleview}
+                  >
+                    <FastImage
+                      style={[FriendDetailStyle.socialicon]}
+                      source={IMAGE.insta_icon_img}
+                    />
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.navigatetoSocialProfiles("Snap", friendDetail.username)
+                  }
+                  style={[
+                    FriendDetailStyle.circleview,
+                    { backgroundColor: Colors.snapChat },
+                  ]}
+                >
+                  <FastImage
+                    style={[FriendDetailStyle.socialicon]}
+                    source={IMAGE.snap_img}
+                  />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
 
           <View
@@ -617,6 +736,7 @@ const mapDispatchToProps = (dispatch) => ({
   getfriendDetails: (params) => dispatch(actions.getfriendDetails(params)),
   addfriend: (params) => dispatch(actions.addfriend(params)),
   friendsearch: (params) => dispatch(actions.friendsearch(params)),
+  requestforsocial: (params) => dispatch(actions.requestforsocial(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendDetailScreen);

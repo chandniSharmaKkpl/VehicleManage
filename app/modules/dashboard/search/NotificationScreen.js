@@ -22,6 +22,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../../../utils/Globals";
+import Colors from "../../../assets/Colors";
 
 const TAG = "NotificationScreen ::=";
 let getmsgCount;
@@ -34,14 +35,13 @@ export class NotificationScreen extends Component {
       countDeatils: this.props.navigation.state.params.countDeatils,
       searched_avatars: [],
       messages_count: "",
+      request_count: 0,
     };
   }
 
   componentDidMount = async () => {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-
-  
 
     getmsgCount = await JSON.parse(await AsyncStorage.getItem("msg_count"));
     DeviceEventEmitter.addListener("msg_count_remove", () => {
@@ -67,8 +67,11 @@ export class NotificationScreen extends Component {
   };
 
   gotoChatdetails = () => {
-    // Alert.alert("coming soon...");
     NavigationService.navigate("ChatList");
+  };
+
+  gotoRequestedList = () => {
+    NavigationService.navigate("SocialRequest");
   };
 
   // render friendlist dataItem
@@ -199,20 +202,50 @@ export class NotificationScreen extends Component {
     );
   };
 
+  returnRequestList = () => {
+    return (
+      <TouchableWithoutFeedback
+        style={FriendListStyle.itemcell}
+        onPress={() => this.gotoRequestedList()}
+      >
+        <View
+          style={[FriendListStyle.imageStyle, { justifyContent: "center" }]}
+        >
+          <FastImage
+            tintColor={Colors.primary}
+            resizeMethod="resize"
+            source={IMAGE.social_group_img}
+            style={[FriendListStyle.chatImgstyle]}
+          />
+          <View style={ComponentStyle.msgcountcircleview}>
+            <Text style={ComponentStyle.messagescountstyle}>
+              {this.state.request_count}
+            </Text>
+          </View>
+        </View>
+
+        <Text
+          numberOfLines={1}
+          style={[
+            FriendListStyle.notificationtext,
+            { color: this.props.theme.LITE_FONT_COLOR },
+          ]}
+        >
+          {"You have requests"}
+        </Text>
+      </TouchableWithoutFeedback>
+    );
+  };
+
   render() {
-    const { notificationListData, searched_avatars, messages_count } =
-      this.state;
+    const {
+      notificationListData,
+      searched_avatars,
+      messages_count,
+      request_count,
+    } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
-    // console.log(
-    //   TAG,
-    //   "messages_count-----------------------------------",
-    //   messages_count
-    // );
-    // console.log(
-    //   TAG,
-    //   "searched_avatars-----------------------------------",
-    //   searched_avatars
-    // );
+
     return (
       <>
         <View
@@ -239,6 +272,7 @@ export class NotificationScreen extends Component {
             : this.retunNotificationList()}
 
           {messages_count == "0" ? null : this.retunChatMsgList()}
+          {request_count == 0 ? this.returnRequestList() : null}
         </View>
       </>
     );

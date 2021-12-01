@@ -83,6 +83,7 @@ const StaticTitle = {
   whosearchyou: "Who's Searched You..",
   searchrequired: "The search by vehicle field is required.",
   shareprofiles:"Share Socials",
+  sharesocialrequest:"Share social requests",
 
   //// PRIVACY SETTINGS
   privacysettings: "Privacy Settings",

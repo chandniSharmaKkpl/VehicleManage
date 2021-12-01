@@ -31,25 +31,26 @@ export class RecentViewersScreen extends Component {
     this.state = {
       recentViewerListData: [],
       theme: {},
+      user: {},
     };
   }
 
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-   
 
+    if (this.props.userDetails != null && this.props.userDetails != undefined) {
+      this.setState({ user: this.props.userDetails.user_data });
+    }
     let gettotalCount = await JSON.parse(
       await AsyncStorage.getItem("total_count")
     );
-   
 
     if (gettotalCount != 0 || gettotalCount != undefined) {
       await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
       DeviceEventEmitter.emit("total_count_remove");
     }
 
-   
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
         this.getrecentViewersList();
@@ -62,31 +63,34 @@ export class RecentViewersScreen extends Component {
   getrecentViewersList = async () => {
     const { whosearchedyou } = this.props;
     if (globals.isInternetConnected == true) {
-      whosearchedyou().then(async (res) => {
-        // console.log("res----------whosearchedyou-", JSON.stringify(res));
-        if (res.value && res.value.data.success == true) {
-          if (res.value && res.value.status === 200) {
+      if (this.state.user.setting_7 == 1) {
+      } else {
+        whosearchedyou().then(async (res) => {
+          // console.log("res----------whosearchedyou-", JSON.stringify(res));
+          if (res.value && res.value.data.success == true) {
+            if (res.value && res.value.status === 200) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "info",
+                duration: 4000,
+              });
+              this.setState({
+                recentViewerListData: res.value.data.data.who_searched_you,
+              });
+              this.getnotificationCount();
+            }
+          } else if (res.value && res.value.error == "Unauthenticated") {
+            console.log(TAG, "notification count can't fetched");
             await showMessage({
-              message: res.value.data.message,
-              type: "success",
+              message: res.value.error,
+              type: "danger",
               icon: "info",
               duration: 4000,
             });
-            this.setState({
-              recentViewerListData: res.value.data.data.who_searched_you,
-            });
-            this.getnotificationCount();
           }
-        } else if (res.value && res.value.error == "Unauthenticated") {
-          console.log(TAG, "notification count can't fetched");
-          await showMessage({
-            message: res.value.error,
-            type: "danger",
-            icon: "info",
-            duration: 4000,
-          });
-        }
-      });
+        });
+      }
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
@@ -225,6 +229,7 @@ const mapStateToProps = (state) => {
     isLoading: state.home.home.isLoading,
     loaderMessage: state.home.home.loaderMessage,
     theme: state.home.home.theme,
+    userDetails: state.auth.user.userDetails,
   };
 };
 

@@ -193,7 +193,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-       //// UPDATE_SETTINGS
+    //// UPDATE_SETTINGS
     case actionTypes.UPDATE_SETTINGS_LOADING:
       return {
         ...state,
@@ -223,8 +223,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-
-        //// UPDATE_SETTINGS
+    //// UPDATE_SETTINGS
     case actionTypes.WHO_SEARCH_YOU_LOADING:
       return {
         ...state,
@@ -245,6 +244,126 @@ const homeReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.WHO_SEARCH_YOU_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+    //// REQUEST_FOR_SOCIAL
+    case actionTypes.REQUEST_FOR_SOCIAL_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.REQUEST_FOR_SOCIAL_SUCCESS:
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.REQUEST_FOR_SOCIAL_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+       //// SOCIAL_REQUEST_LIST
+    case actionTypes.SOCIAL_REQUEST_LIST_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.SOCIAL_REQUEST_LIST_SUCCESS:
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SOCIAL_REQUEST_LIST_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+        //// DENY_SOCIAL_REQUEST
+    case actionTypes.DENY_SOCIAL_REQUEST_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.DENY_SOCIAL_REQUEST_SUCCESS:
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.DENY_SOCIAL_REQUEST_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+       //// APPROVE_SOCIAL_REQUEST
+    case actionTypes.APPROVE_SOCIAL_REQUEST_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.APPROVE_SOCIAL_REQUEST_SUCCESS:
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.APPROVE_SOCIAL_REQUEST_ERROR:
       return {
         ...state,
         home: {
