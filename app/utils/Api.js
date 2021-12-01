@@ -43,7 +43,7 @@ function makeAuthPostHeaders() {
 }
 
 function makeURLencodedPostHeaders() {
-  // console.warn("I am in makeURLencodedPostHeaders()");
+  // console.warn("I am in makeURLencodedPostHeaders()",globals.access_token);
   let headerObj = {};
   const accessToken = globals.access_token;
   if (accessToken && accessToken != null) {
@@ -90,7 +90,10 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/report" ||
       request.url === "api/friend_search" ||
       request.url === "api/messages/social_share_friends" ||
-      request.url === "api/messages/social_share_send"
+      request.url === "api/messages/social_share_send" ||
+      request.url === "social_profiles/request" ||
+      request.url === "api/social_profiles/approve" ||
+      request.url === "api/social_profiles/deny"
     ) {
       request.headers = makeURLencodedPostHeaders();
     } else {

@@ -21,6 +21,8 @@ import RecentViewersScreen from "../modules/dashboard/search/RecentViewersScreen
 import ChatMessagesScreen from "../modules/dashboard/chat/ChatMessagesScreen";
 import RegistrationDetailsScreen from "..//modules/authentication/RegistrationDetailsScreen";
 import ShareSocialsScreen from "..//modules/dashboard/chat/ShareSocialsScreen";
+import SocialRequestScreen from '..//modules/dashboard/search/SocialRequestScreen';
+
 const SearchStack = createStackNavigator(
   {
     Search: {
@@ -34,6 +36,9 @@ const SearchStack = createStackNavigator(
     },
     FriendDetail: {
       screen: FriendDetailScreen,
+    },
+    SocialRequest:{
+      screen:SocialRequestScreen,
     },
     ChatList: {
       screen: ChatListScreen,

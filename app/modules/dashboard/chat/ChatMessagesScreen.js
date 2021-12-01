@@ -108,14 +108,18 @@ export class ChatMessagesScreen extends Component {
 
   async componentDidMount() {
     this._isMounted = true;
-    let getchatCount = await JSON.parse(
-      await AsyncStorage.getItem("chat_count")
+
+    let getmsgCount = await JSON.parse(await AsyncStorage.getItem("msg_count"));
+    let gettotalCount = await JSON.parse(
+      await AsyncStorage.getItem("total_count")
     );
-    if (getchatCount != "0") {
-      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("ChatCountRemove");
-    } else {
-      DeviceEventEmitter.emit("ChatCountRemove");
+    if (getmsgCount == 0 || getmsgCount == undefined) {
+      await AsyncStorage.setItem("msg_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("msg_count_remove");
+    }
+    if (gettotalCount == 0 || gettotalCount == undefined) {
+      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+      DeviceEventEmitter.emit("total_count_remove");
     }
 
     if (this.props.userDetails != null && this.props.userDetails != undefined) {

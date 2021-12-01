@@ -8,7 +8,13 @@ import {
   LOGOUT,
   UPDATE_SETTINGS,
   NOTIFICATION_COUNT,
-  SEARCH_FRIEND,WHO_SEARCH_YOU, SWITCH_THEME
+  SEARCH_FRIEND,
+  WHO_SEARCH_YOU,
+  SWITCH_THEME,
+  REQUEST_FOR_SOCIAL,
+  SOCIAL_REQUEST_LIST,
+  DENY_SOCIAL_REQUEST,
+  APPROVE_SOCIAL_REQUEST
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -112,7 +118,7 @@ export const notificationCount = () => ({
 export const friendsearch = (params) => ({
   type: SEARCH_FRIEND,
   payload: api
-    .post("api/friend_search",params)
+    .post("api/friend_search", params)
     .then((res) => {
       return res;
     })
@@ -124,6 +130,51 @@ export const whosearchedyou = () => ({
   type: WHO_SEARCH_YOU,
   payload: api
     .get("api/notifications/who_searched_you")
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+export const requestforsocial = (params) => ({
+  type: REQUEST_FOR_SOCIAL,
+  payload: api
+    .post("api/social_profiles/request", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+export const socialrequestlist = () => ({
+  type: SOCIAL_REQUEST_LIST,
+  payload: api
+    .get("api/social_profiles/requests")
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
+export const denyRequest = (params) => ({
+  type: DENY_SOCIAL_REQUEST,
+  payload: api
+    .post("api/social_profiles/deny", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+export const approveRequest = (params) => ({
+  type: APPROVE_SOCIAL_REQUEST,
+  payload: api
+    .post("api/social_profiles/approve", params)
     .then((res) => {
       return res;
     })

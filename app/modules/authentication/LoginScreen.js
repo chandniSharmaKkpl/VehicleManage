@@ -71,7 +71,6 @@ export class LoginScreen extends Component {
   };
 
   componentDidMount = async () => {
-    Alert.alert("DIDMOUNT ")
     this.checkPermission();
 
     this._isMounted = true;

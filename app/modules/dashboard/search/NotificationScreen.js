@@ -22,9 +22,10 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../../../utils/Globals";
+import Colors from "../../../assets/Colors";
 
 const TAG = "NotificationScreen ::=";
-
+let getmsgCount;
 export class NotificationScreen extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +35,7 @@ export class NotificationScreen extends Component {
       countDeatils: this.props.navigation.state.params.countDeatils,
       searched_avatars: [],
       messages_count: "",
+      request_count: 0,
     };
   }
 
@@ -41,41 +43,23 @@ export class NotificationScreen extends Component {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
 
-    let getsearchedCount = await JSON.parse(
-      await AsyncStorage.getItem("searched_count")
-    );
-    let getchatCount = await JSON.parse(
-      await AsyncStorage.getItem("chat_count")
-    );
-
-    if (getsearchedCount != "0") {
-      await AsyncStorage.setItem("searched_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("NotificationCountRemove");
-    }
-
-    if (getchatCount != "0") {
-      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("ChatCountRemove");
-    }
-
-    DeviceEventEmitter.addListener("ChatCountRemove", () => {
-      this.setChatCountsafterreview();
+    getmsgCount = await JSON.parse(await AsyncStorage.getItem("msg_count"));
+    DeviceEventEmitter.addListener("msg_count_remove", () => {
+      this.setMsgCountsafterreview();
     });
 
     this.setState({
       theme: this.props.theme,
       searched_avatars: this.state.countDeatils.searched_avatars,
-      messages_count: this.state.countDeatils.messages_count
-        ? this.state.countDeatils.messages_count
-        : getchatCount,
+      messages_count:
+        getmsgCount == 0 ? getmsgCount : this.state.countDeatils.messages_count,
     });
   };
 
-  setChatCountsafterreview = () => {
+  setMsgCountsafterreview = () => {
     this.setState({
       messages_count: 0,
     });
-    console.log("after-----", this.state.messages_count);
   };
 
   gotoRecentViewers = () => {
@@ -83,8 +67,11 @@ export class NotificationScreen extends Component {
   };
 
   gotoChatdetails = () => {
-    // Alert.alert("coming soon...");
     NavigationService.navigate("ChatList");
+  };
+
+  gotoRequestedList = () => {
+    NavigationService.navigate("SocialRequest");
   };
 
   // render friendlist dataItem
@@ -215,10 +202,50 @@ export class NotificationScreen extends Component {
     );
   };
 
+  returnRequestList = () => {
+    return (
+      <TouchableWithoutFeedback
+        style={FriendListStyle.itemcell}
+        onPress={() => this.gotoRequestedList()}
+      >
+        <View
+          style={[FriendListStyle.imageStyle, { justifyContent: "center" }]}
+        >
+          <FastImage
+            tintColor={Colors.primary}
+            resizeMethod="resize"
+            source={IMAGE.social_group_img}
+            style={[FriendListStyle.chatImgstyle]}
+          />
+          <View style={ComponentStyle.msgcountcircleview}>
+            <Text style={ComponentStyle.messagescountstyle}>
+              {this.state.request_count}
+            </Text>
+          </View>
+        </View>
+
+        <Text
+          numberOfLines={1}
+          style={[
+            FriendListStyle.notificationtext,
+            { color: this.props.theme.LITE_FONT_COLOR },
+          ]}
+        >
+          {"You have requests"}
+        </Text>
+      </TouchableWithoutFeedback>
+    );
+  };
+
   render() {
-    const { notificationListData, searched_avatars, messages_count } =
-      this.state;
+    const {
+      notificationListData,
+      searched_avatars,
+      messages_count,
+      request_count,
+    } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
+
     return (
       <>
         <View
@@ -245,6 +272,7 @@ export class NotificationScreen extends Component {
             : this.retunNotificationList()}
 
           {messages_count == "0" ? null : this.retunChatMsgList()}
+          {request_count == 0 ? this.returnRequestList() : null}
         </View>
       </>
     );
