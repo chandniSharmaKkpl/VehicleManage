@@ -178,9 +178,9 @@ export const ComponentStyle = StyleSheet.create({
   },
   tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
   roundedtab_img: {
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 40 / 2,
     tintColor: Colors.primary,
   },
 
@@ -203,12 +203,13 @@ export const ComponentStyle = StyleSheet.create({
     // width:globals.deviceWidth * 0.42
   },
   messagescountstyle: {
-    fontSize: RFPercentage(2),
+    fontSize: (Platform.OS == 'ios') ? RFPercentage(1.6): RFPercentage(2),
     fontFamily: FontFamily.RalewaRegular,
     color: Colors.white,
     textAlign: "center",
     alignSelf: "center",
-    bottom: 4,
+    bottom: (Platform.OS == 'ios') ? 3 :4,
+    fontWeight:'bold'
   },
   countcircleview: {
     width: globals.deviceWidth * 0.045,
@@ -360,9 +361,9 @@ export const ComponentStyle = StyleSheet.create({
 
   /// CHAT HEADER
   circleview: {
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 40 / 2,
     // justifyContent: "center",
   },
 });

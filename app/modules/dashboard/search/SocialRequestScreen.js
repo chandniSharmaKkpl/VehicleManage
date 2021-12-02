@@ -40,14 +40,10 @@ export class SocialRequestScreen extends Component {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
 
-    let gettotalCount = await JSON.parse(
-      await AsyncStorage.getItem("total_count")
-    );
+    await AsyncStorage.setItem("IsRead", JSON.stringify(true));
 
-    if (gettotalCount != 0 || gettotalCount != undefined) {
-      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("total_count_remove");
-    }
+    await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("total_count_remove");
 
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
@@ -186,7 +182,7 @@ export class SocialRequestScreen extends Component {
           console.log(
             TAG,
             "response of approveRequest",
-            JSON.stringify(res.value.data.data)
+            JSON.stringify(res.value)
           );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
@@ -198,6 +194,13 @@ export class SocialRequestScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
+              await AsyncStorage.setItem("IsReadRequest", JSON.stringify(true));
+
+              await AsyncStorage.setItem(
+                "request_count",
+                JSON.stringify(parseInt(0))
+              );
+              DeviceEventEmitter.emit("request_count_remove");
             }
           } else {
             if (res.value && res.value.data.error == "Unauthenticated.") {
@@ -246,6 +249,13 @@ export class SocialRequestScreen extends Component {
                 icon: "info",
                 duration: 4000,
               });
+              await AsyncStorage.setItem("IsReadRequest", JSON.stringify(true));
+
+              await AsyncStorage.setItem(
+                "request_count",
+                JSON.stringify(parseInt(0))
+              );
+              DeviceEventEmitter.emit("request_count_remove");
             }
           } else {
             if (res.value && res.value.data.error == "Unauthenticated.") {

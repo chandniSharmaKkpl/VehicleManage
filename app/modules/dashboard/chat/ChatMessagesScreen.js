@@ -58,6 +58,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 
 const TAG = "ChatMessagesScreen ::=";
+
 export class ChatMessagesScreen extends Component {
   _isMounted = false;
   constructor(props) {
@@ -82,6 +83,7 @@ export class ChatMessagesScreen extends Component {
       currentMsg_id: "",
       getparticularMsg_id: "",
     };
+    global.ws = null;
     this.onSend = this.onSend.bind(this);
     this.callSendAPI = this.callSendAPI.bind(this);
     this.readMessagesAPI = this.readMessagesAPI.bind(this);
@@ -108,19 +110,16 @@ export class ChatMessagesScreen extends Component {
 
   async componentDidMount() {
     this._isMounted = true;
+    global.ws = new WebSocket("ws://20.37.36.107:56113");
 
-    let getmsgCount = await JSON.parse(await AsyncStorage.getItem("msg_count"));
-    let gettotalCount = await JSON.parse(
-      await AsyncStorage.getItem("total_count")
-    );
-    if (getmsgCount == 0 || getmsgCount == undefined) {
-      await AsyncStorage.setItem("msg_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("msg_count_remove");
-    }
-    if (gettotalCount == 0 || gettotalCount == undefined) {
-      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("total_count_remove");
-    }
+    await AsyncStorage.setItem("IsReadMessage", JSON.stringify(true));
+    await AsyncStorage.setItem("IsRead", JSON.stringify(true));
+
+    await AsyncStorage.setItem("msg_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("msg_count_remove");
+
+    await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("total_count_remove");
 
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -334,6 +333,8 @@ export class ChatMessagesScreen extends Component {
     }
   }
 
+  // iF INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
+
   onSend = (message, callback) => {
     this.waitForConnection(() => {
       this.callOnSend(message);
@@ -343,6 +344,7 @@ export class ChatMessagesScreen extends Component {
     }, 1000);
   };
 
+  // id INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
   waitForConnection = (callback, interval) => {
     if (global.ws.readyState === 1) {
       callback();
@@ -367,8 +369,30 @@ export class ChatMessagesScreen extends Component {
       newMsgs.push(msg);
     });
 
+    // id INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
+    // try {
+    //   const { isConnecting, isConnected } = this.state;
+    //   // stop if connecting
+    //   if (isConnecting) {
+    //     return Promise.resolve(false);
+    //   }
+    //   // socket connection is required
+    //   if (!this.socket || !isConnected) {
+    //     // start connecting
+    //     this.connect();
+    //     // resolve with false
+    //     return Promise.resolve(false);
+    //   }
+    //   this.socket.send(JSON.stringify(payload));
+    //   // resolve with true;
+    //   return Promise.resolve(true);
+    // } catch (error) {
+    //   // Handle error
+    //   return Promise.resolve(false);
+    // }
+
     // console.log("onSend() :->", global.ws);
-    console.log("onSend() newMsgs:->", newMsgs);
+    // console.log("onSend() newMsgs:->", newMsgs);
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {

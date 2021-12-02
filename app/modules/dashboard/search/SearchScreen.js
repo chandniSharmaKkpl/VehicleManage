@@ -86,8 +86,8 @@ export class SearchScreen extends Component {
 
   componentWillUnmount = () => {
     DeviceEventEmitter.removeAllListeners("recall_init_api");
-    DeviceEventEmitter.removeAllListeners("received_push_notification");
-    DeviceEventEmitter.removeAllListeners("NotificationCountRemove");
+    // DeviceEventEmitter.removeAllListeners("received_push_notification");
+    DeviceEventEmitter.removeAllListeners("total_count_remove");
     AppState.removeAllListeners("change", this._handleAppStateThemeChange);
   };
 
@@ -155,24 +155,23 @@ export class SearchScreen extends Component {
 
   setNotificationCounts = async (countDeatils) => {
     console.log("countDeatils-----", countDeatils);
-    let gettotalCount = await JSON.parse(
-      await AsyncStorage.getItem("total_count")
-    );
-    if (gettotalCount == 0 || gettotalCount == undefined) {
-      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
-    }
-    this.setState(
-      {
-        countDeatils: countDeatils,
-        total_count: gettotalCount == 0 ? gettotalCount : countDeatils.total_count,
-      },
-      async () => {
-        await AsyncStorage.setItem(
-          "total_count",
-          JSON.stringify(parseInt(this.state.total_count))
-        );
-      }
-    );
+    // let gettotalCount = await JSON.parse(
+    //   await AsyncStorage.getItem("total_count")
+    // );
+    // if (gettotalCount == 0) {
+    //   await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    // }
+
+    let count =
+      (await JSON.parse(await AsyncStorage.getItem("total_count"))) ||
+      countDeatils.total_count;
+    let isitread = await AsyncStorage.getItem("IsRead");
+    console.log("count-----", count);
+
+    this.setState({
+      countDeatils: countDeatils,
+      total_count: isitread ? 0 : count,
+    });
   };
 
   receivedPushNotification = async (msgDetails) => {
