@@ -154,7 +154,7 @@ export class ChatListScreen extends Component {
       await AsyncStorage.removeItem("live_chatMessage");
     }
 
-    // DeviceEventEmitter.removeAllListeners("fetch_message_list");
+    DeviceEventEmitter.removeAllListeners("fetch_message_list");
     DeviceEventEmitter.addListener("fetch_message_list", this.callAPI.bind());
     // DeviceEventEmitter.addListener(
     //   "received_push_notification",
@@ -242,7 +242,7 @@ export class ChatListScreen extends Component {
     };
 
     global.ws.onclose = ({ event }) => {
-      console.log(Platform.OS + " --- WS onClose() ---->", event);
+      // console.log(Platform.OS + " --- WS onClose() ---->", event);
       // console.warn(" --- WS onClose() ---->");
     };
   }

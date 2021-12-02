@@ -117,7 +117,7 @@ const Header = ({
                 resizeMode={FastImage.resizeMode.contain}
               ></FastImage>
 
-              {total_count == 0 ? null : (
+              {total_count == "0" || total_count == null? null : (
                 <View style={ComponentStyle.countcircleview}>
                   <Text style={ComponentStyle.messagescountstyle}>
                     {total_count}

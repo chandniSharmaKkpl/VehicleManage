@@ -112,18 +112,14 @@ export class ChatMessagesScreen extends Component {
     this._isMounted = true;
     global.ws = new WebSocket("ws://20.37.36.107:56113");
 
-    let getmsgCount = await JSON.parse(await AsyncStorage.getItem("msg_count"));
-    let gettotalCount = await JSON.parse(
-      await AsyncStorage.getItem("total_count")
-    );
-    if (getmsgCount == 0 || getmsgCount == undefined) {
-      await AsyncStorage.setItem("msg_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("msg_count_remove");
-    }
-    if (gettotalCount == 0 || gettotalCount == undefined) {
-      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("total_count_remove");
-    }
+    await AsyncStorage.setItem("IsReadMessage", JSON.stringify(true));
+    await AsyncStorage.setItem("IsRead", JSON.stringify(true));
+
+    await AsyncStorage.setItem("msg_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("msg_count_remove");
+
+    await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("total_count_remove");
 
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
@@ -373,7 +369,7 @@ export class ChatMessagesScreen extends Component {
       newMsgs.push(msg);
     });
 
-      // id INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
+    // id INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
     // try {
     //   const { isConnecting, isConnected } = this.state;
     //   // stop if connecting

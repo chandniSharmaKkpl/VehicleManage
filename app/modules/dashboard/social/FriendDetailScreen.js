@@ -10,6 +10,7 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
 import { FriendDetailStyle } from "../../../assets/styles/FriendDetailStyle";
@@ -364,7 +365,7 @@ export class FriendDetailScreen extends Component {
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
-              this.setState({isrequested:1})
+              this.setState({ isrequested: 1 });
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
@@ -559,12 +560,17 @@ export class FriendDetailScreen extends Component {
               </TouchableOpacity>
             ) : null}
             {friendDetail.setting_4 == 1 ? (
-              isrequested ? (
-                <View
+              <View style={FriendDetailStyle.beforesquareview}>
+                <TouchableWithoutFeedback
+                  onPress={() =>
+                    isrequested == 1
+                      ? null
+                      : this.requestforSocialApi(friendDetail)
+                  }
                   style={[
                     FriendDetailStyle.squareviews,
                     {
-                      opacity: 0.7,
+                      opacity: isrequested == 1 ? 0.7 : null,
                       backgroundColor: Colors.btnSecondaryPrimary,
                     },
                   ]}
@@ -580,32 +586,10 @@ export class FriendDetailScreen extends Component {
                       },
                     ]}
                   >
-                    {"Requested"}
+                    {isrequested == 1 ? "Requested" : "Request for social"}
                   </Text>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => this.requestforSocialApi(friendDetail)}
-                  style={[
-                    FriendDetailStyle.squareviews,
-                    { backgroundColor: Colors.btnSecondaryPrimary },
-                  ]}
-                >
-                  <Text
-                    numberOfLines={1}
-                    style={[
-                      FriendDetailStyle.dectext,
-                      {
-                        color: theme.PRIMARY_BACKGROUND_COLOR,
-                        fontSize: globals.font_14,
-                        width: "100%",
-                      },
-                    ]}
-                  >
-                    {"Request for social"}
-                  </Text>
-                </TouchableOpacity>
-              )
+                </TouchableWithoutFeedback>
+              </View>
             ) : (
               <>
                 <TouchableOpacity

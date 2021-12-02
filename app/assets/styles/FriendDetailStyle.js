@@ -112,6 +112,14 @@ export const FriendDetailStyle = StyleSheet.create({
     alignSelf: "center",
     marginHorizontal: 5,
   },
+  beforesquareview:{
+    height: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  alignSelf: "center",
+                  backgroundColor: Colors.btnSecondaryPrimary,
+                  marginHorizontal: 5,
+  },
   secondhalfview: {
     flex: 0.4,
     position: "relative",

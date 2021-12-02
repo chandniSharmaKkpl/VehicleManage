@@ -42,14 +42,11 @@ export class RecentViewersScreen extends Component {
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState({ user: this.props.userDetails.user_data });
     }
-    let gettotalCount = await JSON.parse(
-      await AsyncStorage.getItem("total_count")
-    );
 
-    if (gettotalCount != 0 || gettotalCount != undefined) {
-      await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("total_count_remove");
-    }
+    await AsyncStorage.setItem("IsRead", JSON.stringify(true));
+
+    await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("total_count_remove");
 
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
