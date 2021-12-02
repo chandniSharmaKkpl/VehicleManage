@@ -178,9 +178,9 @@ export const ComponentStyle = StyleSheet.create({
   },
   tab_Image: { width: 20, height: 20, tintColor: Colors.primary },
   roundedtab_img: {
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 40 / 2,
     tintColor: Colors.primary,
   },
 
@@ -360,9 +360,9 @@ export const ComponentStyle = StyleSheet.create({
 
   /// CHAT HEADER
   circleview: {
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 40 / 2,
     // justifyContent: "center",
   },
 });
