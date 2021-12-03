@@ -81,14 +81,15 @@ export class SearchScreen extends Component {
         Alert.alert(globals.warning, globals.noInternet);
       }
     });
-    AppState.addEventListener("change", this._handleAppStateThemeChange);
+    AppState.addEventListener("change", this._handleAppStateThemeChange());
   }
 
   componentWillUnmount = () => {
     DeviceEventEmitter.removeAllListeners("recall_init_api");
     // DeviceEventEmitter.removeAllListeners("received_push_notification");
     DeviceEventEmitter.removeAllListeners("total_count_remove");
-    AppState.removeAllListeners("change", this._handleAppStateThemeChange);
+    AppState.removeAllListeners("change", this._handleAppStateThemeChange());
+    AppState.removeEventListener("change", () => this._handleAppStateChange());
   };
 
   callInitAPI = async () => {

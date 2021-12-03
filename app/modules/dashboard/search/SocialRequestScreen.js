@@ -58,7 +58,7 @@ export class SocialRequestScreen extends Component {
     const { socialrequestlist } = this.props;
     if (globals.isInternetConnected == true) {
       socialrequestlist().then(async (res) => {
-        // console.log("res----------socialrequestlist-", JSON.stringify(res.value.data));
+        console.log("res----------socialrequestlist-", JSON.stringify(res.value.data));
         if (res.value && res.value.data.success == true) {
           if (res.value && res.value.status === 200) {
             await showMessage({
@@ -288,6 +288,7 @@ export class SocialRequestScreen extends Component {
   render() {
     const { requestedListData } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
+    console.log("requestedListData====",requestedListData);
     return (
       <>
         <View
