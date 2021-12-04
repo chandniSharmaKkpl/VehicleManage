@@ -143,11 +143,20 @@ export class ChatMessagesScreen extends Component {
     }
   }
 
-  componentWillUnmount() {
+ async componentWillUnmount() {
     this._isMounted = false;
     if (this.state.isMessageSend) {
       DeviceEventEmitter.emit("fetch_message_list");
     }
+
+    await AsyncStorage.setItem("IsReadMessage", JSON.stringify(true));
+    await AsyncStorage.setItem("IsRead", JSON.stringify(true));
+
+    await AsyncStorage.setItem("msg_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("msg_count_remove");
+
+    await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("total_count_remove");
   }
 
   callFetchAPI = () => {

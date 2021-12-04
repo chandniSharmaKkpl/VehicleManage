@@ -40,8 +40,7 @@ export class LoginScreen extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
-    AppState.removeAllListeners("change", this._handleAppStateThemeChange());
-    AppState.removeEventListener("change", () => this._handleAppStateChange());
+    AppState.removeAllListeners("change", this._handleAppStateThemeChange);
   }
 
   UNSAFE_componentWillReceiveProps = (newProps) => {
@@ -54,6 +53,8 @@ export class LoginScreen extends Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === "active"
     ) {
+      this.setState({ appState: nextAppState });
+
       this.setThemeModes();
     }
     this.setState({ appState: nextAppState });
@@ -76,7 +77,7 @@ export class LoginScreen extends Component {
 
     this._isMounted = true;
     await this.setThemeModes();
-    AppState.addEventListener("change", this._handleAppStateThemeChange());
+    AppState.addEventListener("change", this._handleAppStateThemeChange);
   };
 
   async checkPermission() {

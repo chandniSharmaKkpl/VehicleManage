@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StatusBar, Platform, LogBox, TextInput, Text } from "react-native";
+import { StatusBar, Platform, LogBox, TextInput, Text, Alert } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import AppNavigator from "./store/AppNavigation";
@@ -12,7 +12,7 @@ import {
   AppearanceProvider,
   useColorScheme,
 } from "react-native-appearance";
-import messaging, { firebase } from '@react-native-firebase/messaging';
+import messaging, { firebase } from "@react-native-firebase/messaging";
 
 let subscription;
 export class App extends Component {
@@ -24,6 +24,8 @@ export class App extends Component {
     TextInput.defaultProps.allowFontScaling = false;
     super(props);
   }
+
+
 
   async componentDidMount() {
     this.checkPermission();
@@ -54,7 +56,6 @@ export class App extends Component {
     }
   }
 
-
   async getToken() {
     let fcmToken = await AsyncStorage.getItem("fcmToken");
     if (!fcmToken) {
@@ -72,10 +73,10 @@ export class App extends Component {
       // await AsyncStorage.setItem("dt_logs", "found dt:" + fcmToken);
     }
   }
-  
+
   async requestPermission() {
     try {
-      const authStatus = await messaging().requestPermission(() => { });
+      const authStatus = await messaging().requestPermission(() => {});
       const enabled =
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
@@ -111,8 +112,8 @@ export class App extends Component {
   };
 
   render() {
-    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-    LogBox.ignoreAllLogs();//Ignore all log notifications
+    LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+    LogBox.ignoreAllLogs(); //Ignore all log notifications
     return (
       <AppearanceProvider>
         <Provider store={store}>
