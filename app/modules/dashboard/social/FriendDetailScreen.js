@@ -176,7 +176,7 @@ export class FriendDetailScreen extends Component {
           let currentScreen =
             nav.routes[2].routes[0].routes[1].routes[nav.routes.length - 1]
               .routeName;
-          console.log("currentScreen ", currentScreen);
+          console.log("currentScreen from frnd details screen", currentScreen);
 
           // var payload = {
           //   msg_data: object,
@@ -188,7 +188,7 @@ export class FriendDetailScreen extends Component {
             const currentScreenParams =
               nav.routes[2].routes[0].routes[1].routes[nav.routes.length - 1]
                 .params;
-            console.log("currentScreenParams :->", currentScreenParams);
+            console.log("currentScreenParams details screen:->", currentScreenParams);
             console.log("parseInt(from_id)===", parseInt(from_id));
             if (currentScreenParams !== undefined) {
               var userScreenLoadUserId = currentScreenParams.user_info.id;
