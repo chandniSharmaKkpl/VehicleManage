@@ -84,6 +84,7 @@ export class ChatMessagesScreen extends Component {
       getparticularMsg_id: "",
     };
     global.ws = null;
+
     this.onSend = this.onSend.bind(this);
     this.callSendAPI = this.callSendAPI.bind(this);
     this.readMessagesAPI = this.readMessagesAPI.bind(this);
@@ -120,7 +121,6 @@ export class ChatMessagesScreen extends Component {
 
     await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
     DeviceEventEmitter.emit("total_count_remove");
-
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
         {
@@ -143,11 +143,19 @@ export class ChatMessagesScreen extends Component {
     }
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     this._isMounted = false;
     if (this.state.isMessageSend) {
       DeviceEventEmitter.emit("fetch_message_list");
     }
+    await AsyncStorage.setItem("IsReadMessage", JSON.stringify(true));
+    await AsyncStorage.setItem("IsRead", JSON.stringify(true));
+
+    await AsyncStorage.setItem("msg_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("msg_count_remove");
+
+    await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("total_count_remove");
   }
 
   callFetchAPI = () => {
@@ -173,7 +181,7 @@ export class ChatMessagesScreen extends Component {
           //OK 200 The request was fulfilled
           // console.log(
           //   "tres.value.data.success == true   ",
-          //   res.value.data.data
+          //   res.value.data.success
           // );
 
           // this.setState({
@@ -333,30 +341,7 @@ export class ChatMessagesScreen extends Component {
     }
   }
 
-  // iF INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
-
-  onSend = (message, callback) => {
-    this.waitForConnection(() => {
-      this.callOnSend(message);
-      if (typeof callback !== "undefined") {
-        callback();
-      }
-    }, 1000);
-  };
-
-  // id INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
-  waitForConnection = (callback, interval) => {
-    if (global.ws.readyState === 1) {
-      callback();
-    } else {
-      // optional: implement backoff for interval here
-      setTimeout(function () {
-        this.waitForConnection(callback, interval);
-      }, interval);
-    }
-  };
-
-  callOnSend = (messages = []) => {
+  onSend(messages = []) {
     const { userDetails } = this.props;
     // console.log("onSend() messages  :->", this.props.userDetails);
 
@@ -369,30 +354,8 @@ export class ChatMessagesScreen extends Component {
       newMsgs.push(msg);
     });
 
-    // id INVALID_STATE_ERROE COMES THEN FIRST TRY TO ESTABLISH CONNECTION THEN SEND MSG
-    // try {
-    //   const { isConnecting, isConnected } = this.state;
-    //   // stop if connecting
-    //   if (isConnecting) {
-    //     return Promise.resolve(false);
-    //   }
-    //   // socket connection is required
-    //   if (!this.socket || !isConnected) {
-    //     // start connecting
-    //     this.connect();
-    //     // resolve with false
-    //     return Promise.resolve(false);
-    //   }
-    //   this.socket.send(JSON.stringify(payload));
-    //   // resolve with true;
-    //   return Promise.resolve(true);
-    // } catch (error) {
-    //   // Handle error
-    //   return Promise.resolve(false);
-    // }
-
     // console.log("onSend() :->", global.ws);
-    // console.log("onSend() newMsgs:->", newMsgs);
+    console.log("onSend() newMsgs:->", newMsgs);
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
@@ -419,7 +382,7 @@ export class ChatMessagesScreen extends Component {
         // console.log("to_detail :->"+err);
       }
     }
-  };
+  }
 
   callSendAPI(messages) {
     var allTextMsg = messages.map((item) => {
@@ -579,7 +542,6 @@ export class ChatMessagesScreen extends Component {
   displayMsgReportPicker = () => {
     this.setState({ isMsgReportPicker: !this.state.isMsgReportPicker });
   };
-
   //display emoji picker model
   displayMsgEmojiPicker = () => {
     this.setState({ isopenEmojiPicker: !this.state.isopenEmojiPicker });
@@ -656,7 +618,6 @@ export class ChatMessagesScreen extends Component {
             isMsgReportPicker={() => this.displayMsgReportPicker()}
             isShareSocials={() => this.shareSocials()}
           />
-
           <View>
             <MediaModel
               modalVisible={isMsgReportPicker}
@@ -715,9 +676,9 @@ export class ChatMessagesScreen extends Component {
                 <MessageImage {...props} />
               </View>;
             }}
-            onLongPress={(context, message) =>
-              this.onLongPress(context, message)
-            }
+            // onLongPress={(context, message) =>
+            //   this.onLongPress(context, message)
+            // }
             textInputProps={{}}
             keyboardShouldPersistTaps="never"
             renderTicks={(message) => this.renderTicks(message, user_id)}
@@ -756,7 +717,7 @@ export class ChatMessagesScreen extends Component {
           {Platform.OS === "android" ? (
             <KeyboardSpacer topSpacing={-160} />
           ) : null}
-          {isopenEmojiPicker == true ? (
+          {/* {isopenEmojiPicker == true ? (
             <EmojiSelector
               onEmojiSelected={(emoji) => this.updateSelectedEmoji(emoji)}
               showSearchBar={true}
@@ -765,7 +726,7 @@ export class ChatMessagesScreen extends Component {
               showSectionTitles={true}
               category={Categories.all}
             />
-          ) : null}
+          ) : null} */}
         </View>
       </>
     );

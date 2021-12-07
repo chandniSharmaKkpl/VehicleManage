@@ -35,6 +35,13 @@ export class RecentViewersScreen extends Component {
     };
   }
 
+  async componentWillUnmount() {
+    await AsyncStorage.setItem("IsRead", JSON.stringify(true));
+
+    await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
+    DeviceEventEmitter.emit("total_count_remove");
+  }
+
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;

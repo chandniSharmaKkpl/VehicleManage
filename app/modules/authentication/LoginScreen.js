@@ -21,7 +21,7 @@ import * as globals from "../../utils/Globals";
 import { darkTheme, lightTheme } from "../../assets/Theme";
 import * as actions from "./redux/Actions";
 import Colors from "../../assets/Colors";
-import messaging, { firebase } from '@react-native-firebase/messaging';
+import messaging, { firebase } from "@react-native-firebase/messaging";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -53,6 +53,8 @@ export class LoginScreen extends Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === "active"
     ) {
+      this.setState({ appState: nextAppState });
+
       this.setThemeModes();
     }
     this.setState({ appState: nextAppState });
@@ -107,7 +109,7 @@ export class LoginScreen extends Component {
         // await AsyncStorage.setItem("dt_logs", "in else not getToken");
       }
     } else {
-      console.log("Already Saved Device TOKEN ======>" , fcmToken);
+      console.log("Already Saved Device TOKEN ======>", fcmToken);
       this.setState({ deviceToken: fcmToken });
       // await AsyncStorage.setItem("dt_logs", "found dt:" + fcmToken);
     }
@@ -121,7 +123,7 @@ export class LoginScreen extends Component {
 
     if (enabled) {
       this.getToken();
-      console.log('Authorization status:', authStatus);
+      console.log("Authorization status:", authStatus);
     }
   }
 
