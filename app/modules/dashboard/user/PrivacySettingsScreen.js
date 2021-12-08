@@ -21,6 +21,8 @@ import RNIap, {
   purchaseErrorListener,
   purchaseUpdatedListener,
 } from "react-native-iap";
+import NavigationService from "../../../utils/NavigationService";
+
 const TAG = "PrivacySettingsScreen ::=";
 let purchaseUpdateSubscription;
 let purchaseErrorSubscription;
