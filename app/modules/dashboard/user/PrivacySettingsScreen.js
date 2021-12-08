@@ -11,8 +11,9 @@ import { connect } from "react-redux";
 import { PrivacySettingStyle } from "../../../assets/styles/PrivacySettingStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
 import * as actions from "../redux/Actions";
-import { SwitchComponent, Header } from "../../../components";
+import { SwitchComponent, Header, PrimaryButton } from "../../../components";
 import * as Authactions from "../../authentication/redux/Actions";
+import { AuthStyle } from "../../../assets/styles/AuthStyle";
 
 const TAG = "PrivacySettingsScreen ::=";
 
@@ -28,11 +29,10 @@ export class PrivacySettingsScreen extends Component {
       isHideShareSocial: false,
       isHideDisplayName: false,
       isHideSearchUser: false,
+      turnonsubscription_button: false,
       user: {},
     };
   }
-
- 
 
   async componentDidMount() {
     await this.onFocus();
@@ -123,12 +123,16 @@ export class PrivacySettingsScreen extends Component {
 
   // change on-off isHideSearchUser
   changeHideSearchUser = () => {
-    this.setState(
-      { isHideSearchUser: !this.state.isHideSearchUser },
-      async () => {
-        await this.updateUserSettingsAPI();
-      }
-    );
+    if (this.state.turnonsubscription_button == true) {
+      this.setState(
+        { isHideSearchUser: !this.state.isHideSearchUser },
+        async () => {
+          await this.updateUserSettingsAPI();
+        }
+      );
+    } else {
+      Alert.alert(globals.appName, globals.subscriptionrequired);
+    }
   };
 
   // API call of update User Settings
@@ -215,6 +219,7 @@ export class PrivacySettingsScreen extends Component {
       isHideShareSocial,
       isHideDisplayName,
       isHideSearchUser,
+      turnonsubscription_button,
     } = this.state;
     const { isLoading, loaderMessage, theme, userDetails } = this.props;
 
@@ -360,7 +365,12 @@ export class PrivacySettingsScreen extends Component {
               >
                 {StaticTitle.premiumsetting}
               </Text>
-              <View style={PrivacySettingStyle.separatorLine}></View>
+              {/* <View style={PrivacySettingStyle.separatorLine}></View> */}
+
+              <View style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}>
+                <PrimaryButton btnName={StaticTitle.subscribe} />
+              </View>
+
               <View style={PrivacySettingStyle.itemview}>
                 <Text
                   style={[

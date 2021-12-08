@@ -109,6 +109,7 @@ const StaticTitle = {
   /// PROFILE
   update: "Update",
   updatedetail: "Update Deatils",
+  subscribe:"Subscribe now",
 
   // LOGOUT
   logout: "Are you sure you want to logout?",
