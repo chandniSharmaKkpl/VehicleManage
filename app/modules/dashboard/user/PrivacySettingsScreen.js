@@ -193,8 +193,7 @@ export class PrivacySettingsScreen extends Component {
                 icon: "success",
                 duration: 3000,
               });
-              const { getUserData } = this.props;
-              getUserData();
+              this.getUserData();
             } else {
               showMessage({
                 message: Messages.subscriptionFail,
