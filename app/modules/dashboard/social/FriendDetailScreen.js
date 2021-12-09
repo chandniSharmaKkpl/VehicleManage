@@ -188,7 +188,10 @@ export class FriendDetailScreen extends Component {
             const currentScreenParams =
               nav.routes[2].routes[0].routes[1].routes[nav.routes.length - 1]
                 .params;
-            console.log("currentScreenParams details screen:->", currentScreenParams);
+            console.log(
+              "currentScreenParams details screen:->",
+              currentScreenParams
+            );
             console.log("parseInt(from_id)===", parseInt(from_id));
             if (currentScreenParams !== undefined) {
               var userScreenLoadUserId = currentScreenParams.user_info.id;
@@ -365,7 +368,6 @@ export class FriendDetailScreen extends Component {
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
-              this.setState({ isrequested: 1 });
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
@@ -484,9 +486,124 @@ export class FriendDetailScreen extends Component {
     });
   };
 
+  returnRequestButton() {
+    return (
+      <View style={FriendDetailStyle.beforesquareview}>
+        <TouchableWithoutFeedback
+          onPress={() => this.requestforSocialApi(friendDetail)}
+          style={[
+            FriendDetailStyle.squareviews,
+            {
+              backgroundColor: Colors.btnSecondaryPrimary,
+            },
+          ]}
+        >
+          <Text
+            numberOfLines={1}
+            style={[
+              FriendDetailStyle.dectext,
+              {
+                color: this.props.theme.PRIMARY_BACKGROUND_COLOR,
+                fontSize: globals.font_14,
+                width: "100%",
+              },
+            ]}
+          >
+            {"Request for social"}
+          </Text>
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  }
+
+  returnSocialIconViews = () => {
+    return (
+      <>
+        <TouchableOpacity
+          onPress={() =>
+            this.navigatetoSocialProfiles("Fb", friendDetail.username)
+          }
+          style={[
+            FriendDetailStyle.circleview,
+            { backgroundColor: Colors.blue },
+          ]}
+        >
+          <FastImage
+            style={[FriendDetailStyle.socialicon]}
+            source={IMAGE.fb_icon_square}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            this.navigatetoSocialProfiles("Insta", friendDetail.username)
+          }
+        >
+          <LinearGradient
+            start={{ x: 0.0, y: 0.5 }}
+            end={{ x: 0.7, y: 1.0 }}
+            colors={[Colors.orange, Colors.pink, Colors.purple]}
+            style={FriendDetailStyle.circleview}
+          >
+            <FastImage
+              style={[FriendDetailStyle.socialicon]}
+              source={IMAGE.insta_icon_img}
+            />
+          </LinearGradient>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            this.navigatetoSocialProfiles("Snap", friendDetail.username)
+          }
+          style={[
+            FriendDetailStyle.circleview,
+            { backgroundColor: Colors.snapChat },
+          ]}
+        >
+          <FastImage
+            style={[FriendDetailStyle.socialicon]}
+            source={IMAGE.snap_img}
+          />
+        </TouchableOpacity>
+      </>
+    );
+  };
+
+  returnRequestButtonDisable = () => {
+    return (
+      <View style={FriendDetailStyle.beforesquareview}>
+        <TouchableWithoutFeedback
+          onPress={() => null}
+          style={[
+            FriendDetailStyle.squareviews,
+            {
+              opacity: 0.7,
+              backgroundColor: Colors.btnSecondaryPrimary,
+            },
+          ]}
+        >
+          <Text
+            numberOfLines={1}
+            style={[
+              FriendDetailStyle.dectext,
+              {
+                color: this.props.theme.PRIMARY_BACKGROUND_COLOR,
+                fontSize: globals.font_14,
+                width: "100%",
+              },
+            ]}
+          >
+            {"Requested"}
+          </Text>
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { friendDetail, isrequested, user, getfriendData } = this.state;
+    console.log("isrequested===== render", isrequested);
+    console.log("friendDetail.setting_4==========", friendDetail.setting_4);
     return (
       <>
         <View
@@ -559,89 +676,13 @@ export class FriendDetailScreen extends Component {
                 />
               </TouchableOpacity>
             ) : null}
-            {friendDetail.setting_4 == 1 ? (
-              <View style={FriendDetailStyle.beforesquareview}>
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    isrequested == 1
-                      ? null
-                      : this.requestforSocialApi(friendDetail)
-                  }
-                  style={[
-                    FriendDetailStyle.squareviews,
-                    {
-                      opacity: isrequested == 1 ? 0.7 : null,
-                      backgroundColor: Colors.btnSecondaryPrimary,
-                    },
-                  ]}
-                >
-                  <Text
-                    numberOfLines={1}
-                    style={[
-                      FriendDetailStyle.dectext,
-                      {
-                        color: theme.PRIMARY_BACKGROUND_COLOR,
-                        fontSize: globals.font_14,
-                        width: "100%",
-                      },
-                    ]}
-                  >
-                    {isrequested == 1 ? "Requested" : "Request for social"}
-                  </Text>
-                </TouchableWithoutFeedback>
-              </View>
-            ) : (
-              <>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.navigatetoSocialProfiles("Fb", friendDetail.username)
-                  }
-                  style={[
-                    FriendDetailStyle.circleview,
-                    { backgroundColor: Colors.blue },
-                  ]}
-                >
-                  <FastImage
-                    style={[FriendDetailStyle.socialicon]}
-                    source={IMAGE.fb_icon_square}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.navigatetoSocialProfiles(
-                      "Insta",
-                      friendDetail.username
-                    )
-                  }
-                >
-                  <LinearGradient
-                    start={{ x: 0.0, y: 0.5 }}
-                    end={{ x: 0.7, y: 1.0 }}
-                    colors={[Colors.orange, Colors.pink, Colors.purple]}
-                    style={FriendDetailStyle.circleview}
-                  >
-                    <FastImage
-                      style={[FriendDetailStyle.socialicon]}
-                      source={IMAGE.insta_icon_img}
-                    />
-                  </LinearGradient>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.navigatetoSocialProfiles("Snap", friendDetail.username)
-                  }
-                  style={[
-                    FriendDetailStyle.circleview,
-                    { backgroundColor: Colors.snapChat },
-                  ]}
-                >
-                  <FastImage
-                    style={[FriendDetailStyle.socialicon]}
-                    source={IMAGE.snap_img}
-                  />
-                </TouchableOpacity>
-              </>
-            )}
+            {friendDetail.setting_4 == 1 && isrequested == 0
+              ? this.returnRequestButton()
+              : friendDetail.setting_4 == 1 && isrequested == 1
+              ? this.returnSocialIconViews()
+              : friendDetail.setting_4 == 1 && isrequested == 2
+              ? this.returnRequestButtonDisable()
+              : this.returnSocialIconViews()}
           </View>
 
           <View

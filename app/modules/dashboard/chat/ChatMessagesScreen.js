@@ -171,18 +171,10 @@ export class ChatMessagesScreen extends Component {
     params.append("to_id", to_id);
     messagesDetails(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get messagesDetails",
-        //   JSON.stringify(res.value.data.data)
-        // );
-        // console.log("this.props.chatMessages======", this.props.chatMessages);
+       
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
-          // console.log(
-          //   "tres.value.data.success == true   ",
-          //   res.value.data.success
-          // );
+         
 
           // this.setState({
           //   messages: res.value.data.data,
@@ -201,12 +193,10 @@ export class ChatMessagesScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log(TAG, "i am in catch error get messagesDetails", err);
       });
   };
 
   formatMessageAndStore(response) {
-    // console.log("response=============formatMessageAndStore=====", response);
     var msgArr = [];
 
     this.readMessagesAPI(response);
@@ -216,14 +206,9 @@ export class ChatMessagesScreen extends Component {
     var toUser = response.to_detail;
 
     messages.forEach((msg) => {
-      // console.log(
-      //   "3 msg *->",
-      //   msg.id
-      // );
+   
 
-      // console.log("fromUser :->", fromUser);
       var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
-      // console.log("fromUserDtl :->", fromUserDtl);
 
       var avatar_img = avatar;
       if (fromUserDtl.avatar != null && fromUserDtl.avatar != "null") {
@@ -252,14 +237,11 @@ export class ChatMessagesScreen extends Component {
         pending: false,
       };
 
-      // console.log("msgDic :->", msgDic);
 
       msgArr.push(msgDic);
     });
 
-    // console.log("Before msgArr :-->", msgArr);
     msgArr = msgArr.sort((a, b) => parseInt(a._id) < parseInt(b._id));
-    // console.log("After msgArr :-->", msgArr);
 
     const newArray = [];
     msgArr.forEach((obj) => {
@@ -275,12 +257,10 @@ export class ChatMessagesScreen extends Component {
 
   readMessagesAPI = (response) => {
     const messages = response.messages;
-    // console.log("in messages() :->", messages);
 
     var message_ids = "[";
     messages.forEach((msg) => {
       if (parseInt(msg.is_received) == 0 && parseInt(msg.id) > 0) {
-        // console.log("message_ids.length :-->", String(message_ids).length);
         if (String(message_ids).length == 1) {
           message_ids = message_ids + msg.id;
         } else {
@@ -288,12 +268,10 @@ export class ChatMessagesScreen extends Component {
         }
       }
 
-      // console.log("in loop message_ids :-->", message_ids);
     });
 
     message_ids = message_ids + "]";
 
-    // console.log("message_ids :-->", message_ids);
     if (message_ids == "[]") {
       console.log("Not any message in unread....");
       return;
@@ -305,14 +283,9 @@ export class ChatMessagesScreen extends Component {
     params.append("ids", message_ids);
     readMessage(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get readMessage",
-        //   JSON.stringify(res.value.data)
-        // );
+       
       })
       .catch((err) => {
-        console.log(TAG, "i am in catch error readMessage", err);
       });
   };
 
@@ -343,7 +316,6 @@ export class ChatMessagesScreen extends Component {
 
   onSend(messages = []) {
     const { userDetails } = this.props;
-    // console.log("onSend() messages  :->", this.props.userDetails);
 
     var newMsgs = [];
     messages.forEach((msg) => {
@@ -354,8 +326,7 @@ export class ChatMessagesScreen extends Component {
       newMsgs.push(msg);
     });
 
-    // console.log("onSend() :->", global.ws);
-    console.log("onSend() newMsgs:->", newMsgs);
+    
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
@@ -388,22 +359,16 @@ export class ChatMessagesScreen extends Component {
     var allTextMsg = messages.map((item) => {
       return item.text;
     });
-    // console.log("in callSendAPI allTextMsg:->", allTextMsg);
     const { insertMessage } = this.props;
     let params = new URLSearchParams();
     // user click on student type chat message
     params.append("to_id", this.state.to_id);
     params.append("message", allTextMsg.join("\n"));
 
-    console.log("param insertMessage :->", params);
 
     insertMessage(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of insertMessage",
-        //   JSON.stringify(res.value.data)
-        // );
+     
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -447,14 +412,9 @@ export class ChatMessagesScreen extends Component {
 
     params.append("friend_id", user_info.id);
 
-    console.log("param reportUserAPI :->", params);
     reportUser(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of reportUserAPI",
-        //   JSON.stringify(res.value.data.message)
-        // );
+        
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -486,14 +446,9 @@ export class ChatMessagesScreen extends Component {
 
     params.append("friend_id", user_info.id);
 
-    console.log("param blockUser :->", params);
     blockUser(params)
       .then(async (res) => {
-        console.log(
-          TAG,
-          "response of blockUser",
-          JSON.stringify(res.value.data.message)
-        );
+       
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -684,7 +639,7 @@ export class ChatMessagesScreen extends Component {
             renderTicks={(message) => this.renderTicks(message, user_id)}
             alwaysShowSend={true}
             timeFormat={"HH:mm"}
-            onPressAvatar={console.log("onPressAvatar")}
+            // onPressAvatar={console.log("onPressAvatar")}
             alwaysShowSend={true}
             style={{ flex: 1 }}
             placeholder={StaticTitle.chatinput}

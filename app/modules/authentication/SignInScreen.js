@@ -187,10 +187,10 @@ export class SignInScreen extends Component {
     if (globals.isInternetConnected == true) {
       login(params)
         .then(async (res) => {
-          console.log(
-            "res.value.data.data------login-------",
-            JSON.stringify(res.value)
-          );
+          // console.log(
+          //   "res.value.data.data------login-------",
+          //   JSON.stringify(res.value)
+          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.invalid_email) {

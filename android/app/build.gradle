@@ -134,9 +134,11 @@ android {
         applicationId "com.roadie"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 6
+        versionName "0.1"
         multiDexEnabled true
+        missingDimensionStrategy 'react-native-camera', 'general'
+        missingDimensionStrategy 'store', 'play'
     }
     splits {
         abi {
@@ -152,6 +154,12 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+        release {
+            storeFile file('release.keystore')
+            storePassword '123456'
+            keyAlias 'Roadie'
+            keyPassword '123456'
         }
     }
     buildTypes {

@@ -5,16 +5,27 @@ import {
   Alert,
   Text,
   ScrollView,
+  Platform,
 } from "react-native";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import * as globals from "../../../utils/Globals";
 import { connect } from "react-redux";
 import { PrivacySettingStyle } from "../../../assets/styles/PrivacySettingStyle";
 import { StaticTitle } from "../../../utils/StaticTitle";
 import * as actions from "../redux/Actions";
-import { SwitchComponent, Header } from "../../../components";
+import { SwitchComponent, Header, PrimaryButton } from "../../../components";
 import * as Authactions from "../../authentication/redux/Actions";
+import { AuthStyle } from "../../../assets/styles/AuthStyle";
+import RNIap, {
+  acknowledgePurchaseAndroid,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+} from "react-native-iap";
+import NavigationService from "../../../utils/NavigationService";
 
 const TAG = "PrivacySettingsScreen ::=";
+let purchaseUpdateSubscription;
+let purchaseErrorSubscription;
 
 export class PrivacySettingsScreen extends Component {
   _isMounted = false;
@@ -28,11 +39,17 @@ export class PrivacySettingsScreen extends Component {
       isHideShareSocial: false,
       isHideDisplayName: false,
       isHideSearchUser: false,
+      turnonsubscription_button: false,
       user: {},
+      localizedPrice: "",
+      description: "",
+      isPurchasesLoading: false,
+      productID: "",
+      currency: "",
+      isSubsctiptionTrue: false,
+      currentplan: "",
     };
   }
-
- 
 
   async componentDidMount() {
     await this.onFocus();
@@ -44,12 +61,156 @@ export class PrivacySettingsScreen extends Component {
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setUserInfo(this.props.userDetails);
     }
+    const Product_sku_id =
+      Platform.OS === "ios"
+        ? ["1_month_auto_subscription"]
+        : ["1_month_subscription"];
+
+    try {
+      const result = await RNIap.initConnection();
+      console.log("-------------------connection init result", result);
+      if (result) {
+        const products = await RNIap.getSubscriptions(Product_sku_id);
+        console.log("products=================================", products);
+        for (var index = 0; index < products.length; index++) {
+          var product = products[index];
+          this.setState({
+            localizedPrice: product.localizedPrice,
+            description: product.description,
+            productID: product.productId,
+            currency: product.currency,
+            currentplan: product.title,
+          });
+        }
+      }
+      if (Platform.OS === "android") {
+        console.warn("i am in in flushFailedPurchasesCachedAsPendingAndroid");
+        RNIap.flushFailedPurchasesCachedAsPendingAndroid()
+          .catch(() => {
+            // exception can happen here if:
+            // - there are pending purchases that are still pending (we can't consume a pending purchase)
+            // in any case, you might not want to do anything special with the error
+          })
+          .then(() => {
+            purchaseUpdateSubscription = purchaseUpdatedListener(
+              async (purchase) => {
+                // Type purchase: ProductPurchase
+                console.log("purchaseUpdatedListener :--->", purchase);
+                if (
+                  purchase.purchaseStateAndroid === 1 &&
+                  !purchase.isAcknowledgedAndroid
+                ) {
+                }
+                purchaseErrorSubscription = purchaseErrorListener((error) => {
+                  console.log("Purchase Error:->", error);
+                });
+              }
+            );
+          });
+        setTimeout(() => {}, 3000);
+      }
+    } catch (err) {
+      console.warn("Error:->", err);
+      showMessage({
+        message: err.message,
+        type: "danger",
+        icon: "danger",
+        duration: 4000,
+      });
+    }
   };
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     this._isMounted = false;
     this.getUserData();
     DeviceEventEmitter.emit("initializeApp");
+    if (purchaseUpdateSubscription) {
+      purchaseUpdateSubscription.remove();
+      purchaseUpdateSubscription = null;
+    }
+    if (purchaseErrorSubscription) {
+      purchaseErrorSubscription.remove();
+      purchaseErrorSubscription = null;
+    }
+    await RNIap.endConnection();
+  }
+
+  UNSAFE_componentWillReceiveProps = (newProps) => {
+    if (newProps.userDetails) {
+      this.setUserInfo(newProps.userDetails);
+    }
+  };
+
+  gotoRequestPurchase() {
+    this.setState({ isPurchasesLoading: true });
+
+    try {
+      RNIap.requestPurchase(this.state.productID, true).then((res) => {
+        const { subscriptionSuccess } = this.props;
+        let params;
+        if (Platform.OS === "android") {
+          let saveData = JSON.parse(res.transactionReceipt);
+          params = {
+            currency: this.state.currency,
+            deviceType: Platform.OS,
+            localizedPrice: this.state.localizedPrice,
+            originalTransactionDateIOS: "",
+            originalTransactionIdentifierIOS: "",
+            productId: res.productId,
+            transactionDate: res.transactionDate,
+            transactionId: res.transactionId,
+            transactionReceipt: res.transactionReceipt,
+          };
+        } else {
+          params = {
+            currency: this.state.currency,
+            deviceType: Platform.OS,
+            localizedPrice: this.state.localizedPrice,
+            originalTransactionDateIOS: res.originalTransactionDateIOS,
+            originalTransactionIdentifierIOS:
+              res.originalTransactionIdentifierIOS,
+            productId: res.productId,
+            transactionDate: res.transactionDate,
+            transactionId: res.transactionId,
+            transactionReceipt: res.transactionReceipt,
+          };
+        }
+        subscriptionSuccess(params)
+          .then(async (res) => {
+            console.log(
+              "res of subscriptions---------------------------------",
+              JSON.stringify(res)
+            );
+            //OK 200 The request was fulfilled
+            if (res.value.status === 200) {
+              this.setState({
+                turnonsubscription_button: true,
+                isPurchasesLoading: false,
+              });
+              showMessage({
+                message: res.value.data.data,
+                type: "success",
+                icon: "success",
+                duration: 3000,
+              });
+              const { getUserData } = this.props;
+              getUserData();
+            } else {
+              showMessage({
+                message: Messages.subscriptionFail,
+                type: "danger",
+                icon: "danger",
+                duration: 4000,
+              });
+            }
+          })
+          .catch((err) => {
+            this.setState({ isPurchasesLoading: false });
+          });
+      });
+    } catch (err) {
+      this.setState({ isPurchasesLoading: false });
+    }
   }
 
   // set userInformation
@@ -65,6 +226,8 @@ export class PrivacySettingsScreen extends Component {
           isHideShareSocial: user.user_data.setting_5 == 1 ? true : false,
           isHideDisplayName: user.user_data.setting_6 == 1 ? true : false,
           isHideSearchUser: user.user_data.setting_7 == 1 ? true : false,
+          isSubsctiptionTrue:
+            user.user_data.subscription_status == 1 ? true : false,
         });
       }
     }
@@ -123,12 +286,16 @@ export class PrivacySettingsScreen extends Component {
 
   // change on-off isHideSearchUser
   changeHideSearchUser = () => {
-    this.setState(
-      { isHideSearchUser: !this.state.isHideSearchUser },
-      async () => {
-        await this.updateUserSettingsAPI();
-      }
-    );
+    if (this.state.turnonsubscription_button == true) {
+      this.setState(
+        { isHideSearchUser: !this.state.isHideSearchUser },
+        async () => {
+          await this.updateUserSettingsAPI();
+        }
+      );
+    } else {
+      Alert.alert(globals.appName, globals.subscriptionrequired);
+    }
   };
 
   // API call of update User Settings
@@ -215,6 +382,10 @@ export class PrivacySettingsScreen extends Component {
       isHideShareSocial,
       isHideDisplayName,
       isHideSearchUser,
+      turnonsubscription_button,
+      isSubsctiptionTrue,
+      currentplan,
+      localizedPrice,
     } = this.state;
     const { isLoading, loaderMessage, theme, userDetails } = this.props;
 
@@ -368,6 +539,40 @@ export class PrivacySettingsScreen extends Component {
                     { color: theme.DESCRIPTION_TEXT_COLOR },
                   ]}
                 >
+                  {currentplan}
+                </Text>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
+                  {localizedPrice}
+                </Text>
+              </View>
+
+              <View style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}>
+                <PrimaryButton
+                  onPress={() =>
+                    isSubsctiptionTrue == true
+                      ? null
+                      : this.gotoRequestPurchase()
+                  }
+                  btnName={
+                    isSubsctiptionTrue == true
+                      ? StaticTitle.subscribed
+                      : StaticTitle.subscribe
+                  }
+                />
+              </View>
+
+              <View style={PrivacySettingStyle.itemview}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {StaticTitle.hidesearchuser}
                 </Text>
                 <SwitchComponent
@@ -397,6 +602,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   updateUserSettings: (params) => dispatch(actions.updateUserSettings(params)),
   initializeApp: (params) => dispatch(Authactions.initializeApp(params)),
+  subscriptionSuccess: (params) =>
+    dispatch(actions.subscriptionSuccess(params)),
 });
 
 export default connect(
