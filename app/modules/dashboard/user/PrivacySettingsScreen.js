@@ -47,6 +47,7 @@ export class PrivacySettingsScreen extends Component {
       productID: "",
       currency: "",
       isSubsctiptionTrue: false,
+      currentplan: "",
     };
   }
 
@@ -63,7 +64,7 @@ export class PrivacySettingsScreen extends Component {
     const Product_sku_id =
       Platform.OS === "ios"
         ? ["1_month_auto_subscription"]
-        : ["1_month_auto_subscription"];
+        : ["1_month_subscription"];
 
     try {
       const result = await RNIap.initConnection();
@@ -78,6 +79,7 @@ export class PrivacySettingsScreen extends Component {
             description: product.description,
             productID: product.productId,
             currency: product.currency,
+            currentplan: product.title,
           });
         }
       }
@@ -181,7 +183,10 @@ export class PrivacySettingsScreen extends Component {
             );
             //OK 200 The request was fulfilled
             if (res.value.status === 200) {
-              this.setState({ isPurchasesLoading: false });
+              this.setState({
+                turnonsubscription_button: true,
+                isPurchasesLoading: false,
+              });
               showMessage({
                 message: res.value.data.data,
                 type: "success",
@@ -221,6 +226,8 @@ export class PrivacySettingsScreen extends Component {
           isHideShareSocial: user.user_data.setting_5 == 1 ? true : false,
           isHideDisplayName: user.user_data.setting_6 == 1 ? true : false,
           isHideSearchUser: user.user_data.setting_7 == 1 ? true : false,
+          isSubsctiptionTrue:
+            user.user_data.subscription_status == 1 ? true : false,
         });
       }
     }
@@ -376,6 +383,9 @@ export class PrivacySettingsScreen extends Component {
       isHideDisplayName,
       isHideSearchUser,
       turnonsubscription_button,
+      isSubsctiptionTrue,
+      currentplan,
+      localizedPrice,
     } = this.state;
     const { isLoading, loaderMessage, theme, userDetails } = this.props;
 
@@ -521,12 +531,38 @@ export class PrivacySettingsScreen extends Component {
               >
                 {StaticTitle.premiumsetting}
               </Text>
-              {/* <View style={PrivacySettingStyle.separatorLine}></View> */}
+              <View style={PrivacySettingStyle.separatorLine}></View>
+              <View style={PrivacySettingStyle.itemview}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
+                  {currentplan}
+                </Text>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
+                  {localizedPrice}
+                </Text>
+              </View>
 
               <View style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}>
                 <PrimaryButton
-                  // onPress={() => this.gotoRequestPurchase()}
-                  btnName={StaticTitle.subscribe}
+                  onPress={() =>
+                    isSubsctiptionTrue == true
+                      ? null
+                      : this.gotoRequestPurchase()
+                  }
+                  btnName={
+                    isSubsctiptionTrue == true
+                      ? StaticTitle.subscribed
+                      : StaticTitle.subscribe
+                  }
                 />
               </View>
 
