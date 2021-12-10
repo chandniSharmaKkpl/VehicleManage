@@ -780,6 +780,7 @@ export class UserProfileScreen extends Component {
                     />
                   </>
 
+                  {/* Instagram, FaceBook and Snapchat with TextInput */}
                   {/* <PrimaryTextinputwithIcon
                     isFrom="Instagram"
                     iconName={IMAGE.insta_icon_img}
