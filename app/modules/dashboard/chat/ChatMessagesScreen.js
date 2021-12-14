@@ -58,7 +58,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 
 const TAG = "ChatMessagesScreen ::=";
-
 export class ChatMessagesScreen extends Component {
   _isMounted = false;
   constructor(props) {
@@ -83,8 +82,6 @@ export class ChatMessagesScreen extends Component {
       currentMsg_id: "",
       getparticularMsg_id: "",
     };
-    global.ws = null;
-
     this.onSend = this.onSend.bind(this);
     this.callSendAPI = this.callSendAPI.bind(this);
     this.readMessagesAPI = this.readMessagesAPI.bind(this);
@@ -111,8 +108,6 @@ export class ChatMessagesScreen extends Component {
 
   async componentDidMount() {
     this._isMounted = true;
-    global.ws = new WebSocket("ws://20.37.36.107:56113");
-
     await AsyncStorage.setItem("IsReadMessage", JSON.stringify(true));
     await AsyncStorage.setItem("IsRead", JSON.stringify(true));
 
@@ -121,6 +116,7 @@ export class ChatMessagesScreen extends Component {
 
     await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
     DeviceEventEmitter.emit("total_count_remove");
+
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setState(
         {
@@ -171,10 +167,8 @@ export class ChatMessagesScreen extends Component {
     params.append("to_id", to_id);
     messagesDetails(params)
       .then(async (res) => {
-       
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
-         
 
           // this.setState({
           //   messages: res.value.data.data,
@@ -193,6 +187,7 @@ export class ChatMessagesScreen extends Component {
         }
       })
       .catch((err) => {
+        console.log(TAG, "i am in catch error get messagesDetails", err);
       });
   };
 
@@ -206,8 +201,6 @@ export class ChatMessagesScreen extends Component {
     var toUser = response.to_detail;
 
     messages.forEach((msg) => {
-   
-
       var fromUserDtl = msg.from_id == fromUser.id ? fromUser : toUser;
 
       var avatar_img = avatar;
@@ -236,7 +229,6 @@ export class ChatMessagesScreen extends Component {
         received: parseInt(msg.is_received) == 1 ? true : false,
         pending: false,
       };
-
 
       msgArr.push(msgDic);
     });
@@ -267,7 +259,6 @@ export class ChatMessagesScreen extends Component {
           message_ids = message_ids + "," + msg.id;
         }
       }
-
     });
 
     message_ids = message_ids + "]";
@@ -282,10 +273,9 @@ export class ChatMessagesScreen extends Component {
     // Collect the necessary params
     params.append("ids", message_ids);
     readMessage(params)
-      .then(async (res) => {
-       
-      })
+      .then(async (res) => {})
       .catch((err) => {
+        console.log(TAG, "i am in catch error readMessage", err);
       });
   };
 
@@ -314,8 +304,29 @@ export class ChatMessagesScreen extends Component {
     }
   }
 
-  onSend(messages = []) {
+  onSend = (message, callback) => {
+    this.waitForConnection(() => {
+      this.callOnSend(message);
+      if (typeof callback !== "undefined") {
+        callback();
+      }
+    }, 1000);
+  };
+
+  waitForConnection = (callback, interval) => {
+    if (global.ws.readyState === 1) {
+      callback();
+    } else {
+      // optional: implement backoff for interval here
+      setTimeout(function () {
+        this.waitForConnection(callback, interval);
+      }, interval);
+    }
+  };
+
+  callOnSend = (messages = []) => {
     const { userDetails } = this.props;
+    // console.log("onSend() messages  :->", this.props.userDetails);
 
     var newMsgs = [];
     messages.forEach((msg) => {
@@ -326,7 +337,6 @@ export class ChatMessagesScreen extends Component {
       newMsgs.push(msg);
     });
 
-    
     {
       // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
@@ -353,7 +363,7 @@ export class ChatMessagesScreen extends Component {
         // console.log("to_detail :->"+err);
       }
     }
-  }
+  };
 
   callSendAPI(messages) {
     var allTextMsg = messages.map((item) => {
@@ -365,10 +375,8 @@ export class ChatMessagesScreen extends Component {
     params.append("to_id", this.state.to_id);
     params.append("message", allTextMsg.join("\n"));
 
-
     insertMessage(params)
       .then(async (res) => {
-     
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -414,7 +422,6 @@ export class ChatMessagesScreen extends Component {
 
     reportUser(params)
       .then(async (res) => {
-        
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -448,7 +455,6 @@ export class ChatMessagesScreen extends Component {
 
     blockUser(params)
       .then(async (res) => {
-       
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {

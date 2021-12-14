@@ -51,8 +51,8 @@ class GoogleLogin extends Component {
   configureGoogleSignIn() {
     GoogleSignin.configure({
       webClientId: WEB_CLIENT_ID,
-      // androidClientId: WEB_CLIENT_ID,
-      offlineAccess: false,
+      androidClientId: WEB_CLIENT_ID,
+      offlineAccess: true,
       hostedDomain: "",
       forceConsentPrompt: true,
     });

@@ -44,8 +44,6 @@ export class ChatListScreen extends Component {
       isUserRegister: false,
       loader: false,
     };
-    // this.alert = "no";
-    // this.showAlert = this.showAlert.bind(this);
     global.ws = null;
     this.registerDeviceTimer = null;
     this.callAPI = this.callAPI.bind(this);
@@ -129,13 +127,6 @@ export class ChatListScreen extends Component {
   }
 
   onFocusFunction = async () => {
-    let getchatCount = await JSON.parse(
-      await AsyncStorage.getItem("chat_count")
-    );
-    if (getchatCount != "0") {
-      await AsyncStorage.setItem("chat_count", JSON.stringify(parseInt(0)));
-      DeviceEventEmitter.emit("ChatCountRemove");
-    }
     this._isMounted = true;
     if (globals.isInternetConnected == true) {
       this.callMessageListAPI();
@@ -143,30 +134,13 @@ export class ChatListScreen extends Component {
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
-    // var live_chatMessage =
-    //   JSON.parse(await AsyncStorage.getItem("live_chatMessage")) || {};
-    // // console.log(
-    // //   "Listing screen componentDidMount() -----> params.chatMessage :-->",
-    // //   live_chatMessage
-    // // );
-
-    // if (live_chatMessage != undefined && live_chatMessage.id != undefined) {
-    //   console.log("inSide IF NavigationService.navigate('ChatDetails') ...");
-    //   NavigationService.navigate("ChatMessages", {
-    //     user_info: live_chatMessage,
-    //   });
-    //   await AsyncStorage.removeItem("live_chatMessage");
-    // }
-
-     // DeviceEventEmitter.addListener(
-    //   "received_push_notification",
-    //   this.receivedPushNotification.bind()
-    // );
-
 
     DeviceEventEmitter.removeAllListeners("fetch_message_list");
     DeviceEventEmitter.addListener("fetch_message_list", this.callAPI.bind());
-
+    // DeviceEventEmitter.addListener(
+    //   "received_push_notification",
+    //   this.receivedPushNotification.bind()
+    // );
     AppState.addEventListener("change", this._handleAppStateChange);
   };
 
@@ -205,11 +179,12 @@ export class ChatListScreen extends Component {
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
           const { nav } = this.props;
+          // const currentScreen = this.props.navigation.state.routeName;
           let currentScreen =
             nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
           // console.log(
           //   "navigate--------------nav------",
-          //   JSON.stringify(currentScreen)
+          //   JSON.stringify(this.props.navigation)
           // );
 
           // var payload = {
@@ -383,36 +358,6 @@ export class ChatListScreen extends Component {
     );
   }
 
-  // async redirectToChatDetails(chatDetail) {
-  //   var object = JSON.parse(chatDetail);
-  //   console.log("redirectToChatDetails() :->", object);
-
-  //   const { nav } = this.props;
-  //   const currentScreen = this.props.navigation.state.routeName;
-  //   // console.log(
-  //   //   "redirectToChatDetails----------------currentScreen",
-  //   //   currentScreen
-  //   // );
-
-  //   if (currentScreen.routeName == "ChatMessages") {
-  //     await AsyncStorage.setItem("live_chatMessage", JSON.stringify(detailObj));
-  //     NavigationService.navigate("ChatMessages", { user_info: detailObj });
-  //   } else if (currentScreen.routeName == "ChatList") {
-  //     console.log("in ELSE -->", currentScreen.routeName);
-  //     {
-  //       await AsyncStorage.setItem(
-  //         "live_chatMessage",
-  //         JSON.stringify(detailObj)
-  //       );
-  //       NavigationService.navigate("ChatMessages", {
-  //         user_info: detailObj.sender_detail,
-  //       });
-  //     }
-  //   } else {
-  //     this.showAlert(title, body, detail);
-  //   }
-  // }
-
   callAPI() {
     setTimeout(() => {
       this.callMessageListAPI();
@@ -560,7 +505,8 @@ export class ChatListScreen extends Component {
             {item.name ? item.name + " " + item.surname : ""}
           </Text>
 
-          <Text numberOfLines={2}
+          <Text
+            numberOfLines={2}
             style={[
               FriendListStyle.titleSmall,
               {
