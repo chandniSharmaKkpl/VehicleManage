@@ -47,6 +47,7 @@ const InputWithIcon = ({
             ComponentStyle.passwordInputText,
             inputStyle,
             {
+              color: theme.PRIMARY_TEXT_COLOR,
               borderColor: isValidationShow ? Colors.red : Colors.white,
             },
           ]}
@@ -57,7 +58,7 @@ const InputWithIcon = ({
           keyboardType={keyboardType}
           maxLength={maxLength}
           autoCapitalize={autoCapitalize}
-          underlineColorAndroid='transparent'
+          underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={onPressIcon}>
           <View

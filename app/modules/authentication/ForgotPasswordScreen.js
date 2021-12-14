@@ -218,7 +218,12 @@ export class ForgotPasswordScreen extends Component {
                       />
                     </View>
                     <View style={AuthStyle.bottomsignin}>
-                      <Text style={AuthStyle.smallNewAppText}>
+                      <Text
+                        style={[
+                          AuthStyle.smallNewAppText,
+                          { color: theme.PRIMARY_TEXT_COLOR },
+                        ]}
+                      >
                         {StaticTitle.backTo}
                       </Text>
                       <TouchableOpacity onPress={() => this.gotoSigninscreen()}>

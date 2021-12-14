@@ -167,6 +167,8 @@ export class SignInScreen extends Component {
     var deviceToken = DeviceInfo.getDeviceToken();
     let fcmToken = await AsyncStorage.getItem("fcmToken");
     console.log(Platform.OS + " - fcmToken :->", fcmToken);
+    console.log("Device uuid and name", deviceUUID, deviceName);
+
     // var deviceToken = (await AsyncStorage.getItem("fcmToken")) || "";
     // if (deviceToken === "") {
     //   deviceToken = await firebase.messaging().getToken();
@@ -449,7 +451,12 @@ export class SignInScreen extends Component {
                       />
                     </View>
                     <View style={AuthStyle.bottomsignin}>
-                      <Text style={AuthStyle.smallNewAppText}>
+                      <Text
+                        style={[
+                          AuthStyle.smallNewAppText,
+                          { color: theme.PRIMARY_TEXT_COLOR },
+                        ]}
+                      >
                         {StaticTitle.backTo}
                       </Text>
                       <TouchableOpacity onPress={() => this.gotoLoginscreen()}>

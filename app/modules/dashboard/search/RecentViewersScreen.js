@@ -32,6 +32,7 @@ export class RecentViewersScreen extends Component {
       recentViewerListData: [],
       theme: {},
       user: {},
+      recentViewersIdList: [],
     };
   }
 
@@ -82,10 +83,27 @@ export class RecentViewersScreen extends Component {
               this.setState({
                 recentViewerListData: res.value.data.data.who_searched_you,
               });
+              for (
+                let i = 0;
+                i < res.value.data.data.who_searched_you.length;
+                i++
+              ) {
+                this.setState({
+                  recentViewersIdList: [
+                    ...this.state.recentViewersIdList,
+                    res.value.data.data.who_searched_you[i].search_id,
+                  ],
+                });
+              }
+              console.log(
+                "RecentViewersIdList",
+                this.state.recentViewersIdList
+              );
+
               this.getnotificationCount();
             }
           } else if (res.value && res.value.error == "Unauthenticated") {
-            console.log(TAG, "notification count can't fetched");
+            console.log(TAG, "notification count couldn't fetch");
             await showMessage({
               message: res.value.error,
               type: "danger",
@@ -102,6 +120,8 @@ export class RecentViewersScreen extends Component {
 
   getnotificationCount = async () => {
     const { notificationCount } = this.props;
+    // console.log("RecentViewersIdList", this.state.recentViewersIdList);
+
     notificationCount().then((res) => {
       // console.log("res----------notificationCount-", JSON.stringify(res));
       if (res.value && res.value.data.success == true) {
@@ -116,6 +136,20 @@ export class RecentViewersScreen extends Component {
         console.log(TAG, "notification count can't fetched");
       }
     });
+  };
+
+  readRecentViewers = (idList) => {
+    const { searchesRead } = this.props;
+    var params = new FormData();
+    // Collect the necessary params
+    params.append("ids", idList);
+    searchesRead(params)
+      .then(async (res) => {
+        console.log("resData after readRecentViewers", res);
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error readMessage", err);
+      });
   };
 
   // navigate to FriendDetails screen
@@ -239,6 +273,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   whosearchedyou: (params) => dispatch(actions.whosearchedyou(params)),
+  searchesRead: (params) => dispatch(actions.searchesRead(params)),
   notificationCount: (params) => dispatch(actions.notificationCount(params)),
 });
 

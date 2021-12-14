@@ -6,6 +6,7 @@ import {
   Text,
   StatusBar,
   Platform,
+  Appearance,
   SafeAreaView,
 } from "react-native";
 import Colors from "../assets/Colors";
@@ -34,6 +35,7 @@ const Header = ({
   total_count,
   ...props
 }) => {
+  const colorScheme = Appearance.getColorScheme();
   const gotoBack = async () => {
     NavigationService.back();
   };
@@ -47,12 +49,17 @@ const Header = ({
     <SafeAreaView
       style={[
         ComponentStyle.headerContainer,
-        { backgroundColor: theme.ANDROID_STATUR_BAR_COLOR },
+        {
+          backgroundColor:
+            colorScheme === "light" ? Colors.primary : Colors.darkBottomTabBar,
+        },
       ]}
     >
       <StatusBar
         barStyle="light-content"
-        backgroundColor={theme.ANDROID_STATUR_BAR_COLOR}
+        backgroundColor={
+          colorScheme === "light" ? Colors.primary : Colors.darkBottomTabBar
+        }
       />
 
       <View
@@ -117,7 +124,7 @@ const Header = ({
                 resizeMode={FastImage.resizeMode.contain}
               ></FastImage>
 
-              {total_count == "0" || total_count == null? null : (
+              {total_count == "0" || total_count == null ? null : (
                 <View style={ComponentStyle.countcircleview}>
                   <Text style={ComponentStyle.messagescountstyle}>
                     {total_count}

@@ -253,6 +253,19 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
+    case actionTypes.SEARCHES_READ_SUCCESS:
+      const data = action.payload.data.data;
+      console.log("data=====SEARCHES_READ_SUCCESS", data);
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+
     //// REQUEST_FOR_SOCIAL
     case actionTypes.REQUEST_FOR_SOCIAL_LOADING:
       return {
@@ -283,7 +296,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-       //// SOCIAL_REQUEST_LIST
+    //// SOCIAL_REQUEST_LIST
     case actionTypes.SOCIAL_REQUEST_LIST_LOADING:
       return {
         ...state,
@@ -313,7 +326,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-        //// DENY_SOCIAL_REQUEST
+    //// DENY_SOCIAL_REQUEST
     case actionTypes.DENY_SOCIAL_REQUEST_LOADING:
       return {
         ...state,
@@ -343,7 +356,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-       //// APPROVE_SOCIAL_REQUEST
+    //// APPROVE_SOCIAL_REQUEST
     case actionTypes.APPROVE_SOCIAL_REQUEST_LOADING:
       return {
         ...state,
@@ -373,7 +386,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-        //// ADD_SUBSCRIPTION
+    //// ADD_SUBSCRIPTION
     case actionTypes.ADD_SUBSCRIPTION_LOADING:
       return {
         ...state,

@@ -42,8 +42,8 @@ function makeAuthPostHeaders() {
   return headerObj;
 }
 
-function makeURLencodedPostHeaders() {
-  // console.warn("I am in makeURLencodedPostHeaders()",globals.access_token);
+function makeURLEncodedPostHeaders() {
+  // console.warn("I am in makeURLEncodedPostHeaders()",globals.access_token);
   let headerObj = {};
   const accessToken = globals.access_token;
   if (accessToken && accessToken != null) {
@@ -95,7 +95,7 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/social_profiles/approve" ||
       request.url === "api/social_profiles/deny"
     ) {
-      request.headers = makeURLencodedPostHeaders();
+      request.headers = makeURLEncodedPostHeaders();
     } else {
       request.headers = makeFormDataPostHeaders();
     }

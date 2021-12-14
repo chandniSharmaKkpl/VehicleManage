@@ -22,7 +22,6 @@ export const FriendListStyle = StyleSheet.create({
     fontSize: globals.font_14,
     color: Colors.black,
     marginBottom: globals.deviceHeight * 0.003,
-   
   },
   detailsview: {
     flexDirection: "row",
@@ -35,13 +34,12 @@ export const FriendListStyle = StyleSheet.create({
     fontSize: globals.font_12,
     color: Colors.lite_black,
     marginBottom: globals.deviceHeight * 0.003,
-    
   },
   readcount: {
     fontSize: globals.font_15,
     color: Colors.white,
     textAlign: "center",
-    alignSelf:'center',
+    alignSelf: "center",
     fontFamily: FontFamily.RalewaRegular,
   },
   separatorLine: {
@@ -58,9 +56,11 @@ export const FriendListStyle = StyleSheet.create({
     alignItems: "center",
   },
   multiimageStyle: {
-    height: globals.deviceWidth * 0.05,
-    width: globals.deviceWidth * 0.05,
-    borderRadius: (globals.deviceWidth * 0.05) / 2,
+    height: globals.deviceWidth * 0.08,
+    width: globals.deviceWidth * 0.08,
+    borderRadius: (globals.deviceWidth * 0.08) / 2,
+    borderColor: Colors.primary,
+    borderWidth: 1,
     alignItems: "center",
     position: "relative",
   },

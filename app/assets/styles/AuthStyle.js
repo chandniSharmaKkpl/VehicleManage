@@ -69,7 +69,7 @@ export const AuthStyle = StyleSheet.create({
     flex: 1,
     borderWidth: 2,
     borderRadius: 8,
-    borderColor: Colors.placeholderColor
+    borderColor: Colors.placeholderColor,
   },
   placeholder_font: {
     color: Colors.placeholderColor,
@@ -240,6 +240,7 @@ export const AuthStyle = StyleSheet.create({
 
   //////// SignUp screen
   termAndConditionView: {
+    justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
     marginTop: -3.5,
