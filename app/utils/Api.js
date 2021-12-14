@@ -123,7 +123,7 @@ axiosApi.interceptors.response.use(
         icon: "danger",
         duration: 4000,
       });
-      NavigationService.reset("Login");
+      NavigationService.navigate("Login");
       return Promise.reject(error.response);
     } else {
       return Promise.reject(error.response.data);
