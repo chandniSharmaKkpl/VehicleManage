@@ -60,7 +60,7 @@ export const FriendListStyle = StyleSheet.create({
     width: globals.deviceWidth * 0.08,
     borderRadius: (globals.deviceWidth * 0.08) / 2,
     borderColor: Colors.primary,
-    borderWidth: 1,
+    borderWidth: 2,
     alignItems: "center",
     position: "relative",
   },
@@ -96,7 +96,7 @@ export const FriendListStyle = StyleSheet.create({
   },
   userdetail: {
     marginHorizontal: 15,
-    width: "55%",
+    width: "65%",
   },
   flatliststyle: {
     marginVertical: 5,
