@@ -93,7 +93,8 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/messages/social_share_send" ||
       request.url === "social_profiles/request" ||
       request.url === "api/social_profiles/approve" ||
-      request.url === "api/social_profiles/deny"
+      request.url === "api/social_profiles/deny" ||
+      request.url === "api/add-user-subscription-details"
     ) {
       request.headers = makeURLencodedPostHeaders();
     } else {

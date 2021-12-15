@@ -134,7 +134,7 @@ android {
         applicationId "com.roadie"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
+        versionCode 7
         versionName "0.1"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'

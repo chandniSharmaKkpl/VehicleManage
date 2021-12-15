@@ -100,7 +100,7 @@ export class LoginScreen extends Component {
       fcmToken = await messaging().getToken();
       if (fcmToken) {
         // Alert.alert("Device Token", fcmToken);
-        // console.log("Device TOKEN ======>" , fcmToken);
+        console.log("Device TOKEN ======>", fcmToken);
         this.setState({ deviceToken: fcmToken });
 
         // user has a device token

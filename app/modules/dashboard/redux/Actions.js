@@ -14,7 +14,8 @@ import {
   REQUEST_FOR_SOCIAL,
   SOCIAL_REQUEST_LIST,
   DENY_SOCIAL_REQUEST,
-  APPROVE_SOCIAL_REQUEST,ADD_SUBSCRIPTION
+  APPROVE_SOCIAL_REQUEST,
+  ADD_SUBSCRIPTION,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -185,7 +186,7 @@ export const approveRequest = (params) => ({
 export const subscriptionSuccess = (params) => ({
   type: ADD_SUBSCRIPTION,
   payload: api
-    .post("android-server-notification-for-subscription", params)
+    .post("api/add-user-subscription-details", params)
     .then((res) => {
       return res;
     })
@@ -193,4 +194,3 @@ export const subscriptionSuccess = (params) => ({
       return err;
     }),
 });
-

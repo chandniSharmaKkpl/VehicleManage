@@ -22,6 +22,7 @@ import RNIap, {
   purchaseUpdatedListener,
 } from "react-native-iap";
 import NavigationService from "../../../utils/NavigationService";
+import FormData from "form-data";
 
 const TAG = "PrivacySettingsScreen ::=";
 let purchaseUpdateSubscription;
@@ -63,7 +64,7 @@ export class PrivacySettingsScreen extends Component {
     }
     const Product_sku_id =
       Platform.OS === "ios"
-        ? ["1_month_auto_subscription"]
+        ? ["1_month_auto_subscription_"]
         : ["1_month_subscription"];
 
     try {
@@ -142,53 +143,53 @@ export class PrivacySettingsScreen extends Component {
   };
 
   gotoRequestPurchase() {
+    console.warn("i am in goto request ==>");
     this.setState({ isPurchasesLoading: true });
 
     try {
       RNIap.requestPurchase(this.state.productID, true).then((res) => {
         const { subscriptionSuccess } = this.props;
-        let params;
+        var params = new FormData();
+
         if (Platform.OS === "android") {
           let saveData = JSON.parse(res.transactionReceipt);
-          params = {
-            currency: this.state.currency,
-            deviceType: Platform.OS,
-            localizedPrice: this.state.localizedPrice,
-            originalTransactionDateIOS: "",
-            originalTransactionIdentifierIOS: "",
-            productId: res.productId,
-            transactionDate: res.transactionDate,
-            transactionId: res.transactionId,
-            transactionReceipt: res.transactionReceipt,
-          };
+          params.append("currency", this.state.currency);
+          params.append("deviceType", Platform.OS);
+          params.append("localizedPrice", this.state.localizedPrice);
+          params.append("originalTransactionDateIOS", "");
+          params.append("originalTransactionIdentifierIOS", "");
+          params.append("productId", res.productId);
+          params.append("transactionDate", res.transactionDate);
+          params.append("transactionId", res.transactionId);
+          params.append("transactionReceipt", res.transactionReceipt);
         } else {
-          params = {
-            currency: this.state.currency,
-            deviceType: Platform.OS,
-            localizedPrice: this.state.localizedPrice,
-            originalTransactionDateIOS: res.originalTransactionDateIOS,
-            originalTransactionIdentifierIOS:
-              res.originalTransactionIdentifierIOS,
-            productId: res.productId,
-            transactionDate: res.transactionDate,
-            transactionId: res.transactionId,
-            transactionReceipt: res.transactionReceipt,
-          };
+          params.append("currency", this.state.currency);
+          params.append("deviceType", Platform.OS);
+          params.append("localizedPrice", this.state.localizedPrice);
+          params.append("originalTransactionDateIOS", "");
+          params.append("originalTransactionIdentifierIOS", "");
+          params.append("productId", res.productId);
+          params.append("transactionDate", res.transactionDate);
+          params.append("transactionId", res.transactionId);
+          params.append("transactionReceipt", res.transactionReceipt);
         }
+        console.warn(
+          "i am in param in ===>",
+          Platform.OS,
+          "Param list",
+          params
+        );
         subscriptionSuccess(params)
           .then(async (res) => {
-            console.log(
-              "res of subscriptions---------------------------------",
-              JSON.stringify(res)
-            );
             //OK 200 The request was fulfilled
+            console.warn("i am in subscriptionSuccess=>API", res.value);
             if (res.value.status === 200) {
               this.setState({
                 turnonsubscription_button: true,
                 isPurchasesLoading: false,
               });
               showMessage({
-                message: res.value.data.data,
+                message: res.value.message,
                 type: "success",
                 icon: "success",
                 duration: 3000,
@@ -226,7 +227,7 @@ export class PrivacySettingsScreen extends Component {
           isHideDisplayName: user.user_data.setting_6 == 1 ? true : false,
           isHideSearchUser: user.user_data.setting_7 == 1 ? true : false,
           isSubsctiptionTrue:
-            user.user_data.subscription_status == 1 ? true : false,
+            user.user_data.subscription_status === 0 ? true : false,
         });
       }
     }
@@ -552,13 +553,9 @@ export class PrivacySettingsScreen extends Component {
 
               <View style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}>
                 <PrimaryButton
-                  onPress={() =>
-                    isSubsctiptionTrue == true
-                      ? null
-                      : this.gotoRequestPurchase()
-                  }
+                  onPress={() => this.gotoRequestPurchase()}
                   btnName={
-                    isSubsctiptionTrue == true
+                    isSubsctiptionTrue
                       ? StaticTitle.subscribed
                       : StaticTitle.subscribe
                   }
