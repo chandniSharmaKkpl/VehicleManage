@@ -253,15 +253,69 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
+    //// SEARCHES_READ
+    case actionTypes.SEARCHES_READ_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
     case actionTypes.SEARCHES_READ_SUCCESS:
-      const data = action.payload.data.data;
-      console.log("data=====SEARCHES_READ_SUCCESS", data);
+      const searchesReadDataStatus = action.payload.status;
+      console.log("data=====SEARCHES_READ_SUCCESS", searchesReadDataStatus);
       return {
         home: {
           ...state.home,
           isLoading: false,
           isLoggedIn: true,
-          ...action.payload,
+          // ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SEARCHES_READ_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+    //// SOCIAL_PROFILES_READ
+    case actionTypes.SOCIAL_PROFILES_READ_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.SOCIAL_PROFILES_READ_SUCCESS:
+      const socialProfilesReadDataStatus = action.payload.status;
+      console.log(
+        "data=====SOCIAL_PROFILES_READ_SUCCESS",
+        socialProfilesReadDataStatus
+      );
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          // ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SOCIAL_PROFILES_READ_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
           loaderMessage: "Loading...",
         },
       };

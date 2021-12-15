@@ -328,7 +328,8 @@ export class NotificationScreen extends Component {
                 : this.retunNotificationList()}
 
               {messages_count == 0 ? null : this.retunChatMsgList()}
-              {request_count == 0 ? null : this.returnRequestList()}
+              {this.returnRequestList()}
+              {/* {request_count == 0 ? null : this.returnRequestList()} */}
             </>
           )}
         </View>

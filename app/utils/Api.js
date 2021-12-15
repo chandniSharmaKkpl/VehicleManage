@@ -86,6 +86,7 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/messages/details" ||
       request.url === "api/messages/insert" ||
       request.url === "api/messages/read" ||
+      // request.url === "api/notifications/searches/read" ||
       request.url === "api/block" ||
       request.url === "api/report" ||
       request.url === "api/friend_search" ||

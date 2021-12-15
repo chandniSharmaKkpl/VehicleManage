@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   Text,
+  Appearance,
   DeviceEventEmitter,
 } from "react-native";
 import moment from "moment";
@@ -22,7 +23,9 @@ import * as actions from "../redux/Actions";
 import * as globals from "../../../utils/Globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import Colors from "../../../assets/Colors";
 
+const colorScheme = Appearance.getColorScheme();
 const TAG = "RecentViewersScreen ::=";
 
 export class RecentViewersScreen extends Component {
@@ -100,6 +103,7 @@ export class RecentViewersScreen extends Component {
                 this.state.recentViewersIdList
               );
 
+              this.readRecentViewers(this.state.recentViewersIdList);
               this.getnotificationCount();
             }
           } else if (res.value && res.value.error == "Unauthenticated") {
@@ -142,13 +146,15 @@ export class RecentViewersScreen extends Component {
     const { searchesRead } = this.props;
     var params = new FormData();
     // Collect the necessary params
-    params.append("ids", idList);
+    params.append("ids", JSON.stringify(idList));
+    console.log("params in recent viewers screen ==>", JSON.stringify(params));
+
     searchesRead(params)
       .then(async (res) => {
-        console.log("resData after readRecentViewers", res);
+        console.log("resData after readRecentViewers", res.value.data);
       })
       .catch((err) => {
-        console.log(TAG, "i am in catch error readMessage", err);
+        console.log(TAG, "i am in catch error readRecentViewers", err);
       });
   };
 
@@ -197,7 +203,15 @@ export class RecentViewersScreen extends Component {
             >
               {item.updated_time ? item.updated_time : ""}
             </Text>
-            <Text style={{ marginHorizontal: 5, marginTop: -3 }}>{"|"}</Text>
+            <Text
+              style={{
+                color: colorScheme === "light" ? Colors.black : Colors.white,
+                marginHorizontal: 5,
+                marginTop: -3,
+              }}
+            >
+              {"|"}
+            </Text>
             <Text
               style={[
                 FriendListStyle.titleSmall,
@@ -223,7 +237,7 @@ export class RecentViewersScreen extends Component {
       </View>
     );
   };
-  // seprate component
+  // separate component
   separatorComponent = () => {
     return <View style={FriendListStyle.separatorLine} />;
   };
