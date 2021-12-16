@@ -232,7 +232,12 @@ export class LoginScreen extends Component {
             </View>
 
             <View style={AuthStyle.bottomContainer}>
-              <Text style={AuthStyle.smallNewAppText}>
+              <Text
+                style={[
+                  AuthStyle.smallNewAppText,
+                  { color: theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
                 {StaticTitle.newApp}
               </Text>
               <TouchableOpacity onPress={() => this.gotoSignUpscreen()}>

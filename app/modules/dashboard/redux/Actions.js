@@ -16,6 +16,8 @@ import {
   DENY_SOCIAL_REQUEST,
   APPROVE_SOCIAL_REQUEST,
   ADD_SUBSCRIPTION,
+  SEARCHES_READ,
+  SOCIAL_PROFILES_READ,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -138,6 +140,31 @@ export const whosearchedyou = () => ({
       return err;
     }),
 });
+
+export const searchesRead = (params) => ({
+  type: SEARCHES_READ,
+  payload: api
+    .post("api/notifications/searches/read", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
+export const socialProfilesRead = (params) => ({
+  type: SOCIAL_PROFILES_READ,
+  payload: api
+    .post("api/notifications/social_profiles/read", params)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    }),
+});
+
 export const requestforsocial = (params) => ({
   type: REQUEST_FOR_SOCIAL,
   payload: api

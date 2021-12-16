@@ -34,6 +34,7 @@ export class SocialRequestScreen extends Component {
     this.state = {
       requestedListData: [],
       theme: {},
+      socialProfilesIdList: [],
     };
   }
 
@@ -89,6 +90,19 @@ export class SocialRequestScreen extends Component {
             this.setState({
               requestedListData: res.value.data.data.requests,
             });
+            for (let i = 0; i < res.value.data.data.requests.length; i++) {
+              this.setState({
+                socialProfilesIdList: [
+                  ...this.state.socialProfilesIdList,
+                  res.value.data.data.requests[i].social_profile_id,
+                ],
+              });
+            }
+            console.log(
+              "socialProfilesIdList",
+              this.state.socialProfilesIdList
+            );
+            this.readSocialRequests(this.state.socialProfilesIdList);
           }
         } else if (res.value && res.value.error == "Unauthenticated") {
           await showMessage({
@@ -102,6 +116,22 @@ export class SocialRequestScreen extends Component {
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
+  };
+
+  readSocialRequests = (idList) => {
+    const { socialProfilesRead } = this.props;
+    var params = new FormData();
+    // Collect the necessary params
+    params.append("ids", JSON.stringify(idList));
+    console.log("params in social request screen ==>", JSON.stringify(params));
+
+    socialProfilesRead(params)
+      .then(async (res) => {
+        console.log("resData after readSocialRequests", res.value.data);
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error readSocialRequests", err);
+      });
   };
 
   // render renderRequestedList dataItem
@@ -299,7 +329,7 @@ export class SocialRequestScreen extends Component {
     }
   };
 
-  // seprate component
+  // separate component
   separatorComponent = () => {
     return <View style={FriendListStyle.separatorLine} />;
   };
@@ -349,6 +379,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   socialrequestlist: (params) => dispatch(actions.socialrequestlist(params)),
+  socialProfilesRead: (params) => dispatch(actions.socialProfilesRead(params)),
   denyRequest: (params) => dispatch(actions.denyRequest(params)),
   approveRequest: (params) => dispatch(actions.approveRequest(params)),
 });

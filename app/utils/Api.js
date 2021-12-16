@@ -42,8 +42,8 @@ function makeAuthPostHeaders() {
   return headerObj;
 }
 
-function makeURLencodedPostHeaders() {
-  // console.warn("I am in makeURLencodedPostHeaders()",globals.access_token);
+function makeURLEncodedPostHeaders() {
+  // console.warn("I am in makeURLEncodedPostHeaders()",globals.access_token);
   let headerObj = {};
   const accessToken = globals.access_token;
   if (accessToken && accessToken != null) {
@@ -86,6 +86,7 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/messages/details" ||
       request.url === "api/messages/insert" ||
       request.url === "api/messages/read" ||
+      // request.url === "api/notifications/searches/read" ||
       request.url === "api/block" ||
       request.url === "api/report" ||
       request.url === "api/friend_search" ||
@@ -96,7 +97,7 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/social_profiles/deny" ||
       request.url === "api/add-user-subscription-details"
     ) {
-      request.headers = makeURLencodedPostHeaders();
+      request.headers = makeURLEncodedPostHeaders();
     } else {
       request.headers = makeFormDataPostHeaders();
     }

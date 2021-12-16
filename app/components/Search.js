@@ -38,6 +38,7 @@ const Search = ({
         ComponentStyle.search_inputText,
         inputStyle,
         {
+          color: theme.PRIMARY_TEXT_COLOR,
           borderColor: Colors.white,
         },
       ]}
@@ -58,7 +59,7 @@ const Search = ({
         style={[
           ComponentStyle.search_icon,
           iconStyle,
-          { tintColor: theme.LITE_FONT_COLOR },
+          { tintColor: theme.prim },
         ]}
         source={IMAGE.search_img}
         resizeMode={FastImage.resizeMode.contain}
