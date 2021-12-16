@@ -51,13 +51,7 @@ class SnapchatIntegration extends Component {
     } else {
       SocialURL = "https://www.google.com" + name;
     }
-
-    Linking.canOpenURL(SocialURL).then((supported) => {
-      if (supported) {
-        Linking.openURL(SocialURL);
-      } else {
-      }
-    });
+    Linking.openURL(SocialURL);
   };
 
   render() {
@@ -79,7 +73,9 @@ class SnapchatIntegration extends Component {
             fontSize: globals.font_15,
             color: Colors.black,
           }}
-          onPress={() => this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)}
+          onPress={() =>
+            this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)
+          }
 
           // onPress={() => this.performSnapchatLogin()}
         />

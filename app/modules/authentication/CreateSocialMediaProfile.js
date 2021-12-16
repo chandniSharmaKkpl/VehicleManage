@@ -31,9 +31,6 @@ import * as globals from "../../utils/Globals";
 import Header from "../../components/Header";
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../../assets/Images";
-import InstagramIntegration from "../../components/InstagramIntegration";
-import FacebookIntegration from "../../components/FacebookIntegration";
-import SnapchatIntegration from "../../components/SnapchatIntegration";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { DefaultOptions } from "../../components/DefaultOptions";
 import * as actions from "./redux/Actions";
@@ -392,10 +389,6 @@ export class CreateSocialMediaProfile extends Component {
                       { marginHorizontal: globals.deviceWidth * 0.03 },
                     ]}
                   >
-                    {/* <InstagramIntegration />
-                    <FacebookIntegration />
-                    <SnapchatIntegration /> */}
-
                     <PrimaryTextinputwithIcon
                       isFrom="Instagram"
                       iconName={IMAGE.insta_icon_img}
