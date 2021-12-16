@@ -213,7 +213,7 @@ export const approveRequest = (params) => ({
 export const subscriptionSuccess = (params) => ({
   type: ADD_SUBSCRIPTION,
   payload: api
-    .post("android-server-notification-for-subscription", params)
+    .post("api/add-user-subscription-details", params)
     .then((res) => {
       return res;
     })

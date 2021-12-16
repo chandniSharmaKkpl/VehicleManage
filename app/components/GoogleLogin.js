@@ -8,7 +8,6 @@ import { StaticTitle } from "../utils/StaticTitle";
 import { WEB_CLIENT_ID } from "../config/GoogleClientId";
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { connect } from "react-redux";
@@ -51,9 +50,10 @@ class GoogleLogin extends Component {
   configureGoogleSignIn() {
     GoogleSignin.configure({
       webClientId: WEB_CLIENT_ID,
-      androidClientId: WEB_CLIENT_ID,
+      // androidClientId: WEB_CLIENT_ID,
       offlineAccess: true,
       hostedDomain: "",
+      forceConsentPrompt: true,
       forceConsentPrompt: true,
     });
   }
@@ -73,11 +73,12 @@ class GoogleLogin extends Component {
    * @function performGoogleLogin
    */
   performGoogleLogin = async (props) => {
-    await this._signOut();
+    // await this._signOut();
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(TAG, "userInfo---", userInfo);
+      // const accessToken = await GoogleSignin.getTokens();
+      console.warn("i am in user access token=>", "userInfo ===>", userInfo);
       let params = new URLSearchParams();
       // Collect the necessary params
       params.append("accessToken", userInfo.idToken);

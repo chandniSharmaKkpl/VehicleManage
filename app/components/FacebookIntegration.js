@@ -128,12 +128,7 @@ class FacebookIntegration extends Component {
       SocialURL = "https://www.google.com" + name;
     }
 
-    Linking.canOpenURL(SocialURL).then((supported) => {
-      if (supported) {
-        Linking.openURL(SocialURL);
-      } else {
-      }
-    });
+    Linking.openURL(SocialURL);
   };
 
   render() {

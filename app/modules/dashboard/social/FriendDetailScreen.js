@@ -477,14 +477,7 @@ export class FriendDetailScreen extends Component {
     } else {
       SocialURL = "https://www.google.com" + name;
     }
-
-    Linking.canOpenURL(SocialURL).then((supported) => {
-      if (supported) {
-        Linking.openURL(SocialURL);
-      } else {
-        console.log("Linking is not supported");
-      }
-    });
+    Linking.openURL(SocialURL);
   };
 
   returnRequestButton() {
@@ -518,6 +511,7 @@ export class FriendDetailScreen extends Component {
   }
 
   returnSocialIconViews = () => {
+    const { friendDetail } = this.state;
     return (
       <>
         <TouchableOpacity

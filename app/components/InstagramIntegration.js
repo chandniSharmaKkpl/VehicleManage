@@ -26,15 +26,10 @@ class InstagramIntegration extends Component {
    * Method for login with instagram
    * @function performInstaLogin
    */
-  setSuccessofLogin = (data) => {
-    console.log(TAG, "setSuccessofLogin", data);
-  };
+  setSuccessofLogin = (data) => {};
 
   // navigate Social Profiles
   navigatetoSocialProfiles = (isFrom, name) => {
-    console.log("name---Instagram--", name);
-    console.log("SocialURL-----", SocialURL);
-
     let SocialURL;
 
     if (isFrom == "Instagram") {
@@ -43,12 +38,7 @@ class InstagramIntegration extends Component {
       SocialURL = "https://www.google.com" + name;
     }
 
-    Linking.canOpenURL(SocialURL).then((supported) => {
-      if (supported) {
-        Linking.openURL(SocialURL);
-      } else {
-      }
-    });
+    Linking.openURL(SocialURL);
   };
 
   render() {
@@ -61,12 +51,13 @@ class InstagramIntegration extends Component {
           redirectUrl="https://staging.2excel.com.au/Roadie/privacy_policy"
           scopes={["user_profile", "user_media"]}
           onLoginSuccess={this.setSuccessofLogin}
-          onLoginFailure={(data) => console.log(TAG, "data=========Fail", data)}
         />
 
         <TouchableOpacity
           // onPress={() => this.instagramLogin.show()}
-          onPress={() => this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)}
+          onPress={() =>
+            this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)
+          }
         >
           <LinearGradient
             start={{ x: 0.0, y: 0.5 }}
