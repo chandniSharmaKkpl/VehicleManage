@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   Text,
+  Appearance,
   DeviceEventEmitter,
 } from "react-native";
 import moment from "moment";
@@ -22,7 +23,9 @@ import * as actions from "../redux/Actions";
 import * as globals from "../../../utils/Globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import Colors from "../../../assets/Colors";
 
+const colorScheme = Appearance.getColorScheme();
 const TAG = "RecentViewersScreen ::=";
 
 export class RecentViewersScreen extends Component {
@@ -32,6 +35,7 @@ export class RecentViewersScreen extends Component {
       recentViewerListData: [],
       theme: {},
       user: {},
+      recentViewersIdList: [],
     };
   }
 
@@ -82,10 +86,28 @@ export class RecentViewersScreen extends Component {
               this.setState({
                 recentViewerListData: res.value.data.data.who_searched_you,
               });
+              for (
+                let i = 0;
+                i < res.value.data.data.who_searched_you.length;
+                i++
+              ) {
+                this.setState({
+                  recentViewersIdList: [
+                    ...this.state.recentViewersIdList,
+                    res.value.data.data.who_searched_you[i].search_id,
+                  ],
+                });
+              }
+              console.log(
+                "RecentViewersIdList",
+                this.state.recentViewersIdList
+              );
+
+              this.readRecentViewers(this.state.recentViewersIdList);
               this.getnotificationCount();
             }
           } else if (res.value && res.value.error == "Unauthenticated") {
-            console.log(TAG, "notification count can't fetched");
+            console.log(TAG, "notification count couldn't fetch");
             await showMessage({
               message: res.value.error,
               type: "danger",
@@ -102,6 +124,8 @@ export class RecentViewersScreen extends Component {
 
   getnotificationCount = async () => {
     const { notificationCount } = this.props;
+    // console.log("RecentViewersIdList", this.state.recentViewersIdList);
+
     notificationCount().then((res) => {
       // console.log("res----------notificationCount-", JSON.stringify(res));
       if (res.value && res.value.data.success == true) {
@@ -116,6 +140,22 @@ export class RecentViewersScreen extends Component {
         console.log(TAG, "notification count can't fetched");
       }
     });
+  };
+
+  readRecentViewers = (idList) => {
+    const { searchesRead } = this.props;
+    var params = new FormData();
+    // Collect the necessary params
+    params.append("ids", JSON.stringify(idList));
+    console.log("params in recent viewers screen ==>", JSON.stringify(params));
+
+    searchesRead(params)
+      .then(async (res) => {
+        console.log("resData after readRecentViewers", res.value.data);
+      })
+      .catch((err) => {
+        console.log(TAG, "i am in catch error readRecentViewers", err);
+      });
   };
 
   // navigate to FriendDetails screen
@@ -163,7 +203,15 @@ export class RecentViewersScreen extends Component {
             >
               {item.updated_time ? item.updated_time : ""}
             </Text>
-            <Text style={{ marginHorizontal: 5, marginTop: -3 }}>{"|"}</Text>
+            <Text
+              style={{
+                color: colorScheme === "light" ? Colors.black : Colors.white,
+                marginHorizontal: 5,
+                marginTop: -3,
+              }}
+            >
+              {"|"}
+            </Text>
             <Text
               style={[
                 FriendListStyle.titleSmall,
@@ -189,7 +237,7 @@ export class RecentViewersScreen extends Component {
       </View>
     );
   };
-  // seprate component
+  // separate component
   separatorComponent = () => {
     return <View style={FriendListStyle.separatorLine} />;
   };
@@ -239,6 +287,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   whosearchedyou: (params) => dispatch(actions.whosearchedyou(params)),
+  searchesRead: (params) => dispatch(actions.searchesRead(params)),
   notificationCount: (params) => dispatch(actions.notificationCount(params)),
 });
 

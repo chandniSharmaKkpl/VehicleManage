@@ -32,7 +32,10 @@ const PasswordInput = ({
           value={value}
           style={[
             ComponentStyle.passwordInputText,
-            { borderColor: isValidationShow ? Colors.red : Colors.white },
+            {
+              color: theme.PRIMARY_TEXT_COLOR,
+              borderColor: isValidationShow ? Colors.red : Colors.white,
+            },
           ]}
           placeholderTextColor={theme.BASIC_FONT_COLOR}
           ref={forwardRef}
@@ -60,7 +63,7 @@ const PasswordInput = ({
               <Icon
                 name={isVisible ? "eye-slash" : "eye"}
                 size={18}
-                color={isVisible ? Colors.placeholderColor : Colors.black}
+                color={Colors.placeholderColor}
               />
             </View>
           </View>

@@ -625,7 +625,7 @@ export class SignUpScreen extends Component {
                       }
                     />
                     <InputWithIcon
-                    theme={theme}
+                      theme={theme}
                       onPressIcon={() => this.showDatePicker()}
                       value={this.state.txtDob}
                       placeholderText={StaticTitle.enterDOB}
@@ -663,7 +663,12 @@ export class SignUpScreen extends Component {
                     />
 
                     <View style={AuthStyle.signinbtnView}>
-                      <Text style={[AuthStyle.smallNewAppText, {}]}>
+                      <Text
+                        style={[
+                          AuthStyle.smallNewAppText,
+                          { color: theme.PRIMARY_TEXT_COLOR },
+                        ]}
+                      >
                         {StaticTitle.termAndConditionText}
                         <TouchableOpacity
                           onPress={() => this.handletermconditionClick()}
@@ -682,7 +687,10 @@ export class SignUpScreen extends Component {
 
                       <Text
                         numberOfLines={2}
-                        style={[AuthStyle.smallNewAppText]}
+                        style={[
+                          AuthStyle.smallNewAppText,
+                          { color: theme.PRIMARY_TEXT_COLOR },
+                        ]}
                       >
                         {StaticTitle.termAndConditionLast}
                       </Text>
@@ -696,7 +704,12 @@ export class SignUpScreen extends Component {
                     </View>
 
                     <View style={AuthStyle.bottomsignin}>
-                      <Text style={AuthStyle.smallNewAppText}>
+                      <Text
+                        style={[
+                          AuthStyle.smallNewAppText,
+                          { color: theme.PRIMARY_TEXT_COLOR },
+                        ]}
+                      >
                         {StaticTitle.alreadyHaveAccount}
                       </Text>
                       <TouchableOpacity onPress={() => this.gotoSigninscreen()}>

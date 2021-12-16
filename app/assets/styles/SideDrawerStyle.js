@@ -1,7 +1,9 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Appearance, Platform } from "react-native";
 import Colors from "../Colors";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
+
+const colorScheme = Appearance.getColorScheme();
 
 export const SideDrawerStyle = StyleSheet.create({
   container: {
@@ -20,8 +22,9 @@ export const SideDrawerStyle = StyleSheet.create({
     height: globals.deviceHeight * 0.0015,
   },
   headerSeprate: {
-    height: globals.deviceHeight * 0.09,
-    backgroundColor: Colors.primary,
+    height: globals.deviceHeight * 0.1,
+    backgroundColor:
+      colorScheme === "light" ? Colors.primary : Colors.darkBottomTabBar,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -38,6 +41,8 @@ export const SideDrawerStyle = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50 / 2,
+    borderColor: Colors.primary,
+    borderWidth: 1,
   },
   usernametext: {
     fontFamily: FontFamily.RalewayBold,
@@ -47,7 +52,7 @@ export const SideDrawerStyle = StyleSheet.create({
   },
   drawerSaperator: {
     width: "100%",
-    height: globals.deviceHeight*0.000,
+    height: globals.deviceHeight * 0.0,
     backgroundColor: Colors.primary,
   },
   dashBoardTextStyle: {
@@ -57,7 +62,7 @@ export const SideDrawerStyle = StyleSheet.create({
     fontFamily: FontFamily.RalewayBold,
   },
   dashboardBottomView: {
-    height: globals.deviceHeight * 0.065,
+    height: globals.deviceHeight * 0.07,
     paddingLeft: 10,
     alignItems: "center",
     flexDirection: "row",

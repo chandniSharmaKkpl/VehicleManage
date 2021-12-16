@@ -38,6 +38,7 @@ const Input = ({
           ComponentStyle.inputText,
           inputStyle,
           {
+            color: theme.PRIMARY_TEXT_COLOR,
             borderColor: isValidationShow ? Colors.red : Colors.white,
           },
         ]}

@@ -482,6 +482,7 @@ export class FriendDetailScreen extends Component {
       if (supported) {
         Linking.openURL(SocialURL);
       } else {
+        console.log("Linking is not supported");
       }
     });
   };

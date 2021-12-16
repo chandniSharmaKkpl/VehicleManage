@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { Image, View, Text, Platform, SafeAreaView } from "react-native";
+import {
+  Image,
+  View,
+  Text,
+  Platform,
+  Appearance,
+  SafeAreaView,
+  AppState,
+} from "react-native";
 import {
   TransitionPresets,
   createStackNavigator,
@@ -21,7 +29,9 @@ import RecentViewersScreen from "../modules/dashboard/search/RecentViewersScreen
 import ChatMessagesScreen from "../modules/dashboard/chat/ChatMessagesScreen";
 import RegistrationDetailsScreen from "..//modules/authentication/RegistrationDetailsScreen";
 import ShareSocialsScreen from "..//modules/dashboard/chat/ShareSocialsScreen";
-import SocialRequestScreen from '..//modules/dashboard/search/SocialRequestScreen';
+import SocialRequestScreen from "..//modules/dashboard/search/SocialRequestScreen";
+
+const colorScheme = Appearance.getColorScheme();
 
 const SearchStack = createStackNavigator(
   {
@@ -37,8 +47,8 @@ const SearchStack = createStackNavigator(
     FriendDetail: {
       screen: FriendDetailScreen,
     },
-    SocialRequest:{
-      screen:SocialRequestScreen,
+    SocialRequest: {
+      screen: SocialRequestScreen,
     },
     ChatList: {
       screen: ChatListScreen,
@@ -46,9 +56,9 @@ const SearchStack = createStackNavigator(
     ChatMessages: {
       screen: ChatMessagesScreen,
     },
-    ShareSocials:{
-      screen:ShareSocialsScreen
-    }
+    ShareSocials: {
+      screen: ShareSocialsScreen,
+    },
   },
   {
     headerMode: "none",
@@ -75,9 +85,9 @@ const SocialStack = createStackNavigator(
     ChatMessages: {
       screen: ChatMessagesScreen,
     },
-    ShareSocials:{
-      screen:ShareSocialsScreen
-    }
+    ShareSocials: {
+      screen: ShareSocialsScreen,
+    },
   },
   {
     headerMode: "none",
@@ -98,9 +108,9 @@ const ChatStack = createStackNavigator(
     ChatMessages: {
       screen: ChatMessagesScreen,
     },
-    ShareSocials:{
-      screen:ShareSocialsScreen
-    }
+    ShareSocials: {
+      screen: ShareSocialsScreen,
+    },
   },
   {
     headerMode: "none",
@@ -215,8 +225,9 @@ const TabNavigator = createBottomTabNavigator(
 
       tabBarOptions: {
         style: {
-          backgroundColor: Colors.primary,
-          height: 50,
+          backgroundColor:
+            colorScheme === "light" ? Colors.primary : Colors.darkBottomTabBar,
+          height: 60,
         },
       },
     }),

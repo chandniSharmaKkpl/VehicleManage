@@ -253,6 +253,73 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
+    //// SEARCHES_READ
+    case actionTypes.SEARCHES_READ_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.SEARCHES_READ_SUCCESS:
+      const searchesReadDataStatus = action.payload.status;
+      console.log("data=====SEARCHES_READ_SUCCESS", searchesReadDataStatus);
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          // ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SEARCHES_READ_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
+    //// SOCIAL_PROFILES_READ
+    case actionTypes.SOCIAL_PROFILES_READ_LOADING:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: true,
+          loaderMessage: "Please wait...",
+        },
+      };
+    case actionTypes.SOCIAL_PROFILES_READ_SUCCESS:
+      const socialProfilesReadDataStatus = action.payload.status;
+      console.log(
+        "data=====SOCIAL_PROFILES_READ_SUCCESS",
+        socialProfilesReadDataStatus
+      );
+      return {
+        home: {
+          ...state.home,
+          isLoading: false,
+          isLoggedIn: true,
+          // ...action.payload,
+          loaderMessage: "Loading...",
+        },
+      };
+    case actionTypes.SOCIAL_PROFILES_READ_ERROR:
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          isLoading: false,
+          loaderMessage: "Loading...",
+        },
+      };
+
     //// REQUEST_FOR_SOCIAL
     case actionTypes.REQUEST_FOR_SOCIAL_LOADING:
       return {
@@ -283,7 +350,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-       //// SOCIAL_REQUEST_LIST
+    //// SOCIAL_REQUEST_LIST
     case actionTypes.SOCIAL_REQUEST_LIST_LOADING:
       return {
         ...state,
@@ -313,7 +380,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-        //// DENY_SOCIAL_REQUEST
+    //// DENY_SOCIAL_REQUEST
     case actionTypes.DENY_SOCIAL_REQUEST_LOADING:
       return {
         ...state,
@@ -343,7 +410,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-       //// APPROVE_SOCIAL_REQUEST
+    //// APPROVE_SOCIAL_REQUEST
     case actionTypes.APPROVE_SOCIAL_REQUEST_LOADING:
       return {
         ...state,
@@ -373,7 +440,7 @@ const homeReducer = (state = initialState, action) => {
         },
       };
 
-        //// ADD_SUBSCRIPTION
+    //// ADD_SUBSCRIPTION
     case actionTypes.ADD_SUBSCRIPTION_LOADING:
       return {
         ...state,

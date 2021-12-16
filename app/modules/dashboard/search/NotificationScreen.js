@@ -128,41 +128,11 @@ export class NotificationScreen extends Component {
                   source={{
                     uri: this.state.searched_avatars[i],
                   }}
-                  style={FriendListStyle.multiimageStyle}
-                />
-              ) : (
-                <FastImage
-                  resizeMethod="resize"
-                  source={IMAGE.user}
-                  style={FriendListStyle.multiimageStyle}
-                />
-              )}
-              {this.state.searched_avatars[i] ? (
-                <FastImage
-                  resizeMethod="resize"
-                  source={{
-                    uri: this.state.searched_avatars[i],
-                  }}
-                  style={[FriendListStyle.multiimageStyle, { left: 15 }]}
-                />
-              ) : (
-                <FastImage
-                  resizeMethod="resize"
-                  source={IMAGE.user}
-                  style={[FriendListStyle.multiimageStyle, { left: 15 }]}
-                />
-              )}
-              {this.state.searched_avatars[i] ? (
-                <FastImage
-                  resizeMethod="resize"
-                  source={{
-                    uri: this.state.searched_avatars[i],
-                  }}
                   style={[
                     FriendListStyle.multiimageStyle,
                     {
-                      right: 10,
-                      bottom: 20,
+                      top: 20,
+                      right: 15,
                     },
                   ]}
                 />
@@ -173,8 +143,60 @@ export class NotificationScreen extends Component {
                   style={[
                     FriendListStyle.multiimageStyle,
                     {
-                      right: 10,
-                      bottom: 20,
+                      top: 20,
+                      right: 15,
+                    },
+                  ]}
+                />
+              )}
+              {this.state.searched_avatars[i] ? (
+                <FastImage
+                  resizeMethod="resize"
+                  source={{
+                    uri: this.state.searched_avatars[i],
+                  }}
+                  style={[
+                    FriendListStyle.multiimageStyle,
+                    {
+                      bottom: 25,
+                    },
+                  ]}
+                />
+              ) : (
+                <FastImage
+                  resizeMethod="resize"
+                  source={IMAGE.user}
+                  style={[
+                    FriendListStyle.multiimageStyle,
+                    {
+                      bottom: 25,
+                    },
+                  ]}
+                />
+              )}
+              {this.state.searched_avatars[i] ? (
+                <FastImage
+                  resizeMethod="resize"
+                  source={{
+                    uri: this.state.searched_avatars[i],
+                  }}
+                  style={[
+                    FriendListStyle.multiimageStyle,
+                    {
+                      left: 5,
+                      bottom: 35,
+                    },
+                  ]}
+                />
+              ) : (
+                <FastImage
+                  resizeMethod="resize"
+                  source={IMAGE.user}
+                  style={[
+                    FriendListStyle.multiimageStyle,
+                    {
+                      left: 5,
+                      bottom: 35,
                     },
                   ]}
                 />
@@ -228,7 +250,7 @@ export class NotificationScreen extends Component {
             { color: this.props.theme.LITE_FONT_COLOR },
           ]}
         >
-          {"You have new messages"}
+          {`You have ${this.state.messages_count} new messages!`}
         </Text>
       </TouchableWithoutFeedback>
     );
@@ -263,7 +285,7 @@ export class NotificationScreen extends Component {
             { color: this.props.theme.LITE_FONT_COLOR },
           ]}
         >
-          {"You have requests"}
+          {`You have ${this.state.request_count} requests!`}
         </Text>
       </TouchableWithoutFeedback>
     );
@@ -306,7 +328,8 @@ export class NotificationScreen extends Component {
                 : this.retunNotificationList()}
 
               {messages_count == 0 ? null : this.retunChatMsgList()}
-              {request_count == 0 ? null : this.returnRequestList()}
+              {this.returnRequestList()}
+              {/* {request_count == 0 ? null : this.returnRequestList()} */}
             </>
           )}
         </View>
