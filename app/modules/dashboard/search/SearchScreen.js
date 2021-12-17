@@ -137,7 +137,7 @@ export class SearchScreen extends Component {
   getnotificationCount = async () => {
     const { notificationCount } = this.props;
     notificationCount().then((res) => {
-      // console.log("res----------notificationCount-", JSON.stringify(res));
+      console.warn("res----------notificationCount-", JSON.stringify(res));
       if (res.value && res.value.data.success == true) {
         if (res.value && res.value.status === 200) {
           this.setNotificationCounts(res.value.data.data);

@@ -23,7 +23,7 @@ import RNIap, {
 } from "react-native-iap";
 import NavigationService from "../../../utils/NavigationService";
 import FormData from "form-data";
-
+import { renderIf } from "../../../utils/Globals";
 const TAG = "PrivacySettingsScreen ::=";
 let purchaseUpdateSubscription;
 let purchaseErrorSubscription;
@@ -182,11 +182,11 @@ export class PrivacySettingsScreen extends Component {
         subscriptionSuccess(params)
           .then(async (res) => {
             //OK 200 The request was fulfilled
-            console.warn("i am in subscriptionSuccess=>API", res.value);
             if (res.value.status === 200) {
               this.setState({
                 turnonsubscription_button: true,
                 isPurchasesLoading: false,
+                isSubsctiptionTrue: false,
               });
               showMessage({
                 message: res.value.message,
@@ -216,7 +216,7 @@ export class PrivacySettingsScreen extends Component {
   // set userInformation
   setUserInfo = async (user) => {
     if (this._isMounted) {
-      if (user && user.user_data) {
+      if (user) {
         this.setState({
           user: user.user_data,
           isHideProfile: user.user_data.setting_1 == 1 ? true : false,
@@ -531,37 +531,48 @@ export class PrivacySettingsScreen extends Component {
               >
                 {StaticTitle.premiumsetting}
               </Text>
-              <View style={PrivacySettingStyle.separatorLine}></View>
-              <View style={PrivacySettingStyle.itemview}>
-                <Text
-                  style={[
-                    PrivacySettingStyle.itemtext,
-                    { color: theme.DESCRIPTION_TEXT_COLOR },
-                  ]}
-                >
-                  {currentplan}
-                </Text>
-                <Text
-                  style={[
-                    PrivacySettingStyle.itemtext,
-                    { color: theme.DESCRIPTION_TEXT_COLOR },
-                  ]}
-                >
-                  {localizedPrice}
-                </Text>
-              </View>
+              {renderIf(
+                this.state.isSubsctiptionTrue,
+                <View>
+                  <View style={PrivacySettingStyle.separatorLine}></View>
 
-              <View style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}>
-                <PrimaryButton
-                  onPress={() => this.gotoRequestPurchase()}
-                  btnName={
-                    isSubsctiptionTrue
-                      ? StaticTitle.subscribed
-                      : StaticTitle.subscribe
-                  }
-                />
-              </View>
+                  <View style={PrivacySettingStyle.itemview}>
+                    <Text
+                      style={[
+                        PrivacySettingStyle.itemtext,
+                        { color: theme.DESCRIPTION_TEXT_COLOR },
+                      ]}
+                    >
+                      {currentplan}
+                    </Text>
+                    <Text
+                      style={[
+                        PrivacySettingStyle.itemtext,
+                        { color: theme.DESCRIPTION_TEXT_COLOR },
+                      ]}
+                    >
+                      {localizedPrice}
+                    </Text>
+                  </View>
 
+                  <View
+                    style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
+                  >
+                    <PrimaryButton
+                      onPress={() => this.gotoRequestPurchase()}
+                      btnName={StaticTitle.subscribe}
+                    />
+                  </View>
+                </View>
+              )}
+              {renderIf(
+                !this.state.isSubsctiptionTrue,
+                <View
+                  style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
+                >
+                  <PrimaryButton btnName={StaticTitle.subscribed} />
+                </View>
+              )}
               <View style={PrivacySettingStyle.itemview}>
                 <Text
                   style={[

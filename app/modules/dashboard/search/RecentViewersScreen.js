@@ -124,20 +124,9 @@ export class RecentViewersScreen extends Component {
 
   getnotificationCount = async () => {
     const { notificationCount } = this.props;
-    // console.log("RecentViewersIdList", this.state.recentViewersIdList);
-
     notificationCount().then((res) => {
-      // console.log("res----------notificationCount-", JSON.stringify(res));
-      if (res.value && res.value.data.success == true) {
-        if (res.value && res.value.status === 200) {
-        }
-      } else {
-        if (res.value && res.value.data.error == "Unauthenticated.") {
-          {
-            NavigationService.navigate("Login");
-          }
-        }
-        console.log(TAG, "notification count can't fetched");
+      if (res.value.status === 200) {
+        console.warn("i am in res.val====>", res.value.data);
       }
     });
   };

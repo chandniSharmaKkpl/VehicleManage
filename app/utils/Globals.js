@@ -1,4 +1,4 @@
-import { Dimensions,PixelRatio, StatusBar, Platform } from "react-native";
+import { Dimensions, PixelRatio, StatusBar, Platform } from "react-native";
 import DeviceInfo from "react-native-device-info";
 
 // Find the deviceWidth & deviceHeight
@@ -11,21 +11,22 @@ export const timeoutDuration = 30000;
 export const appName = "Roadie";
 export const isInternetConnected = true;
 export const isDarkMode = "";
-export const isRegistrationDeatils=false;
+export const isRegistrationDeatils = false;
 export let isTablat = iPad.indexOf("iPad") != -1 || DeviceInfo.isTablet();
 export const warning = "Warning!";
-export const noInternet ="This Application Require Network Connection!";
-export const onlyoneDevice ="This Application works on one device only please try again with login"
-export const subscriptionrequired ="Premium Settings required subscription plan"
-
+export const noInternet = "This Application Require Network Connection!";
+export const onlyoneDevice =
+  "This Application works on one device only please try again with login";
+export const subscriptionrequired =
+  "Premium Settings required subscription plan";
 
 const scale = deviceWidth / 320;
 export function normalize(size) {
-  const newSize = size * scale
-  if (Platform.OS === 'ios') {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+  const newSize = size * scale;
+  if (Platform.OS === "ios") {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
   } else {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
 }
 
@@ -38,8 +39,8 @@ export const THEME_MODE = {
 // CHAT_MESSAGE_TYPE
 export const CHAT_MESSAGE_TYPE = {
   CLASS: "class",
-  ROADIE: "roadie"
-}
+  ROADIE: "roadie",
+};
 
 // Check the return custom condition
 export function renderIf(condition, component) {

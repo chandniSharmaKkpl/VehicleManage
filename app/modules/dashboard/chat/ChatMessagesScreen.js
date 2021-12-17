@@ -167,13 +167,9 @@ export class ChatMessagesScreen extends Component {
     params.append("to_id", to_id);
     messagesDetails(params)
       .then(async (res) => {
+        //OK 200 The request was fulfilled
+
         if (res.value && res.value.data.success == true) {
-          //OK 200 The request was fulfilled
-
-          // this.setState({
-          //   messages: res.value.data.data,
-          // });
-
           if (this.state.messages.length > 0) {
             // if local state variable already have messages and anyone receive new message then no need to update local state
             // Only update Read flag api
