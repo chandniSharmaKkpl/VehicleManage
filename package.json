@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.4",
+    "@react-native-community/cookies": "^5.0.1",
     "@react-native-community/datetimepicker": "^3.0.9",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/netinfo": "^6.0.0",
@@ -53,7 +54,7 @@
     "react-native-snapchat-login": "^1.1.1",
     "react-native-splash-screen": "^3.2.0",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-webview": "^11.6.5",
+    "react-native-webview": "11.6.5",
     "react-navigation": "^4.4.4",
     "react-navigation-drawer": "^2.7.1",
     "react-navigation-material-bottom-tabs": "^2.3.4",

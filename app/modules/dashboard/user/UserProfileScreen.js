@@ -95,6 +95,8 @@ export class UserProfileScreen extends Component {
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
+    console.log("userDetails", this.props.userDetails);
+
     this.onFocusFunction();
     DeviceEventEmitter.addListener("initializeApp", () => {
       this.getUserData();
@@ -130,6 +132,17 @@ export class UserProfileScreen extends Component {
   setUserInfo = async (user) => {
     if (this._isMounted) {
       if (user && user.user_data) {
+        if (user.user_data.instagram_username !== "") {
+          var instagramDetails =
+            user.user_data.instagram_username.split(".com/");
+        }
+        if (user.user_data.fb_username !== "") {
+          var facebookDetails = user.user_data.fb_username.split(".com/");
+        }
+        if (user.user_data.snapchat_username !== "") {
+          var snapchatDetails = user.user_data.snapchat_username.split("add/");
+        }
+
         this.setState({
           user: user.user_data,
           selectedCity: user.user_data.city,
@@ -139,9 +152,9 @@ export class UserProfileScreen extends Component {
           txtusernameInstedofname: user.user_data.username,
           txtDescription: user.user_data.car_description,
           photoUrl: user.user_data.avatar,
-          txtSnapName: user.user_data.snapchat_username,
-          txtInstaName: user.user_data.instagram_username,
-          txtFbName: user.user_data.fb_username,
+          txtSnapName: snapchatDetails ? snapchatDetails[1] : "",
+          txtInstaName: instagramDetails ? instagramDetails[1] : "",
+          txtFbName: facebookDetails ? facebookDetails[1] : "",
         });
       }
     }
@@ -408,6 +421,7 @@ export class UserProfileScreen extends Component {
 
     if (globals.isInternetConnected == true) {
       console.log("params======", JSON.stringify(params));
+
       updateprofile(params)
         .then(async (res) => {
           // console.log(
@@ -427,7 +441,10 @@ export class UserProfileScreen extends Component {
               sideDrawer.updateUserInfo({
                 userData: res.value.data.data.user_data,
               });
+              console.log("res value data", res.value.data.data);
+
               this.getUserData();
+              this.setUserInfo(res.value.data.data);
             } else {
             }
           } else {
@@ -759,7 +776,13 @@ export class UserProfileScreen extends Component {
                       URL={
                         user.instagram_username
                           ? user.instagram_username
-                          : "https://www.google.com"
+                          : "https://www.instagram.com"
+                      }
+                      value={this.state.txtInstaName}
+                      onChangeText={(text) =>
+                        this.setState({
+                          txtInstaName: text,
+                        })
                       }
                     />
                     <FacebookIntegration
@@ -767,7 +790,13 @@ export class UserProfileScreen extends Component {
                       URL={
                         user.fb_username
                           ? user.fb_username
-                          : "https://www.google.com"
+                          : "https://www.facebook.com"
+                      }
+                      value={this.state.txtFbName}
+                      onChangeText={(text) =>
+                        this.setState({
+                          txtFbName: text,
+                        })
                       }
                     />
                     <SnapchatIntegration
@@ -775,7 +804,13 @@ export class UserProfileScreen extends Component {
                       URL={
                         user.snapchat_username
                           ? user.snapchat_username
-                          : "https://www.google.com"
+                          : "https://www.snapchat.com"
+                      }
+                      value={this.state.txtSnapName}
+                      onChangeText={(text) =>
+                        this.setState({
+                          txtSnapName: text,
+                        })
                       }
                     />
                   </>
