@@ -1,13 +1,21 @@
 import React, { Component } from "react";
+import {
+  Text,
+  Linking,
+  TouchableOpacity,
+  TextInput,
+  View,
+  Alert,
+} from "react-native";
 import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
 import { StaticTitle } from "../utils/StaticTitle";
-import { Alert } from "react-native";
 import { IMAGE } from "../assets/Images";
+import FastImage from "react-native-fast-image";
 import Colors from "../assets/Colors";
 import FontFamily from "../assets/styles/FontFamily";
 import * as globals from "../utils/Globals";
 import SnapchatLogin from "react-native-snapchat-login";
-import { Linking } from "react-native";
+import { ComponentStyle } from "../assets/styles/ComponentStyle";
 
 const TAG = "SnapchatIntegration ::=";
 
@@ -26,21 +34,21 @@ class SnapchatIntegration extends Component {
    * Method for login with Snapchat
    * @function SnapchatIntegration
    */
-  performSnapchatLogin = () => {
-    SnapchatLogin.login().then((r2) => {
-      console.log("login");
-      console.log(r2);
-      Alert.alert("login:", r2);
-    });
-  };
+  // performSnapchatLogin = () => {
+  //   SnapchatLogin.login().then((r2) => {
+  //     console.log("login");
+  //     console.log(r2);
+  //     Alert.alert("login:", r2);
+  //   });
+  // };
 
-  performSnapchatGetInfo = () => {
-    SnapchatLogin.getUserInfo().then((value) => {
-      console.log("getUserInfo");
-      console.log(value);
-      Alert.alert("getUserInfo:", value);
-    });
-  };
+  // performSnapchatGetInfo = () => {
+  //   SnapchatLogin.getUserInfo().then((value) => {
+  //     console.log("getUserInfo");
+  //     console.log(value);
+  //     Alert.alert("getUserInfo:", value);
+  //   });
+  // };
 
   // navigate Social Profiles
   navigatetoSocialProfiles = (isFrom, name) => {
@@ -51,13 +59,15 @@ class SnapchatIntegration extends Component {
     } else {
       SocialURL = "https://www.google.com" + name;
     }
+    console.log("Social URL", SocialURL);
+
     Linking.openURL(SocialURL);
   };
 
   render() {
     return (
-      <>
-        <PrimaryButtonwithIcon
+      <View style={ComponentStyle.primaryInputView}>
+        {/* <PrimaryButtonwithIcon
           iconName={IMAGE.snap_img}
           logoStyle={{
             width: 25,
@@ -76,28 +86,32 @@ class SnapchatIntegration extends Component {
           onPress={() =>
             this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)
           }
-
-          // onPress={() => this.performSnapchatLogin()}
-        />
-        {/* <PrimaryButtonwithIcon
-          iconName={IMAGE.snap_img}
-          logoStyle={{
-            width: 25,
-            height: 25,
-            marginLeft: 20,
-            marginRight: 24,
-            marginVertical: 10,
-          }}
-          buttonStyle={{ backgroundColor: Colors.snapChat }}
-          btnName={StaticTitle.linksnap}
-          buttonTextStyle={{
-            fontFamily: FontFamily.RalewaRegular,
-            fontSize: globals.font_15,
-            color: Colors.black,
-          }}
-          onPress={() => this.performSnapchatGetInfo()}
         /> */}
-      </>
+        <TouchableOpacity
+          // onPress={() => this.instagramLogin.show()}
+          onPress={() =>
+            this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)
+          }
+          style={ComponentStyle.snapIconContainerView}
+        >
+          <FastImage
+            style={[ComponentStyle.instaiconstyle]}
+            source={IMAGE.snap_img}
+            resizeMode={FastImage.resizeMode.contain}
+          />
+        </TouchableOpacity>
+        <View style={ComponentStyle.snapInputContainerView}>
+          <TextInput
+            style={ComponentStyle.snapButtonText}
+            placeholder={"Enter Snapchat Username"}
+            placeholderTextColor={Colors.black}
+            value={this.props.value}
+            onChangeText={this.props.onChangeText}
+            autoCapitalize="none"
+            autoCompleteType="username"
+          />
+        </View>
+      </View>
     );
   }
 }
