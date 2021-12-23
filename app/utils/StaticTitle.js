@@ -51,7 +51,7 @@ const StaticTitle = {
   rego: "REGO",
   sa: "SA",
   linkwithinsta: "Link with Instagram",
-  enterSnapName: "Enter Sanpchat Username",
+  enterSnapName: "Enter Snapchat Username",
   enterinstname: "Enter Instagram Username",
   enterfbname: "Enter Facebook Username",
   captureimgfromCamera: "Capture Image from Camera",
