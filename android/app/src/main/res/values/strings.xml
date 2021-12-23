@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Roadie</string>
     <string name="facebook_app_id">1121539361675701</string>
+    <string name="facebook_client_token">affbf1e3cc738dea4875d54091224cf4</string>
 </resources>

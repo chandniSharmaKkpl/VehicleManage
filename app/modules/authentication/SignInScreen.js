@@ -29,9 +29,8 @@ import { IMAGE } from "../../assets/Images";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import DeviceInfo from "react-native-device-info";
-import messaging, { firebase } from "@react-native-firebase/messaging";
 
 const TAG = "SignInScreen ::=";
 

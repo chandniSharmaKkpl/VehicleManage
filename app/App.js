@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StatusBar, Platform, LogBox, TextInput, Text, Alert } from "react-native";
+import { StatusBar, Platform, LogBox, TextInput, Text } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import AppNavigator from "./store/AppNavigation";
@@ -7,11 +7,7 @@ import FlashMessage from "react-native-flash-message";
 import NetInfo from "@react-native-community/netinfo";
 import * as globals from "./utils/Globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  Appearance,
-  AppearanceProvider,
-  useColorScheme,
-} from "react-native-appearance";
+import { Appearance, AppearanceProvider } from "react-native-appearance";
 import messaging, { firebase } from "@react-native-firebase/messaging";
 
 let subscription;
@@ -24,8 +20,6 @@ export class App extends Component {
     TextInput.defaultProps.allowFontScaling = false;
     super(props);
   }
-
-
 
   async componentDidMount() {
     this.checkPermission();

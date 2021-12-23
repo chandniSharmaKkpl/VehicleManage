@@ -31,9 +31,9 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-         <meta-data android:name="com.facebook.sdk.ApplicationId"
-        android:value="@string/facebook_app_id"/>
-         <meta-data android:name="com.snapchat.kit.sdk.clientId" android:value="df42b7d8-156f-41f8-bb9c-098574ea1ec4" />
+      <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+      <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+      <meta-data android:name="com.snapchat.kit.sdk.clientId" android:value="df42b7d8-156f-41f8-bb9c-098574ea1ec4" />
       <meta-data android:name="com.snapchat.kit.sdk.redirectUrl" android:value="example://snap-kit/oauth2" />
       <meta-data android:name="com.snapchat.kit.sdk.scopes" android:resource="@array/snap_connect_scopes" />
 
