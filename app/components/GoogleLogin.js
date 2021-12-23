@@ -54,11 +54,10 @@ class GoogleLogin extends Component {
       offlineAccess: true,
       hostedDomain: "",
       forceConsentPrompt: true,
-      forceConsentPrompt: true,
     });
   }
 
-  // signout fb account from application
+  // signout gmail account from application
   _signOut = async () => {
     try {
       // await GoogleSignin.revokeAccess();
@@ -73,8 +72,8 @@ class GoogleLogin extends Component {
    * @function performGoogleLogin
    */
   performGoogleLogin = async (props) => {
-    // await this._signOut();
     try {
+      await this._signOut();
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       // const accessToken = await GoogleSignin.getTokens();
