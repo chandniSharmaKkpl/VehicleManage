@@ -20,7 +20,6 @@ import { IMAGE } from "../../assets/Images";
 import * as globals from "../../utils/Globals";
 import { darkTheme, lightTheme } from "../../assets/Theme";
 import * as actions from "./redux/Actions";
-import Colors from "../../assets/Colors";
 import messaging, { firebase } from "@react-native-firebase/messaging";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
