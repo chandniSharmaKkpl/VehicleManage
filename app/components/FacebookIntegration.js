@@ -165,7 +165,6 @@ class FacebookIntegration extends Component {
       // />
       <View style={ComponentStyle.primaryInputView}>
         <TouchableOpacity
-          // onPress={() => this.instagramLogin.show()}
           onPress={() =>
             this.navigatetoSocialProfiles(this.props.isFrom, this.props.URL)
           }
