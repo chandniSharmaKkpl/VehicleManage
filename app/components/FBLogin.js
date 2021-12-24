@@ -14,7 +14,6 @@ import {
   AccessToken,
   GraphRequest,
   GraphRequestManager,
-  Profile,
 } from "react-native-fbsdk-next";
 
 class FBLogin extends Component {
@@ -22,46 +21,49 @@ class FBLogin extends Component {
     super(props);
     this.state = {};
   }
-  performFBLogin = (props) => {
-    let tempToken;
-    LoginManager.logInWithPermissions(["public_profile", "email"]).then(
-      function (result) {
-        if (!result.isCancelled) {
-          AccessToken.getCurrentAccessToken().then((data) => {
-            tempToken = data.accessToken;
-            const infoRequest = new GraphRequest(
-              "/me",
-              {
-                version: "v2.9",
-                accessToken: data.accessToken,
-                parameters: {
-                  fields: {
-                    string: "email,name,first_name,last_name",
+  performFBLogin() {
+    console.warn("i am in fb login==>");
+
+    try {
+      let tempToken;
+      LoginManager.logOut();
+      LoginManager.setLoginBehavior("WEB_ONLY");
+      LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+        function (result) {
+          if (!result.isCancelled) {
+            AccessToken.getCurrentAccessToken().then((data) => {
+              // console.warn("i am in access token data ==>", data);
+              tempToken = data.accessToken;
+              const infoRequest = new GraphRequest(
+                "/me",
+                {
+                  version: "v2.9",
+                  accessToken: data.accessToken,
+                  parameters: {
+                    fields: {
+                      string: "email,name,first_name,last_name",
+                    },
                   },
                 },
-              },
-              self._responseInfoCallback
-            );
-            new GraphRequestManager().addRequest(infoRequest).start();
-          });
-        } else {
-          //cancel
+                this._responseInfoCallback
+              );
+              new GraphRequestManager().addRequest(infoRequest).start();
+            });
+          }
         }
-      }
-    );
+      );
 
-    _responseInfoCallback = async (error, result) => {
-      if (!error) {
-        let params = new URLSearchParams();
-        // Collect the necessary params
-        params.append("accessToken", tempToken);
-        params.append("provider", "facebook");
-        params.append("provider_id", result.id);
-        params.append("name", result.first_name);
-        params.append("email", result.email);
-        const { sociallogin } = props;
-        sociallogin(params)
-          .then(async (res) => {
+      _responseInfoCallback = async (error, result) => {
+        if (!error) {
+          let params = new URLSearchParams();
+          // Collect the necessary params
+          params.append("accessToken", tempToken);
+          params.append("provider", "facebook");
+          params.append("provider_id", result.id);
+          params.append("name", result.first_name);
+          params.append("email", result.email);
+          const { sociallogin } = this.props;
+          sociallogin(params).then(async (res) => {
             if (res.value && res.value.data.success == true) {
               //OK 200 The request was fulfilled
               if (res.value && res.value.status === 200) {
@@ -103,13 +105,13 @@ class FBLogin extends Component {
                 });
               }
             }
-          })
-          .catch((err) => {
-            console.log("i am in catch error login", err);
           });
-      }
-    };
-  };
+        }
+      };
+    } catch (e) {
+      console.warn("i am in catch====>", e);
+    }
+  }
 
   // save access token
   async gotoSaveToken(accessToken) {
@@ -136,7 +138,7 @@ class FBLogin extends Component {
           <PrimaryButtonwithIcon
             iconName={IMAGE.facebook_img}
             btnName={StaticTitle.loginwithFB}
-            onPress={() => this.performFBLogin(this.props)}
+            onPress={() => this.performFBLogin()}
           />
         </View>
       </>

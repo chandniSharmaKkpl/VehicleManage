@@ -21,7 +21,7 @@ import { Input, PrimaryButton, Loader, DropDownPicker } from "../../components";
 import NavigationService from "../../utils/NavigationService";
 import * as globals from "../../utils/Globals";
 import { isEmpty, isText } from "../../utils/Validators";
-import { Messages  } from "../../utils/Messages";
+import { Messages } from "../../utils/Messages";
 import { IMAGE } from "../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import * as actions from "./redux/Actions";
@@ -193,14 +193,8 @@ export class CreateProfileScreen extends PureComponent {
     params.append("car_description", txtDescription);
     if (globals.isInternetConnected == true) {
       const { createprofile } = this.props;
-      // console.log("params0=====", params);
       createprofile(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "res--createprofile-",
-          //   JSON.stringify(res.value.data)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -218,15 +212,14 @@ export class CreateProfileScreen extends PureComponent {
               {
                 NavigationService.navigate("Login");
               }
-            }else if (res.value && res.value.data.username) {
+            } else if (res.value && res.value.data.username) {
               await showMessage({
                 message: res.value.data.username,
                 type: "danger",
                 icon: "info",
                 duration: 4000,
               });
-            }
-             else if (res.value && res.value.data.error) {
+            } else if (res.value && res.value.data.error) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",

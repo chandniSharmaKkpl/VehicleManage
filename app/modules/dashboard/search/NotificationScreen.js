@@ -47,13 +47,11 @@ export class NotificationScreen extends Component {
       (await JSON.parse(await AsyncStorage.getItem("request_count"))) ||
       this.state.countDeatils.requests_count;
     let isitreadrequest = await AsyncStorage.getItem("IsReadRequest");
-    console.log("reqcount-----", reqcount);
 
     let msgcount =
       (await JSON.parse(await AsyncStorage.getItem("msg_count"))) ||
       this.state.countDeatils.messages_count;
     let isitreadMessage = await AsyncStorage.getItem("IsReadMessage");
-    console.log("msgcount-----", msgcount);
 
     DeviceEventEmitter.addListener("msg_count_remove", () => {
       this.setMsgCountsafterreview();
@@ -108,10 +106,6 @@ export class NotificationScreen extends Component {
 
   // render friendlist dataItem
   retunNotificationList = () => {
-    // console.log(
-    //   "this.state.searched_avatars========",
-    //   this.state.searched_avatars
-    // );
     for (let i = 0; i <= this.state.searched_avatars.length; i++) {
       if (this.state.searched_avatars.length > 3) {
         console.log("NOOO valid");

@@ -69,10 +69,8 @@ export class PrivacySettingsScreen extends Component {
 
     try {
       const result = await RNIap.initConnection();
-      console.log("-------------------connection init result", result);
       if (result) {
         const products = await RNIap.getSubscriptions(Product_sku_id);
-        console.log("products=================================", products);
         for (var index = 0; index < products.length; index++) {
           var product = products[index];
           this.setState({
@@ -96,22 +94,20 @@ export class PrivacySettingsScreen extends Component {
             purchaseUpdateSubscription = purchaseUpdatedListener(
               async (purchase) => {
                 // Type purchase: ProductPurchase
-                console.log("purchaseUpdatedListener :--->", purchase);
                 if (
                   purchase.purchaseStateAndroid === 1 &&
                   !purchase.isAcknowledgedAndroid
                 ) {
                 }
-                purchaseErrorSubscription = purchaseErrorListener((error) => {
-                  console.log("Purchase Error:->", error);
-                });
+                purchaseErrorSubscription = purchaseErrorListener(
+                  (error) => {}
+                );
               }
             );
           });
         setTimeout(() => {}, 3000);
       }
     } catch (err) {
-      console.warn("Error:->", err);
       showMessage({
         message: err.message,
         type: "danger",
@@ -143,7 +139,6 @@ export class PrivacySettingsScreen extends Component {
   };
 
   gotoRequestPurchase() {
-    console.warn("i am in goto request ==>");
     this.setState({ isPurchasesLoading: true });
 
     try {
@@ -173,12 +168,7 @@ export class PrivacySettingsScreen extends Component {
           params.append("transactionId", res.transactionId);
           params.append("transactionReceipt", res.transactionReceipt);
         }
-        console.warn(
-          "i am in param in ===>",
-          Platform.OS,
-          "Param list",
-          params
-        );
+
         subscriptionSuccess(params)
           .then(async (res) => {
             //OK 200 The request was fulfilled
@@ -322,14 +312,8 @@ export class PrivacySettingsScreen extends Component {
     params.append("setting_7", isHideSearchUser == true ? 1 : 0);
 
     if (globals.isInternetConnected == true) {
-      // console.log("params===updateUserSettings===", JSON.stringify(params));
       updateUserSettings(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "updateUserSettings res.value.data---",
-          //   JSON.stringify(res.value.data)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {

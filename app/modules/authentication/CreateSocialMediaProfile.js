@@ -101,14 +101,8 @@ export class CreateSocialMediaProfile extends Component {
 
     const { createSocialprofile } = this.props;
     if (globals.isInternetConnected == true) {
-      console.log("params======", JSON.stringify(params));
       createSocialprofile(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "res.value.data---",
-            JSON.stringify(res.value.data.data)
-          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -208,7 +202,6 @@ export class CreateSocialMediaProfile extends Component {
         maxWidth: 200,
       },
       (response) => {
-        // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
           name: response.fileName ? response.fileName : "Dummy.jpg",
@@ -234,7 +227,6 @@ export class CreateSocialMediaProfile extends Component {
         maxWidth: 200,
       },
       (response) => {
-        // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
           name: response.fileName ? response.fileName : "Dummy.jpg",
