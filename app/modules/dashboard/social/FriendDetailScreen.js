@@ -249,11 +249,9 @@ export class FriendDetailScreen extends Component {
 
   searchFromUser(from_id) {
     var user = {};
-
     if (Number(this.state.getfriendData.id) == Number(from_id)) {
       user = this.state.getfriendData;
     }
-
     return user;
   }
 

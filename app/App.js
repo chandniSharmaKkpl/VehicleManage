@@ -25,13 +25,11 @@ export class App extends Component {
     this.checkPermission();
     this.setDefaultSettings();
     subscription = Appearance.addChangeListener(async ({ colorScheme }) => {
-      console.log("colorScheme=====", colorScheme);
       await AsyncStorage.setItem("them_mode", Appearance.getColorScheme());
     });
 
     // check IsInternet-Connection available or not at the time of page load / first render
     NetInfo.addEventListener((state) => {
-      console.log("Is connected?", state.isConnected);
       globals.isInternetConnected = state.isConnected;
     });
   }
@@ -43,7 +41,6 @@ export class App extends Component {
       authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      console.log("Notification have permission");
       this.getToken();
     } else {
       this.requestPermission();
@@ -55,16 +52,10 @@ export class App extends Component {
     if (!fcmToken) {
       fcmToken = await messaging().getToken();
       if (fcmToken) {
-        // Alert.alert("Device Token", fcmToken);
-        console.log("Device TOKEN ======>" + fcmToken);
-        // user has a device token
         await AsyncStorage.setItem("fcmToken", fcmToken);
       } else {
-        // await AsyncStorage.setItem("dt_logs", "in else not getToken");
       }
     } else {
-      console.log("Already Saved Device TOKEN ======>" + fcmToken);
-      // await AsyncStorage.setItem("dt_logs", "found dt:" + fcmToken);
     }
   }
 
@@ -79,11 +70,9 @@ export class App extends Component {
         // User has authorised
         this.getToken();
       } else {
-        console.log("permission rejected.....");
       }
     } catch (error) {
       // User has rejected permissions
-      console.log("permission rejected");
     }
   }
 
@@ -91,14 +80,12 @@ export class App extends Component {
     subscription.remove();
     // check IsInternet-Connection available or not at the time of page exit / leave the page
     NetInfo.addEventListener((state) => {
-      console.log("componentWillUnmount Is connected?", state.isConnected);
       globals.isInternetConnected = state.isConnected;
     });
   }
 
   setDefaultSettings = async () => {
     // set Theme
-    console.log("setDefaultSettings---------");
     let them_mode = await AsyncStorage.getItem("them_mode");
     if (!them_mode) {
       await AsyncStorage.setItem("them_mode", Appearance.getColorScheme());

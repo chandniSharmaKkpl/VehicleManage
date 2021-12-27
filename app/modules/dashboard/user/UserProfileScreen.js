@@ -95,25 +95,19 @@ export class UserProfileScreen extends Component {
   async componentDidMount() {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
-    console.log("userDetails", this.props.userDetails);
-
     this.onFocusFunction();
     DeviceEventEmitter.addListener("initializeApp", () => {
       this.getUserData();
       this.setUserInfo(this.props.userDetails);
     });
-    // this.focusListener = this.props.navigation.addListener("didFocus", () => {
-    //   this.onFocusFunction();
-    // });
   }
 
-  /// call everytime didmount
+  /// call everytime did mount
   onFocusFunction = async () => {
     this._isMounted = true;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
       this.setUserInfo(this.props.userDetails);
     }
-
     if (globals.isInternetConnected == true) {
       await this.getcarModelAPI();
       await this.getcarColourAPI();
@@ -130,6 +124,7 @@ export class UserProfileScreen extends Component {
 
   // set userInformation
   setUserInfo = async (user) => {
+    console.warn("i am in set info===>", user.user_data);
     if (this._isMounted) {
       if (user && user.user_data) {
         if (user.user_data.instagram_username !== "") {
@@ -272,7 +267,6 @@ export class UserProfileScreen extends Component {
         maxWidth: 200,
       },
       (response) => {
-        // console.log(TAG, "I am in open camera", response);
         const source = {
           uri: response.uri,
           name: response.fileName ? response.fileName : "Dummy.jpg",
@@ -298,7 +292,6 @@ export class UserProfileScreen extends Component {
         maxWidth: 200,
       },
       (response) => {
-        // console.log(TAG, "response---", response);
         const source = {
           uri: response.uri,
           name: response.fileName ? response.fileName : "Dummy.jpg",
@@ -420,15 +413,8 @@ export class UserProfileScreen extends Component {
     params.append("snapchat_username", txtSnapName);
 
     if (globals.isInternetConnected == true) {
-      console.log("params======", JSON.stringify(params));
-
       updateprofile(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "updateprofile res.value.data---",
-          //   JSON.stringify(res.value.data)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -441,7 +427,6 @@ export class UserProfileScreen extends Component {
               sideDrawer.updateUserInfo({
                 userData: res.value.data.data.user_data,
               });
-              console.log("res value data", res.value.data.data);
 
               this.getUserData();
               this.setUserInfo(res.value.data.data);
@@ -501,7 +486,6 @@ export class UserProfileScreen extends Component {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-          {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
           )}
@@ -590,7 +574,6 @@ export class UserProfileScreen extends Component {
                 />
               </TouchableOpacity>
               <View style={UserProfileStyle.registrationView}>
-                {/* <Text style={UserProfileStyle.changeRegText}>{photoUrl}</Text> */}
                 <Text
                   style={[
                     UserProfileStyle.changeRegText,

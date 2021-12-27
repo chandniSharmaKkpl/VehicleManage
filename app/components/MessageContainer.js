@@ -165,8 +165,7 @@ export const renderMessageText = (props) => (
   />
 );
 
-export const renderCustomView = ({ user }) => (
-  console.log("user=====", user),
+export const renderCustomView = ({ user }) =>
   user.currentMsg_id == user.getparticularMsg_id ? (
     <View
       style={{
@@ -190,5 +189,4 @@ export const renderCustomView = ({ user }) => (
         {user.emoji}
       </Text>
     </View>
-  ) : null
-);
+  ) : null;

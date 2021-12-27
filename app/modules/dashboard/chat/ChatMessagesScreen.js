@@ -168,7 +168,6 @@ export class ChatMessagesScreen extends Component {
     messagesDetails(params)
       .then(async (res) => {
         //OK 200 The request was fulfilled
-
         if (res.value && res.value.data.success == true) {
           // if (this.state.messages.length > 0) {
           //   // if local state variable already have messages and anyone receive new message then no need to update local state
@@ -320,8 +319,6 @@ export class ChatMessagesScreen extends Component {
 
   callOnSend = (messages = []) => {
     const { userDetails } = this.props;
-    // console.log("onSend() messages  :->", this.props.userDetails);
-
     var newMsgs = [];
     messages.forEach((msg) => {
       msg.user.avatar = userDetails.user_data.user_photo;
@@ -332,7 +329,6 @@ export class ChatMessagesScreen extends Component {
     });
 
     {
-      // console.log("in IF singleChat from: " + this.state.from_id + ", to: " + this.state.to_id);
       try {
         global.ws.send(
           JSON.stringify({
@@ -352,10 +348,7 @@ export class ChatMessagesScreen extends Component {
             isMessageSend: true,
           };
         });
-      } catch (err) {
-        // console.log("2nd Error while send socket message. Error:->", err);
-        // console.log("to_detail :->"+err);
-      }
+      } catch (err) {}
     }
   };
 
@@ -639,7 +632,6 @@ export class ChatMessagesScreen extends Component {
             renderTicks={(message) => this.renderTicks(message, user_id)}
             alwaysShowSend={true}
             timeFormat={"HH:mm"}
-            // onPressAvatar={console.log("onPressAvatar")}
             alwaysShowSend={true}
             style={{ flex: 1 }}
             placeholder={StaticTitle.chatinput}

@@ -184,10 +184,8 @@ export class SignUpScreen extends Component {
     if (globals.isInternetConnected == true) {
       registeruser(params)
         .then(async (res) => {
-          console.log("res======signup", res.value.data.data);
           if (res.value.data.success == true) {
             //OK 200 The request was fulfilled
-
             if (res.value && res.value.invalid_password) {
               this.setState({
                 isPasswordError: true,

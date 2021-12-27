@@ -9,16 +9,10 @@ import { name as appName } from "./app.json";
 AppRegistry.registerComponent(appName, () => App);
 import messaging from "@react-native-firebase/messaging";
 
-messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-  console.log(
-    "Roadie ------- Message handled in the background!",
-    remoteMessage
-  );
-});
+messaging().setBackgroundMessageHandler(async (remoteMessage) => {});
 
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
-    console.log("in IF ++++++++++++++++++ >" + isHeadless);
     // App has been launched in the background by iOS, ignore
     return null;
   }
@@ -28,7 +22,6 @@ function HeadlessCheck({ isHeadless }) {
 
 function appCode() {
   // Your application
-  console.log("in appCode() ~~~~~~~~~~~~~~~~~~~>");
 }
 
 if (Platform.OS == "android") {

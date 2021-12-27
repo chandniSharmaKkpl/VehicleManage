@@ -22,7 +22,6 @@ function makeFormDataPostHeaders() {
 }
 
 function makeGetHeaders() {
-  // console.log("I am in makeGetHeaders()");
   let headerObj = {};
   const getaccessToken = globals.access_token;
   if (getaccessToken && getaccessToken != null) {
@@ -43,7 +42,6 @@ function makeAuthPostHeaders() {
 }
 
 function makeURLEncodedPostHeaders() {
-  // console.warn("I am in makeURLEncodedPostHeaders()",globals.access_token);
   let headerObj = {};
   const accessToken = globals.access_token;
   if (accessToken && accessToken != null) {
@@ -86,7 +84,6 @@ axiosApi.interceptors.request.use((request) => {
       request.url === "api/messages/details" ||
       request.url === "api/messages/insert" ||
       request.url === "api/messages/read" ||
-      // request.url === "api/notifications/searches/read" ||
       request.url === "api/block" ||
       request.url === "api/report" ||
       request.url === "api/friend_search" ||
@@ -102,13 +99,11 @@ axiosApi.interceptors.request.use((request) => {
       request.headers = makeFormDataPostHeaders();
     }
   }
-  // console.log("<~~~~~~~~~~~ REQUEST:::=>" + JSON.stringify(request));
   return request;
 });
 
 const checkRespAndRedirect = (response) => {
   const { data } = response;
-  // console.log("i am in checkRespAndRedirect =>", JSON.stringify(data));
 };
 
 axiosApi.interceptors.response.use(
@@ -120,12 +115,12 @@ axiosApi.interceptors.response.use(
     console.log("API error=====", error);
     if (error.response.status === 401) {
       showMessage({
-        message: "Something went wrong,,Please try again..!!",
+        message: "Something went wrong,Please try again!",
         type: "danger",
         icon: "danger",
         duration: 4000,
       });
-      NavigationService.navigate("Login");
+      NavigationService.reset("Login");
       return Promise.reject(error.response);
     } else {
       return Promise.reject(error.response.data);

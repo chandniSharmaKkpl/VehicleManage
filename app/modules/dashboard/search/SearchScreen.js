@@ -148,10 +148,6 @@ export class SearchScreen extends Component {
 
     const { notificationCount } = this.props;
     notificationCount().then((res) => {
-      console.warn(
-        "res----------notificationCount-",
-        JSON.stringify(res.value.data.data)
-      );
       if (res.value && res.value.data.success == true) {
         if (res.value && res.value.status === 200) {
           this.setNotificationCounts(res.value.data.data);
@@ -171,19 +167,10 @@ export class SearchScreen extends Component {
   };
 
   setNotificationCounts = async (countDeatils) => {
-    console.log("countDeatils-----", countDeatils);
-    // let gettotalCount = await JSON.parse(
-    //   await AsyncStorage.getItem("total_count")
-    // );
-    // if (gettotalCount == 0) {
-    //   await AsyncStorage.setItem("total_count", JSON.stringify(parseInt(0)));
-    // }
-
     let count =
       (await JSON.parse(await AsyncStorage.getItem("total_count"))) ||
       countDeatils.total_count;
     let isitread = await AsyncStorage.getItem("IsRead");
-    console.log("count-----", count);
 
     this.setState({
       countDeatils: countDeatils,
@@ -192,14 +179,8 @@ export class SearchScreen extends Component {
   };
 
   receivedPushNotification = async (msgDetails) => {
-    console.log("receivedPushNotification() message:", msgDetails);
-    // console.log("this.props :-->", this.props.nav);
-
     const { nav } = this.props;
     const currentScreen = this.props.navigation.state.routeName;
-    // const currentScreen = this.props.navigation.state.routeName;
-    console.log("currentScreen :-->", currentScreen);
-
     const { title, body, detail } = msgDetails;
     var detailObj = JSON.parse(detail);
 
@@ -433,13 +414,7 @@ export class SearchScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-    const {
-      txtSearch,
-      searchListdata,
-
-      countDeatils,
-      total_count,
-    } = this.state;
+    const { txtSearch, searchListdata, countDeatils, total_count } = this.state;
     return (
       <>
         <View
@@ -486,13 +461,6 @@ export class SearchScreen extends Component {
             placeholderText={StaticTitle.searchbyVehicalNum}
             onPress={() => this.getSearchResult()}
           />
-          {/* {searchListdata.length == 0 || searchListdata == [] ? (
-            <View style={FriendListStyle.emptyview}>
-              <Text numberOfLines={2} style={FriendListStyle.emptytext}>
-                {StaticTitle.noFrnds}
-              </Text>
-            </View>
-          ) : ( */}
           <FlatList
             data={searchListdata}
             style={[FriendListStyle.flatliststyle]}

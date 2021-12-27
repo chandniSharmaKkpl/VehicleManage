@@ -17,7 +17,6 @@ class AppNavigation extends Component {
     super(props);
     this.exitCount = 0;
     this.FCM = new FireBase();
-
   }
 
   componentDidMount() {
@@ -35,7 +34,6 @@ class AppNavigation extends Component {
     // manage hardware backpress button in android
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
     this.FCM.clearListers();
-
   }
 
   // setTimeOut while app will close
@@ -63,9 +61,7 @@ class AppNavigation extends Component {
   // manage hardware backpress button in android
   onBackPress = () => {
     const { nav, dispatch } = this.props;
-    console.log("nav.index====",JSON.stringify(nav.routes[nav.routes.length - 1].index) );
-    if (nav.routes[nav.routes.length - 1].index === 0)  {
-      console.log("i amin 1 index");
+    if (nav.routes[nav.routes.length - 1].index === 0) {
       this.exitApp();
     }
     dispatch(NavigationActions.back());
@@ -73,19 +69,21 @@ class AppNavigation extends Component {
   };
 
   setAppNotification = async () => {
-		// console.log("in setAppNotification() .....");
-		let havePermission = await this.FCM.setFCMPermission();
-		console.log("havePermission:" + havePermission);
-		let push_notification_token = await this.FCM.setFCMToken();
-		console.log("push_notification_token------------------------->" + push_notification_token);
+    let havePermission = await this.FCM.setFCMPermission();
+    console.log("havePermission:" + havePermission);
+    let push_notification_token = await this.FCM.setFCMToken();
+    console.log(
+      "push_notification_token------------------------->" +
+        push_notification_token
+    );
 
-		this.FCM.createNotificationListeners(this.callAPI);
-	};
+    this.FCM.createNotificationListeners(this.callAPI);
+  };
 
   async callAPI(newDeviceToken) {
-		// Call api to update on server
-		await AsyncStorage.setItem('fcmToken', newDeviceToken);
-	}
+    // Call api to update on server
+    await AsyncStorage.setItem("fcmToken", newDeviceToken);
+  }
 
   render() {
     const { nav, dispatch, isLoading, loaderMessage } = this.props;
