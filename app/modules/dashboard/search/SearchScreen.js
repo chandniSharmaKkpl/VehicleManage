@@ -30,6 +30,7 @@ import * as Authactions from "../../authentication/redux/Actions";
 const TAG = "SearchScreen ::=";
 let gettotalCount;
 export class SearchScreen extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -40,6 +41,7 @@ export class SearchScreen extends Component {
       countDeatils: {},
       appState: AppState.currentState,
       total_count: 0,
+      isItLoading: false,
     };
     this.alert = "no";
     this.showAlert = this.showAlert.bind(this);
@@ -85,6 +87,10 @@ export class SearchScreen extends Component {
   }
 
   componentWillUnmount = () => {
+    this._isMounted = false;
+    this.setState({
+      isItLoading: false,
+    });
     DeviceEventEmitter.removeAllListeners("recall_init_api");
     // DeviceEventEmitter.removeAllListeners("received_push_notification");
     DeviceEventEmitter.removeAllListeners("total_count_remove");
@@ -135,12 +141,23 @@ export class SearchScreen extends Component {
   };
 
   getnotificationCount = async () => {
+    this._isMounted = true;
+    this.setState({
+      isItLoading: true,
+    });
+
     const { notificationCount } = this.props;
     notificationCount().then((res) => {
-      console.warn("res----------notificationCount-", JSON.stringify(res));
+      console.warn(
+        "res----------notificationCount-",
+        JSON.stringify(res.value.data.data)
+      );
       if (res.value && res.value.data.success == true) {
         if (res.value && res.value.status === 200) {
           this.setNotificationCounts(res.value.data.data);
+          this.setState({
+            isItLoading: false,
+          });
         }
       } else {
         if (res.value && res.value.data.error == "Unauthenticated.") {
@@ -431,10 +448,20 @@ export class SearchScreen extends Component {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-          {isLoading && (
+          {/* {this.state.isItLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
-          )}
-          <NavigationEvents onWillBlur={() => this.clearStates()} />
+          )} */}
+          <NavigationEvents
+            onDidFocus={() => {
+              if (globals.isInternetConnected == true) {
+                this.getnotificationCount();
+              } else {
+                Alert.alert(globals.warning, globals.noInternet);
+              }
+            }}
+            onWillBlur={() => this.clearStates()}
+          />
+
           <Header
             isShowBack={false}
             title={""}
@@ -442,7 +469,7 @@ export class SearchScreen extends Component {
             isShowRighttwo={true}
             theme={theme}
             countDeatils={countDeatils}
-            total_count={total_count}
+            total_count={countDeatils.total_count}
           />
           <Search
             theme={theme}

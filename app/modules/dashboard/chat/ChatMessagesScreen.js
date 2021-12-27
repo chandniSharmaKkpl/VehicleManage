@@ -170,13 +170,14 @@ export class ChatMessagesScreen extends Component {
         //OK 200 The request was fulfilled
 
         if (res.value && res.value.data.success == true) {
-          if (this.state.messages.length > 0) {
-            // if local state variable already have messages and anyone receive new message then no need to update local state
-            // Only update Read flag api
-            this.readMessagesAPI(res.value.data.data);
-          } else {
-            this.formatMessageAndStore(res.value.data.data);
-          }
+          // if (this.state.messages.length > 0) {
+          //   // if local state variable already have messages and anyone receive new message then no need to update local state
+          //   // Only update Read flag api
+          //   this.readMessagesAPI(res.value.data.data);
+          // } else {
+          this.formatMessageAndStore(res.value.data.data);
+          // this.readMessagesAPI(res.value.data.data);
+          // }
         } else {
           if (res.value && res.value.data.error) {
           }
