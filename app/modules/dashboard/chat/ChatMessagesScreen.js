@@ -178,9 +178,6 @@ export class ChatMessagesScreen extends Component {
           this.formatMessageAndStore(res.value.data.data);
           // this.readMessagesAPI(res.value.data.data);
           // }
-        } else {
-          if (res.value && res.value.data.error) {
-          }
         }
       })
       .catch((err) => {
