@@ -13,7 +13,7 @@ const StaticTitle = {
   forgotPasswordSignin: "Forgot password ?",
   enterPassword: "Enter Password",
   enterUsaerName: "Enter Email Address",
-  backTo: "Back to",
+  backTo: "Back to ",
   enterFirstName: "Enter First Name",
   enterLastName: "Enter Last Name",
   confirmPassword: "Confirm Password",

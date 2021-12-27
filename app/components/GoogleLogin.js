@@ -28,21 +28,17 @@ class GoogleLogin extends Component {
 
   async componentDidMount() {
     this.configureGoogleSignIn(); // configure Google SignIn
-    // await this.getCurrentUser(); // check Current user
   }
 
   // check Current user  Silently
   async getCurrentUser() {
     try {
       const userInfo = await GoogleSignin.signInSilently();
-      // console.log("userinfo check Current user  Silently", userInfo);
     } catch (error) {
       const errorMessage =
         error.code === statusCodes.SIGN_IN_REQUIRED
           ? "Please sign in :)"
           : error.message;
-
-      // console.log("error", new Error(errorMessage));
     }
   }
 
@@ -50,7 +46,6 @@ class GoogleLogin extends Component {
   configureGoogleSignIn() {
     GoogleSignin.configure({
       webClientId: WEB_CLIENT_ID,
-      // androidClientId: WEB_CLIENT_ID,
       offlineAccess: true,
       hostedDomain: "",
       forceConsentPrompt: true,
@@ -62,15 +57,9 @@ class GoogleLogin extends Component {
     try {
       // await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-    } catch (error) {
-      // console.log("Error", error);
-    }
+    } catch (error) {}
   };
 
-  /**
-   * Method for login with Google
-   * @function performGoogleLogin
-   */
   performGoogleLogin = async (props) => {
     try {
       await this._signOut();
@@ -90,7 +79,6 @@ class GoogleLogin extends Component {
 
       sociallogin(params)
         .then(async (res) => {
-          console.log("res---Google login-", res.value.data);
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -156,7 +144,6 @@ class GoogleLogin extends Component {
           break;
         default:
           Alert.alert("Something went wrong", error.toString());
-          console.log("err0r-, error", error);
       }
     }
   };
@@ -175,7 +162,6 @@ class GoogleLogin extends Component {
 
   // save access token
   async gotoSaveToken(accessToken) {
-    console.log(TAG, "accessToken===", accessToken);
     await AsyncStorage.setItem("access_token", accessToken);
     globals.access_token = accessToken;
   }

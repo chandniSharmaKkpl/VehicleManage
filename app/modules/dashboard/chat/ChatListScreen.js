@@ -56,16 +56,7 @@ export class ChatListScreen extends Component {
     this.updateUnreadCount = this.updateUnreadCount.bind(this);
     this.closeOrInActiveScreen = this.closeOrInActiveScreen.bind(this);
   }
-
   UNSAFE_componentWillReceiveProps = (newProps) => {
-    // console.log(
-    //   Platform.OS +
-    //     " - UNSAFE_componentWillReceiveProps () newProps.isReceiveChatMessage:",
-    //   newProps.isReceiveChatMessage +
-    //     ", chatMsg Length:" +
-    //     newProps.chatMessages.length
-    // );
-    // When user is inside Inbox screen and any 1-1 or group message is received, then IF condition is true
     if (
       this.state.dataArray.length == newProps.chatList.length &&
       newProps.isReceiveChatMessage == true &&
@@ -171,8 +162,6 @@ export class ChatListScreen extends Component {
       }
     };
     global.ws.onmessage = ({ data }) => {
-      // console.log(Platform.OS + " --- WS OnMessage() ---->", data);
-      // alert(" --- Connected-------------------------", data)
       const object = JSON.parse(data);
       if (object.command != undefined) {
         if (object.command == "message") {
@@ -184,29 +173,12 @@ export class ChatListScreen extends Component {
           // const currentScreen = this.props.navigation.state.routeName;
           let currentScreen =
             nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
-          // console.log(
-          //   "navigate--------------nav------",
-          //   JSON.stringify(this.props.navigation)
-          // );
 
-          // var payload = {
-          //   msg_data: object,
-          //   user_data: this.searchFromUser(from_id),
-          // };
-          // this.props.receivedChatMessage(payload);
-          // }
           if (currentScreen[1].routeName == "ChatMessages") {
             const currentScreenParams = currentScreen[1].params;
-            console.log("currentScreenParams :->", currentScreenParams);
-            console.log("parseInt(from_id)===", parseInt(from_id));
             if (currentScreenParams !== undefined) {
               var userScreenLoadUserId = currentScreenParams.user_info.id;
-              console.log("userScreenLoadUserId :->", userScreenLoadUserId);
-
-              console.log("from_id :->", from_id);
-
               if (parseInt(from_id) == userScreenLoadUserId) {
-                console.log("Inside ID both user are matched....");
                 var payload = {
                   msg_data: object,
                   user_data: this.searchFromUser(from_id),
@@ -219,19 +191,13 @@ export class ChatListScreen extends Component {
       }
     };
     global.ws.onerror = ({ error }) => {
-      console.log(Platform.OS + " --- WS OnError() ---->", error);
-      // Alert.alert("Websocket Error", error);
       global.ws = null;
     };
 
-    global.ws.onclose = ({ event }) => {
-      console.log(Platform.OS + " --- WS onClose() ---->", event);
-      // console.warn(" --- WS onClose() ---->");
-    };
+    global.ws.onclose = ({ event }) => {};
   }
 
   _handleAppStateChange = (nextAppState) => {
-    // console.log("_handleAppStateChange() nextAppState :-->", nextAppState);
     if (nextAppState.match(/inactive|background/)) {
       this.closeOrInActiveScreen();
     } else if (nextAppState.match(/active/)) {
@@ -251,8 +217,6 @@ export class ChatListScreen extends Component {
       let usersdata = userDetails.user_data;
       let chat_user_id = usersdata.user_id;
 
-      // console.log("unregister chat_user_id :->", chat_user_id);
-
       global.ws.send(
         JSON.stringify({
           command: "unregister",
@@ -261,13 +225,9 @@ export class ChatListScreen extends Component {
         })
       );
 
-      // setTimeout(() => {
       try {
         global.ws.close();
-      } catch (err) {
-        // console.log("Error while connection close :->", err);
-      }
-      // }, 3000)
+      } catch (err) {}
     }
   }
 
@@ -276,7 +236,6 @@ export class ChatListScreen extends Component {
     let usersdata = userDetails.user_data;
     let chat_user_id = usersdata.user_id;
 
-    // console.log("registerAndSubscribe() chat_user_id :->", chat_user_id);
     global.ws.send(
       JSON.stringify({ command: "register", userId: chat_user_id })
     );
@@ -299,13 +258,8 @@ export class ChatListScreen extends Component {
   };
 
   receivedPushNotification = async (msgDetails) => {
-    console.log("receivedPushNotification() message:", msgDetails);
-    // console.log("this.props :-->", this.props.nav);
-
     const { nav } = this.props;
     const currentScreen = this.getActiveRouteState(this.props.navigation.state);
-    console.log("currentScreen :-->", currentScreen);
-
     const { title, body, detail } = msgDetails;
     var detailObj = JSON.parse(detail);
 
@@ -313,7 +267,6 @@ export class ChatListScreen extends Component {
       await AsyncStorage.setItem("live_chatMessage", JSON.stringify(detailObj));
       NavigationService.navigate("ChatMessages", { user_info: detailObj });
     } else if (currentScreen.routeName == "ChatList") {
-      console.log("in ELSE -->", currentScreen.routeName);
       {
         await AsyncStorage.setItem(
           "live_chatMessage",
@@ -341,17 +294,13 @@ export class ChatListScreen extends Component {
         {
           text: "Open Now",
           onPress: () => {
-            console.log("Open-Now Pressed.");
-
             this.redirectToChatDetails(detail);
-
             this.alert = "no";
           },
         },
         {
           text: "Open Later",
           onPress: () => {
-            console.log("Open-Later Pressed.");
             this.alert = "no";
           },
         },
@@ -367,8 +316,6 @@ export class ChatListScreen extends Component {
   }
 
   searchFromUser(from_id) {
-    // console.log("searchFromUser() from_id :-->", from_id);
-
     var user = {};
     this.state.dataArray.forEach((msg) => {
       if (Number(msg.id) == Number(from_id)) {
@@ -396,12 +343,6 @@ export class ChatListScreen extends Component {
 
     messagesList(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get messagesList",
-        //   JSON.stringify(res.value.data.data)
-        // );
-        // console.log("this.props.chatList--------", this.props.chatList);
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
@@ -422,8 +363,6 @@ export class ChatListScreen extends Component {
   };
 
   searchByName(searchText) {
-    // console.log("Value of item is :->", searchText);
-    // console.log("this.state.chatName :-->", this.state);
     const newData = Object.values(this.state.chatName).filter((item) => {
       const itemnumData = item.registration_number.toUpperCase();
       const itemData = item.name.toUpperCase();

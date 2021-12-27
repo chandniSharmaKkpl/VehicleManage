@@ -218,17 +218,9 @@ export class RegistrationDetailsScreen extends Component {
 
     const { updateRegistrationDetail } = this.props;
 
-    // console.log(
-    //   "updateRegisterDetailAPIcall params----------",
-    //   JSON.stringify(params)
-    // );
     if (globals.isInternetConnected == true) {
       updateRegistrationDetail(params)
         .then(async (res) => {
-          // console.log(
-          //   "updateRegisterDetailAPIcall res.value.data---",
-          //   JSON.stringify(res.value)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -295,19 +287,15 @@ export class RegistrationDetailsScreen extends Component {
   // API CALL begin
   registerDetailAPIcall = () => {
     const { txtRegNumber, attachPaperObj, attachphotoObj } = this.state;
-
     var params = new FormData();
     // Collect the necessary params
     params.append("vehicle_photo", attachphotoObj);
     params.append("registration_number", txtRegNumber);
     params.append("registration_paper", attachPaperObj);
     const { registerdetail } = this.props;
-
-    // console.log("params----------", JSON.stringify(params));
     if (globals.isInternetConnected == true) {
       registerdetail(params)
         .then(async (res) => {
-          // console.log("res.value.data---", JSON.stringify(res.value.data.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -404,9 +392,6 @@ export class RegistrationDetailsScreen extends Component {
         }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the camera");
-      } else {
-        console.log("Camera permission denied");
       }
     } catch (err) {
       console.warn(err);
@@ -426,7 +411,6 @@ export class RegistrationDetailsScreen extends Component {
             isattachphoto: false,
           });
         } else {
-          // console.log(TAG, "I am in open camera", response);
           const source = {
             uri: response.uri,
             name: response.fileName ? response.fileName : "Dummy.jpg",
@@ -472,11 +456,6 @@ export class RegistrationDetailsScreen extends Component {
           buttonPositive: "OK",
         }
       );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the camera");
-      } else {
-        console.log("Camera permission denied");
-      }
     } catch (err) {
       console.warn(err);
     }
@@ -489,7 +468,6 @@ export class RegistrationDetailsScreen extends Component {
         maxWidth: 200,
       },
       async (response) => {
-        // console.log(TAG, "response---", response);
         if (response.didCancel === true) {
           this.setState({
             ImageSource: IMAGE.user,

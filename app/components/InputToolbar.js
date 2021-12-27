@@ -24,7 +24,7 @@ export const renderInputToolbar = (props) => (
         width: 2,
         height: 12,
       },
-     
+
       shadowOpacity: 0.58,
       shadowRadius: 16,
       elevation: 24,
@@ -55,12 +55,8 @@ export const renderActions = (props) => (
       />
     )}
     options={{
-      "Choose From Library": () => {
-        console.log("Choose From Library");
-      },
-      Cancel: () => {
-        console.log("Cancel");
-      },
+      "Choose From Library": () => {},
+      Cancel: () => {},
     }}
     optionTintColor={Colors.black}
   />

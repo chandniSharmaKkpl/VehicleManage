@@ -18,8 +18,6 @@ export default class FireBase {
   }
 
   logFBEvent = (title, params) => {
-    console.log("Firebase Analytics Log....");
-    console.log("title:" + title + " Param:" + JSON.stringify(params));
     firebase.analytics().logEvent(title, params);
   };
 
@@ -37,7 +35,6 @@ export default class FireBase {
               .getAPNSToken()
               .then((token) => {
                 // token not null
-                console.log("in class's iOS APNS Token:=>" + token);
               });
           });
       }
@@ -47,10 +44,7 @@ export default class FireBase {
     this.isFCMEnabled =
       authStatus === firebase.messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
-
-    console.log("isFCMEnabled:====>" + this.isFCMEnabled);
     if (!this.isFCMEnabled) {
-      console.log("NOT have permission... request for permission()");
       /**
        * If FCM Not Enabled - request enable permission;
        * **/
@@ -60,7 +54,6 @@ export default class FireBase {
           .requestPermission()
           .then(() => {
             // User has authorised
-            console.log("now the FCM Enabled", setPermission);
             this.isFCMEnabled = setPermission;
           })
           .catch((err) => {
@@ -71,36 +64,25 @@ export default class FireBase {
                 {
                   text: "Settings",
                   onPress: () => {
-                    console.log("Settings Pressed");
-                    // Linking.openURL('app-settings://notification/${com.Fleurieu}');
                     Linking.openURL(
                       "app-settings://notification/<com.whatslocalapp>"
                     );
-                    // Linking.openURL('app-settings:');
                   },
                 },
                 {
                   text: "Cancel",
-                  onPress: () => {
-                    console.log("User have pressed cancel.");
-                  },
+                  onPress: () => {},
                 },
               ],
               { cancelable: false }
             );
-            console.log("Error requestPermission  ()=>", err);
           });
-      } catch (error) {
-        console.log("Error in APNS permission=>", error);
-      }
-    } else {
-      console.log("isFCMEnabled is TRUE");
+      } catch (error) {}
     }
     return this.isFCMEnabled;
   };
 
   setFCMToken = async () => {
-    console.log("Firebase.js ------------->");
     this.fcmToken = await firebase.messaging().getToken();
     this.saveToken();
     return this.fcmToken;
@@ -109,7 +91,6 @@ export default class FireBase {
   async saveToken() {
     let fcmToken = this.fcmToken;
     if (fcmToken) {
-      console.log("Device TOKEN ======>" + fcmToken);
       // user has a device token
       await AsyncStorage.setItem("fcmToken", fcmToken);
     }
@@ -119,12 +100,6 @@ export default class FireBase {
     /*
      * Triggered when a particular notification has been received in foreground
      * */
-    // this.notificationListener = firebase.notifications().onNotification((notification) => {
-    //   console.log("onNotification()----->");
-    //   const { title, body } = notification.data;
-    //   this.showAlert(title, body);
-    //   console.log("onNotification()----->", notification);
-    // });
 
     /*
      * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
@@ -132,7 +107,6 @@ export default class FireBase {
     this.notificationOpenedListener = firebase
       .messaging()
       .onNotificationOpenedApp(async (remoteMessage) => {
-        // alert("Background Push Notification opened");
         console.log(
           "Roadie ::::::::: onNotificationOpenedApp()----->",
           remoteMessage
@@ -144,7 +118,6 @@ export default class FireBase {
             body: body,
             detail: detail,
           });
-          // this.showAlert(title, body, detail);
         }
       });
 
@@ -156,11 +129,6 @@ export default class FireBase {
       .getInitialNotification()
       .then((remoteMessage) => {
         if (remoteMessage) {
-          // alert("App Closed Push Notification opened");
-          console.log(
-            "Roadie ::::::::: getInitialNotification()----->",
-            remoteMessage
-          );
           const { title, body, detail } = remoteMessage.data;
           if (
             title !== undefined &&
@@ -172,7 +140,6 @@ export default class FireBase {
               body: body,
               detail: detail,
             });
-            // this.showAlert(title, body, detail);
           }
         }
       });
@@ -181,11 +148,6 @@ export default class FireBase {
      * Triggered for data only payload in foreground
      * */
     this.messageListener = firebase.messaging().onMessage((message) => {
-      //process data message
-
-      // const {nav} = this.props;
-      // const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-      console.log("Roadie ::::::::: onMessage()----->", message);
       // console.log("this.props :-->",this.props);
       const { title, body, detail } = message.data;
       if (title !== undefined && body !== undefined && detail !== undefined) {
@@ -202,10 +164,8 @@ export default class FireBase {
     this.backgroundMessageListener = firebase
       .messaging()
       .setBackgroundMessageHandler(async (remoteMessage) => {
-        console.log("Message handled in the background!", remoteMessage);
         const { title, body, detail } = remoteMessage.data;
         if (title !== undefined && body !== undefined && detail !== undefined) {
-          // this.showAlert(title, body, detail);
           DeviceEventEmitter.emit("received_push_notification", {
             title: title,
             body: body,
@@ -217,11 +177,6 @@ export default class FireBase {
     this.tokenRefreshListener = firebase
       .messaging()
       .onTokenRefresh((newDeviceToken) => {
-        console.log(
-          "Roadie ::::::::: <=============: New Device Token :=============>",
-          newDeviceToken
-        );
-
         callAPI(newDeviceToken);
       });
   };

@@ -86,7 +86,6 @@ export class LoginScreen extends Component {
       authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      console.log("Notification have permission");
       this.getToken();
     } else {
       this.requestUserPermission();
@@ -98,19 +97,12 @@ export class LoginScreen extends Component {
     if (!fcmToken) {
       fcmToken = await messaging().getToken();
       if (fcmToken) {
-        // Alert.alert("Device Token", fcmToken);
-        console.log("Device TOKEN ======>", fcmToken);
         this.setState({ deviceToken: fcmToken });
-
         // user has a device token
         await AsyncStorage.setItem("fcmToken", fcmToken);
-      } else {
-        // await AsyncStorage.setItem("dt_logs", "in else not getToken");
       }
     } else {
-      console.log("Already Saved Device TOKEN ======>", fcmToken);
       this.setState({ deviceToken: fcmToken });
-      // await AsyncStorage.setItem("dt_logs", "found dt:" + fcmToken);
     }
   }
 
@@ -122,7 +114,6 @@ export class LoginScreen extends Component {
 
     if (enabled) {
       this.getToken();
-      console.log("Authorization status:", authStatus);
     }
   }
 

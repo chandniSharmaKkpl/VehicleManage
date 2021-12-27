@@ -68,7 +68,6 @@ export class ForgotPasswordScreen extends Component {
     if (globals.isInternetConnected == true) {
       forgotpassword(params)
         .then(async (res) => {
-          // console.log("res=====forgotpassword", JSON.stringify(res.value.data));
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {

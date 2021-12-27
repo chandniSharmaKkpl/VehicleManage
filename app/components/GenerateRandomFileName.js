@@ -1,9 +1,7 @@
 import React from "react";
 import { View, Text, Switch, TouchableOpacity } from "react-native";
 
-
 const GenerateRandomFileName = ({ result, ...props }) => {
-  console.log("GenerateRandomFileName");
   let length = 5;
   var result = "";
   var characters =

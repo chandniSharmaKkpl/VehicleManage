@@ -26,8 +26,6 @@ const authReducer = (state = initialState, action) => {
       };
     case actionTypes.INIT_APP_SUCCESS:
       const errdata = action.payload.data.error;
-      console.log("errdata=====INIT_APP_SUCCESS", errdata);
-
       if (errdata == "Unauthenticated.") {
         return {
           user: {
@@ -41,7 +39,6 @@ const authReducer = (state = initialState, action) => {
         };
       }
       const data = action.payload.data.data;
-      console.log("data=====INIT_APP_SUCCESS", data);
       let apiData = [];
       if (data.user_data) {
         apiData = data;
@@ -344,7 +341,6 @@ const authReducer = (state = initialState, action) => {
       };
 
     case actionTypes.SWITCH_THEME:
-      // console.log("actionTypes.SWITCH_THEME action.baseTheme :->"+JSON.stringify(action.payload.baseTheme));
       return {
         ...state,
         user: {

@@ -8,7 +8,8 @@ import {
   SOCIAL_SHARE_FRIEND,
   REPORT_USER,
   RECEIVED_CHAT_MESSAGE,
-  SWITCH_THEME,SHARE_SOCIAL_PROFILES,
+  SWITCH_THEME,
+  SHARE_SOCIAL_PROFILES,
 } from "./ActionType";
 
 export const swicthTheme = (BaseTheme) => ({
@@ -47,11 +48,9 @@ export const insertMessage = (params) => ({
   payload: api
     .post("api/messages/insert", params)
     .then((res) => {
-      // console.log("res==========insertMessage==", res);
       return res;
     })
     .catch((err) => {
-      // console.log("err==========insertMessage==", err);
       return err;
     }),
 });

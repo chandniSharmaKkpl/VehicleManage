@@ -39,8 +39,6 @@ export class SignInScreen extends Component {
     super(props);
     this.state = {
       //initialize variable
-      // txtEmail: "we@mailinator.com",
-      // txtPassword: "Abcd@1234fdgfd",
       txtEmail: "",
       txtPassword: "",
       isShowPassword: true,
@@ -51,8 +49,6 @@ export class SignInScreen extends Component {
     };
     this.input = {};
   }
-
-  componentDidMount = async () => {};
 
   // clear States before leave this screen
   clearStates = () => {
@@ -79,23 +75,7 @@ export class SignInScreen extends Component {
 
   // user forgot their password then go to ForgotPassword screen
   gotoForgotPasswordscreen = async () => {
-    const { txtEmail, txtPassword } = this.state;
-
-    // if (isEmpty(txtEmail)) {
-    //   this.setState({
-    //     isEmailError: true,
-    //     emailValidMsg: Messages.email,
-    //   });
-    //   return false;
-    // } else if (!isEmail(txtEmail)) {
-    //   this.setState({
-    //     isEmailError: true,
-    //     emailValidMsg: Messages.emailValid,
-    //   });
-    //   return false;
-    // } else {
     NavigationService.navigate("ForgotPassword");
-    // }
   };
 
   // This function show/hide the password
@@ -145,7 +125,6 @@ export class SignInScreen extends Component {
       });
       return false;
     }
-
     return true;
   };
 
@@ -163,17 +142,7 @@ export class SignInScreen extends Component {
     const { txtEmail, txtPassword } = this.state;
     var deviceUUID = DeviceInfo.getUniqueId();
     var deviceName = DeviceInfo.getDeviceNameSync();
-    var deviceToken = DeviceInfo.getDeviceToken();
     let fcmToken = await AsyncStorage.getItem("fcmToken");
-    console.log(Platform.OS + " - fcmToken :->", fcmToken);
-    console.log("Device uuid and name", deviceUUID, deviceName);
-
-    // var deviceToken = (await AsyncStorage.getItem("fcmToken")) || "";
-    // if (deviceToken === "") {
-    //   deviceToken = await firebase.messaging().getToken();
-    //   AsyncStorage.setItem("fcmToken", deviceToken);
-    // }
-
     let params = new URLSearchParams();
     // Collect the necessary params
     params.append("email", txtEmail);
@@ -182,16 +151,11 @@ export class SignInScreen extends Component {
     params.append("device_uuid", deviceUUID);
     params.append("device_type", Platform.OS == "android" ? "1" : "0");
     params.append("device_name", deviceName);
-
-    console.log("params---LOGIN-", JSON.stringify(params));
     const { login } = this.props;
     if (globals.isInternetConnected == true) {
       login(params)
         .then(async (res) => {
-          // console.log(
-          //   "res.value.data.data------login-------",
-          //   JSON.stringify(res.value)
-          // );
+          console.warn("i am in res value===> login api", res.value.data.data);
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.invalid_email) {
