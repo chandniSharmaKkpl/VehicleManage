@@ -34,6 +34,7 @@ export class NotificationScreen extends Component {
       theme: {},
       countDeatils: this.props.navigation.state.params.countDeatils,
       searched_avatars: [],
+      searched_count: 0,
       messages_count: 0,
       request_count: 0,
     };
@@ -43,15 +44,23 @@ export class NotificationScreen extends Component {
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
 
-    let reqcount =
-      (await JSON.parse(await AsyncStorage.getItem("request_count"))) ||
-      this.state.countDeatils.requests_count;
-    let isitreadrequest = await AsyncStorage.getItem("IsReadRequest");
+    let searchcount =
+      (await JSON.parse(await AsyncStorage.getItem("search_count"))) ||
+      this.state.countDeatils.searched_count;
+    console.log("searchcount-----", searchcount);
 
     let msgcount =
       (await JSON.parse(await AsyncStorage.getItem("msg_count"))) ||
       this.state.countDeatils.messages_count;
     let isitreadMessage = await AsyncStorage.getItem("IsReadMessage");
+
+    let reqcount =
+      (await JSON.parse(await AsyncStorage.getItem("request_count"))) ||
+      this.state.countDeatils.requests_count;
+    let isitreadrequest = await AsyncStorage.getItem("IsReadRequest");
+    console.log("reqcount-----", reqcount);
+
+    console.log("totalcount-----", this.state.countDeatils.total_count);
 
     DeviceEventEmitter.addListener("msg_count_remove", () => {
       this.setMsgCountsafterreview();
@@ -64,14 +73,23 @@ export class NotificationScreen extends Component {
     this.setState({
       theme: this.props.theme,
       searched_avatars: this.state.countDeatils.searched_avatars,
-      messages_count: isitreadMessage ? 0 : msgcount,
-      request_count: isitreadrequest ? 0 : reqcount,
+      messages_count: msgcount,
+      request_count: reqcount,
     });
   };
 
   componentWillUnmount = () => {
     DeviceEventEmitter.removeAllListeners("request_count_remove");
     DeviceEventEmitter.removeAllListeners("msg_count_remove");
+  };
+
+  setSearchCountsafterreview = () => {
+    this.setState({ searched_count: 0 }, async () => {
+      await AsyncStorage.setItem(
+        "search_count",
+        JSON.stringify(parseInt(this.state.searched_count))
+      );
+    });
   };
 
   setMsgCountsafterreview = () => {
@@ -97,6 +115,8 @@ export class NotificationScreen extends Component {
   };
 
   gotoChatdetails = () => {
+    console.log("go to chat details");
+
     NavigationService.navigate("ChatList");
   };
 
@@ -292,6 +312,8 @@ export class NotificationScreen extends Component {
       messages_count,
       request_count,
     } = this.state;
+    console.log("messages_count in render", messages_count);
+
     const { isLoading, loaderMessage, theme } = this.props;
 
     return (
@@ -317,11 +339,11 @@ export class NotificationScreen extends Component {
             </View>
           ) : (
             <>
-              {searched_avatars.length == 0 || searched_avatars == []
+              {searched_avatars.length === 0 || searched_avatars == []
                 ? null
                 : this.retunNotificationList()}
 
-              {messages_count == 0 ? null : this.retunChatMsgList()}
+              {messages_count === 0 ? null : this.retunChatMsgList()}
               {this.returnRequestList()}
               {/* {request_count == 0 ? null : this.returnRequestList()} */}
             </>

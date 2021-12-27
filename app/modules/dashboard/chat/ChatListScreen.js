@@ -110,6 +110,8 @@ export class ChatListScreen extends Component {
   };
 
   async componentDidMount() {
+    this.onFocusFunction();
+
     let token = await AsyncStorage.getItem("access_token");
     globals.access_token = token;
     // this.focusListener = this.props.navigation.addListener("didFocus", () => {
