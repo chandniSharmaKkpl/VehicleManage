@@ -150,10 +150,12 @@ const chatReducer = (state = initialState, action) => {
       var message = chat_message.message;
       var from_id = Number(chat_message.from);
       var to_id = Number(chat_message.to);
-      var createdAt = moment(
-        message[0].createdAt,
-        "YYYY-MM-DDTHH:mm:ssZ"
-      ).format("YYYY/MM/DD HH:mm:ss");
+      // var createdAt = moment(
+      //   message[0].createdAt,
+      //   "YYYY-MM-DDTHH:mm:ssZ"
+      // ).format("YYYY/MM/DD HH:mm:ss");
+      var createdAt = message[0].createdAt;
+
       var messgae_id = message[0]._id;
 
       var msgDic = {
@@ -162,7 +164,7 @@ const chatReducer = (state = initialState, action) => {
 
         to_id: to_id,
         text: message[0].text,
-        created_at: createdAt,
+        createdAt: createdAt,
         is_received: 0,
         user: {
           _id: user_data.id,
@@ -217,7 +219,7 @@ const chatReducer = (state = initialState, action) => {
         },
       };
 
-      //// SHARE_SOCIAL_PROFILES
+    //// SHARE_SOCIAL_PROFILES
     case actionTypes.SHARE_SOCIAL_PROFILES_LOADING:
       return {
         ...state,
@@ -245,7 +247,6 @@ const chatReducer = (state = initialState, action) => {
           loaderMessage: "Loading...",
         },
       };
-
 
     case actionTypes.SWITCH_THEME:
       // console.log("actionTypes.SWITCH_THEME action.baseTheme :->"+JSON.stringify(action.payload.baseTheme));
