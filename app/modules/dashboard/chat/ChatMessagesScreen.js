@@ -169,14 +169,14 @@ export class ChatMessagesScreen extends Component {
       .then(async (res) => {
         //OK 200 The request was fulfilled
         if (res.value && res.value.data.success == true) {
-          // if (this.state.messages.length > 0) {
-          //   // if local state variable already have messages and anyone receive new message then no need to update local state
-          //   // Only update Read flag api
-          //   this.readMessagesAPI(res.value.data.data);
-          // } else {
-          this.formatMessageAndStore(res.value.data.data);
-          // this.readMessagesAPI(res.value.data.data);
-          // }
+          if (this.state.messages.length > 0) {
+            // if local state variable already have messages and anyone receive new message then no need to update local state
+            // Only update Read flag api
+            this.readMessagesAPI(res.value.data.data);
+          } else {
+            this.formatMessageAndStore(res.value.data.data);
+            // this.readMessagesAPI(res.value.data.data);
+          }
         }
       })
       .catch((err) => {
@@ -307,14 +307,14 @@ export class ChatMessagesScreen extends Component {
   };
 
   waitForConnection = (callback, interval) => {
-    if (global.ws.readyState === 1) {
-      callback();
-    } else {
-      // optional: implement backoff for interval here
-      setTimeout(function () {
+    setTimeout(function () {
+      if (global.ws.readyState === 1) {
+        callback();
+      } else {
+        // optional: implement backoff for interval here
         this.waitForConnection(callback, interval);
-      }, interval);
-    }
+      }
+    }, interval);
   };
 
   callOnSend = (messages = []) => {
@@ -632,7 +632,6 @@ export class ChatMessagesScreen extends Component {
             renderTicks={(message) => this.renderTicks(message, user_id)}
             alwaysShowSend={true}
             timeFormat={"HH:mm"}
-            alwaysShowSend={true}
             style={{ flex: 1 }}
             placeholder={StaticTitle.chatinput}
             renderInputToolbar={renderInputToolbar}
@@ -661,9 +660,9 @@ export class ChatMessagesScreen extends Component {
             ]}
             {...platformConf}
           />
-          {Platform.OS === "android" ? (
+          {/* {Platform.OS === "android" ? (
             <KeyboardSpacer topSpacing={-160} />
-          ) : null}
+          ) : null} */}
           {/* {isopenEmojiPicker == true ? (
             <EmojiSelector
               onEmojiSelected={(emoji) => this.updateSelectedEmoji(emoji)}
