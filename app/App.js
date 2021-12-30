@@ -11,13 +11,16 @@ import { Appearance, AppearanceProvider } from "react-native-appearance";
 import messaging, { firebase } from "@react-native-firebase/messaging";
 
 let subscription;
+LogBox.ignoreAllLogs();
+
 export class App extends Component {
   constructor(props) {
-    // Set allowFontScaling false for Screen
-    Text.defaultProps = Text.defaultProps || {};
-    Text.defaultProps.allowFontScaling = false;
-    TextInput.defaultProps = TextInput.defaultProps || {};
-    TextInput.defaultProps.allowFontScaling = false;
+    if (Text.defaultProps == null) Text.defaultProps = {};
+    Text.defaultProps.allowFontScaling = false; //<--------Set allowFontScaling false for Screen
+
+    if (TextInput.defaultProps == null) Input.defaultProps = {};
+    TextInput.defaultProps.allowFontScaling = false; //<--------Set allowFontScaling false for Screen
+
     super(props);
   }
 
@@ -53,9 +56,7 @@ export class App extends Component {
       fcmToken = await messaging().getToken();
       if (fcmToken) {
         await AsyncStorage.setItem("fcmToken", fcmToken);
-      } else {
       }
-    } else {
     }
   }
 
@@ -69,7 +70,6 @@ export class App extends Component {
       if (enabled) {
         // User has authorised
         this.getToken();
-      } else {
       }
     } catch (error) {
       // User has rejected permissions
@@ -93,18 +93,17 @@ export class App extends Component {
   };
 
   render() {
-    LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
-    LogBox.ignoreAllLogs(); //Ignore all log notifications
     return (
       <AppearanceProvider>
         <Provider store={store}>
           <AppNavigator />
           <FlashMessage
             style={{
-              paddingTop:
-                Platform.OS === "android" ? StatusBar.currentHeight + 15 : 0,
+              marginTop:
+                Platform.OS === "android" ? StatusBar.currentHeight : 0,
             }}
             position="top"
+            floating={Platform.OS !== "ios"}
           />
         </Provider>
       </AppearanceProvider>

@@ -134,8 +134,6 @@ export class LoginScreen extends Component {
 
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
-    // const { theme } = this.state;
-
     if (theme == undefined || theme.PRIMARY_BACKGROUND_COLOR === undefined) {
       return <></>;
     }

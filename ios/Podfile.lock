@@ -410,7 +410,7 @@ PODS:
   - RNGoogleSignin (6.0.1):
     - GoogleSignIn (~> 5.0.0)
     - React-Core
-  - RNIap (7.5.3):
+  - RNIap (7.5.1):
     - React-Core
   - RNReanimated (1.13.3):
     - React-Core
@@ -621,7 +621,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: bb1d56de6269dd581d0c7d4069d06bfe028fb535
+  FBReactNativeSpec: 10166b1702bd37d5b0c8c7b30b1a2e343196e999
   FBSDKCoreKit: fada1a6a0076724678993ff05a633848765ff18c
   FBSDKLoginKit: d5ffe6d808897019ccf16feb6f0a7ab260bc5cd6
   FBSDKShareKit: 6a85acb92eaf43a0b6dfa2ba6106eb74c7f10d30
@@ -679,7 +679,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: afa6fe27d755207b84c7f3820ae35b609dac56fc
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
-  RNIap: 7ac6e0bcb9d5d457e3dbec305ba8aceef201cb8b
+  RNIap: 5a03bf7852ba58a939051077c0e138caf301d22f
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: 522705f2e5c9d27efb17f24aceb2bf8335bc7b8e
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4

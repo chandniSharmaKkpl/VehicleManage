@@ -155,7 +155,6 @@ export class SignInScreen extends Component {
     if (globals.isInternetConnected == true) {
       login(params)
         .then(async (res) => {
-          console.warn("i am in res value===> login api", res.value.data.data);
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.invalid_email) {
@@ -194,7 +193,7 @@ export class SignInScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else {
@@ -218,7 +217,7 @@ export class SignInScreen extends Component {
               await showMessage({
                 message: res.value.data.email,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (
@@ -229,14 +228,14 @@ export class SignInScreen extends Component {
               await showMessage({
                 message: res.value.data.device_token,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (res.value && res.value.success == false) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (
@@ -246,7 +245,7 @@ export class SignInScreen extends Component {
               await showMessage({
                 message: res.value.data.errors.email,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }

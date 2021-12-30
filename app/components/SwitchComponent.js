@@ -1,13 +1,15 @@
 import React from "react";
-import { View, Text, Switch, TouchableOpacity ,Platform} from "react-native";
-import { ComponentStyle } from "../assets/styles/ComponentStyle";
+import { Switch, Platform } from "react-native";
 import Colors from "../assets/Colors";
 
-const SwitchComponent = ({theme, value, onValueChange, ...props }) => {
+const SwitchComponent = ({ theme, value, onValueChange, ...props }) => {
   return (
     <Switch
       style={{
-        transform:(Platform.OS =='ios')? [{ scaleX: 0.99 }, { scaleY: 0.9 }] : [{ scaleX: 1.2 }, { scaleY: 1.2 }],
+        transform:
+          Platform.OS == "ios"
+            ? [{ scaleX: 0.99 }, { scaleY: 0.9 }]
+            : [{ scaleX: 1.2 }, { scaleY: 1.2 }],
         alignSelf: "flex-end",
       }}
       trackColor={{ false: theme.SWITCH_COLOR, true: Colors.primary }}

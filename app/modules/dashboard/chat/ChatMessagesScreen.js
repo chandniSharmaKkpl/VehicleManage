@@ -415,7 +415,7 @@ export class ChatMessagesScreen extends Component {
             await showMessage({
               message: res.value.data.message,
               type: "success",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
             this.displayMsgReportPicker();
@@ -448,7 +448,7 @@ export class ChatMessagesScreen extends Component {
             await showMessage({
               message: res.value.data.message,
               type: "success",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
             this.displayMsgReportPicker();

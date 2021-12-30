@@ -22,8 +22,6 @@ class FBLogin extends Component {
     this.state = {};
   }
   performFBLogin() {
-    console.warn("i am in fb login==>");
-
     try {
       let tempToken;
       LoginManager.logOut();
@@ -32,7 +30,6 @@ class FBLogin extends Component {
         function (result) {
           if (!result.isCancelled) {
             AccessToken.getCurrentAccessToken().then((data) => {
-              // console.warn("i am in access token data ==>", data);
               tempToken = data.accessToken;
               const infoRequest = new GraphRequest(
                 "/me",
@@ -45,7 +42,7 @@ class FBLogin extends Component {
                     },
                   },
                 },
-                this._responseInfoCallback
+                self._responseInfoCallback
               );
               new GraphRequestManager().addRequest(infoRequest).start();
             });
@@ -61,6 +58,7 @@ class FBLogin extends Component {
           params.append("provider", "facebook");
           params.append("provider_id", result.id);
           params.append("name", result.first_name);
+          params.append("surname", result.last_name);
           params.append("email", result.email);
           const { sociallogin } = this.props;
           sociallogin(params).then(async (res) => {
@@ -70,7 +68,7 @@ class FBLogin extends Component {
                 await showMessage({
                   message: res.value.data.message,
                   type: "success",
-                  icon: "info",
+                  icon: "auto",
                   duration: 4000,
                 });
                 if (res.value.data.data.createprofileone == true) {
@@ -100,7 +98,7 @@ class FBLogin extends Component {
                 await showMessage({
                   message: res.value.message,
                   type: "danger",
-                  icon: "info",
+                  icon: "auto",
                   duration: 4000,
                 });
               }
@@ -109,7 +107,7 @@ class FBLogin extends Component {
         }
       };
     } catch (e) {
-      console.warn("i am in catch====>", e);
+      console.warn("i am FBLogin component in catch block", e);
     }
   }
 

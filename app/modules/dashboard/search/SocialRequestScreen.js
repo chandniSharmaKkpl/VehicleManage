@@ -50,9 +50,6 @@ export class SocialRequestScreen extends Component {
   }
 
   async componentDidMount() {
-    let token = await AsyncStorage.getItem("access_token");
-    globals.access_token = token;
-
     await AsyncStorage.setItem("IsRead", JSON.stringify(true));
     await AsyncStorage.setItem("IsReadRequest", JSON.stringify(true));
 
@@ -64,27 +61,23 @@ export class SocialRequestScreen extends Component {
 
     this.setState({ theme: this.props.theme }, () => {
       if (globals.isInternetConnected == true) {
-        this.getrequestedList();
+        this.getRequestedList();
       } else {
         Alert.alert(globals.warning, globals.noInternet);
       }
     });
   }
 
-  getrequestedList = async () => {
+  getRequestedList = async () => {
     const { socialrequestlist } = this.props;
     if (globals.isInternetConnected == true) {
       socialrequestlist().then(async (res) => {
-        // console.log(
-        //   "res----------socialrequestlist-",
-        //   JSON.stringify(res.value.data)
-        // );
         if (res.value && res.value.data.success == true) {
           if (res.value && res.value.status === 200) {
             await showMessage({
               message: res.value.data.message,
               type: "success",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
             this.setState({
@@ -108,7 +101,7 @@ export class SocialRequestScreen extends Component {
           await showMessage({
             message: res.value.error,
             type: "danger",
-            icon: "info",
+            icon: "auto",
             duration: 4000,
           });
         }
@@ -240,7 +233,7 @@ export class SocialRequestScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               await AsyncStorage.setItem("IsReadRequest", JSON.stringify(true));
@@ -260,7 +253,7 @@ export class SocialRequestScreen extends Component {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
@@ -295,7 +288,7 @@ export class SocialRequestScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               await AsyncStorage.setItem("IsReadRequest", JSON.stringify(true));
@@ -315,7 +308,7 @@ export class SocialRequestScreen extends Component {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }

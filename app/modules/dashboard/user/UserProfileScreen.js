@@ -93,8 +93,6 @@ export class UserProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    let token = await AsyncStorage.getItem("access_token");
-    globals.access_token = token;
     this.onFocusFunction();
     DeviceEventEmitter.addListener("initializeApp", () => {
       this.getUserData();
@@ -124,7 +122,6 @@ export class UserProfileScreen extends Component {
 
   // set userInformation
   setUserInfo = async (user) => {
-    console.warn("i am in set info===>", user.user_data);
     if (this._isMounted) {
       if (user && user.user_data) {
         if (user.user_data.instagram_username !== "") {
@@ -421,7 +418,7 @@ export class UserProfileScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               sideDrawer.updateUserInfo({
@@ -441,7 +438,7 @@ export class UserProfileScreen extends Component {
               // await showMessage({
               //   message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
               //   type: "danger",
-              //   icon: "info",
+              //   icon: "auto",
               //   duration: 4000,
               // });
             }

@@ -76,20 +76,9 @@ export class FriendlistScreen extends Component {
 
     getfriendlist(params)
       .then(async (res) => {
-        // console.log(
-        //   TAG,
-        //   "response of get friendlist",
-        //   JSON.stringify(res.value.data.data)
-        // );
         if (res.value && res.value.data.success == true) {
           //OK 200 The request was fulfilled
           if (res.value && res.value.status === 200) {
-            // await showMessage({
-            //   message: res.value.data.message,
-            //   type: "success",
-            //   icon: "info",
-            //   duration: 4000,
-            // });
             if (this._isMounted) {
               this.setState({
                 friendListData: res.value.data.data.friend_list,
@@ -106,7 +95,7 @@ export class FriendlistScreen extends Component {
             await showMessage({
               message: res.value.message,
               type: "danger",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
           }
@@ -151,7 +140,7 @@ export class FriendlistScreen extends Component {
       await showMessage({
         message: StaticTitle.searchrequired,
         type: "danger",
-        icon: "info",
+        icon: "auto",
         duration: 4000,
       });
       return false;

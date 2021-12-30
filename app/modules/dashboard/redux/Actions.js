@@ -62,7 +62,7 @@ export const getfriendlist = (params) => ({
       return err;
     }),
 });
-export const getfriendDetails = (params) => ({
+export const getFriendDetails = (params) => ({
   type: GET_FRIEND_DETAILS,
   payload: api
     .post("api/friend_detail", params)

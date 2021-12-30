@@ -55,7 +55,7 @@ class sideDrawer extends Component {
             await showMessage({
               message: res.value.data.success,
               type: "success",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
             NavigationService.navigate("Login");

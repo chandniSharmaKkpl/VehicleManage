@@ -66,7 +66,6 @@ class GoogleLogin extends Component {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       // const accessToken = await GoogleSignin.getTokens();
-      console.warn("i am in user access token=>", "userInfo ===>", userInfo);
       let params = new URLSearchParams();
       // Collect the necessary params
       params.append("accessToken", userInfo.idToken);
@@ -85,7 +84,7 @@ class GoogleLogin extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               if (
@@ -119,7 +118,7 @@ class GoogleLogin extends Component {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
