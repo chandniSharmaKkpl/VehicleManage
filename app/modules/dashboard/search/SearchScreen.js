@@ -34,7 +34,7 @@ export class SearchScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      txtSearch: "Gj",
+      txtSearch: "",
       searchListdata: [],
       theme: {},
 
@@ -273,7 +273,7 @@ export class SearchScreen extends Component {
       await showMessage({
         message: StaticTitle.searchrequired,
         type: "danger",
-        icon: "info",
+        icon: "auto",
         duration: 4000,
       });
       return false;
@@ -286,18 +286,13 @@ export class SearchScreen extends Component {
     if (globals.isInternetConnected == true) {
       searchvehicle(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "response of search vehical",
-          //   JSON.stringify(res.value)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               this.setSearchdataList(res.value.data.data);
@@ -311,14 +306,14 @@ export class SearchScreen extends Component {
               await showMessage({
                 message: res.value.data.search_by_vehicle,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (res.value && res.value.message) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
@@ -423,9 +418,9 @@ export class SearchScreen extends Component {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-          {/* {this.state.isItLoading && (
+          {isLoading && (
             <Loader isOverlay={true} loaderMessage={loaderMessage} />
-          )} */}
+          )}
           <NavigationEvents
             onDidFocus={() => {
               if (globals.isInternetConnected == true) {
@@ -449,7 +444,7 @@ export class SearchScreen extends Component {
           <Search
             theme={theme}
             value={txtSearch}
-            blurOnSubmit={false}
+            blurOnSubmit={true}
             returnKeyType="done"
             onSubmitEditing={() => this.getSearchResult()}
             autoCapitalize={"none"}
@@ -469,7 +464,6 @@ export class SearchScreen extends Component {
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={this.separatorComponent}
           />
-          {/* )} */}
         </View>
       </>
     );

@@ -74,7 +74,7 @@ export class ForgotPasswordScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               NavigationService.navigate("SignIn");
@@ -93,7 +93,7 @@ export class ForgotPasswordScreen extends Component {
               await showMessage({
                 message: res.value.data.email,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }

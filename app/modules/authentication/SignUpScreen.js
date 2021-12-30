@@ -195,7 +195,7 @@ export class SignUpScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               this.gotoSaveToken(res.value.data.data.token);
@@ -217,7 +217,7 @@ export class SignUpScreen extends Component {
               await showMessage({
                 message: res.value.data.email,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               this.setState({

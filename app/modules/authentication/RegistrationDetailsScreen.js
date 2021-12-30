@@ -27,7 +27,6 @@ import {
   ButtonwithRightIcon,
   MediaModel,
   Loader,
-  GenerateRandomFileName,
 } from "../../components";
 import { Messages } from "../../utils/Messages";
 import * as Authactions from "../authentication/redux/Actions";
@@ -122,14 +121,14 @@ export class RegistrationDetailsScreen extends Component {
       await showMessage({
         message: StaticTitle.registernumberfieldrequire,
         type: "danger",
-        icon: "info",
+        icon: "auto",
         duration: 4000,
       });
     } else if (!onlycharandnum(txtRegNumber)) {
       await showMessage({
         message: StaticTitle.registernumberfieldvalidation,
         type: "danger",
-        icon: "info",
+        icon: "auto",
         duration: 4000,
       });
       this.setState({
@@ -142,14 +141,14 @@ export class RegistrationDetailsScreen extends Component {
           await showMessage({
             message: StaticTitle.registrationpaper,
             type: "danger",
-            icon: "info",
+            icon: "auto",
             duration: 4000,
           });
         } else if (attachPaperUrl == "" || attachPaperUrl == "Dummy.jpg") {
           await showMessage({
             message: StaticTitle.registrationpaper,
             type: "danger",
-            icon: "info",
+            icon: "auto",
             duration: 4000,
           });
         } else {
@@ -163,7 +162,7 @@ export class RegistrationDetailsScreen extends Component {
           await showMessage({
             message: StaticTitle.registrationpaper,
             type: "danger",
-            icon: "info",
+            icon: "auto",
             duration: 4000,
           });
         } else if (
@@ -173,7 +172,7 @@ export class RegistrationDetailsScreen extends Component {
           await showMessage({
             message: StaticTitle.vehicalphotorequired,
             type: "danger",
-            icon: "info",
+            icon: "auto",
             duration: 4000,
           });
         } else {
@@ -227,7 +226,7 @@ export class RegistrationDetailsScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               this.setState({
@@ -247,21 +246,21 @@ export class RegistrationDetailsScreen extends Component {
               await showMessage({
                 message: res.value.data.registration_paper,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (res.value && res.value.data.vehicle_photo) {
               await showMessage({
                 message: res.value.data.vehicle_photo,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (res.value && res.value.data.registration_number) {
               await showMessage({
                 message: res.value.data.registration_number,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
@@ -302,7 +301,7 @@ export class RegistrationDetailsScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               globals.isRegistrationDeatils = true;
@@ -319,21 +318,21 @@ export class RegistrationDetailsScreen extends Component {
               await showMessage({
                 message: res.value.data.registration_paper,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (res.value && res.value.data.vehicle_photo) {
               await showMessage({
                 message: res.value.data.vehicle_photo,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (res.value && res.value.data.registration_number) {
               await showMessage({
                 message: res.value.data.registration_number,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }

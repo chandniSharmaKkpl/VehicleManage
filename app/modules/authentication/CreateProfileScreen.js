@@ -201,7 +201,7 @@ export class CreateProfileScreen extends PureComponent {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               NavigationService.navigate("CreateSocialMediaProfile");
@@ -216,14 +216,14 @@ export class CreateProfileScreen extends PureComponent {
               await showMessage({
                 message: res.value.data.username,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (res.value && res.value.data.error) {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }

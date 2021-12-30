@@ -80,7 +80,7 @@ export class RecentViewersScreen extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               this.setState({
@@ -111,7 +111,7 @@ export class RecentViewersScreen extends Component {
             await showMessage({
               message: res.value.error,
               type: "danger",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
           }

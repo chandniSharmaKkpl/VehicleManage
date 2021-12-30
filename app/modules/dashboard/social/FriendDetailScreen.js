@@ -14,22 +14,16 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { FriendDetailStyle } from "../../../assets/styles/FriendDetailStyle";
-import { StaticTitle } from "../../../utils/StaticTitle";
 import { Loader } from "../../../components";
 import NavigationService from "../../../utils/NavigationService";
-import { Messages } from "../../../utils/Messages";
 import { IMAGE } from "../../../assets/Images";
-import { NavigationEvents } from "react-navigation";
 import FastImage from "react-native-fast-image";
 import Colors from "../../../assets/Colors";
 import LinearGradient from "react-native-linear-gradient";
 import * as globals from "../../../utils/Globals";
 import * as actions from "../redux/Actions";
 import * as chatactions from "../chat/redux/Actions";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const TAG = "FriendDetailScreen ::=";
+import { showMessage } from "react-native-flash-message";
 
 export class FriendDetailScreen extends Component {
   constructor(props) {
@@ -89,13 +83,10 @@ export class FriendDetailScreen extends Component {
   }
 
   componentDidMount = async () => {
-    let token = await AsyncStorage.getItem("access_token");
-    globals.access_token = token;
     if (this.props.userDetails != null && this.props.userDetails != undefined) {
-      this.setState({ user: this.props.userDetails.user_data }, () => {
-        this.getuserDetail();
-        this.connectWebSocket();
-      });
+      this.setState({ user: this.props.userDetails.user_data });
+      this.getUserDetails();
+      this.connectWebSocket();
     }
     AppState.addEventListener("change", this._handleAppStateChange);
   };
@@ -243,7 +234,6 @@ export class FriendDetailScreen extends Component {
 
     global.ws.onclose = ({ event }) => {
       console.log(Platform.OS + " --- WS onClose() ---->", event);
-      // console.warn(" --- WS onClose() ---->");
     };
   }
 
@@ -256,29 +246,18 @@ export class FriendDetailScreen extends Component {
   }
 
   // API call of get user details
-  getuserDetail = async () => {
+  getUserDetails = async () => {
     const { getfriendData } = this.state;
-    const { getfriendDetails } = this.props;
+    const { getFriendDetails } = this.props;
     let params = new URLSearchParams();
     // Collect the necessary params
     if (globals.isInternetConnected == true) {
       params.append("friend_id", getfriendData.id);
-      getfriendDetails(params)
+      getFriendDetails(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "response of getfriend Details",
-            JSON.stringify(res.value.data.data)
-          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
-              // await showMessage({
-              //   message: res.value.data.message,
-              //   type: "success",
-              //   icon: "info",
-              //   duration: 4000,
-              // });
               await this.friendsearchApi(res.value.data.data.user_data);
               this.setState({
                 friendDetail: res.value.data.data.user_data,
@@ -294,14 +273,14 @@ export class FriendDetailScreen extends Component {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
           }
         })
         .catch((err) => {
-          console.log(TAG, "i am in catch error getfriendDetails", err);
+          console.log("i am in catch error getFriendDetails", err);
         });
     } else {
       Alert.alert(globals.warning, globals.noInternet);
@@ -309,7 +288,6 @@ export class FriendDetailScreen extends Component {
   };
 
   friendsearchApi = (frndsearchData) => {
-    // console.log("frndsearchData=============", frndsearchData);
     const { friendsearch } = this.props;
     let params = new URLSearchParams();
     // Collect the necessary params
@@ -317,11 +295,6 @@ export class FriendDetailScreen extends Component {
       params.append("searched_id", frndsearchData.id);
       friendsearch(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "response of friendsearch",
-          //   JSON.stringify(res.value)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -335,7 +308,7 @@ export class FriendDetailScreen extends Component {
           }
         })
         .catch((err) => {
-          console.log(TAG, "i am in catch error friendsearch", err);
+          console.log("i am in catch error friendsearch", err);
         });
     } else {
       Alert.alert(globals.warning, globals.noInternet);
@@ -355,21 +328,15 @@ export class FriendDetailScreen extends Component {
     if (globals.isInternetConnected == true) {
       params.append("to_id", friendDetail.id);
 
-      // console.log("params====requestforSocialApi", JSON.stringify(params));
       requestforsocial(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "response of requestforsocial",
-          //   JSON.stringify(res.value)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
@@ -382,7 +349,7 @@ export class FriendDetailScreen extends Component {
               await showMessage({
                 message: res.value.data.to_id,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             } else if (
@@ -392,14 +359,14 @@ export class FriendDetailScreen extends Component {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
           }
         })
         .catch((err) => {
-          console.log(TAG, "i am in catch error addfriend", err);
+          console.log("i am in catch error addfriend", err);
         });
     } else {
       Alert.alert(globals.warning, globals.noInternet);
@@ -415,22 +382,16 @@ export class FriendDetailScreen extends Component {
     if (globals.isInternetConnected == true) {
       params.append("user_id", user.user_id);
       params.append("friend_id", getfriendData.id);
-      // console.log("params====AddasFriend", JSON.stringify(params));
       addfriend(params)
         .then(async (res) => {
-          // console.log(
-          //   TAG,
-          //   "response of addfriend",
-          //   JSON.stringify(res.value.data)
-          // );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
-              await this.getuserDetail();
+              await this.getUserDetails();
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
@@ -443,14 +404,14 @@ export class FriendDetailScreen extends Component {
               await showMessage({
                 message: res.value.message,
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
           }
         })
         .catch((err) => {
-          console.log(TAG, "i am in catch error addfriend", err);
+          console.log("i am in catch error addfriend", err);
         });
     } else {
       Alert.alert(globals.warning, globals.noInternet);
@@ -482,7 +443,7 @@ export class FriendDetailScreen extends Component {
     return (
       <View style={FriendDetailStyle.beforesquareview}>
         <TouchableWithoutFeedback
-          onPress={() => this.requestforSocialApi(friendDetail)}
+          onPress={() => this.requestforSocialApi(this.state.friendDetail)}
           style={[
             FriendDetailStyle.squareviews,
             {
@@ -595,8 +556,6 @@ export class FriendDetailScreen extends Component {
   render() {
     const { isLoading, loaderMessage, theme } = this.props;
     const { friendDetail, isrequested, user, getfriendData } = this.state;
-    console.log("isrequested===== render", isrequested);
-    console.log("friendDetail.setting_4==========", friendDetail.setting_4);
     return (
       <>
         <View
@@ -751,7 +710,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   receivedChatMessage: (params) =>
     dispatch(chatactions.receivedChatMessage(params)),
-  getfriendDetails: (params) => dispatch(actions.getfriendDetails(params)),
+  getFriendDetails: (params) => dispatch(actions.getFriendDetails(params)),
   addfriend: (params) => dispatch(actions.addfriend(params)),
   friendsearch: (params) => dispatch(actions.friendsearch(params)),
   requestforsocial: (params) => dispatch(actions.requestforsocial(params)),

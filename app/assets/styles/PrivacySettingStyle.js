@@ -31,16 +31,20 @@ export const PrivacySettingStyle = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 10,
   },
-  itemview:{
-    flexDirection: "row" 
+  itemview: {
+    flexDirection: "row",
   },
-  itemtext:{
+  itemtext: {
     fontFamily: FontFamily.RalewaRegular,
     fontSize: globals.font_14,
     color: Colors.switchtext,
     textAlign: "left",
     paddingVertical: 5,
     paddingHorizontal: 10,
-    width:'80%'
-  }
+    width: "80%",
+  },
+  marginTop: {
+    marginHorizontal: 10,
+    marginVertical: 20,
+  },
 });

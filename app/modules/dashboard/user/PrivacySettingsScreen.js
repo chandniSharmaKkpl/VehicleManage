@@ -83,7 +83,6 @@ export class PrivacySettingsScreen extends Component {
         }
       }
       if (Platform.OS === "android") {
-        console.warn("i am in in flushFailedPurchasesCachedAsPendingAndroid");
         RNIap.flushFailedPurchasesCachedAsPendingAndroid()
           .catch(() => {
             // exception can happen here if:
@@ -224,72 +223,49 @@ export class PrivacySettingsScreen extends Component {
   };
 
   // change on-off HideProfile
-  changeHideProfile = () => {
-    this.setState({ isHideProfile: !this.state.isHideProfile }, async () => {
-      await this.updateUserSettingsAPI();
-    });
-  };
+  changeHideProfile() {
+    this.setState({ isHideProfile: !this.state.isHideProfile });
+  }
 
   // change on-off HideCity
   changeHideCity = () => {
-    this.setState({ isHideCity: !this.state.isHideCity }, async () => {
-      await this.updateUserSettingsAPI();
-    });
+    this.setState({ isHideCity: !this.state.isHideCity });
   };
 
   // change on-off HideCarModel
   changeHideCarModel = () => {
-    this.setState({ isHideCarModel: !this.state.isHideCarModel }, async () => {
-      await this.updateUserSettingsAPI();
-    });
+    this.setState({ isHideCarModel: !this.state.isHideCarModel });
   };
 
   // change on-off HideRequestSocial
   changeHideRequestSocial = () => {
-    this.setState(
-      { isHideRequestSocial: !this.state.isHideRequestSocial },
-      async () => {
-        await this.updateUserSettingsAPI();
-      }
-    );
+    this.setState({ isHideRequestSocial: !this.state.isHideRequestSocial });
   };
 
   // change on-off isHideShareSocial
   changeHideShareSocial = () => {
-    this.setState(
-      { isHideShareSocial: !this.state.isHideShareSocial },
-      async () => {
-        await this.updateUserSettingsAPI();
-      }
-    );
+    this.setState({ isHideShareSocial: !this.state.isHideShareSocial });
   };
 
   // change on-off isHideDisplayName
   changeHideDisplayName = () => {
-    this.setState(
-      { isHideDisplayName: !this.state.isHideDisplayName },
-      async () => {
-        await this.updateUserSettingsAPI();
-      }
-    );
+    this.setState({ isHideDisplayName: !this.state.isHideDisplayName });
   };
 
   // change on-off isHideSearchUser
   changeHideSearchUser = () => {
-    if (this.state.turnonsubscription_button == true) {
-      this.setState(
-        { isHideSearchUser: !this.state.isHideSearchUser },
-        async () => {
-          await this.updateUserSettingsAPI();
-        }
-      );
+    if (this.state.turnonsubscription_button) {
+      this.setState({ isHideSearchUser: !this.state.isHideSearchUser });
+      setTimeout(() => {
+        this.updateUserSettingsAPI();
+      }, 10000);
     } else {
       Alert.alert(globals.appName, globals.subscriptionrequired);
     }
   };
 
   // API call of update User Settings
-  updateUserSettingsAPI = () => {
+  updateUserSettingsAPI() {
     const {
       isHideProfile,
       isHideCity,
@@ -300,17 +276,15 @@ export class PrivacySettingsScreen extends Component {
       isHideSearchUser,
     } = this.state;
     var params = new FormData();
-
     // Collect the necessary params
     const { updateUserSettings } = this.props;
-    params.append("setting_1", isHideProfile == true ? 1 : 0);
-    params.append("setting_2", isHideCity == true ? 1 : 0);
-    params.append("setting_3", isHideCarModel == true ? 1 : 0);
-    params.append("setting_4", isHideRequestSocial == true ? 1 : 0);
-    params.append("setting_5", isHideShareSocial == true ? 1 : 0);
-    params.append("setting_6", isHideDisplayName == true ? 1 : 0);
-    params.append("setting_7", isHideSearchUser == true ? 1 : 0);
-
+    params.append("setting_1", isHideProfile ? 1 : 0);
+    params.append("setting_2", isHideCity ? 1 : 0);
+    params.append("setting_3", isHideCarModel ? 1 : 0);
+    params.append("setting_4", isHideRequestSocial ? 1 : 0);
+    params.append("setting_5", isHideShareSocial ? 1 : 0);
+    params.append("setting_6", isHideDisplayName ? 1 : 0);
+    params.append("setting_7", isHideSearchUser ? 1 : 0);
     if (globals.isInternetConnected == true) {
       updateUserSettings(params)
         .then(async (res) => {
@@ -318,7 +292,6 @@ export class PrivacySettingsScreen extends Component {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
               this.getUserData();
-            } else {
             }
           } else {
             if (res.value && res.value.data.error == "Unauthenticated.") {
@@ -334,7 +307,7 @@ export class PrivacySettingsScreen extends Component {
     } else {
       Alert.alert(globals.warning, globals.noInternet);
     }
-  };
+  }
 
   getUserData() {
     if (globals.isInternetConnected == true) {
@@ -417,7 +390,7 @@ export class PrivacySettingsScreen extends Component {
                 <SwitchComponent
                   theme={theme}
                   value={isHideProfile}
-                  onValueChange={this.changeHideProfile}
+                  onValueChange={() => this.changeHideProfile()}
                 />
               </View>
               <View style={PrivacySettingStyle.separatorLine}></View>
@@ -505,7 +478,12 @@ export class PrivacySettingsScreen extends Component {
                   onValueChange={this.changeHideDisplayName}
                 />
               </View>
-              <View style={PrivacySettingStyle.separatorLine}></View>
+              <View style={[PrivacySettingStyle.marginTop]}>
+                <PrimaryButton
+                  onPress={() => this.updateUserSettingsAPI()}
+                  btnName={"Update Settings"}
+                />
+              </View>
 
               <Text
                 style={[

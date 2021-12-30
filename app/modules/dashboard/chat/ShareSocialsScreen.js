@@ -83,7 +83,7 @@ export class ShareSocialsScreen extends Component {
             await showMessage({
               message: res.value.data.message,
               type: "success",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
             NavigationService.back();
@@ -97,7 +97,7 @@ export class ShareSocialsScreen extends Component {
             await showMessage({
               message: res.value.message,
               type: "danger",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
           }
@@ -121,7 +121,7 @@ export class ShareSocialsScreen extends Component {
             await showMessage({
               message: res.value.data.message,
               type: "success",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
             if (this._isMounted) {
@@ -139,7 +139,7 @@ export class ShareSocialsScreen extends Component {
             await showMessage({
               message: res.value.message,
               type: "danger",
-              icon: "info",
+              icon: "auto",
               duration: 4000,
             });
           }

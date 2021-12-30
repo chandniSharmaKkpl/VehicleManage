@@ -75,7 +75,7 @@ export class CreateSocialMediaProfile extends Component {
       await showMessage({
         message: StaticTitle.registerinfoneeded,
         type: "danger",
-        icon: "info",
+        icon: "auto",
         duration: 4000,
       });
     } else {
@@ -109,7 +109,7 @@ export class CreateSocialMediaProfile extends Component {
               await showMessage({
                 message: res.value.data.message,
                 type: "success",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
               let token = await AsyncStorage.getItem("access_token");
@@ -126,7 +126,7 @@ export class CreateSocialMediaProfile extends Component {
               await showMessage({
                 message: res.value.data.image, // "The image field is required.", // update API response here res.value.data.image
                 type: "danger",
-                icon: "info",
+                icon: "auto",
                 duration: 4000,
               });
             }
