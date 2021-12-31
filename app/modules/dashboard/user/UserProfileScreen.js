@@ -412,6 +412,8 @@ export class UserProfileScreen extends Component {
     if (globals.isInternetConnected == true) {
       updateprofile(params)
         .then(async (res) => {
+          console.log("res", res);
+
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -428,6 +430,7 @@ export class UserProfileScreen extends Component {
               this.getUserData();
               this.setUserInfo(res.value.data.data);
             } else {
+              console.log("in res.value.status !== 200", res.value.status);
             }
           } else {
             if (res.value && res.value.data.error == "Unauthenticated.") {

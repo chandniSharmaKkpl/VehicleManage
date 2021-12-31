@@ -149,6 +149,8 @@ export class ChatListScreen extends Component {
   connectWebSocket() {
     global.ws = new WebSocket("ws://20.37.36.107:56113");
     global.ws.onopen = (data) => {
+      console.log("in global.ws.onopen", data);
+
       if (data.isTrusted === false) {
         this.setState({
           loader: false,

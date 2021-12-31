@@ -53,6 +53,7 @@ export class NotificationScreen extends Component {
       (await JSON.parse(await AsyncStorage.getItem("msg_count"))) ||
       this.state.countDeatils.messages_count;
     let isitreadMessage = await AsyncStorage.getItem("IsReadMessage");
+    console.log("msgcount-----", msgcount);
 
     let reqcount =
       (await JSON.parse(await AsyncStorage.getItem("request_count"))) ||
@@ -62,9 +63,9 @@ export class NotificationScreen extends Component {
 
     console.log("totalcount-----", this.state.countDeatils.total_count);
 
-    DeviceEventEmitter.addListener("msg_count_remove", () => {
-      this.setMsgCountsafterreview();
-    });
+    // DeviceEventEmitter.addListener("msg_count_remove", () => {
+    //   this.setMsgCountsafterreview();
+    // });
 
     DeviceEventEmitter.addListener("request_count_remove", () => {
       this.setRequestCountsafterreview();
