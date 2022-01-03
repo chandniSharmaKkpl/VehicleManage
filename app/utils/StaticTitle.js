@@ -26,6 +26,8 @@ const StaticTitle = {
   continue: "Continue",
   createProfile: "Create Profile",
   userName: "Username",
+  name: "Name ",
+  surname: "Surname ",
   city: "City or Suburb",
   makeModal: "Make and Model of Car",
   colors: "Color of Car",

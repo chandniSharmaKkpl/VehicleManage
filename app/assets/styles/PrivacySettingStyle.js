@@ -20,7 +20,7 @@ export const PrivacySettingStyle = StyleSheet.create({
     fontSize: globals.font_20,
     color: Colors.black,
     textAlign: "left",
-    paddingVertical: 5,
+    paddingVertical: 10,
     paddingHorizontal: 10,
   },
   separatorLine: {
@@ -35,8 +35,8 @@ export const PrivacySettingStyle = StyleSheet.create({
     flexDirection: "row",
   },
   itemtext: {
-    fontFamily: FontFamily.RalewaRegular,
-    fontSize: globals.font_14,
+    fontFamily: FontFamily.RalewaySemiBold,
+    fontSize: globals.font_13,
     color: Colors.switchtext,
     textAlign: "left",
     paddingVertical: 5,

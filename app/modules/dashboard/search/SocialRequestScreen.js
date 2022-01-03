@@ -175,7 +175,7 @@ export class SocialRequestScreen extends Component {
           </View>
         </View>
         <TouchableOpacity
-          onPress={() => this.approveRequestApi(item)}
+          onPress={() => this.approveRequestApi(item.social_profile_id)}
           style={[
             FriendListStyle.squareView,
             {
@@ -192,7 +192,7 @@ export class SocialRequestScreen extends Component {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => this.denyRequestApi(item)}
+          onPress={() => this.denyRequestApi(item.social_profile_id)}
           style={[
             FriendListStyle.squareView,
             {
@@ -213,12 +213,12 @@ export class SocialRequestScreen extends Component {
   };
 
   // approveRequest API call
-  approveRequestApi = (data) => {
+  approveRequestApi = (id) => {
     const { approveRequest } = this.props;
     let params = new URLSearchParams();
     // Collect the necessary params
     if (globals.isInternetConnected == true) {
-      params.append("id", data.id);
+      params.append("id", id);
       approveRequest(params)
         .then(async (res) => {
           console.log(
@@ -226,6 +226,7 @@ export class SocialRequestScreen extends Component {
             "response of approveRequest",
             JSON.stringify(res.value)
           );
+          console.warn("i approveRequest====>", res.value.data);
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
@@ -268,19 +269,14 @@ export class SocialRequestScreen extends Component {
   };
 
   // denyRequest API call
-  denyRequestApi = (data) => {
+  denyRequestApi = (id) => {
     const { denyRequest } = this.props;
     let params = new URLSearchParams();
     // Collect the necessary params
     if (globals.isInternetConnected == true) {
-      params.append("id", data.id);
+      params.append("id", id);
       denyRequest(params)
         .then(async (res) => {
-          console.log(
-            TAG,
-            "response of denyRequest",
-            JSON.stringify(res.value)
-          );
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {
