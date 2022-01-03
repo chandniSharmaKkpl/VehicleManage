@@ -24,6 +24,7 @@ import RNIap, {
 import NavigationService from "../../../utils/NavigationService";
 import FormData from "form-data";
 import { renderIf } from "../../../utils/Globals";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const TAG = "PrivacySettingsScreen ::=";
 let purchaseUpdateSubscription;
 let purchaseErrorSubscription;
@@ -357,7 +358,7 @@ export class PrivacySettingsScreen extends Component {
           {/* <NavigationEvents onDidFocus={() => this.onFocusFunction()} /> */}
           <Header
             isShowBack={true}
-            title={StaticTitle.privacysettings}
+            title={"Settings & Subscription"}
             theme={theme}
             onPressed={() => this.props.navigation.openDrawer()}
           />
@@ -478,53 +479,54 @@ export class PrivacySettingsScreen extends Component {
                   onValueChange={this.changeHideDisplayName}
                 />
               </View>
-              <View style={[PrivacySettingStyle.marginTop]}>
-                <PrimaryButton
-                  onPress={() => this.updateUserSettingsAPI()}
-                  btnName={"Update Settings"}
-                />
-              </View>
+              <View style={PrivacySettingStyle.separatorLine}></View>
 
               <Text
                 style={[
                   PrivacySettingStyle.headingtitle,
-                  { color: theme.LITE_FONT_COLOR, marginVertical: 5 },
+                  { color: theme.LITE_FONT_COLOR },
                 ]}
               >
-                {StaticTitle.premiumsetting}
+                {"Subscription"}
               </Text>
+              <View style={PrivacySettingStyle.separatorLine}></View>
+
+              <View style={PrivacySettingStyle.itemview}>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
+                  {currentplan}
+                </Text>
+                <Text
+                  style={[
+                    PrivacySettingStyle.itemtext,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
+                  {localizedPrice}
+                </Text>
+              </View>
+
+              <View style={[AuthStyle.subscriptionDesc]}>
+                <View style={[AuthStyle.boldStyle]}></View>
+                <Text style={[AuthStyle.descText]}>
+                  {"Profile hide when user search"}
+                </Text>
+              </View>
+
               {renderIf(
                 this.state.isSubsctiptionTrue,
-                <View>
-                  <View style={PrivacySettingStyle.separatorLine}></View>
-
-                  <View style={PrivacySettingStyle.itemview}>
-                    <Text
-                      style={[
-                        PrivacySettingStyle.itemtext,
-                        { color: theme.DESCRIPTION_TEXT_COLOR },
-                      ]}
-                    >
-                      {currentplan}
-                    </Text>
-                    <Text
-                      style={[
-                        PrivacySettingStyle.itemtext,
-                        { color: theme.DESCRIPTION_TEXT_COLOR },
-                      ]}
-                    >
-                      {localizedPrice}
-                    </Text>
-                  </View>
-
-                  <View
-                    style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
-                  >
-                    <PrimaryButton
-                      onPress={() => this.gotoRequestPurchase()}
-                      btnName={StaticTitle.subscribe}
-                    />
-                  </View>
+                <View
+                  style={[AuthStyle.signinbtnView, { marginHorizontal: 10 }]}
+                >
+                  <PrimaryButton
+                    buttonStyle={[AuthStyle.subscriptionBtn]}
+                    onPress={() => this.gotoRequestPurchase()}
+                    btnName={StaticTitle.subscribe}
+                  />
                 </View>
               )}
               {renderIf(
@@ -535,6 +537,26 @@ export class PrivacySettingsScreen extends Component {
                   <PrimaryButton btnName={StaticTitle.subscribed} />
                 </View>
               )}
+
+              <TouchableOpacity>
+                <View style={[AuthStyle.privacyPolicyView]}>
+                  <Text style={[AuthStyle.privacyPolicyText]}>
+                    {"Privacy Policy & Terms of Use"}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <View style={PrivacySettingStyle.separatorLine}></View>
+              <Text
+                style={[
+                  PrivacySettingStyle.headingtitle,
+                  { color: theme.LITE_FONT_COLOR },
+                ]}
+              >
+                {"Premium Settings"}
+              </Text>
+              <View style={PrivacySettingStyle.separatorLine}></View>
+
               <View style={PrivacySettingStyle.itemview}>
                 <Text
                   style={[
@@ -550,7 +572,15 @@ export class PrivacySettingsScreen extends Component {
                   onValueChange={this.changeHideSearchUser}
                 />
               </View>
+
               <View style={PrivacySettingStyle.separatorLine}></View>
+
+              <View style={[PrivacySettingStyle.marginTop]}>
+                <PrimaryButton
+                  onPress={() => this.updateUserSettingsAPI()}
+                  btnName={"Update Settings"}
+                />
+              </View>
             </ScrollView>
           </View>
         </View>

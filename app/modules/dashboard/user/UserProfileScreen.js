@@ -66,7 +66,8 @@ export class UserProfileScreen extends Component {
       selectedColour: "",
 
       txtUserName: "",
-      txtusernameInstedofname: "",
+      fname: "",
+      surname: "",
       txtDescription: "",
       txtSnapName: "",
       txtInstaName: "",
@@ -140,9 +141,8 @@ export class UserProfileScreen extends Component {
           selectedCity: user.user_data.city,
           selectedModel: user.user_data.car_make_model,
           selectedColour: user.user_data.car_colour,
-          txtUserName: user.user_data.name + " " + user.user_data.surname,
-          txtusernameInstedofname: user.user_data.username,
-          txtDescription: user.user_data.car_description,
+          txtUserName: user.user_data.username,
+          txtDescription: user.user_data.user_description,
           photoUrl: user.user_data.avatar,
           txtSnapName: snapchatDetails ? snapchatDetails[1] : "",
           txtInstaName: instagramDetails ? instagramDetails[1] : "",
@@ -334,7 +334,7 @@ export class UserProfileScreen extends Component {
 
   // start of validation
   checkValidation = () => {
-    const { txtUserName, txtusernameInstedofname } = this.state;
+    const { txtUserName, fname, surname } = this.state;
     if (isEmpty(txtUserName)) {
       this.setState({
         isUserNameError: true,
@@ -349,14 +349,27 @@ export class UserProfileScreen extends Component {
       });
       return false;
     }
-    if (isEmpty(txtusernameInstedofname)) {
+    if (isEmpty(fname)) {
       this.setState({
         isUserNameError: true,
         userNameValidMsg: Messages.enterUsername,
       });
       return false;
     }
-    if (!isText(txtusernameInstedofname)) {
+    if (!isText(fname)) {
+      this.setState({
+        isUserNameError: true,
+        userNameValidMsg: Messages.userNameFail,
+      });
+    }
+    if (isEmpty(surname)) {
+      this.setState({
+        isUserNameError: true,
+        userNameValidMsg: Messages.enterUsername,
+      });
+      return false;
+    }
+    if (!isText(surname)) {
       this.setState({
         isUserNameError: true,
         userNameValidMsg: Messages.userNameFail,
@@ -380,7 +393,8 @@ export class UserProfileScreen extends Component {
       txtFbName,
       txtDescription,
       txtUserName,
-      txtusernameInstedofname,
+      fname,
+      surname,
     } = this.state;
 
     if (!this.checkValidation()) {
@@ -392,10 +406,9 @@ export class UserProfileScreen extends Component {
     // Collect the necessary params
     const { updateprofile } = this.props;
     params.append("email", user.email);
-    params.append(
-      "username",
-      user.setting_6 == 1 ? txtusernameInstedofname : txtUserName
-    );
+    params.append("username", txtUserName);
+    params.append("name", fname);
+    params.append("surname", surname);
     if (photoObj.uri == undefined || (photoObj.uri == "") != []) {
       params.append("image", "");
     } else {
@@ -404,7 +417,7 @@ export class UserProfileScreen extends Component {
     params.append("city", selectedCity);
     params.append("car_make_model", selectedModel);
     params.append("car_colour", selectedColour);
-    params.append("car_description", txtDescription);
+    params.append("user_description", txtDescription);
     params.append("fb_username", txtFbName);
     params.append("instalgram_username", txtInstaName);
     params.append("snapchat_username", txtSnapName);
@@ -429,8 +442,6 @@ export class UserProfileScreen extends Component {
 
               this.getUserData();
               this.setUserInfo(res.value.data.data);
-            } else {
-              console.log("in res.value.status !== 200", res.value.status);
             }
           } else {
             if (res.value && res.value.data.error == "Unauthenticated.") {
@@ -477,6 +488,8 @@ export class UserProfileScreen extends Component {
       selectedColour,
       selectedModel,
       selectedCity,
+      fname,
+      surname,
     } = this.state;
     return (
       <>
@@ -645,72 +658,99 @@ export class UserProfileScreen extends Component {
                     })
                   }
                 />
-                {user.setting_6 == 0 ? (
-                  <Input
-                    theme={theme}
-                    value={this.state.txtUserName}
-                    placeholderText={StaticTitle.userName}
-                    inputStyle={{
-                      marginTop: 8,
-                      color: Colors.placeholderColor,
-                    }}
-                    onSubmitEditing={Keyboard.dismiss}
-                    blurOnSubmit={false}
-                    forwardRef={(ref) => {
-                      (this.input.txtUserName = ref),
-                        this.input.txtUserName &&
-                          this.input.txtUserName.setNativeProps({
-                            style: { fontFamily: "Raleway-Regular" },
-                          });
-                    }}
-                    autoFocus={true}
-                    returnKeyType="done"
-                    autoCapitalize={"none"}
-                    maxLength={26}
-                    minLength={3}
-                    isValidationShow={this.state.isUserNameError}
-                    validateMesssage={this.state.userNameValidMsg}
-                    onChangeText={(text) =>
-                      this.setState({
-                        txtUserName: text,
-                        isUserNameError: false,
-                      })
-                    }
-                  />
-                ) : (
-                  <Input
-                    theme={theme}
-                    value={this.state.txtusernameInstedofname}
-                    placeholderText={StaticTitle.userName}
-                    inputStyle={{
-                      marginTop: 8,
-                      color: Colors.placeholderColor,
-                    }}
-                    onSubmitEditing={Keyboard.dismiss}
-                    blurOnSubmit={false}
-                    forwardRef={(ref) => {
-                      (this.input.txtusernameInstedofname = ref),
-                        this.input.txtusernameInstedofname &&
-                          this.input.txtusernameInstedofname.setNativeProps({
-                            style: { fontFamily: "Raleway-Regular" },
-                          });
-                    }}
-                    autoFocus={true}
-                    returnKeyType="done"
-                    autoCapitalize={"none"}
-                    maxLength={26}
-                    minLength={3}
-                    isValidationShow={this.state.isUserNameError}
-                    validateMesssage={this.state.userNameValidMsg}
-                    onChangeText={(text) =>
-                      this.setState({
-                        txtusernameInstedofname: text,
-                        isUserNameError: false,
-                      })
-                    }
-                  />
-                )}
-
+                <Input
+                  theme={theme}
+                  value={this.state.txtUserName}
+                  placeholderText={StaticTitle.userName}
+                  inputStyle={{
+                    marginTop: 8,
+                    color: Colors.placeholderColor,
+                  }}
+                  onSubmitEditing={Keyboard.dismiss}
+                  blurOnSubmit={false}
+                  forwardRef={(ref) => {
+                    (this.input.txtUserName = ref),
+                      this.input.txtUserName &&
+                        this.input.txtUserName.setNativeProps({
+                          style: { fontFamily: "Raleway-Regular" },
+                        });
+                  }}
+                  autoFocus={true}
+                  returnKeyType="done"
+                  autoCapitalize={"none"}
+                  maxLength={26}
+                  minLength={3}
+                  isValidationShow={this.state.isUserNameError}
+                  validateMesssage={this.state.userNameValidMsg}
+                  onChangeText={(text) =>
+                    this.setState({
+                      txtUserName: text,
+                      isUserNameError: false,
+                    })
+                  }
+                />
+                <Input
+                  theme={theme}
+                  value={fname}
+                  placeholderText={StaticTitle.name}
+                  inputStyle={{
+                    marginTop: 8,
+                    color: Colors.placeholderColor,
+                  }}
+                  onSubmitEditing={Keyboard.dismiss}
+                  blurOnSubmit={false}
+                  forwardRef={(ref) => {
+                    (this.input.fname = ref),
+                      this.input.fname &&
+                        this.input.fname.setNativeProps({
+                          style: { fontFamily: "Raleway-Regular" },
+                        });
+                  }}
+                  autoFocus={true}
+                  returnKeyType="done"
+                  autoCapitalize={"none"}
+                  maxLength={26}
+                  minLength={3}
+                  isValidationShow={this.state.isUserNameError}
+                  validateMesssage={this.state.userNameValidMsg}
+                  onChangeText={(text) =>
+                    this.setState({
+                      fname: text,
+                      isUserNameError: false,
+                    })
+                  }
+                />
+                <Input
+                  theme={theme}
+                  value={surname}
+                  placeholderText={StaticTitle.surname}
+                  inputStyle={{
+                    marginTop: 8,
+                    color: Colors.placeholderColor,
+                  }}
+                  onSubmitEditing={Keyboard.dismiss}
+                  blurOnSubmit={false}
+                  forwardRef={(ref) => {
+                    (this.input.surname = ref),
+                      this.input.surname &&
+                        this.input.surname.setNativeProps({
+                          style: { fontFamily: "Raleway-Regular" },
+                        });
+                  }}
+                  autoFocus={true}
+                  returnKeyType="done"
+                  autoCapitalize={"none"}
+                  maxLength={26}
+                  minLength={3}
+                  isValidationShow={this.state.isUserNameError}
+                  validateMesssage={this.state.userNameValidMsg}
+                  onChangeText={(text) =>
+                    this.setState({
+                      surname: text,
+                      isUserNameError: false,
+                    })
+                  }
+                />
                 {user.setting_2 == 1 ? null : (
                   <DropDownPicker
                     options={cityList}

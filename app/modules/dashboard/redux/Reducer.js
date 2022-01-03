@@ -265,7 +265,6 @@ const homeReducer = (state = initialState, action) => {
       };
     case actionTypes.SEARCHES_READ_SUCCESS:
       const searchesReadDataStatus = action.payload.status;
-      console.log("data=====SEARCHES_READ_SUCCESS", searchesReadDataStatus);
       return {
         home: {
           ...state.home,

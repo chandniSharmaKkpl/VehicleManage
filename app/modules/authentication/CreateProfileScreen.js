@@ -190,7 +190,7 @@ export class CreateProfileScreen extends PureComponent {
     params.append("city", selectedCity);
     params.append("car_make_model", selectedModel);
     params.append("car_colour", selectedColour);
-    params.append("car_description", txtDescription);
+    params.append("user_description", txtDescription);
     if (globals.isInternetConnected == true) {
       const { createprofile } = this.props;
       createprofile(params)
