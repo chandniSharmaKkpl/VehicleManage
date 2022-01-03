@@ -118,6 +118,7 @@ export default class FireBase {
             body: body,
             detail: detail,
           });
+          NavigationService.navigate("ChatList");
         }
       });
 

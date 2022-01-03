@@ -234,8 +234,8 @@ export const AuthStyle = StyleSheet.create({
     paddingBottom: 10,
   },
   signinbtnView: {
-    paddingVertical: "5%",
     marginHorizontal: 20,
+    paddingTop: 20,
   },
 
   //////// SignUp screen
@@ -378,5 +378,33 @@ export const AuthStyle = StyleSheet.create({
   registernumView: {
     marginTop: 10,
     marginBottom: 20,
+  },
+  subscriptionBtn: {
+    backgroundColor: Colors.success,
+  },
+  boldStyle: {
+    height: 7,
+    width: 7,
+    borderRadius: 5,
+    backgroundColor: Colors.black,
+  },
+  subscriptionDesc: {
+    marginHorizontal: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  descText: {
+    marginLeft: 10,
+  },
+  privacyPolicyView: {
+    alignSelf: "center",
+    paddingTop: 2,
+    paddingBottom: 10,
+  },
+  privacyPolicyText: {
+    color: Colors.red,
+    fontSize: globals.font_13,
+    fontFamily: FontFamily.RalewaRegular,
   },
 });
