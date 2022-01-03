@@ -425,6 +425,8 @@ export class UserProfileScreen extends Component {
     if (globals.isInternetConnected == true) {
       updateprofile(params)
         .then(async (res) => {
+          console.log("res", res);
+
           if (res.value && res.value.data.success == true) {
             //OK 200 The request was fulfilled
             if (res.value && res.value.status === 200) {

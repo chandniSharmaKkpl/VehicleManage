@@ -35,6 +35,7 @@ export class SocialRequestScreen extends Component {
       requestedListData: [],
       theme: {},
       socialProfilesIdList: [],
+      isEmpty: false,
     };
   }
 
@@ -47,6 +48,10 @@ export class SocialRequestScreen extends Component {
 
     await AsyncStorage.setItem("request_count", JSON.stringify(parseInt(0)));
     DeviceEventEmitter.emit("request_count_remove");
+
+    this.setState({
+      isEmpty: false,
+    });
   }
 
   async componentDidMount() {
@@ -74,28 +79,36 @@ export class SocialRequestScreen extends Component {
       socialrequestlist().then(async (res) => {
         if (res.value && res.value.data.success == true) {
           if (res.value && res.value.status === 200) {
-            await showMessage({
-              message: res.value.data.message,
-              type: "success",
-              icon: "auto",
-              duration: 4000,
-            });
-            this.setState({
-              requestedListData: res.value.data.data.requests,
-            });
-            for (let i = 0; i < res.value.data.data.requests.length; i++) {
+            if (res.value.data.data.requests.length > 0) {
+              await showMessage({
+                message: res.value.data.message,
+                type: "success",
+                icon: "auto",
+                duration: 4000,
+              });
               this.setState({
-                socialProfilesIdList: [
-                  ...this.state.socialProfilesIdList,
-                  res.value.data.data.requests[i].social_profile_id,
-                ],
+                requestedListData: res.value.data.data.requests,
+              });
+              for (let i = 0; i < res.value.data.data.requests.length; i++) {
+                this.setState({
+                  socialProfilesIdList: [
+                    ...this.state.socialProfilesIdList,
+                    res.value.data.data.requests[i].social_profile_id,
+                  ],
+                });
+              }
+              console.log(
+                "socialProfilesIdList",
+                this.state.socialProfilesIdList
+              );
+              this.readSocialRequests(this.state.socialProfilesIdList);
+            } else {
+              console.log("in getRequest else");
+
+              this.setState({
+                isEmpty: true,
               });
             }
-            console.log(
-              "socialProfilesIdList",
-              this.state.socialProfilesIdList
-            );
-            this.readSocialRequests(this.state.socialProfilesIdList);
           }
         } else if (res.value && res.value.error == "Unauthenticated") {
           await showMessage({
@@ -324,7 +337,7 @@ export class SocialRequestScreen extends Component {
   };
 
   render() {
-    const { requestedListData } = this.state;
+    const { requestedListData, isEmpty } = this.state;
     const { isLoading, loaderMessage, theme } = this.props;
     // console.log("requestedListData====", requestedListData);
     return (
@@ -344,14 +357,24 @@ export class SocialRequestScreen extends Component {
             theme={theme}
             onPressed={() => this.props.navigation.openDrawer()}
           />
-          <FlatList
-            data={requestedListData}
-            style={[FriendListStyle.flatliststyle, { paddingVertical: 5 }]}
-            renderItem={(item, index) => this.renderRequestedList(item, index)}
-            keyExtractor={(item, index) => "D" + index.toString()}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={this.separatorComponent}
-          />
+          {isEmpty ? (
+            <View style={FriendListStyle.emptyview}>
+              <Text numberOfLines={2} style={FriendListStyle.emptytext}>
+                {StaticTitle.noRequests}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={requestedListData}
+              style={[FriendListStyle.flatliststyle, { paddingVertical: 5 }]}
+              renderItem={(item, index) =>
+                this.renderRequestedList(item, index)
+              }
+              keyExtractor={(item, index) => "D" + index.toString()}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={this.separatorComponent}
+            />
+          )}
         </View>
       </>
     );

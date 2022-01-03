@@ -11,26 +11,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2988E5187B6F4B5F82317F1E /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BD7CFFC050F473AB8E291D0 /* Octicons.ttf */; };
 		41EB97FA59C39A08A7DC68FD /* libPods-Roadie-RoadieTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DDF705B829A419DEE15C476 /* libPods-Roadie-RoadieTests.a */; };
-		5C03DA696E40434FA308034D /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67FF41D826CC4B6288DE3723 /* Zocial.ttf */; };
-		5C564ECC9AAC42C492092267 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 616DD7BB1653443E8809AC6E /* MaterialCommunityIcons.ttf */; };
-		6C6D1F422EB74AAAA00DBEE6 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4DC85BDF604A43B18E73DB24 /* FontAwesome5_Brands.ttf */; };
-		7B853F05B3D84529AB48A545 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFEC8E447AF34B26A0BA6722 /* Ionicons.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8AB624F3517C47DAA23FF8AA /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E779143E34C24CE8940B6EFB /* Foundation.ttf */; };
-		8B6C50746C714CF8A4B4EFD1 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C5CC0F6D800C4C88916F172A /* FontAwesome5_Regular.ttf */; };
-		8C47B3FFABA743E7825C7BB2 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63A83424D8B84E17AEDC461F /* MaterialIcons.ttf */; };
-		979C2AF18A69485AB166A5B0 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26AEB5572A3C46D596474454 /* Entypo.ttf */; };
-		9AB172C2E8A04954BDC61516 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9361FB1AD1E4138884E836C /* FontAwesome.ttf */; };
-		9B34E6AFC31148CCA9071660 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18BF123B81DC48F7AE9BE889 /* Feather.ttf */; };
-		B33B2704373247249BDF96FA /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C45A8231EFF0498DAB7B69CC /* AntDesign.ttf */; };
-		B38AA3802C404DDD9EAA48AB /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35CC0922D19745A0B80610F3 /* SimpleLineIcons.ttf */; };
 		CF7A412326A54D820052D9D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CF7A412226A54D820052D9D9 /* GoogleService-Info.plist */; };
 		CF7CE4E126A6CEE60020FB90 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = CF7CE4E026A6CEE60020FB90 /* fonts */; };
-		DE2BD06974D04968AD4E195B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC0C51AAC27541AE8026B9A5 /* FontAwesome5_Solid.ttf */; };
-		E7D804276FA841949BA98B16 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3A6E92F4707A4B40B73C6CB3 /* Fontisto.ttf */; };
-		EE5A6EF0168540CA9E1363ED /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0651A160E14E47D7894C011F /* EvilIcons.ttf */; };
 		FCB97C04896EBCD24837FC7E /* libPods-Roadie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FB277C3EE9C2BCE88350B63 /* libPods-Roadie.a */; };
 /* End PBXBuildFile section */
 
@@ -313,22 +297,6 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				CF7A412326A54D820052D9D9 /* GoogleService-Info.plist in Resources */,
 				CF7CE4E126A6CEE60020FB90 /* fonts in Resources */,
-				B33B2704373247249BDF96FA /* AntDesign.ttf in Resources */,
-				979C2AF18A69485AB166A5B0 /* Entypo.ttf in Resources */,
-				EE5A6EF0168540CA9E1363ED /* EvilIcons.ttf in Resources */,
-				9B34E6AFC31148CCA9071660 /* Feather.ttf in Resources */,
-				9AB172C2E8A04954BDC61516 /* FontAwesome.ttf in Resources */,
-				6C6D1F422EB74AAAA00DBEE6 /* FontAwesome5_Brands.ttf in Resources */,
-				8B6C50746C714CF8A4B4EFD1 /* FontAwesome5_Regular.ttf in Resources */,
-				DE2BD06974D04968AD4E195B /* FontAwesome5_Solid.ttf in Resources */,
-				E7D804276FA841949BA98B16 /* Fontisto.ttf in Resources */,
-				8AB624F3517C47DAA23FF8AA /* Foundation.ttf in Resources */,
-				7B853F05B3D84529AB48A545 /* Ionicons.ttf in Resources */,
-				5C564ECC9AAC42C492092267 /* MaterialCommunityIcons.ttf in Resources */,
-				8C47B3FFABA743E7825C7BB2 /* MaterialIcons.ttf in Resources */,
-				2988E5187B6F4B5F82317F1E /* Octicons.ttf in Resources */,
-				B38AA3802C404DDD9EAA48AB /* SimpleLineIcons.ttf in Resources */,
-				5C03DA696E40434FA308034D /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +366,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Roadie/Pods-Roadie-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
