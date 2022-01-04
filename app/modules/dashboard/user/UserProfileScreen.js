@@ -74,12 +74,16 @@ export class UserProfileScreen extends Component {
       txtFbName: "",
 
       isUserNameError: false,
+      isFnameError: false,
+      isSurnameError: false,
       isCityError: false,
       isModalofCarError: false,
       isColorofCarError: false,
       isDescriptionError: false,
 
       userNameValidMsg: "",
+      fNameValidMsg: "",
+      surnameValidMsg: "",
       cityValidMsg: "",
       modalofCarValidMsg: "",
       colorofCarValidMsg: "",
@@ -142,6 +146,8 @@ export class UserProfileScreen extends Component {
           selectedModel: user.user_data.car_make_model,
           selectedColour: user.user_data.car_colour,
           txtUserName: user.user_data.username,
+          fname: user.user_data.name,
+          surname: user.user_data.surname,
           txtDescription: user.user_data.user_description,
           photoUrl: user.user_data.avatar,
           txtSnapName: snapchatDetails ? snapchatDetails[1] : "",
@@ -351,31 +357,31 @@ export class UserProfileScreen extends Component {
     }
     if (isEmpty(fname)) {
       this.setState({
-        isUserNameError: true,
-        userNameValidMsg: Messages.enterUsername,
+        isFnameError: true,
+        fNameValidMsg: Messages.enterFname,
       });
       return false;
     }
-    if (!isText(fname)) {
-      this.setState({
-        isUserNameError: true,
-        userNameValidMsg: Messages.userNameFail,
-      });
-    }
+    // if (!isText(fname)) {
+    //   this.setState({
+    //     isFnameError: true,
+    //     fNameValidMsg: Messages.enterFname,
+    //   });
+    // }
     if (isEmpty(surname)) {
       this.setState({
-        isUserNameError: true,
-        userNameValidMsg: Messages.enterUsername,
+        isSurnameError: true,
+        surnameValidMsg: Messages.enterSurname,
       });
       return false;
     }
-    if (!isText(surname)) {
-      this.setState({
-        isUserNameError: true,
-        userNameValidMsg: Messages.userNameFail,
-      });
-      return false;
-    }
+    // if (!isText(surname)) {
+    //   this.setState({
+    //     isSurnameError: true,
+    //     surnameValidMsg: Messages.enterSurname,
+    //   });
+    //   return false;
+    // }
 
     return true;
   };
@@ -711,12 +717,12 @@ export class UserProfileScreen extends Component {
                   autoCapitalize={"none"}
                   maxLength={26}
                   minLength={3}
-                  isValidationShow={this.state.isUserNameError}
-                  validateMesssage={this.state.userNameValidMsg}
+                  isValidationShow={this.state.isFnameError}
+                  validateMesssage={this.state.fNameValidMsg}
                   onChangeText={(text) =>
                     this.setState({
                       fname: text,
-                      isUserNameError: false,
+                      isFnameError: false,
                     })
                   }
                 />
@@ -742,12 +748,12 @@ export class UserProfileScreen extends Component {
                   autoCapitalize={"none"}
                   maxLength={26}
                   minLength={3}
-                  isValidationShow={this.state.isUserNameError}
-                  validateMesssage={this.state.userNameValidMsg}
+                  isValidationShow={this.state.isSurnameError}
+                  validateMesssage={this.state.surnameValidMsg}
                   onChangeText={(text) =>
                     this.setState({
                       surname: text,
-                      isUserNameError: false,
+                      isSurnameError: false,
                     })
                   }
                 />
