@@ -26,6 +26,7 @@ import { StaticTitle } from "../../../utils/StaticTitle";
 import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
 import FastImage from "react-native-fast-image";
+import Icon from "react-native-vector-icons/Ionicons";
 import {
   Input,
   MediaModel,
@@ -617,9 +618,10 @@ export class UserProfileScreen extends Component {
                 }}
                 style={UserProfileStyle.squareView}
               >
-                <FastImage
-                  style={[UserProfileStyle.navigateimgStyle]}
-                  source={IMAGE.settings_img}
+                <Icon
+                  name={"settings-sharp"}
+                  size={20}
+                  color={theme.ICON_COLOR}
                 />
               </TouchableOpacity>
             </View>

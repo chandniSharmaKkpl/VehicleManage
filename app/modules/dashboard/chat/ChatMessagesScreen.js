@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  Appearance,
   Keyboard,
   KeyboardAvoidingView,
   DeviceEventEmitter,
@@ -57,6 +58,8 @@ const avatar = require("../../../assets/images/user_default.jpeg");
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 
+const colorScheme = Appearance.getColorScheme();
+
 const TAG = "ChatMessagesScreen ::=";
 export class ChatMessagesScreen extends Component {
   _isMounted = false;
@@ -75,6 +78,7 @@ export class ChatMessagesScreen extends Component {
       options: DefaultChatOptions,
       from_id: "",
       user_info: this.props.navigation.state.params.user_info,
+      previous_screen: this.props.navigation.state.params.previous_screen,
       to_id: "",
       isMessageSend: false,
       emoji: " ",
@@ -508,15 +512,36 @@ export class ChatMessagesScreen extends Component {
     }
     if (message && (message.sent || message.received || message.pending)) {
       return (
-        <View style={{ flexDirection: "row", padding: 5 }}>
+        <View style={{ flexDirection: "row", marginRight: 10 }}>
           {!!message.received && (
-            <Text style={{ color: Colors.white, fontSize: 10 }}>✓</Text>
+            <Text
+              style={{
+                color: colorScheme === "dark" ? Colors.white : Colors.black,
+                fontSize: 10,
+              }}
+            >
+              ✓
+            </Text>
           )}
           {!!message.sent && (
-            <Text style={{ color: Colors.white, fontSize: 10 }}>✓</Text>
+            <Text
+              style={{
+                color: colorScheme === "dark" ? Colors.white : Colors.black,
+                fontSize: 10,
+              }}
+            >
+              ✓
+            </Text>
           )}
           {!!message.pending && (
-            <Text style={{ color: Colors.white, fontSize: 10 }}>🕓</Text>
+            <Text
+              style={{
+                color: colorScheme === "dark" ? Colors.white : Colors.black,
+                fontSize: 10,
+              }}
+            >
+              🕓
+            </Text>
           )}
         </View>
       );
@@ -565,6 +590,7 @@ export class ChatMessagesScreen extends Component {
             isuserImage={user_photo}
             isMsgReportPicker={() => this.displayMsgReportPicker()}
             isShareSocials={() => this.shareSocials()}
+            previous_screen={this.state.previous_screen}
           />
           <View>
             <MediaModel
@@ -607,6 +633,7 @@ export class ChatMessagesScreen extends Component {
             shouldRenderUsername={true}
             messagesContainerStyle={{
               paddingBottom: 40,
+              paddingHorizontal: 10,
               backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
             }}
             user={{

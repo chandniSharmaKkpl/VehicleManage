@@ -1,8 +1,10 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Appearance } from "react-native";
 import Colors from "../Colors";
 import { RFPercentage } from "../../utils/ResponsiveFont";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
+
+const colorScheme = Appearance.getColorScheme();
 
 export const ComponentStyle = StyleSheet.create({
   onlyFlex: {
@@ -194,7 +196,8 @@ export const ComponentStyle = StyleSheet.create({
     fontSize: globals.font_14,
     borderBottomWidth: 0.8,
     marginTop: 20,
-    borderBottomColor: Colors.border_color,
+    borderBottomColor:
+      colorScheme === "dark" ? Colors.lite_white : Colors.lite_black,
     color: Colors.black,
   },
   errorText: {
@@ -240,7 +243,6 @@ export const ComponentStyle = StyleSheet.create({
   headerContainer: {
     backgroundColor: Colors.primary,
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? globals.deviceHeight * 0.04 : 0,
   },
   headerContain: {
     flexDirection: "row",
@@ -412,14 +414,14 @@ export const ComponentStyle = StyleSheet.create({
     borderWidth: 0.1,
     borderRadius: 5,
     shadowColor: Platform.OS == "android" ? "#000" : Colors.blackTransparent,
-    shadowOffset: {
-      width: 2,
-      height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16,
-    elevation: 24,
-    zIndex: 0,
+    // shadowOffset: {
+    //   width: 2,
+    //   height: 12,
+    // },
+    // shadowOpacity: 0.58,
+    // shadowRadius: 16,
+    // elevation: 24,
+    // zIndex: 0,
   },
   search_inputText: {
     fontFamily: FontFamily.RalewaRegular,
@@ -428,8 +430,8 @@ export const ComponentStyle = StyleSheet.create({
     color: Colors.search_placeholder,
   },
   search_icon: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
     alignSelf: "center",
   },
 

@@ -75,6 +75,7 @@ const StaticTitle = {
   registerinfoneeded: "You have to fill registration details (REGO)",
 
   /////// DASHBOARD
+  search: "Main Search",
   searchbyVehicalNum: "Search Users by Their Vehicle Number",
   searchbyNameNnum: "Search by Name/Number Plate",
   frndList: "Friends List",

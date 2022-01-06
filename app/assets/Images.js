@@ -28,14 +28,15 @@ const IMAGE = {
   report_user_img: require("../assets/images/report_user.png"),
   block_user_img: require("../assets/images/block_user.png"),
   send_icon_img: require("../assets/images/send_icon.png"),
-  terms_conditions_img: require("../assets/images/terms_conditions.png"),
+  terms_conditions_img_light: require("../assets/images/terms_conditions_light.png"),
+  terms_conditions_img_dark: require("../assets/images/terms_conditions_dark.png"),
   subscription_img: require("../assets/images/subscription.png"),
   sign_out_img: require("../assets/images/sign_out.png"),
   dark_Logo_img: require("../assets/images/dark_Logo.png"),
   dark_Car_img: require("../assets/images/dark_Car.png"),
   close_img: require("../assets/images/close.png"),
   chatboxe_img: require("../assets/images/chatboxe.png"),
-  next_img :require("../assets/images/next.png"),
-}
+  next_img: require("../assets/images/next.png"),
+};
 
 export { IMAGE };

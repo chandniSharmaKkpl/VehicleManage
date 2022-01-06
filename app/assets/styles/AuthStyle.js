@@ -1,8 +1,10 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Appearance } from "react-native";
 import Colors from "../Colors";
 import { RFPercentage } from "../../utils/ResponsiveFont";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
+
+const colorScheme = Appearance.getColorScheme();
 
 export const AuthStyle = StyleSheet.create({
   primaryBG: {
@@ -81,7 +83,8 @@ export const AuthStyle = StyleSheet.create({
     marginHorizontal: 20,
     borderBottomWidth: 0.8,
     marginTop: 20,
-    borderBottomColor: Colors.border_color,
+    borderBottomColor:
+      colorScheme === "dark" ? Colors.lite_white : Colors.lite_black,
   },
   imglogoContainer: {
     // flex: 0.1,
@@ -314,7 +317,7 @@ export const AuthStyle = StyleSheet.create({
   smallTitle: {
     fontFamily: FontFamily.RalewaRegular,
     fontSize: globals.font_14,
-    color: Colors.black,
+    color: colorScheme === "dark" ? Colors.white : Colors.black,
     textAlign: "center",
     justifyContent: "center",
   },

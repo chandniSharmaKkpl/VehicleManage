@@ -242,13 +242,13 @@ ChatStack.navigationOptions = ({ navigation }) => {
     tabBarVisible,
   };
 };
-// SocialStack.navigationOptions = ({ navigation }) => {
-//   let tabBarVisible = true;
-//   if (navigation.state.index > 0) {
-//     tabBarVisible = false;
-//   }
-//   return {
-//     tabBarVisible,
-//   };
-// };
+SocialStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 export default TabNavigator;

@@ -421,21 +421,39 @@ export class FriendDetailScreen extends Component {
   // navigate to gotochatdetailscreen
   gotochatdetailscreen = () => {
     const { friendDetail } = this.state;
-    NavigationService.navigate("ChatMessages", { user_info: friendDetail });
+    NavigationService.navigate("ChatMessages", {
+      user_info: friendDetail,
+      previous_screen: "friendDetail",
+    });
   };
 
   // navigate Social Profiles
   navigatetoSocialProfiles = (isFrom, name) => {
+    console.log("friendDetails", this.state.friendDetail.instagram_username);
+
     let SocialURL;
     if (isFrom == "Fb") {
-      SocialURL = "https://www.facebook.com/" + name;
+      if (this.state.friendDetail.fb_username) {
+        SocialURL = this.state.friendDetail.fb_username;
+      } else {
+        SocialURL = "https://www.facebook.com/";
+      }
     } else if (isFrom == "Insta") {
-      SocialURL = "https://www.instagram.com/" + name;
+      if (this.state.friendDetail.instagram_username) {
+        SocialURL = this.state.friendDetail.instagram_username;
+      } else {
+        SocialURL = "https://www.instagram.com/";
+      }
     } else if (isFrom == "Snap") {
-      SocialURL = "https://www.snapchat.com/" + name;
-    } else {
-      SocialURL = "https://www.google.com" + name;
+      if (this.state.friendDetail.snapchat_username) {
+        SocialURL = this.state.friendDetail.snapchat_username;
+      } else {
+        SocialURL = "https://www.snapchat.com/";
+      }
     }
+    // else {
+    //   SocialURL = "https://www.google.com/" + name;
+    // }
     Linking.openURL(SocialURL);
   };
 
