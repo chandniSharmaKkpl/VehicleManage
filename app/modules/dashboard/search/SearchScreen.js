@@ -26,6 +26,7 @@ import FastImage from "react-native-fast-image";
 import { isEmpty } from "../../../utils/Validators";
 import { darkTheme, lightTheme } from "../../../assets/Theme";
 import * as Authactions from "../../authentication/redux/Actions";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const TAG = "SearchScreen ::=";
 let gettotalCount;
@@ -388,9 +389,10 @@ export class SearchScreen extends Component {
           ]}
           onPress={() => this.navigateToDetailScreen(item, index)}
         >
-          <FastImage
-            style={[FriendListStyle.navigateimgStyle]}
-            source={IMAGE.navigate_img}
+          <Icon
+            name={"chevron-forward"}
+            size={25}
+            color={this.props.theme.PRIMARY_TEXT_COLOR}
           />
         </TouchableOpacity>
       </View>
@@ -399,7 +401,10 @@ export class SearchScreen extends Component {
 
   // navigate to detailed scren
   navigateToDetailScreen = (item, index) => {
-    NavigationService.navigate("FriendDetail", { FriendData: item });
+    NavigationService.navigate("FriendDetail", {
+      FriendData: item,
+      previous_screen: "search",
+    });
   };
 
   // seprate component

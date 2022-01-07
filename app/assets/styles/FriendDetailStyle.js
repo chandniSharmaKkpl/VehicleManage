@@ -10,31 +10,24 @@ export const FriendDetailStyle = StyleSheet.create({
   },
   imageStyle: {
     height: "100%",
-    width: globals.deviceWidth,
+    width: "100%",
   },
   halfContainer: {
     flex: 0.5,
-    position: "relative",
-  },
-  backbtnview: {
-    position: "absolute",
-    top: 45,
-    left: 20,
+    // position: "relative",
   },
   userdetailview: {
-    position: "absolute",
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    // marginTop: globals.deviceHeight * 0.31,
     marginTop:
       Platform.OS == "android"
-        ? globals.deviceHeight / 3.5
-        : globals.deviceHeight / 3.3,
+        ? globals.deviceHeight / 2 - 185
+        : globals.deviceHeight / 2 - 195,
   },
   squareView: {
-    alignSelf: "flex-start",
     justifyContent: "center",
+    alignItems: "center",
     width: 35,
     height: 35,
     backgroundColor: Colors.white,
@@ -49,10 +42,9 @@ export const FriendDetailStyle = StyleSheet.create({
     shadowOpacity: 0.58,
     shadowRadius: 16,
     elevation: 24,
-    zIndex: 0,
-    alignItems: "center",
-    marginTop: 5,
     opacity: 0.5,
+    top: 45,
+    left: 20,
   },
   navigateimgStyle: {
     height: 15,
@@ -70,26 +62,24 @@ export const FriendDetailStyle = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: Colors.placeholderColor,
   },
   titletext: {
     fontFamily: FontFamily.RalewaRegular,
     fontSize: globals.font_14,
     color: Colors.white,
     textAlign: "center",
-    paddingVertical: 5,
     paddingHorizontal: 10,
-    marginTop:globals.deviceHeight *0.01,
-    backgroundColor:Colors.primary
   },
   middleview: {
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
+    height: 50,
+    width: globals.deviceWidth,
     marginTop:
       Platform.OS == "android"
-        ? globals.deviceHeight / 2.1
-        : globals.deviceHeight / 2.4,
+        ? (globals.deviceHeight - 130) / 2
+        : (globals.deviceHeight - 170) / 2,
 
     flexDirection: "row",
     alignSelf: "center",
@@ -102,27 +92,22 @@ export const FriendDetailStyle = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
+    // marginTop: 20,
     marginHorizontal: 7,
   },
-  squareviews:{
-    // width: 50,
+  beforesquareview: {
     height: 50,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
+    backgroundColor: Colors.btnSecondaryPrimary,
     marginHorizontal: 5,
-  },
-  beforesquareview:{
-    height: 50,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  alignSelf: "center",
-                  backgroundColor: Colors.btnSecondaryPrimary,
-                  marginHorizontal: 5,
+    // marginTop: 20,
+    borderRadius: 10,
   },
   secondhalfview: {
     flex: 0.4,
-    position: "relative",
+    // position: "relative",
   },
   descriptionContainer: {
     marginTop: globals.deviceHeight * 0.065,

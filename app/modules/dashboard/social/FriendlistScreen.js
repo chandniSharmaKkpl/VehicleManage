@@ -220,7 +220,10 @@ export class FriendlistScreen extends Component {
 
   // navigate to FriendDetails screen
   gotoFriendDetails = (item) => {
-    NavigationService.navigate("FriendDetail", { FriendData: item });
+    NavigationService.navigate("FriendDetail", {
+      FriendData: item,
+      previous_screen: "friendList",
+    });
   };
 
   // seprate component
