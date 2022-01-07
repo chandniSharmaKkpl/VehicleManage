@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import {
   View,
-  Keyboard,
   FlatList,
-  TouchableWithoutFeedback,
   Text,
-  Platform,
-  Image,
   AppState,
   Alert,
   TouchableOpacity,
@@ -20,14 +16,11 @@ import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import Header from "../../../components/Header";
-import { DummyData } from "../../../dummyData/DummyData";
 import FastImage from "react-native-fast-image";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CHAT_MESSAGE_TYPE } from "../../../utils/Globals";
 import * as actions from "./redux/Actions";
-import { showMessage, hideMessage } from "react-native-flash-message";
 import * as globals from "../../../utils/Globals";
-import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 
 const TAG = "ChatListScreen ::=";
 
@@ -173,8 +166,16 @@ export class ChatListScreen extends Component {
 
           const { nav } = this.props;
           // const currentScreen = this.props.navigation.state.routeName;
+          console.warn(
+            "i am in nav currentScreen screen==>",
+            nav.routes[nav.routes.length - 1].routes[0].routes[
+              nav.routes.length - 1
+            ].routes
+          );
           let currentScreen =
-            nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
+            nav.routes[nav.routes.length - 1].routes[0].routes[
+              nav.routes.length - 1
+            ].routes;
 
           if (currentScreen[1].routeName == "ChatMessages") {
             const currentScreenParams = currentScreen[1].params;

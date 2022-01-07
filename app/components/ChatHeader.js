@@ -8,7 +8,6 @@ import {
   Platform,
   SafeAreaView,
 } from "react-native";
-import Colors from "../assets/Colors";
 import { ComponentStyle } from "../assets/styles/ComponentStyle";
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../assets/Images";

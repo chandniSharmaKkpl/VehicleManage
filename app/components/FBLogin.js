@@ -15,6 +15,7 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from "react-native-fbsdk-next";
+import DeviceInfo from "react-native-device-info";
 
 class FBLogin extends Component {
   constructor(props) {
@@ -52,6 +53,10 @@ class FBLogin extends Component {
 
       _responseInfoCallback = async (error, result) => {
         if (!error) {
+          const { sociallogin } = this.props;
+          var deviceUUID = DeviceInfo.getUniqueId();
+          var deviceName = DeviceInfo.getDeviceNameSync();
+          let fcmToken = await AsyncStorage.getItem("fcmToken");
           let params = new URLSearchParams();
           // Collect the necessary params
           params.append("accessToken", tempToken);
@@ -60,7 +65,11 @@ class FBLogin extends Component {
           params.append("name", result.first_name);
           params.append("surname", result.last_name);
           params.append("email", result.email);
-          const { sociallogin } = this.props;
+          params.append("device_token", fcmToken);
+          params.append("device_uuid", deviceUUID);
+          params.append("device_type", Platform.OS == "android" ? "1" : "0");
+          params.append("device_name", deviceName);
+
           sociallogin(params).then(async (res) => {
             if (res.value && res.value.data.success == true) {
               //OK 200 The request was fulfilled
