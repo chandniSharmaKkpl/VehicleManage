@@ -151,6 +151,7 @@ export class SignInScreen extends Component {
     params.append("device_uuid", deviceUUID);
     params.append("device_type", Platform.OS == "android" ? "1" : "0");
     params.append("device_name", deviceName);
+
     const { login } = this.props;
     if (globals.isInternetConnected == true) {
       login(params)

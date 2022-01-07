@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import {
   View,
-  Keyboard,
   FlatList,
-  TouchableWithoutFeedback,
   Text,
-  Platform,
-  Image,
   AppState,
   Alert,
   TouchableOpacity,
@@ -20,14 +16,11 @@ import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
 import { NavigationEvents } from "react-navigation";
 import Header from "../../../components/Header";
-import { DummyData } from "../../../dummyData/DummyData";
 import FastImage from "react-native-fast-image";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CHAT_MESSAGE_TYPE } from "../../../utils/Globals";
 import * as actions from "./redux/Actions";
-import { showMessage, hideMessage } from "react-native-flash-message";
 import * as globals from "../../../utils/Globals";
-import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 
 const TAG = "ChatListScreen ::=";
 
