@@ -1,8 +1,10 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Appearance } from "react-native";
 import Colors from "../Colors";
 import { RFPercentage } from "../../utils/ResponsiveFont";
 import FontFamily from "./FontFamily";
 import * as globals from "../../utils/Globals";
+
+const colorScheme = Appearance.getColorScheme();
 
 export const UserProfileStyle = StyleSheet.create({
   container: {
@@ -18,14 +20,12 @@ export const UserProfileStyle = StyleSheet.create({
   beforeimgView: {
     height: globals.deviceWidth * 0.26,
     width: globals.deviceWidth * 0.26,
-    borderColor: Colors.primary,
     borderRadius: (globals.deviceWidth * 0.26) / 2,
-    borderWidth: 0.7,
   },
   imageStyle: {
     height: globals.deviceWidth * 0.26,
     width: globals.deviceWidth * 0.26,
-    borderWidth: 0.7,
+    borderWidth: 2,
     borderColor: Colors.primary,
     borderRadius: (globals.deviceWidth * 0.26) / 2,
   },
@@ -90,7 +90,7 @@ export const UserProfileStyle = StyleSheet.create({
     justifyContent: "center",
     width: 35,
     height: 35,
-    backgroundColor: Colors.white,
+    backgroundColor: colorScheme === "dark" ? Colors.primary : Colors.white,
     borderColor: Colors.border_color,
     borderWidth: 0.1,
     borderRadius: 5,
@@ -104,10 +104,10 @@ export const UserProfileStyle = StyleSheet.create({
     elevation: 24,
     zIndex: 0,
     alignItems: "center",
-    marginTop:5
+    marginTop: 5,
   },
   navigateimgStyle: {
-    height: 19,
-    width: 19,
+    height: 20,
+    width: 20,
   },
 });

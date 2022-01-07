@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "react-native";
+import { Appearance, Image } from "react-native";
 import {
   InputToolbar,
   Actions,
@@ -9,16 +9,21 @@ import {
 import FastImage from "react-native-fast-image";
 import { IMAGE } from "../assets/Images";
 import FontFamily from "../assets/styles/FontFamily";
+import Icon from "react-native-vector-icons/Ionicons";
 
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
+
+const colorScheme = Appearance.getColorScheme();
 
 export const renderInputToolbar = (props) => (
   <InputToolbar
     {...props}
     containerStyle={{
-      backgroundColor: Colors.white,
+      backgroundColor:
+        colorScheme === "dark" ? Colors.chatBubbleDark : Colors.white,
       marginHorizontal: 20,
+      marginBottom: 20,
       shadowColor: "#000",
       shadowOffset: {
         width: 2,
@@ -28,8 +33,8 @@ export const renderInputToolbar = (props) => (
       shadowOpacity: 0.58,
       shadowRadius: 16,
       elevation: 24,
-      paddingTop: 6,
-      borderRadius: 8,
+      paddingVertical: 6,
+      borderRadius: 5,
     }}
     primaryStyle={{ alignItems: "center" }}
   />
@@ -82,21 +87,17 @@ export const renderSend = (props) => (
     {...props}
     disabled={!props.text}
     containerStyle={{
-      width: 44,
-      height: 44,
+      width: 40,
+      height: 40,
       alignItems: "center",
       justifyContent: "center",
       marginHorizontal: 4,
-      backgroundColor: Colors.btnSecondaryPrimary,
-      marginBottom: 5,
+      backgroundColor:
+        colorScheme === "dark" ? Colors.primary : Colors.btnSecondaryPrimary,
       marginRight: 5,
       borderRadius: 5,
     }}
   >
-    <FastImage
-      style={{ width: 22, height: 22, tintColor: Colors.white }}
-      source={IMAGE.send_icon_img}
-      resizeMode={FastImage.resizeMode.contain}
-    />
+    <Icon name={"send"} size={22} color={Colors.white} />
   </Send>
 );

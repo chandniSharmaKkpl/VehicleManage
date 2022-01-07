@@ -24,6 +24,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../../../utils/Globals";
 import { isEmpty } from "../../../utils/Validators";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const TAG = "FriendlistScreen ::=";
 
@@ -207,9 +208,10 @@ export class FriendlistScreen extends Component {
             { backgroundColor: this.props.theme.NAVIGATION_ARROW_COLOR },
           ]}
         >
-          <FastImage
-            style={[FriendListStyle.navigateimgStyle]}
-            source={IMAGE.navigate_img}
+          <Icon
+            name={"chevron-forward"}
+            size={25}
+            color={this.props.theme.PRIMARY_TEXT_COLOR}
           />
         </TouchableOpacity>
       </View>
@@ -218,7 +220,10 @@ export class FriendlistScreen extends Component {
 
   // navigate to FriendDetails screen
   gotoFriendDetails = (item) => {
-    NavigationService.navigate("FriendDetail", { FriendData: item });
+    NavigationService.navigate("FriendDetail", {
+      FriendData: item,
+      previous_screen: "friendList",
+    });
   };
 
   // seprate component

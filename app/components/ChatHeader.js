@@ -6,6 +6,7 @@ import {
   Text,
   StatusBar,
   Platform,
+  Appearance,
   SafeAreaView,
 } from "react-native";
 import Colors from "../assets/Colors";
@@ -31,8 +32,12 @@ const ChatHeader = ({
   isMsgReportPicker,
   isuserImage,
   isShareSocials,
+  previous_screen,
   ...props
 }) => {
+  const colorScheme = Appearance.getColorScheme();
+  console.log("in chatHeader", previous_screen);
+
   const gotoBack = async () => {
     NavigationService.back();
   };
@@ -41,12 +46,23 @@ const ChatHeader = ({
     <SafeAreaView
       style={[
         ComponentStyle.headerContainer,
-        { backgroundColor: theme.ANDROID_STATUR_BAR_COLOR },
+        {
+          paddingTop:
+            previous_screen === "friendDetail"
+              ? Platform.OS === "android"
+                ? StatusBar.currentHeight
+                : 0
+              : 0,
+          backgroundColor:
+            colorScheme === "light" ? Colors.primary : Colors.darkBottomTabBar,
+        },
       ]}
     >
       <StatusBar
         barStyle="light-content"
-        backgroundColor={theme.ANDROID_STATUR_BAR_COLOR}
+        backgroundColor={
+          colorScheme === "light" ? Colors.primary : Colors.darkBottomTabBar
+        }
       />
 
       <View
@@ -60,7 +76,7 @@ const ChatHeader = ({
         {isShowBack == true ? (
           <TouchableOpacity
             onPress={gotoBack}
-            style={{ width: wp(15), height: hp(5), justifyContent: "center" }}
+            style={{ width: wp(15), justifyContent: "center" }}
           >
             <View style={{ paddingLeft: 20, padding: 5 }}>
               <FastImage
@@ -80,6 +96,7 @@ const ChatHeader = ({
             }}
           />
         )}
+
         <View
           style={{
             width: isShowRighttwo == true ? wp(55) : wp(70),

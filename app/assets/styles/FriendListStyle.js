@@ -10,12 +10,26 @@ export const FriendListStyle = StyleSheet.create({
     backgroundColor: Colors.liteBg,
   },
   itemcell: {
+    // width: "80%",
     paddingHorizontal: 20,
     paddingVertical: 10,
     // marginVertical: 2,
     marginHorizontal: 4,
     flexDirection: "row",
     alignItems: "center",
+  },
+  itemcellChat: {
+    // width: "100%",
+    width: globals.deviceWidth,
+    paddingVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  rightTime: {
+    // width: "20%",
+    width: globals.deviceWidth * 0.3,
+    paddingRight: 15,
+    alignItems: "flex-end",
   },
   titleBig: {
     fontFamily: FontFamily.RalewaySemiBold,
@@ -38,8 +52,6 @@ export const FriendListStyle = StyleSheet.create({
   readcount: {
     fontSize: globals.font_15,
     color: Colors.white,
-    textAlign: "center",
-    alignSelf: "center",
     fontFamily: FontFamily.RalewaRegular,
   },
   separatorLine: {
@@ -48,6 +60,16 @@ export const FriendListStyle = StyleSheet.create({
     opacity: 0.045,
     paddingTop: 1,
     marginHorizontal: 20,
+  },
+  imageContainer: {
+    // width: "20%",
+    width: globals.deviceWidth * 0.2,
+    alignItems: "center",
+  },
+  imageStyleChat: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
   },
   imageStyle: {
     height: globals.deviceWidth * 0.15,
@@ -94,6 +116,10 @@ export const FriendListStyle = StyleSheet.create({
     zIndex: 0,
     alignItems: "center",
   },
+  userdetailChat: {
+    // width: "60%",
+    width: globals.deviceWidth * 0.5,
+  },
   userdetail: {
     marginHorizontal: 15,
     width: "65%",
@@ -132,10 +158,8 @@ export const FriendListStyle = StyleSheet.create({
     height: 25,
     borderRadius: 25 / 2,
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: Colors.primary,
-    alignSelf: "flex-end",
-    marginRight: 9,
+    marginTop: 3,
   },
   redcircleview: {
     width: 15,
@@ -147,5 +171,6 @@ export const FriendListStyle = StyleSheet.create({
     alignSelf: "flex-end",
     marginRight: 5,
     position: "absolute",
+    right: 7,
   },
 });
