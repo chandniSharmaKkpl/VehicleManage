@@ -3,15 +3,12 @@ import {
   View,
   Text,
   Image,
-  SafeAreaView,
   KeyboardAvoidingView,
   ScrollView,
   Keyboard,
   Platform,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   FlatList,
-  StatusBar,
   Alert,
   DeviceEventEmitter,
 } from "react-native";
@@ -31,11 +28,9 @@ import {
   Input,
   MediaModel,
   Header,
-  GenerateRandomFileName,
   DropDownPicker,
   Loader,
   PrimaryButton,
-  PrimaryTextinputwithIcon,
 } from "../../../components";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -47,8 +42,6 @@ import * as Authactions from "../../authentication/redux/Actions";
 import Colors from "../../../assets/Colors";
 import * as actions from "../redux/Actions";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { NavigationEvents } from "react-navigation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "UserProfileScreen ::=";
 
@@ -78,6 +71,8 @@ export class UserProfileScreen extends Component {
       isFnameError: false,
       isSurnameError: false,
       isCityError: false,
+      isFnameError: false,
+      isSurnameError: false,
       isModalofCarError: false,
       isColorofCarError: false,
       isDescriptionError: false,
@@ -86,6 +81,8 @@ export class UserProfileScreen extends Component {
       fNameValidMsg: "",
       surnameValidMsg: "",
       cityValidMsg: "",
+      fnameValidMsg: "",
+      surnameValidMsg: "",
       modalofCarValidMsg: "",
       colorofCarValidMsg: "",
       descriptionValidMsg: "",
@@ -674,8 +671,8 @@ export class UserProfileScreen extends Component {
                     marginTop: 8,
                     color: Colors.placeholderColor,
                   }}
-                  onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}
+                  onSubmitEditing={() => this.focusNextTextField("fname")}
                   forwardRef={(ref) => {
                     (this.input.txtUserName = ref),
                       this.input.txtUserName &&
@@ -684,7 +681,7 @@ export class UserProfileScreen extends Component {
                         });
                   }}
                   autoFocus={true}
-                  returnKeyType="done"
+                  returnKeyType="next"
                   autoCapitalize={"none"}
                   maxLength={26}
                   minLength={3}
@@ -700,12 +697,12 @@ export class UserProfileScreen extends Component {
                 <Input
                   theme={theme}
                   value={fname}
+                  onSubmitEditing={() => this.focusNextTextField("surname")}
                   placeholderText={StaticTitle.name}
                   inputStyle={{
                     marginTop: 8,
                     color: Colors.placeholderColor,
                   }}
-                  onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}
                   forwardRef={(ref) => {
                     (this.input.fname = ref),
@@ -715,7 +712,7 @@ export class UserProfileScreen extends Component {
                         });
                   }}
                   autoFocus={true}
-                  returnKeyType="done"
+                  returnKeyType="next"
                   autoCapitalize={"none"}
                   maxLength={26}
                   minLength={3}

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Alert } from "react-native";
-import { View } from "react-native";
+import { Alert, Platform, View } from "react-native";
 import PrimaryButtonwithIcon from "../components/PrimaryButtonwithIcon";
 import Colors from "../assets/Colors";
 import { AuthStyle } from "../assets/styles/AuthStyle";
@@ -17,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../utils/Globals";
 import NavigationService from "../utils/NavigationService";
 import * as actions from "../modules/authentication/redux/Actions";
+import DeviceInfo from "react-native-device-info";
 
 const TAG = "GoogleLogin ::=";
 
@@ -61,6 +61,11 @@ class GoogleLogin extends Component {
   };
 
   performGoogleLogin = async (props) => {
+    const { sociallogin } = props;
+
+    var deviceUUID = DeviceInfo.getUniqueId();
+    var deviceName = DeviceInfo.getDeviceNameSync();
+    let fcmToken = await AsyncStorage.getItem("fcmToken");
     try {
       await this._signOut();
       await GoogleSignin.hasPlayServices();
@@ -71,10 +76,13 @@ class GoogleLogin extends Component {
       params.append("accessToken", userInfo.idToken);
       params.append("provider", "google");
       params.append("provider_id", userInfo.user.id);
-      params.append("name", userInfo.user.name);
+      params.append("name", userInfo.user.givenName);
+      params.append("surname", userInfo.user.familyName);
       params.append("email", userInfo.user.email);
-
-      const { sociallogin } = props;
+      params.append("device_token", fcmToken);
+      params.append("device_uuid", deviceUUID);
+      params.append("device_type", Platform.OS == "android" ? "1" : "0");
+      params.append("device_name", deviceName);
 
       sociallogin(params)
         .then(async (res) => {
