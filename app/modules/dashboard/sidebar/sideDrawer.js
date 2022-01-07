@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  Appearance,
   DeviceEventEmitter,
 } from "react-native";
 import Colors from "../../../assets/Colors";
@@ -24,6 +25,8 @@ import FastImage from "react-native-fast-image";
 import { SideDrawerStyle } from "../../../assets/styles/SideDrawerStyle";
 
 let _this = null;
+const colorScheme = Appearance.getColorScheme();
+
 class sideDrawer extends Component {
   constructor(props) {
     super(props);
@@ -168,9 +171,12 @@ class sideDrawer extends Component {
               style={{
                 width: 20,
                 height: 20,
-                tintColor: this.props.theme.LITE_FONT_COLOR,
               }}
-              source={IMAGE.terms_conditions_img}
+              source={
+                colorScheme === "light"
+                  ? IMAGE.terms_conditions_img_light
+                  : IMAGE.terms_conditions_img_dark
+              }
             />
 
             <Text

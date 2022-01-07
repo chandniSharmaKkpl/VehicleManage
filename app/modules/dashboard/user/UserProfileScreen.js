@@ -3,15 +3,12 @@ import {
   View,
   Text,
   Image,
-  SafeAreaView,
   KeyboardAvoidingView,
   ScrollView,
   Keyboard,
   Platform,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   FlatList,
-  StatusBar,
   Alert,
   DeviceEventEmitter,
 } from "react-native";
@@ -26,15 +23,14 @@ import { StaticTitle } from "../../../utils/StaticTitle";
 import NavigationService from "../../../utils/NavigationService";
 import { IMAGE } from "../../../assets/Images";
 import FastImage from "react-native-fast-image";
+import Icon from "react-native-vector-icons/Ionicons";
 import {
   Input,
   MediaModel,
   Header,
-  GenerateRandomFileName,
   DropDownPicker,
   Loader,
   PrimaryButton,
-  PrimaryTextinputwithIcon,
 } from "../../../components";
 import { ComponentStyle } from "../../../assets/styles/ComponentStyle";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -72,6 +68,8 @@ export class UserProfileScreen extends Component {
       txtFbName: "",
 
       isUserNameError: false,
+      isFnameError: false,
+      isSurnameError: false,
       isCityError: false,
       isFnameError: false,
       isSurnameError: false,
@@ -80,6 +78,8 @@ export class UserProfileScreen extends Component {
       isDescriptionError: false,
 
       userNameValidMsg: "",
+      fNameValidMsg: "",
+      surnameValidMsg: "",
       cityValidMsg: "",
       fnameValidMsg: "",
       surnameValidMsg: "",
@@ -144,6 +144,8 @@ export class UserProfileScreen extends Component {
           selectedModel: user.user_data.car_make_model,
           selectedColour: user.user_data.car_colour,
           txtUserName: user.user_data.username,
+          fname: user.user_data.name,
+          surname: user.user_data.surname,
           txtDescription: user.user_data.user_description,
           photoUrl: user.user_data.avatar,
           txtSnapName: snapchatDetails ? snapchatDetails[1] : "",
@@ -354,10 +356,16 @@ export class UserProfileScreen extends Component {
     if (isEmpty(fname)) {
       this.setState({
         isFnameError: true,
-        fnameValidMsg: Messages.enterFname,
+        fNameValidMsg: Messages.enterFname,
       });
       return false;
     }
+    // if (!isText(fname)) {
+    //   this.setState({
+    //     isFnameError: true,
+    //     fNameValidMsg: Messages.enterFname,
+    //   });
+    // }
     if (isEmpty(surname)) {
       this.setState({
         isSurnameError: true,
@@ -365,6 +373,14 @@ export class UserProfileScreen extends Component {
       });
       return false;
     }
+    // if (!isText(surname)) {
+    //   this.setState({
+    //     isSurnameError: true,
+    //     surnameValidMsg: Messages.enterSurname,
+    //   });
+    //   return false;
+    // }
+
     return true;
   };
 
@@ -599,9 +615,10 @@ export class UserProfileScreen extends Component {
                 }}
                 style={UserProfileStyle.squareView}
               >
-                <FastImage
-                  style={[UserProfileStyle.navigateimgStyle]}
-                  source={IMAGE.settings_img}
+                <Icon
+                  name={"settings-sharp"}
+                  size={20}
+                  color={theme.ICON_COLOR}
                 />
               </TouchableOpacity>
             </View>
@@ -700,7 +717,7 @@ export class UserProfileScreen extends Component {
                   maxLength={26}
                   minLength={3}
                   isValidationShow={this.state.isFnameError}
-                  validateMesssage={this.state.fnameValidMsg}
+                  validateMesssage={this.state.fNameValidMsg}
                   onChangeText={(text) =>
                     this.setState({
                       fname: text,

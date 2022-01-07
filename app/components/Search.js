@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { TouchableOpacity, View, TextInput, Text } from "react-native";
 import { ComponentStyle } from "../assets/styles/ComponentStyle";
-import Colors from "../assets/Colors";
-import FastImage from "react-native-fast-image";
-import { IMAGE } from "../assets/Images";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const Search = ({
   searchMessage,
@@ -39,7 +37,6 @@ const Search = ({
         inputStyle,
         {
           color: theme.PRIMARY_TEXT_COLOR,
-          borderColor: Colors.white,
         },
       ]}
       placeholder={placeholderText}
@@ -55,14 +52,10 @@ const Search = ({
       autoFocus={false}
     />
     <TouchableOpacity onPress={onPress}>
-      <FastImage
-        style={[
-          ComponentStyle.search_icon,
-          iconStyle,
-          { tintColor: theme.prim },
-        ]}
-        source={IMAGE.search_img}
-        resizeMode={FastImage.resizeMode.contain}
+      <Icon
+        name={"search-outline"}
+        size={20}
+        color={theme.PRIMARY_TEXT_COLOR}
       />
     </TouchableOpacity>
   </View>

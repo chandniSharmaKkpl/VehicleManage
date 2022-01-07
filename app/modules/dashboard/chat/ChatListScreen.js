@@ -166,16 +166,26 @@ export class ChatListScreen extends Component {
 
           const { nav } = this.props;
           // const currentScreen = this.props.navigation.state.routeName;
-          console.warn(
-            "i am in nav currentScreen screen==>",
-            nav.routes[nav.routes.length - 1].routes[0].routes[
-              nav.routes.length - 1
-            ].routes
-          );
+          // let currentScreen =
+          //   nav.routes[2].routes[0].routes[nav.routes.length - 1].routes;
+
           let currentScreen =
             nav.routes[nav.routes.length - 1].routes[0].routes[
               nav.routes.length - 1
             ].routes;
+
+          // const currentScreen = nav.routes[nav.routes.length - 1].routeName;
+
+          // we can get routeName with below console
+          // console.log(
+          //   "nav.routes",
+          //   JSON.stringify(
+          //     nav.routes[nav.routes.length - 1].routes[0].routes[2].routes[1]
+          //       .routeName
+          //   )
+          // );
+
+          console.log("currentScreen", currentScreen);
 
           if (currentScreen[1].routeName == "ChatMessages") {
             const currentScreenParams = currentScreen[1].params;
@@ -239,9 +249,11 @@ export class ChatListScreen extends Component {
     let usersdata = userDetails.user_data;
     let chat_user_id = usersdata.user_id;
 
-    global.ws.send(
-      JSON.stringify({ command: "register", userId: chat_user_id })
-    );
+    if (global.ws !== null) {
+      global.ws.send(
+        JSON.stringify({ command: "register", userId: chat_user_id })
+      );
+    }
 
     this.setState({
       isUserRegister: true,
@@ -385,6 +397,7 @@ export class ChatListScreen extends Component {
     this.updateUnreadCount(user_info);
     NavigationService.navigate("ChatMessages", {
       user_info: user_info,
+      previous_screen: "chatList",
     });
   };
 
@@ -412,13 +425,13 @@ export class ChatListScreen extends Component {
   renderFriendList = ({ item, index }) => {
     return (
       <TouchableOpacity
-        style={FriendListStyle.itemcell}
+        style={FriendListStyle.itemcellChat}
         onPress={() => this.gotoChatDetails(item)}
       >
         {item.avatar ? (
-          <View style={FriendListStyle.imageStyle}>
+          <View style={FriendListStyle.imageContainer}>
             <FastImage
-              style={[FriendListStyle.imageStyle]}
+              style={[FriendListStyle.imageStyleChat]}
               source={{
                 uri: item.avatar,
               }}
@@ -428,15 +441,15 @@ export class ChatListScreen extends Component {
             )}
           </View>
         ) : (
-          <View style={FriendListStyle.imageStyle}>
+          <View style={FriendListStyle.imageContainer}>
             <FastImage
               resizeMethod="resize"
               source={IMAGE.user}
-              style={FriendListStyle.imageStyle}
+              style={FriendListStyle.imageStyleChat}
             />
           </View>
         )}
-        <View style={FriendListStyle.userdetail}>
+        <View style={FriendListStyle.userdetailChat}>
           <Text
             style={[
               FriendListStyle.titleBig,
@@ -462,14 +475,13 @@ export class ChatListScreen extends Component {
             {item.last_message ? item.last_message : ""}
           </Text>
         </View>
-        <View>
+        <View style={FriendListStyle.rightTime}>
           <Text
             numberOfLines={1}
             style={[
               FriendListStyle.titleSmall,
               {
                 color: this.props.theme.LITE_FONT_COLOR,
-                width: globals.deviceWidth * 0.2,
               },
             ]}
           >

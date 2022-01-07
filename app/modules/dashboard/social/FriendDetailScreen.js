@@ -7,6 +7,7 @@ import {
   Text,
   AppState,
   Image,
+  ImageBackground,
   StatusBar,
   ScrollView,
   TouchableOpacity,
@@ -30,6 +31,7 @@ export class FriendDetailScreen extends Component {
     super(props);
     this.state = {
       getfriendData: this.props.navigation.state.params.FriendData,
+      previous_screen: this.props.navigation.state.params.previous_screen,
       friendDetail: [],
       user: {},
       loader: false,
@@ -421,27 +423,51 @@ export class FriendDetailScreen extends Component {
   // navigate to gotochatdetailscreen
   gotochatdetailscreen = () => {
     const { friendDetail } = this.state;
-    NavigationService.navigate("ChatMessages", { user_info: friendDetail });
+    NavigationService.navigate("ChatMessages", {
+      user_info: friendDetail,
+      previous_screen: "friendDetail",
+    });
   };
 
   // navigate Social Profiles
   navigatetoSocialProfiles = (isFrom, name) => {
+    console.log("friendDetails", this.state.friendDetail.instagram_username);
+
     let SocialURL;
     if (isFrom == "Fb") {
-      SocialURL = "https://www.facebook.com/" + name;
+      if (this.state.friendDetail.fb_username) {
+        SocialURL = this.state.friendDetail.fb_username;
+      } else {
+        SocialURL = "https://www.facebook.com/";
+      }
     } else if (isFrom == "Insta") {
-      SocialURL = "https://www.instagram.com/" + name;
+      if (this.state.friendDetail.instagram_username) {
+        SocialURL = this.state.friendDetail.instagram_username;
+      } else {
+        SocialURL = "https://www.instagram.com/";
+      }
     } else if (isFrom == "Snap") {
-      SocialURL = "https://www.snapchat.com/" + name;
-    } else {
-      SocialURL = "https://www.google.com" + name;
+      if (this.state.friendDetail.snapchat_username) {
+        SocialURL = this.state.friendDetail.snapchat_username;
+      } else {
+        SocialURL = "https://www.snapchat.com/";
+      }
     }
+    // else {
+    //   SocialURL = "https://www.google.com/" + name;
+    // }
     Linking.openURL(SocialURL);
   };
 
   returnRequestButton() {
     return (
-      <View style={FriendDetailStyle.beforesquareview}>
+      // <View style={([FriendDetailStyle.beforesquareview], { marginTop: 15 })}>
+      <View
+        style={[
+          FriendDetailStyle.beforesquareview,
+          { marginTop: this.state.previous_screen === "search" ? 15 : 0 },
+        ]}
+      >
         <TouchableWithoutFeedback
           onPress={() => this.requestforSocialApi(this.state.friendDetail)}
           style={[
@@ -456,7 +482,7 @@ export class FriendDetailScreen extends Component {
             style={[
               FriendDetailStyle.dectext,
               {
-                color: this.props.theme.PRIMARY_BACKGROUND_COLOR,
+                color: Colors.white,
                 fontSize: globals.font_14,
                 width: "100%",
               },
@@ -479,7 +505,10 @@ export class FriendDetailScreen extends Component {
           }
           style={[
             FriendDetailStyle.circleview,
-            { backgroundColor: Colors.blue },
+            {
+              backgroundColor: Colors.blue,
+              marginTop: this.state.previous_screen === "search" ? 15 : 0,
+            },
           ]}
         >
           <FastImage
@@ -496,7 +525,10 @@ export class FriendDetailScreen extends Component {
             start={{ x: 0.0, y: 0.5 }}
             end={{ x: 0.7, y: 1.0 }}
             colors={[Colors.orange, Colors.pink, Colors.purple]}
-            style={FriendDetailStyle.circleview}
+            style={[
+              FriendDetailStyle.circleview,
+              { marginTop: this.state.previous_screen === "search" ? 15 : 0 },
+            ]}
           >
             <FastImage
               style={[FriendDetailStyle.socialicon]}
@@ -510,7 +542,10 @@ export class FriendDetailScreen extends Component {
           }
           style={[
             FriendDetailStyle.circleview,
-            { backgroundColor: Colors.snapChat },
+            {
+              backgroundColor: Colors.snapChat,
+              marginTop: this.state.previous_screen === "search" ? 15 : 0,
+            },
           ]}
         >
           <FastImage
@@ -524,7 +559,12 @@ export class FriendDetailScreen extends Component {
 
   returnRequestButtonDisable = () => {
     return (
-      <View style={FriendDetailStyle.beforesquareview}>
+      <View
+        style={[
+          FriendDetailStyle.beforesquareview,
+          { marginTop: this.state.previous_screen === "search" ? 15 : 0 },
+        ]}
+      >
         <TouchableWithoutFeedback
           onPress={() => null}
           style={[
@@ -540,7 +580,7 @@ export class FriendDetailScreen extends Component {
             style={[
               FriendDetailStyle.dectext,
               {
-                color: this.props.theme.PRIMARY_BACKGROUND_COLOR,
+                color: Colors.white,
                 fontSize: globals.font_14,
                 width: "100%",
               },
@@ -572,54 +612,75 @@ export class FriendDetailScreen extends Component {
             backgroundColor="transparent"
             translucent={true}
           />
-          <View style={FriendDetailStyle.halfContainer}>
-            {friendDetail.avatar ? (
-              <Image
-                style={FriendDetailStyle.imageStyle}
-                source={{
-                  uri: friendDetail.avatar,
-                }}
-              />
-            ) : (
-              <Image
-                resizeMethod="resize"
-                source={IMAGE.user}
-                style={[FriendDetailStyle.imageStyle]}
-              />
-            )}
 
-            <View style={FriendDetailStyle.backbtnview}>
-              <TouchableOpacity
-                onPress={() => this.gotoback()}
-                style={FriendDetailStyle.squareView}
+          <View style={FriendDetailStyle.halfContainer}>
+            <ImageBackground
+              style={FriendDetailStyle.imageStyle}
+              source={
+                friendDetail.avatar
+                  ? {
+                      uri: friendDetail.avatar,
+                    }
+                  : IMAGE.user
+              }
+            >
+              <LinearGradient
+                start={{ x: 0, y: 1 }}
+                end={{ x: 0, y: 0.5 }}
+                colors={[Colors.black1, Colors.transparent]}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
               >
-                <FastImage
-                  style={[FriendDetailStyle.navigateimgStyle]}
-                  source={IMAGE.backArrow}
-                  tintColor={Colors.black}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={FriendDetailStyle.userdetailview}>
-              {friendDetail.username ? (
-                <Text numberOfLines={2} style={FriendDetailStyle.headingtitle}>
-                  {friendDetail.username}
-                </Text>
-              ) : null}
-              {friendDetail.city ? (
-                <Text numberOfLines={1} style={FriendDetailStyle.titletext}>
-                  {friendDetail.city}
-                </Text>
-              ) : null}
-            </View>
+                <View
+                  style={{
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => this.gotoback()}
+                    style={FriendDetailStyle.squareView}
+                  >
+                    <FastImage
+                      style={[FriendDetailStyle.navigateimgStyle]}
+                      source={IMAGE.backArrow}
+                      tintColor={Colors.black}
+                    />
+                  </TouchableOpacity>
+                  <View style={[FriendDetailStyle.userdetailview]}>
+                    {friendDetail.username ? (
+                      <Text
+                        numberOfLines={2}
+                        style={FriendDetailStyle.headingtitle}
+                      >
+                        {friendDetail.username}
+                      </Text>
+                    ) : null}
+                    {friendDetail.city ? (
+                      <Text
+                        numberOfLines={1}
+                        style={FriendDetailStyle.titletext}
+                      >
+                        {friendDetail.city}
+                      </Text>
+                    ) : null}
+                  </View>
+                </View>
+              </LinearGradient>
+            </ImageBackground>
           </View>
+
           <View style={FriendDetailStyle.middleview}>
             {friendDetail.is_friend == false ? (
               <TouchableOpacity
                 onPress={() => this.AddasFriend()}
                 style={[
                   FriendDetailStyle.circleview,
-                  { backgroundColor: Colors.primary },
+                  {
+                    backgroundColor: Colors.primary,
+                    marginTop: this.state.previous_screen === "search" ? 15 : 0,
+                  },
                 ]}
               >
                 <FastImage
