@@ -33,6 +33,7 @@ const Header = ({
   onPressed,
   countDeatils,
   total_count,
+  current_screen,
   ...props
 }) => {
   const colorScheme = Appearance.getColorScheme();
@@ -50,6 +51,12 @@ const Header = ({
       style={[
         ComponentStyle.headerContainer,
         {
+          paddingTop:
+            current_screen === "shareSocial"
+              ? Platform.OS === "android"
+                ? StatusBar.currentHeight
+                : 0
+              : 0,
           backgroundColor:
             colorScheme === "light" ? Colors.primary : Colors.darkBottomTabBar,
         },

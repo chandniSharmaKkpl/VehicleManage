@@ -5,6 +5,7 @@ import {
   Alert,
   Text,
   ScrollView,
+  Appearance,
   Platform,
 } from "react-native";
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -28,6 +29,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 const TAG = "PrivacySettingsScreen ::=";
 let purchaseUpdateSubscription;
 let purchaseErrorSubscription;
+const colorScheme = Appearance.getColorScheme();
 
 export class PrivacySettingsScreen extends Component {
   _isMounted = false;
@@ -511,8 +513,18 @@ export class PrivacySettingsScreen extends Component {
               </View>
 
               <View style={[AuthStyle.subscriptionDesc]}>
-                <View style={[AuthStyle.boldStyle]}></View>
-                <Text style={[AuthStyle.descText]}>
+                <View
+                  style={[
+                    AuthStyle.boldStyle,
+                    { backgroundColor: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                ></View>
+                <Text
+                  style={[
+                    AuthStyle.descText,
+                    { color: theme.DESCRIPTION_TEXT_COLOR },
+                  ]}
+                >
                   {"Profile hide when user search"}
                 </Text>
               </View>

@@ -429,7 +429,7 @@ export class ChatListScreen extends Component {
         onPress={() => this.gotoChatDetails(item)}
       >
         {item.avatar ? (
-          <View style={FriendListStyle.imageContainer}>
+          <View style={FriendListStyle.imageContainerChat}>
             <FastImage
               style={[FriendListStyle.imageStyleChat]}
               source={{
@@ -441,7 +441,7 @@ export class ChatListScreen extends Component {
             )}
           </View>
         ) : (
-          <View style={FriendListStyle.imageContainer}>
+          <View style={FriendListStyle.imageContainerChat}>
             <FastImage
               resizeMethod="resize"
               source={IMAGE.user}

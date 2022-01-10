@@ -251,4 +251,13 @@ SocialStack.navigationOptions = ({ navigation }) => {
     tabBarVisible,
   };
 };
+SearchStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 1) {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 export default TabNavigator;
