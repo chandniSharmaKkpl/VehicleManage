@@ -173,20 +173,6 @@ export class ChatListScreen extends Component {
             nav.routes[nav.routes.length - 1].routes[0].routes[
               nav.routes.length - 1
             ].routes;
-
-          // const currentScreen = nav.routes[nav.routes.length - 1].routeName;
-
-          // we can get routeName with below console
-          // console.log(
-          //   "nav.routes",
-          //   JSON.stringify(
-          //     nav.routes[nav.routes.length - 1].routes[0].routes[2].routes[1]
-          //       .routeName
-          //   )
-          // );
-
-          console.log("currentScreen", currentScreen);
-
           if (currentScreen[1].routeName == "ChatMessages") {
             const currentScreenParams = currentScreen[1].params;
             if (currentScreenParams !== undefined) {
