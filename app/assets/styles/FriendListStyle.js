@@ -66,10 +66,16 @@ export const FriendListStyle = StyleSheet.create({
     width: globals.deviceWidth * 0.2,
     alignItems: "center",
   },
+  imageContainerChat: {
+    // width: "30%",
+    marginLeft: globals.deviceWidth * 0.04,
+    width: globals.deviceWidth * 0.2,
+    alignItems: "center",
+  },
   imageStyleChat: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: 60,
+    width: 60,
+    borderRadius: 30,
   },
   imageStyle: {
     height: globals.deviceWidth * 0.15,
@@ -118,7 +124,7 @@ export const FriendListStyle = StyleSheet.create({
   },
   userdetailChat: {
     // width: "60%",
-    width: globals.deviceWidth * 0.5,
+    width: globals.deviceWidth * 0.46,
   },
   userdetail: {
     marginHorizontal: 15,

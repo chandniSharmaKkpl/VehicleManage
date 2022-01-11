@@ -6,11 +6,13 @@ import {
   SystemMessage,
   Message,
   MessageText,
+  Time,
 } from "react-native-gifted-chat";
 import FontFamily from "../assets/styles/FontFamily";
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
 import FastImage from "react-native-fast-image";
+import moment from "moment";
 
 const colorScheme = Appearance.getColorScheme();
 
@@ -23,109 +25,133 @@ export const renderAvatar = (props) => (
 );
 
 export const renderBubble = (props) => (
-  <Bubble
-    {...props}
-    // renderTime={() => <Text>Time</Text>}
-    // renderTicks={() => <Text>Ticks</Text>}
+  <View>
+    <Bubble
+      {...props}
+      // renderTime={() => <Text>Time</Text>}
+      // renderTicks={() => <Text>Ticks</Text>}
+      // containerStyle={{
+      //   left: {
+      //     color: colorScheme === "dark" ? Colors.white : Colors.black,
+      //     fontSize: globals.normalize(12),
+      //     fontFamily: FontFamily.RalewaRegular,
+      //   },
+      //   right: {
+      //     color: colorScheme === "dark" ? Colors.white : Colors.black,
+      //     fontSize: globals.normalize(12),
+      //     fontFamily: FontFamily.RalewaRegular,
+      //   },
+      // }}
+      wrapperStyle={{
+        left: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          backgroundColor:
+            colorScheme === "dark"
+              ? Colors.chatBubbleDark
+              : Colors.chatBubbleLight,
+          marginBottom: 10,
+          paddingVertical: 5,
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        right: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          backgroundColor:
+            colorScheme === "dark"
+              ? Colors.chatBubbleDark
+              : Colors.chatBubbleLight,
+          marginBottom: 10,
+          paddingVertical: 5,
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      }}
+      timeTextStyle={{
+        right: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+        left: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+      }}
+      textStyle={{
+        right: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+        left: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+      }}
+      bottomContainerStyle={{
+        left: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+        right: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+      }}
+      tickStyle={{
+        color: colorScheme === "dark" ? Colors.white : Colors.black,
+        fontSize: globals.normalize(10),
+        fontFamily: FontFamily.RalewaRegular,
+        marginTop: 2,
+      }}
+      containerToNextStyle={{
+        left: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+        right: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+      }}
+      containerToPreviousStyle={{
+        left: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+        right: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+      }}
+    />
 
-    containerStyle={{
-      left: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-      right: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-    }}
-    wrapperStyle={{
-      left: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        backgroundColor:
-          colorScheme === "dark"
-            ? Colors.chatBubbleDark
-            : Colors.chatBubbleLight,
-        marginBottom: 10,
-        paddingVertical: 5,
-        justifyContent: "center",
-        alignItems: "center",
-      },
-      right: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        backgroundColor:
-          colorScheme === "dark"
-            ? Colors.chatBubbleDark
-            : Colors.chatBubbleLight,
-        marginBottom: 10,
-        paddingVertical: 5,
-        justifyContent: "center",
-        alignItems: "center",
-      },
-    }}
-    timeTextStyle={{
-      right: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-      left: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-    }}
-    textStyle={{
-      right: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-      left: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-    }}
-    bottomContainerStyle={{
-      left: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-      right: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-    }}
-    tickStyle={{}}
-    containerToNextStyle={{
-      left: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-      right: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-    }}
-    containerToPreviousStyle={{
-      left: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-      right: {
-        color: colorScheme === "dark" ? Colors.white : Colors.black,
-        fontSize: globals.normalize(12),
-        fontFamily: FontFamily.RalewaRegular,
-      },
-    }}
-  />
+    {/* In Progress */}
+
+    {/* <Time
+      {...props}
+      timeTextStyle={{
+        right: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+        left: {
+          color: colorScheme === "dark" ? Colors.white : Colors.black,
+          fontSize: globals.normalize(12),
+          fontFamily: FontFamily.RalewaRegular,
+        },
+      }}
+    /> */}
+  </View>
 );
 
 export const renderSystemMessage = (props) => (

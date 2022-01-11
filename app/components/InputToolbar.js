@@ -19,11 +19,18 @@ const colorScheme = Appearance.getColorScheme();
 export const renderInputToolbar = (props) => (
   <InputToolbar
     {...props}
+    textInputStyle={{
+      color: colorScheme === "dark" ? Colors.white : Colors.black,
+      fontFamily: FontFamily.RalewaRegular,
+      fontSize: globals.font_14,
+    }}
     containerStyle={{
       backgroundColor:
         colorScheme === "dark" ? Colors.chatBubbleDark : Colors.white,
       marginHorizontal: 20,
       marginBottom: 20,
+      justifyContent: "center",
+      alignItems: "center",
       shadowColor: "#000",
       shadowOffset: {
         width: 2,
@@ -33,8 +40,14 @@ export const renderInputToolbar = (props) => (
       shadowOpacity: 0.58,
       shadowRadius: 16,
       elevation: 24,
-      paddingVertical: 6,
+      paddingTop: 6,
+      paddingRight: 3,
       borderRadius: 5,
+      borderTopColor:
+        colorScheme === "dark"
+          ? Colors.dark_background
+          : Colors.lite_background,
+      borderTopWidth: 1,
     }}
     primaryStyle={{ alignItems: "center" }}
   />
@@ -63,7 +76,7 @@ export const renderActions = (props) => (
       "Choose From Library": () => {},
       Cancel: () => {},
     }}
-    optionTintColor={Colors.black}
+    optionTintColor={colorScheme === "dark" ? Colors.white : Colors.black}
   />
 );
 
@@ -71,8 +84,8 @@ export const renderComposer = (props) => (
   <Composer
     {...props}
     textInputStyle={{
-      color: Colors.black,
-      backgroundColor: Colors.white,
+      color: colorScheme === "dark" ? Colors.white : Colors.black,
+      // backgroundColor: Colors.white,
       paddingTop: 8.5,
       paddingHorizontal: 12,
       marginLeft: 0,
@@ -95,6 +108,8 @@ export const renderSend = (props) => (
       backgroundColor:
         colorScheme === "dark" ? Colors.primary : Colors.btnSecondaryPrimary,
       marginRight: 5,
+      // marginTop: 5,
+      marginBottom: 10,
       borderRadius: 5,
     }}
   >
