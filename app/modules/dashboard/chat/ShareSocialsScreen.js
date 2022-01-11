@@ -31,6 +31,7 @@ export class ShareSocialsScreen extends Component {
     super(props);
     this.state = {
       from_id: this.props.navigation.state.params.from_id,
+      current_screen: "shareSocial",
       socialfrndList: [],
     };
   }
@@ -248,6 +249,7 @@ export class ShareSocialsScreen extends Component {
             theme={theme}
             isShowSidebar={true}
             onPressed={() => this.shareSocialLinks()}
+            current_screen={this.state.current_screen}
           />
           <FlatList
             data={socialfrndList}

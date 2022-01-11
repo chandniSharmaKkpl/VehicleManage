@@ -656,7 +656,7 @@ export class ChatMessagesScreen extends Component {
             // }
             textInputProps={{}}
             keyboardShouldPersistTaps="never"
-            renderTicks={(message) => this.renderTicks(message, user_id)}
+            // renderTicks={(message) => this.renderTicks(message, user_id)}
             alwaysShowSend={true}
             timeFormat={"HH:mm"}
             style={{ flex: 1 }}
@@ -675,6 +675,8 @@ export class ChatMessagesScreen extends Component {
             renderSend={renderSend}
             // renderAvatar={renderAvatar}
             renderBubble={renderBubble}
+            // renderTime={renderTime}
+            // renderMessage={renderBubble}
             // renderMessage={renderMessage}
             // renderMessageText={renderMessageText}
             isCustomViewBottom
