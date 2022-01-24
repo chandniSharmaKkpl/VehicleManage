@@ -47,13 +47,18 @@ export class FriendDetailScreen extends Component {
     this.searchFromUser = this.searchFromUser.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps = (newProps) => {
+  gotoSocketRegister() {
     // Register is one call at single time, after
     if (!this.state.isUserRegister && this.registerDeviceTimer == null) {
       // Start 3 seconds interval,
       // This will check is internel
-
+      console.warn(
+        "i am in props==> before 3=>",
+        this.state.webSocketServerConnected
+      );
       this.registerDeviceTimer = setInterval(() => {
+        console.warn("i am in props==>", this.state.webSocketServerConnected);
+
         if (this.state.webSocketServerConnected) {
           if (
             this.registerDeviceTimer != undefined ||
@@ -62,12 +67,11 @@ export class FriendDetailScreen extends Component {
             clearInterval(this.registerDeviceTimer);
             this.registerDeviceTimer = null;
           }
-
           this.registerAndSubscribe();
         }
       }, 3000);
     }
-  };
+  }
 
   registerAndSubscribe() {
     const { userDetails } = this.props;
@@ -89,6 +93,7 @@ export class FriendDetailScreen extends Component {
       this.setState({ user: this.props.userDetails.user_data });
       this.getUserDetails();
       this.connectWebSocket();
+      this.gotoSocketRegister();
     }
     AppState.addEventListener("change", this._handleAppStateChange);
   };
@@ -166,11 +171,15 @@ export class FriendDetailScreen extends Component {
           // 1st check is current chatDetails screen user have same user-id ot not, if same then only call Reducer
 
           const { nav } = this.props;
+          console.warn(
+            "currentScreen from frnd details screen======>",
+            JSON.stringify(
+              nav.routes[nav.routes.length - 1].routes[0].routes[0].routes[2]
+            )
+          );
           let currentScreen =
-            nav.routes[2].routes[0].routes[1].routes[nav.routes.length - 1]
+            nav.routes[nav.routes.length - 1].routes[0].routes[0].routes[2]
               .routeName;
-          console.log("currentScreen from frnd details screen", currentScreen);
-
           // var payload = {
           //   msg_data: object,
           //   user_data: this.searchFromUser(from_id),
@@ -179,13 +188,9 @@ export class FriendDetailScreen extends Component {
           // }
           if (currentScreen == "ChatMessages") {
             const currentScreenParams =
-              nav.routes[2].routes[0].routes[1].routes[nav.routes.length - 1]
+              nav.routes[nav.routes.length - 1].routes[0].routes[0].routes[2]
                 .params;
-            console.log(
-              "currentScreenParams details screen:->",
-              currentScreenParams
-            );
-            console.log("parseInt(from_id)===", parseInt(from_id));
+
             if (currentScreenParams !== undefined) {
               var userScreenLoadUserId = currentScreenParams.user_info.id;
               console.log("userScreenLoadUserId :->", userScreenLoadUserId);

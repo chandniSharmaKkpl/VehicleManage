@@ -1,15 +1,9 @@
 import React, { Component } from "react";
-import {
-  ImageBackground,
-  View,
-  StatusBar,
-} from "react-native";
+import { ImageBackground, View, StatusBar } from "react-native";
 import { IMAGE } from "../assets/Images";
 import { AuthStyle } from "../assets/styles/AuthStyle";
 import { connect } from "react-redux";
 import NavigationService from "../utils/NavigationService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Colors from "../assets/Colors";
 import FastImage from "react-native-fast-image";
 
 export class SplashScreen extends Component {
@@ -21,9 +15,8 @@ export class SplashScreen extends Component {
     setTimeout(() => {
       NavigationService.navigate("Login");
     }, 5000);
-    
   }
-  
+
   render() {
     return (
       <>
