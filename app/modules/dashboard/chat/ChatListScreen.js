@@ -197,7 +197,7 @@ export class ChatListScreen extends Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    if (nextAppState.match(/inactive|background/)) {
+    if (nextAppState.match(/background/)) {
       this.closeOrInActiveScreen();
     } else if (nextAppState.match(/active/)) {
       this.callMessageListAPI();

@@ -105,7 +105,7 @@ export class FriendDetailScreen extends Component {
 
   _handleAppStateChange = (nextAppState) => {
     // console.log("_handleAppStateChange() nextAppState :-->", nextAppState);
-    if (nextAppState.match(/inactive|background/)) {
+    if (nextAppState.match(/background/)) {
       this.closeOrInActiveScreen();
     } else if (nextAppState.match(/active/)) {
       this.connectWebSocket();
