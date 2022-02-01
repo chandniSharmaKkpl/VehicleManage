@@ -621,7 +621,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: bb1d56de6269dd581d0c7d4069d06bfe028fb535
+  FBReactNativeSpec: e92f811d66147a5d9a07da0fdd1d2cc010a3232b
   FBSDKCoreKit: fada1a6a0076724678993ff05a633848765ff18c
   FBSDKLoginKit: d5ffe6d808897019ccf16feb6f0a7ab260bc5cd6
   FBSDKShareKit: 6a85acb92eaf43a0b6dfa2ba6106eb74c7f10d30

@@ -19,7 +19,6 @@ import {
 import NavigationService from "../utils/NavigationService";
 import * as globals from "../utils/Globals";
 import Colors from "../assets/Colors";
-
 const ChatHeader = ({
   theme,
   headerStyle,

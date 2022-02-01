@@ -5,7 +5,6 @@ import * as actions from "../modules/authentication/redux/Actions";
 import NavigationService from "../utils/NavigationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as globals from "../utils/Globals";
-import { darkTheme, lightTheme } from "../assets/Theme";
 import messaging, { firebase } from "@react-native-firebase/messaging";
 
 export class FirstScreen extends Component {
